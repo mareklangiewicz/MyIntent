@@ -65,11 +65,12 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
             android:layout_margin="16dp"
-            android:src="@android:drawable/ic_menu_add"
+            android:src="@drawable/ic_add_black_24dp"
             app:elevation="3dp"
             app:borderWidth="0dp"
             />
         <!-- TODO: remove borderWidth attribute when design lib is fixed. -->
+        <!-- TODO: check default icon size. -->
 
 
     </android.support.design.widget.CoordinatorLayout>

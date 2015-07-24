@@ -1,0 +1,1 @@
+include ':myactivities', ':myviews', ':myutils', ':myfragments', ':myloggers'

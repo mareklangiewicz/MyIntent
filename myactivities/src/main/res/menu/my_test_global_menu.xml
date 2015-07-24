@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:checkableBehavior="single"
+        >
+        <item
+            android:id="@+id/section_my_pie_tests"
+            android:title="@string/my_pie_tests"
+            android:titleCondensed="fragment:pl.mareklangiewicz.myfragments.MyPieTestsFragment"
+            android:icon="@android:drawable/ic_menu_gallery"
+            />
+        <item
+            android:id="@+id/section_my_basic_tests"
+            android:title="@string/my_basic_tests"
+            android:titleCondensed="fragment:pl.mareklangiewicz.myfragments.MyBasicTestsFragment"
+            android:icon="@android:drawable/ic_menu_info_details"
+            />
+        <item
+            android:id="@+id/section_my_lldecorator_tests"
+            android:title="@string/my_decorators_tests"
+            android:titleCondensed="fragment:pl.mareklangiewicz.myfragments.MyDecoratorsTestsFragment"
+            android:icon="@android:drawable/ic_menu_edit"
+            />
+        <item
+            android:id="@+id/section_my_example_fragment"
+            android:title="@string/my_example_fragment"
+            android:titleCondensed="fragment:pl.mareklangiewicz.myfragments.MyExampleFragment"
+            />
+        <item
+            android:id="@+id/section_my_log_fragment"
+            android:title="@string/my_log_fragment"
+            android:titleCondensed="fragment:pl.mareklangiewicz.myfragments.MyLogFragment"
+            />
+    </group>
+    <item android:title="@string/actions">
+        <menu>
+            <item
+                android:id="@+id/action_whats_up"
+                android:title="@string/action_whats_up"
+                />
+        </menu>
+    </item>
+    <item android:title="@string/more">
+        <menu>
+            <item
+                android:id="@+id/action_settings"
+                android:title="@string/action_settings"
+                android:icon="@android:drawable/ic_menu_preferences"
+                />
+            <item
+                android:id="@+id/action_clear_menu"
+                android:title="@string/clear_menu"
+                />
+        </menu>
+    </item>
+</menu>

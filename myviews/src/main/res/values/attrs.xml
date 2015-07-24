@@ -1,0 +1,16 @@
+<resources>
+    <declare-styleable name="MyPie">
+        <attr name="min" format="float" />
+        <attr name="max" format="float" />
+        <attr name="from" format="float" />
+        <attr name="to" format="float" />
+        <attr name="pieColor" format="color" />
+        <attr name="ovalColor" format="color" />
+    </declare-styleable>
+    <declare-styleable name="MyLLDecorator">
+        <attr name="decoration" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="MyNavigationView">
+        <attr name="freezeCheckedItems" format="boolean" />
+    </declare-styleable>
+</resources>

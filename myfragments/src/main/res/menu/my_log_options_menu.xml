@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group
+        android:id="@+id/group_log_level"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/log_level_error"
+            android:title="Log level: ERROR"
+            app:showAsAction="never"
+            />
+        <item
+            android:id="@+id/log_level_warning"
+            android:title="Log level: WARNING"
+            app:showAsAction="never"
+            />
+        <item
+            android:id="@+id/log_level_info"
+            android:title="Log level: INFO"
+            app:showAsAction="never"
+            />
+        <item
+            android:id="@+id/log_level_debug"
+            android:title="Log level: DEBUG"
+            app:showAsAction="never"
+            />
+        <item
+            android:id="@+id/log_level_verbose"
+            android:title="Log level: VERBOSE"
+            app:showAsAction="never"
+            />
+    </group>
+    <item
+        android:id="@+id/log_blabla"
+        android:title='log.e("blabla")'
+        app:showAsAction="never"
+        />
+</menu>

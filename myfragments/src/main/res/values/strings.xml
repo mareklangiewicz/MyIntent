@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">My Fragments</string>
+
+    <string name="my_example_fragment">My example fragment</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_blabla">Bla bla</string>
+
+    <string name="my_menu_fragment_desc">MyMenu test fragment</string>
+
+    <string name="action_decorate_views">Decorate some views</string>
+    <string name="enter_name">Enter your name. (not Marek)</string>
+    <string name="my_decorators_tests">My decorators tests</string>
+    <string name="bla_bla">bla bla</string>
+
+</resources>

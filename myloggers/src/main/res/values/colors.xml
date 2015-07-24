@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="li_head_text">#000</color>
+    <color name="li_separator">@android:color/darker_gray</color>
+</resources>

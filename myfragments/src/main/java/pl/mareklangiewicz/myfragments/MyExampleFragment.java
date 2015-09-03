@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import pl.mareklangiewicz.myviews.MyExampleView;
 
 
-public class MyExampleFragment extends Fragment {
+public final class MyExampleFragment extends Fragment {
     private static final String ARG_TEXT = "text";
 
     public MyExampleView mMyExampleView = null;

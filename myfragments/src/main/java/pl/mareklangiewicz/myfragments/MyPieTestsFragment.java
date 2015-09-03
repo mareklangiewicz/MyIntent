@@ -10,7 +10,7 @@ import pl.mareklangiewicz.myutils.MyMath;
 import pl.mareklangiewicz.myviews.MyPie;
 
 
-public class MyPieTestsFragment extends MyBaseFragment implements View.OnClickListener {
+public final class MyPieTestsFragment extends MyFragment implements View.OnClickListener {
 
     private MyPie pie1;
     private MyPie pie2;

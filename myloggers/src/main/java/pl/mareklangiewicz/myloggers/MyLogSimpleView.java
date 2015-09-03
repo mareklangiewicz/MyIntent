@@ -4,20 +4,19 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.FrameLayout;
 
-import com.noveogroup.android.log.LogHistory;
 import com.noveogroup.android.log.MyLogger;
 
 /**
  * Created by marek on 30.06.15.
- * TODO: example tests - copy from MyIntent (remember to setLog(null) in Fragment.onDestroyView
+ * TODO later: example tests - copy from MyIntent (remember to setLog(null) in Fragment.onDestroyView
  */
-public class MyLogSimpleView extends View {
-    private MyLogger log;
+public final class MyLogSimpleView extends View {
+    private @Nullable MyLogger log;
 
     private Paint mPaint;
 
@@ -28,12 +27,12 @@ public class MyLogSimpleView extends View {
         init();
     }
 
-    public MyLogSimpleView(Context context, AttributeSet attrs) {
+    public MyLogSimpleView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public MyLogSimpleView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MyLogSimpleView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
@@ -44,7 +43,7 @@ public class MyLogSimpleView extends View {
         mPaint.setARGB(255, 0, 0, 0);
     }
 
-    public void setPaint(Paint paint) {
+    public void setPaint(@NonNull Paint paint) {
         mPaint = new Paint(paint);
         invalidate();
     }
@@ -73,7 +72,7 @@ public class MyLogSimpleView extends View {
 
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(@NonNull Canvas canvas) {
         if(log != null)
             log.drawHistoryOnCanvas(canvas, 4, canvas.getHeight() - 2, mPaint, mLines);
         super.onDraw(canvas);

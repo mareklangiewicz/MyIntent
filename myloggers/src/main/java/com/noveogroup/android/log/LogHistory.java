@@ -1,5 +1,7 @@
 package com.noveogroup.android.log;
 
+import android.support.annotation.NonNull;
+
 /**
  * Created by marek on 24.06.15.
  *
@@ -7,7 +9,7 @@ package com.noveogroup.android.log;
  * We don't allocate any objects after constructor,
  * so it should be fast and it shouldn't launch garbage collection.
  */
-public class LogHistory {
+public final class LogHistory {
 
     private final int capacity;
 
@@ -22,7 +24,7 @@ public class LogHistory {
     private final Logger.Level arrlevel[];
     private final String arrmessage[];
 
-    private Logger.Level filter_level;
+    private @NonNull Logger.Level filter_level = Logger.Level.VERBOSE;
 
     private int filter_size = 0;
     private int filter_cursor = 0;
@@ -41,12 +43,12 @@ public class LogHistory {
 
     }
 
-    void setFilterLevel(Logger.Level level) {
+    void setFilterLevel(@NonNull Logger.Level level) {
         filter_level = level;
         filter_refresh();
     }
 
-    public Logger.Level getFilterLevel() { return filter_level; }
+    public @NonNull Logger.Level getFilterLevel() { return filter_level; }
 
     private void filter_refresh() {
         filter_cursor = 0;
@@ -72,11 +74,11 @@ public class LogHistory {
             filter_size ++;
     }
 
-    private boolean filter_matches(Logger.Level level) {
+    private boolean filter_matches(@NonNull Logger.Level level) {
         return filter_level.includes(level);
     }
 
-    void add(String logger, Logger.Level level, String message) {
+    void add(@NonNull String logger, @NonNull Logger.Level level, @NonNull String message) {
         if(size == capacity && filter_size > 0) {
             // we will forget the oldest element, so maybe we have to remove it from filter array too..
             int fidx = filter_cursor - filter_size;
@@ -113,9 +115,9 @@ public class LogHistory {
 
     public long getId(int idx) { return arrid[getRealIdx(idx)]; }
     public long getTime(int idx) { return arrtime[getRealIdx(idx)]; }
-    public String getLogger(int idx) { return arrlogger[getRealIdx(idx)]; }
-    public Logger.Level getLevel(int idx) { return arrlevel[getRealIdx(idx)]; }
-    public String getMessage(int idx) { return arrmessage[getRealIdx(idx)]; }
+    public @NonNull String getLogger(int idx) { return arrlogger[getRealIdx(idx)]; }
+    public @NonNull Logger.Level getLevel(int idx) { return arrlevel[getRealIdx(idx)]; }
+    public @NonNull String getMessage(int idx) { return arrmessage[getRealIdx(idx)]; }
 
     private int getFilteredIdx(int idx) {
         if(idx < 0 || idx >= filter_size)
@@ -131,8 +133,8 @@ public class LogHistory {
 
     public long getFilteredId(int idx) { return arrid[getFilteredIdx(idx)]; }
     public long getFilteredTime(int idx) { return arrtime[getFilteredIdx(idx)]; }
-    public String getFilteredLogger(int idx) { return arrlogger[getFilteredIdx(idx)]; }
-    public Logger.Level getFilteredLevel(int idx) { return arrlevel[getFilteredIdx(idx)]; }
-    public String getFilteredMessage(int idx) { return arrmessage[getFilteredIdx(idx)]; }
+    public @NonNull String getFilteredLogger(int idx) { return arrlogger[getFilteredIdx(idx)]; }
+    public @NonNull Logger.Level getFilteredLevel(int idx) { return arrlevel[getFilteredIdx(idx)]; }
+    public @NonNull String getFilteredMessage(int idx) { return arrmessage[getFilteredIdx(idx)]; }
 
 }

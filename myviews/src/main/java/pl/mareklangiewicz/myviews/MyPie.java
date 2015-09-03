@@ -9,13 +9,14 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.ColorInt;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import pl.mareklangiewicz.myutils.MyMath;
 
-public class MyPie extends View {
+public final class MyPie extends View {
 
     private float mMinimum = 0;
     private float mMaximum = 100;
@@ -38,17 +39,17 @@ public class MyPie extends View {
         init(context, null, 0);
     }
 
-    public MyPie(Context context, AttributeSet attrs) {
+    public MyPie(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs, 0);
     }
 
-    public MyPie(Context context, AttributeSet attrs, int defStyle) {
+    public MyPie(Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context, attrs, defStyle);
     }
 
-    private void init(Context context, AttributeSet attrs, int defStyle) {
+    private void init(Context context, @Nullable AttributeSet attrs, int defStyle) {
 
         setBackground(mOvalDrawable);
 
@@ -103,15 +104,15 @@ public class MyPie extends View {
 
     }
 
-    public int getPieColor() { return mPieDrawable.getPaint().getColor(); }
-    public int getOvalColor() { return mOvalDrawable.getPaint().getColor(); }
+    @ColorInt public int getPieColor() { return mPieDrawable.getPaint().getColor(); }
+    @ColorInt public int getOvalColor() { return mOvalDrawable.getPaint().getColor(); }
     public float getMinimum() { return mMinimum; }
     public float getMaximum() { return mMaximum; }
     public float getFrom() { return mFrom; }
     public float getTo() { return mTo; }
 
-    public void setPieColor(int color) { mPieDrawable.getPaint().setColor(color); invalidate(); }
-    public void setOvalColor(int color) { mOvalDrawable.getPaint().setColor(color); invalidate(); }
+    public void setPieColor(@ColorInt int color) { mPieDrawable.getPaint().setColor(color); invalidate(); }
+    public void setOvalColor(@ColorInt int color) { mOvalDrawable.getPaint().setColor(color); invalidate(); }
 
     public void setMinimum(float minimum) { mMinimum = minimum; invalidate(); }
     public void setMaximum(float maximum) { mMaximum = maximum; invalidate(); }
@@ -119,7 +120,7 @@ public class MyPie extends View {
     public void setTo(float to) { mTo = to; invalidate(); }
 
 
-    static class SavedState extends BaseSavedState {
+    static final class SavedState extends BaseSavedState {
 
         float mMinimum;
         float mMaximum;

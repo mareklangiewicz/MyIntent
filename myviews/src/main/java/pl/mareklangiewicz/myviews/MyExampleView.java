@@ -1,45 +1,44 @@
 package pl.mareklangiewicz.myviews;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
-import android.text.TextPaint;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.TextView;
 
-public class MyExampleView extends TextView {
+public final class MyExampleView extends TextView {
 
-    static private Paint mPaint;
+    static private Paint sPaint;
+    private @NonNull Rect mArea = new Rect();
 
     static {
-        mPaint = new Paint();
-        mPaint.setColor(Color.BLACK);
+        sPaint = new Paint();
+        sPaint.setColor(Color.BLACK);
     }
 
     public MyExampleView(Context context) {
         super(context);
     }
 
-    public MyExampleView(Context context, AttributeSet attrs) {
+    public MyExampleView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public MyExampleView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MyExampleView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        Rect area = canvas.getClipBounds();
-        canvas.drawLine(area.centerX(), area.top, area.left, area.centerY(), mPaint);
-        canvas.drawLine(area.centerX(), area.top, area.right, area.centerY(), mPaint);
-        canvas.drawLine(area.centerX(), area.bottom, area.left, area.centerY(), mPaint);
-        canvas.drawLine(area.centerX(), area.bottom, area.right, area.centerY(), mPaint);
+        canvas.getClipBounds(mArea);
+        canvas.drawLine(mArea.centerX(), mArea.top, mArea.left, mArea.centerY(), sPaint);
+        canvas.drawLine(mArea.centerX(), mArea.top, mArea.right, mArea.centerY(), sPaint);
+        canvas.drawLine(mArea.centerX(), mArea.bottom, mArea.left, mArea.centerY(), sPaint);
+        canvas.drawLine(mArea.centerX(), mArea.bottom, mArea.right, mArea.centerY(), sPaint);
         super.onDraw(canvas);
     }
 

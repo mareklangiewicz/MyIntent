@@ -4,17 +4,20 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.UiThread;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 /**
  * Created by marek on 24.06.15.
  */
-public class MyLogger extends AbstractLogger {
+
+// Flagged as UiThread to be on the safe side - we will change this requirement if needed.
+@UiThread
+public final class MyLogger extends AbstractLogger {
 
     /**
      * Default logger for use in UI thread
-     * TODO: use annotations to force UI only usage
      */
     static public final MyLogger sMyDefaultUILogger = new MyLogger("ML");
 
@@ -69,17 +72,17 @@ public class MyLogger extends AbstractLogger {
     }
 
     @Override
-    public void print(Level level, String message, Throwable throwable) {
+    public void print(@NonNull Level level, @NonNull String message, @Nullable Throwable throwable) {
         mHandler.print(getName(), level, throwable, message);
     }
 
     @Override
-    public void print(Level level, Throwable throwable, String messageFormat, Object... args) {
+    public void print(@NonNull Level level, @Nullable Throwable throwable, @NonNull String messageFormat, @NonNull Object... args) {
         mHandler.print(getName(), level, throwable, messageFormat, args);
     }
 
     static private final char LEVEL_CHARS[] = { 'X', 'X', 'V', 'D', 'I', 'W', 'E', 'A' };
-    static public char getLevelChar(Logger.Level level) { return LEVEL_CHARS[level.intValue()]; }
+    static public char getLevelChar(@NonNull Logger.Level level) { return LEVEL_CHARS[level.intValue()]; }
 
     public static final int COLOR_VERBOSE = 0xFFB0B0B0;
     public static final int COLOR_DEBUG = 0xFF606060;
@@ -87,7 +90,7 @@ public class MyLogger extends AbstractLogger {
     public static final int COLOR_WARNING  = 0xFF0000A0;
     public static final int COLOR_ERROR  = 0xFFA00000;
 
-    static public int getLevelColor(Logger.Level level) {
+    static public int getLevelColor(@NonNull Logger.Level level) {
         switch(level) {
             case ERROR: return COLOR_ERROR;
             case WARN: return COLOR_WARNING;
@@ -98,7 +101,7 @@ public class MyLogger extends AbstractLogger {
         }
     }
 
-    public void drawHistoryOnCanvas(Canvas canvas, int x, int y, Paint paint, int lines) {
+    public void drawHistoryOnCanvas(@NonNull Canvas canvas, int x, int y, @NonNull Paint paint, int lines) {
         int minY = canvas.getClipBounds().top;
         LogHistory history = getLogHistory();
         int N = history.getFilteredSize();

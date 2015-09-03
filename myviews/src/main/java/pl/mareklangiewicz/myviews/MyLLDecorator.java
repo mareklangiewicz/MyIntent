@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +21,7 @@ import android.widget.LinearLayout;
  * But it works fine for me ;)
  * Better alternative (without so much hacking) is: MyViewDecorator.
  */
-public class MyLLDecorator extends LinearLayout {
+public final class MyLLDecorator extends LinearLayout {
 
     private @LayoutRes int mDecoration = 0;
     private LayoutInflater mInflater;
@@ -29,15 +30,15 @@ public class MyLLDecorator extends LinearLayout {
         this(context, null);
     }
 
-    public MyLLDecorator(Context context, AttributeSet attrs) {
+    public MyLLDecorator(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public MyLLDecorator(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MyLLDecorator(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         this(context, attrs, defStyleAttr, 0);
     }
 
-    public MyLLDecorator(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public MyLLDecorator(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr);
 
 

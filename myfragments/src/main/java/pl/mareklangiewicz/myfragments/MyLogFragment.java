@@ -14,19 +14,19 @@ import com.noveogroup.android.log.Logger;
 import pl.mareklangiewicz.myloggers.MyLogRecyclerView;
 
 /**
- * Created by marek on 22.07.15.
+ * Created by Marek Langiewicz on 22.07.15.
  */
 
-//TODO: set local menu with log levels using xml (after implementing this feature in MyBaseFragment)
+//TODO later: set local menu with log levels using xml (after implementing this feature in MyFragment)
 
-public class MyLogFragment extends MyBaseFragment {
+public final class MyLogFragment extends MyFragment {
 
     private MyLogRecyclerView mMyLogRecyclerView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.my_log_local_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.my_log_fragment, container, false);
         mMyLogRecyclerView = (MyLogRecyclerView) rootView.findViewById(R.id.my_log_recycler_view);
         mMyLogRecyclerView.setLog(log);
         setHasOptionsMenu(true);
@@ -37,11 +37,6 @@ public class MyLogFragment extends MyBaseFragment {
     public void onDestroyView() {
         mMyLogRecyclerView.setLog(null);
         super.onDestroyView();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
     @Override

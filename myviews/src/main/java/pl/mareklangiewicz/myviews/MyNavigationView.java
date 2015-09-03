@@ -2,19 +2,14 @@ package pl.mareklangiewicz.myviews;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.MenuRes;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,10 +19,13 @@ import com.noveogroup.android.log.MyLogger;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyNavigationView extends NavigationView {
+public final class MyNavigationView extends NavigationView implements IMyNavigation {
 
     protected final MyLogger log = MyLogger.sMyDefaultUILogger;
 
+    private View mHeader;
+
+    @Nullable
     private OnNavigationItemSelectedListener mMyListener;
 
     private boolean mFreezeCheckedItems = true;
@@ -37,62 +35,66 @@ public class MyNavigationView extends NavigationView {
         init(null, 0);
     }
 
-    public MyNavigationView(Context context, AttributeSet attrs) {
+    public MyNavigationView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(attrs, 0);
     }
 
-    public MyNavigationView(Context context, AttributeSet attrs, int defStyle) {
+    public MyNavigationView(Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(attrs, defStyle);
     }
 
-    private void init(AttributeSet attrs, int defStyle) {
+    private void init(@Nullable AttributeSet attrs, int defStyle) {
         final TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.MyNavigationView, defStyle, 0);
         mFreezeCheckedItems = a.getBoolean(R.styleable.MyNavigationView_freezeCheckedItems, mFreezeCheckedItems);
         a.recycle();
-        super.setNavigationItemSelectedListener(new OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
-                return selectMenuItem(item);
-            }
-        });
+        super.setNavigationItemSelectedListener(this);
     }
 
     @Override
-    public void setNavigationItemSelectedListener(OnNavigationItemSelectedListener listener) {
+    public boolean onNavigationItemSelected(MenuItem item) {
+        return selectMenuItem(item);
+    }
+
+    @Override
+    public void setNavigationItemSelectedListener(@Nullable OnNavigationItemSelectedListener listener) {
         mMyListener = listener;
     }
 
 
-    public void setMenu(@MenuRes int id) {
+    public @Nullable View getHeader() {
+        return mHeader;
+    }
+
+    public void inflateHeader(@LayoutRes int id) {
+        mHeader = inflateHeaderView(id);
+    }
+
+
+    @Override
+    public void clearMenu() {
         getMenu().clear();
-        if(id > 0)
-            inflateMenu(id);
     }
 
-    public void setHeader(@LayoutRes int id) {
-        log.w("TODO: clear old header content");
-        //TODO: clear old header content
-        if(id > 0)
-            inflateHeaderView(id);
+    @Override
+    public void clearHeader() {
+        removeHeaderView(mHeader);
+        mHeader = null;
     }
 
-
-
-    public boolean selectMenuItem(MenuItem item) {
+    public boolean selectMenuItem(@Nullable MenuItem item) {
         if(item == null) {
             log.d("menu item is null!");
             return false;
         }
         if(item.isCheckable()) {
-            //TODO: handle case when it is just single item with switch (not a group with checkableBehaviour:single)
-            if(item.isChecked())
-                return false;
             item.setChecked(true);
+            //TODO: handle case when it is just single item with switch (not a group with checkableBehaviour:single)
         }
-        if(mMyListener != null)
+        if(mMyListener != null) {
             return mMyListener.onNavigationItemSelected(item);
+        }
         return true;
     }
 
@@ -105,6 +107,16 @@ public class MyNavigationView extends NavigationView {
         MenuItem item = menu.findItem(id);
         return selectMenuItem(item);
     }
+
+
+
+    /**
+     * Default is true.
+     * Only items with id can have their checked state freezed!
+     */
+    public void setFreezeCheckedItems(boolean freeze) { mFreezeCheckedItems = freeze; }
+    public boolean geFreezeCheckedItems() { return mFreezeCheckedItems; }
+
 
 
 
@@ -146,18 +158,6 @@ public class MyNavigationView extends NavigationView {
         }
     }
 
-    /**
-     * Default is true.
-     * Only items with id can have their checked state freezed!
-     */
-    public void setFreezeCheckedItems(boolean freeze) { mFreezeCheckedItems = freeze; }
-    public boolean geFreezeCheckedItems() { return mFreezeCheckedItems; }
-
-
-
-
-
-
 
     static class SavedState extends BaseSavedState {
 
@@ -170,8 +170,8 @@ public class MyNavigationView extends NavigationView {
         private SavedState(Parcel in) {
             super(in);
             int N = in.readInt();
-            mCheckedIds.ensureCapacity(N);
             mCheckedIds.clear();
+            mCheckedIds.ensureCapacity(N);
             for(int i = 0; i < N; i++)
                 mCheckedIds.add(in.readInt());
         }

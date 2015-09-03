@@ -2,7 +2,6 @@ package pl.mareklangiewicz.myfragments;
 
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 
-public class MyBasicTestsFragment extends MyBaseFragment {
-
-    private FloatingActionButton mFAB;
+public final class MyBasicTestsFragment extends MyFragment {
 
     public MyBasicTestsFragment() { }
 
@@ -37,15 +34,6 @@ public class MyBasicTestsFragment extends MyBaseFragment {
                 return false;
             }
         });
-
-        mFAB = (FloatingActionButton) root.findViewById(R.id.fab);
-        mFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                log.w("[SNACK]FAB Clicked!");
-            }
-        });
-        // FIXME: FAB should move up when snack bar is displayed..
 
 
         return root;

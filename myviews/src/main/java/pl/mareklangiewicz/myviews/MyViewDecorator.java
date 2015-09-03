@@ -11,10 +11,10 @@ import java.util.Map;
 
 /**
  * Created by Marek Langiewicz on 31.05.15.
- * TODO: javadocs and tests
+ * TODO later: javadocs and tests
  * We do not decorate inside already decorated view.
  */
-public class MyViewDecorator {
+public final class MyViewDecorator {
 
     static public void decorateOne(@NonNull View view, @LayoutRes int decoration, @Nullable LayoutInflater inflater) {
 

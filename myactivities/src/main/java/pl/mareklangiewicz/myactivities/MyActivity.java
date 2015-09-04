@@ -39,6 +39,8 @@ public class MyActivity extends AppCompatActivity implements IMyCommander {
 
     static public final String PREFIX_FRAGMENT = "fragment:";
 
+    static public final String TAG_LOCAL_FRAGMENT = "tag_local_fragment";
+
     protected DrawerLayout mGlobalDrawerLayout;
     protected CoordinatorLayout mCoordinatorLayout;
     protected AppBarLayout mAppBarLayout;
@@ -51,10 +53,6 @@ public class MyActivity extends AppCompatActivity implements IMyCommander {
     protected MyNavigation mLocalNavigation;
 
     protected FloatingActionButton mFAB;
-
-    protected Fragment mLocalFragment;
-        // fragment that is instantiated in mLocalFrameLayout at the moment (or null if there is none).
-        // usually it is MyFragment, but it can be arbitrary Fragment object..
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +123,18 @@ public class MyActivity extends AppCompatActivity implements IMyCommander {
 
         @Override public boolean selectMenuItem(@IdRes int id) { return mMyNavigationView.selectMenuItem(id); }
 
+        /**
+         * Override if you want to do something different that clearing local navigation menu and header
+         * before new local fragment creation, or if you want to cancel it (by returning false)
+         * @param name Class name of new fragment to instantiate
+         * @return  False will cancel new fragment creation.
+         */
+        protected boolean onNewLocalFragment(String name) {
+            mLocalNavigation.clearHeader();
+            mLocalNavigation.clearMenu();
+            return true;
+        }
+
         @Override
         public boolean onNavigationItemSelected(MenuItem item) {
             if(mGlobalDrawerLayout != null)
@@ -132,20 +142,26 @@ public class MyActivity extends AppCompatActivity implements IMyCommander {
             if(mLocalDrawerLayout != null)
                 mLocalDrawerLayout.closeDrawers();
             String ctitle = item.getTitleCondensed().toString();
+            FragmentManager fm = getFragmentManager();
+            Fragment f;
             if(ctitle.startsWith(PREFIX_FRAGMENT)) {
                 ctitle = ctitle.substring(PREFIX_FRAGMENT.length());
-                mLocalFragment = Fragment.instantiate(MyActivity.this, ctitle);
-                FragmentManager fm = getFragmentManager();
-                fm.beginTransaction().replace(R.id.ma_local_frame_layout, mLocalFragment).commit(); //TODO later: some animation?
+                boolean ok = onNewLocalFragment(ctitle);
+                if(!ok)
+                    return false;
+                f = Fragment.instantiate(MyActivity.this, ctitle);
+                fm.beginTransaction().replace(R.id.ma_local_frame_layout, f, TAG_LOCAL_FRAGMENT).commit(); //TODO later: some animation?
                 return true;
             }
             //TODO later: support for other prefixes (like starting activities/services) - but first lets make MyIntent work with new MyBlocks
             //TODO later: if we want to have an engine for starting activities/services here - we should put almost all logic from MyIntent to MyBlocks...
             //TODO later: and MyIntent would be only a thin wrapper.. and.. that's a great idea!
             //TODO later: menu api already has some api for launching intents (MenuItem.setIntent) - but our MyIntent engine is better!
-            if(mLocalFragment instanceof MyFragment) {
-                MyFragment f = (MyFragment) mLocalFragment;
-                if(f.onNavigationItemSelected(item))
+
+            f = fm.findFragmentByTag(TAG_LOCAL_FRAGMENT);
+            if(f instanceof IMyNavigation) {
+                IMyNavigation imn = (IMyNavigation) f;
+                if(imn.onNavigationItemSelected(item))
                     return true;
             }
             return false;

@@ -59,13 +59,13 @@ public class MyFragment extends Fragment implements IMyNavigation {
     }
 
     @Override
-    public void clearMenu() {
+    public final void clearMenu() {
         IMyNavigation nav = ((IMyCommander) getActivity()).getLocalNavigation();
         nav.clearMenu();
     }
 
     @Override
-    public void clearHeader() {
+    public final void clearHeader() {
         IMyNavigation nav = ((IMyCommander) getActivity()).getLocalNavigation();
         nav.clearHeader();
     }

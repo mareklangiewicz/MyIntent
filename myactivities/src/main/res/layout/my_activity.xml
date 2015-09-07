@@ -49,7 +49,7 @@
 
                 <pl.mareklangiewicz.myviews.MyNavigationView
                     android:id="@+id/ma_local_navigation_view"
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/my_local_navigation_width"
                     android:layout_height="match_parent"
                     android:layout_gravity="end"
                     />
@@ -77,7 +77,7 @@
 
     <pl.mareklangiewicz.myviews.MyNavigationView
         android:id="@+id/ma_global_navigation_view"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/my_global_navigation_width"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         />

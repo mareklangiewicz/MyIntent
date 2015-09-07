@@ -1,4 +1,4 @@
-package pl.mareklangiewicz.myactivities;
+package pl.mareklangiewicz.mytestapp;
 
 import android.os.Bundle;
 
@@ -8,7 +8,7 @@ import android.os.Bundle;
 
 // TODO: set lint to fatal and remove all problems before putting MyBlocks on github
     
-public final class MyTestActivity extends MyActivity {
+public final class MyTestActivity extends pl.mareklangiewicz.myactivities.MyActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

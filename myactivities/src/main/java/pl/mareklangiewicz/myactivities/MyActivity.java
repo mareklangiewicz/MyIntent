@@ -22,15 +22,17 @@ import android.widget.FrameLayout;
 
 import com.noveogroup.android.log.MyLogger;
 
-import pl.mareklangiewicz.myfragments.MyFragment;
 import pl.mareklangiewicz.myviews.IMyCommander;
 import pl.mareklangiewicz.myviews.IMyNavigation;
 import pl.mareklangiewicz.myviews.MyNavigationView;
-
+import static pl.mareklangiewicz.myutils.MyText.*;
 // TODO: Hide left menu icon and block left drawer if global menu is empty
 // TODO: Hide right menu icon and block right drawer if local menu is empty
 
 public class MyActivity extends AppCompatActivity implements IMyCommander {
+
+    static final boolean VERBOSE = true;
+    //TODO later: implement it as a build time switch for user
 
     /**
      * Default logger for use in UI thread
@@ -56,7 +58,7 @@ public class MyActivity extends AppCompatActivity implements IMyCommander {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        log.v("%s.%s", this.getClass().getSimpleName(), "onCreate");
+        if(VERBOSE) log.v("%s.%s(%s)", this.getClass().getSimpleName(), "onCreate", toStr(savedInstanceState));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_activity);
 
@@ -75,7 +77,7 @@ public class MyActivity extends AppCompatActivity implements IMyCommander {
         setSupportActionBar(mToolbar);
 
         mToolbar.setNavigationIcon(R.drawable.ic_menu_black_24dp); //FIXME later: better animated icon (and for local navigation too..)
-        mToolbar.setNavigationContentDescription(R.string.mba_navigation_content_description);
+        mToolbar.setNavigationContentDescription(R.string.ma_global_navigation_description);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,12 +100,12 @@ public class MyActivity extends AppCompatActivity implements IMyCommander {
 
     @Override
     protected void onDestroy() {
-        log.v("%s.%s", this.getClass().getSimpleName(), "onDestroy");
+        if(VERBOSE) log.v("%s.%s()", this.getClass().getSimpleName(), "onDestroy");
         log.setSnackView(null);
         super.onDestroy();
     }
 
-    class MyNavigation implements IMyNavigation {
+    public class MyNavigation implements IMyNavigation {
 
         private @NonNull MyNavigationView mMyNavigationView;
 

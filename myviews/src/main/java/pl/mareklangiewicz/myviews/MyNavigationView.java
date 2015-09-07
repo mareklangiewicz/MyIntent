@@ -9,6 +9,7 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.MenuRes;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
 import android.util.AttributeSet;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,6 +52,7 @@ public final class MyNavigationView extends NavigationView implements IMyNavigat
         a.recycle();
         super.setNavigationItemSelectedListener(this);
     }
+
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {

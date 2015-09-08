@@ -25,14 +25,16 @@ import com.noveogroup.android.log.MyLogger;
 import pl.mareklangiewicz.myviews.IMyCommander;
 import pl.mareklangiewicz.myviews.IMyNavigation;
 import pl.mareklangiewicz.myviews.MyNavigationView;
-import static pl.mareklangiewicz.myutils.MyText.*;
+
+import static pl.mareklangiewicz.myutils.MyTextUtils.*;
 // TODO: Hide left menu icon and block left drawer if global menu is empty
 // TODO: Hide right menu icon and block right drawer if local menu is empty
+// TODO LATER: use Leak Canary: https://github.com/square/leakcanary
 
 public class MyActivity extends AppCompatActivity implements IMyCommander {
 
     static final boolean VERBOSE = true;
-    //TODO later: implement it as a build time switch for user
+    //TODO LATER: implement it as a build time switch for user
 
     /**
      * Default logger for use in UI thread
@@ -96,6 +98,7 @@ public class MyActivity extends AppCompatActivity implements IMyCommander {
         });
 
         log.setSnackView(mCoordinatorLayout);
+
     }
 
     @Override
@@ -103,6 +106,18 @@ public class MyActivity extends AppCompatActivity implements IMyCommander {
         if(VERBOSE) log.v("%s.%s()", this.getClass().getSimpleName(), "onDestroy");
         log.setSnackView(null);
         super.onDestroy();
+    }
+
+    /**
+     * Override if you want to do something different that clearing local navigation menu and header
+     * before new local fragment creation, or if you want to cancel it (by returning false)
+     * @param name Class name of new fragment to instantiate
+     * @return  False will cancel new fragment creation.
+     */
+    protected boolean onNewLocalFragment(String name) {
+        mLocalNavigation.clearHeader();
+        mLocalNavigation.clearMenu();
+        return true;
     }
 
     public class MyNavigation implements IMyNavigation {
@@ -125,18 +140,6 @@ public class MyActivity extends AppCompatActivity implements IMyCommander {
 
         @Override public boolean selectMenuItem(@IdRes int id) { return mMyNavigationView.selectMenuItem(id); }
 
-        /**
-         * Override if you want to do something different that clearing local navigation menu and header
-         * before new local fragment creation, or if you want to cancel it (by returning false)
-         * @param name Class name of new fragment to instantiate
-         * @return  False will cancel new fragment creation.
-         */
-        protected boolean onNewLocalFragment(String name) {
-            mLocalNavigation.clearHeader();
-            mLocalNavigation.clearMenu();
-            return true;
-        }
-
         @Override
         public boolean onNavigationItemSelected(MenuItem item) {
             if(mGlobalDrawerLayout != null)
@@ -152,13 +155,13 @@ public class MyActivity extends AppCompatActivity implements IMyCommander {
                 if(!ok)
                     return false;
                 f = Fragment.instantiate(MyActivity.this, ctitle);
-                fm.beginTransaction().replace(R.id.ma_local_frame_layout, f, TAG_LOCAL_FRAGMENT).commit(); //TODO later: some animation?
+                fm.beginTransaction().replace(R.id.ma_local_frame_layout, f, TAG_LOCAL_FRAGMENT).commit(); //TODO LATER: some animation?
                 return true;
             }
-            //TODO later: support for other prefixes (like starting activities/services) - but first lets make MyIntent work with new MyBlocks
-            //TODO later: if we want to have an engine for starting activities/services here - we should put almost all logic from MyIntent to MyBlocks...
-            //TODO later: and MyIntent would be only a thin wrapper.. and.. that's a great idea!
-            //TODO later: menu api already has some api for launching intents (MenuItem.setIntent) - but our MyIntent engine is better!
+            //TODO LATER: support for other prefixes (like starting activities/services) - but first lets make MyIntent work with new MyBlocks
+            //TODO LATER: if we want to have an engine for starting activities/services here - we should put almost all logic from MyIntent to MyBlocks...
+            //TODO LATER: and MyIntent would be only a thin wrapper.. and.. that's a great idea!
+            //TODO LATER: menu api already has some api for launching intents (MenuItem.setIntent) - but our MyIntent engine is better!
 
             f = fm.findFragmentByTag(TAG_LOCAL_FRAGMENT);
             if(f instanceof IMyNavigation) {

@@ -17,7 +17,7 @@ import pl.mareklangiewicz.myloggers.MyLogRecyclerView;
  * Created by Marek Langiewicz on 22.07.15.
  */
 
-//TODO later: set local menu with log levels using xml (after implementing this feature in MyFragment)
+//TODO LATER: set local menu with log levels using xml (after implementing this feature in MyFragment)
 
 public final class MyLogFragment extends MyFragment {
 

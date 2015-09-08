@@ -14,7 +14,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
-import pl.mareklangiewicz.myutils.MyMath;
+import pl.mareklangiewicz.myutils.MyMathUtils;
 
 public final class MyPie extends View {
 
@@ -26,8 +26,8 @@ public final class MyPie extends View {
         @Override
         public void draw(Canvas canvas, Paint paint) {
             canvas.drawArc(rect(),
-                    MyMath.scale1d(mFrom, mMinimum, mMaximum, 270, 270 + 360),
-                    MyMath.scale1d(mTo - mFrom, mMinimum, mMaximum, 0, 360),
+                    MyMathUtils.scale1d(mFrom, mMinimum, mMaximum, 270, 270 + 360),
+                    MyMathUtils.scale1d(mTo - mFrom, mMinimum, mMaximum, 0, 360),
                     true, paint
             );
         }
@@ -121,6 +121,8 @@ public final class MyPie extends View {
 
 
     static final class SavedState extends BaseSavedState {
+
+        //TODO LATER: we should save colors too
 
         float mMinimum;
         float mMaximum;

@@ -13,7 +13,7 @@ import com.noveogroup.android.log.MyLogger;
 
 /**
  * Created by marek on 30.06.15.
- * TODO later: example tests - copy from MyIntent (remember to setLog(null) in Fragment.onDestroyView
+ * TODO LATER: example tests - copy from MyIntent (remember to setLog(null) in Fragment.onDestroyView
  */
 public final class MyLogSimpleView extends View {
     private @Nullable MyLogger log;

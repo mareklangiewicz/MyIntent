@@ -11,7 +11,7 @@ import java.util.Map;
 
 /**
  * Created by Marek Langiewicz on 31.05.15.
- * TODO later: javadocs and tests
+ * TODO LATER: javadocs and tests
  * We do not decorate inside already decorated view.
  */
 public final class MyViewDecorator {

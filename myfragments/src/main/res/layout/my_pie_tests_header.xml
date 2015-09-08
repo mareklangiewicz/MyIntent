@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="100dp">
+    <pl.mareklangiewicz.myviews.MyPie
+        android:id="@+id/header_pie"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        android:elevation="4dp"
+        app:pieColor="?colorPrimaryDark"
+        app:ovalColor="@color/cardview_light_background"
+        />
+
+</LinearLayout>

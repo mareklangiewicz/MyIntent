@@ -10,11 +10,11 @@ import java.util.Random;
 /**
  * Created by marek on 15.07.15.
  */
-public final class MyMath {
+public final class MyMathUtils {
 
     static public final Random RANDOM = new Random();
 
-    private MyMath() {};
+    private MyMathUtils() {};
 
 
 

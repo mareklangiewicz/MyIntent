@@ -32,7 +32,7 @@ public final class MyDecoratorsTestsFragment extends MyFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.action_decorate_views) { // TODO later: change this to FAB action!!!
+        if(id == R.id.action_decorate_views) { // TODO LATER: change this to FAB action!!!
             View view = getView();
             if(view == null)
                 throw new NullPointerException("The root view of this fragment is null.");

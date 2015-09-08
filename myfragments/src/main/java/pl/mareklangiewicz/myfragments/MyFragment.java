@@ -20,7 +20,7 @@ import com.noveogroup.android.log.MyLogger;
 import pl.mareklangiewicz.myviews.IMyCommander;
 import pl.mareklangiewicz.myviews.IMyNavigation;
 
-import static pl.mareklangiewicz.myutils.MyText.*;
+import static pl.mareklangiewicz.myutils.MyTextUtils.*;
 
 /**
  * This is my base class for common fragments.
@@ -35,9 +35,9 @@ import static pl.mareklangiewicz.myutils.MyText.*;
 public class MyFragment extends Fragment implements IMyNavigation {
 
     static final boolean VERBOSE = true;
-        //TODO later: implement it as a build time switch for user
+        //TODO LATER: implement it as a build time switch for user
     static final boolean VERY_VERBOSE = false;
-        //TODO later: implement it as a build time switch for user
+        //TODO LATER: implement it as a build time switch for user
 
     protected MyLogger log = MyLogger.sMyDefaultUILogger;
 

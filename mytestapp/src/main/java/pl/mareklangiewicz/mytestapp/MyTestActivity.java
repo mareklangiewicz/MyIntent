@@ -6,7 +6,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
-import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 
 /**
@@ -20,10 +19,10 @@ public final class MyTestActivity extends pl.mareklangiewicz.myactivities.MyActi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mGlobalNavigation.inflateMenu(R.menu.my_test_global_menu);
-        mGlobalNavigation.inflateHeader(R.layout.my_test_global_header);
+        getGlobalNavigation().inflateMenu(R.menu.my_test_global_menu);
+        getGlobalNavigation().inflateHeader(R.layout.my_test_global_header);
 
-        View target = mGlobalNavigation.getHeader().findViewById(R.id.my_home_page_text_view);
+        @SuppressWarnings("ConstantConditions") View target = getGlobalNavigation().getHeader().findViewById(R.id.my_home_page_text_view);
 
         PropertyValuesHolder pvha = PropertyValuesHolder.ofFloat("alpha", 0f, 0f, 1f);
         PropertyValuesHolder pvhy = PropertyValuesHolder.ofFloat("translationY", -50f, -50f, 0f);
@@ -41,6 +40,6 @@ public final class MyTestActivity extends pl.mareklangiewicz.myactivities.MyActi
         });
 
         if(savedInstanceState == null)
-            mGlobalNavigation.selectMenuItem(R.id.section_my_pie_tests);
+            getGlobalNavigation().selectMenuItem(R.id.section_my_pie_tests);
     }
 }

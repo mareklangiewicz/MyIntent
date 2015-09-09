@@ -3,19 +3,15 @@ package pl.mareklangiewicz.myactivities;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.MenuRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.support.annotation.CallSuper;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -26,12 +22,12 @@ import pl.mareklangiewicz.myviews.IMyCommander;
 import pl.mareklangiewicz.myviews.IMyNavigation;
 import pl.mareklangiewicz.myviews.MyNavigationView;
 
-import static pl.mareklangiewicz.myutils.MyTextUtils.*;
+import static pl.mareklangiewicz.myutils.MyTextUtils.toStr;
 // TODO: Hide left menu icon and block left drawer if global menu is empty
 // TODO: Hide right menu icon and block right drawer if local menu is empty
 // TODO LATER: use Leak Canary: https://github.com/square/leakcanary
 
-public class MyActivity extends AppCompatActivity implements IMyCommander {
+public class MyActivity extends AppCompatActivity implements IMyCommander, NavigationView.OnNavigationItemSelectedListener {
 
     static final boolean VERBOSE = true;
     //TODO LATER: implement it as a build time switch for user
@@ -53,8 +49,6 @@ public class MyActivity extends AppCompatActivity implements IMyCommander {
     protected FrameLayout mLocalFrameLayout;
     protected MyNavigationView mLocalNavigationView;
     protected MyNavigationView mGlobalNavigationView;
-    protected MyNavigation mGlobalNavigation;
-    protected MyNavigation mLocalNavigation;
 
     protected FloatingActionButton mFAB;
 
@@ -73,8 +67,8 @@ public class MyActivity extends AppCompatActivity implements IMyCommander {
         mGlobalNavigationView = (MyNavigationView) findViewById(R.id.ma_global_navigation_view);
         mLocalNavigationView = (MyNavigationView) findViewById(R.id.ma_local_navigation_view);
 
-        mGlobalNavigation = new MyNavigation(mGlobalNavigationView);
-        mLocalNavigation = new MyNavigation(mLocalNavigationView);
+        mGlobalNavigationView.setNavigationItemSelectedListener(this);
+        mLocalNavigationView.setNavigationItemSelectedListener(this);
 
         setSupportActionBar(mToolbar);
 
@@ -99,6 +93,11 @@ public class MyActivity extends AppCompatActivity implements IMyCommander {
 
         log.setSnackView(mCoordinatorLayout);
 
+        if(savedInstanceState != null) {
+            FragmentManager fm = getFragmentManager();
+            Fragment f = fm.findFragmentByTag(TAG_LOCAL_FRAGMENT);
+            if(f != null) setupLocalFragment(f);
+        }
     }
 
     @Override
@@ -115,71 +114,67 @@ public class MyActivity extends AppCompatActivity implements IMyCommander {
      * @return  False will cancel new fragment creation.
      */
     protected boolean onNewLocalFragment(String name) {
-        mLocalNavigation.clearHeader();
-        mLocalNavigation.clearMenu();
+        if(VERBOSE) log.v("%s.%s(%s)", this.getClass().getSimpleName(), "onNewLocalFragment", name);
+        mLocalNavigationView.clearHeader();
+        mLocalNavigationView.clearMenu();
         return true;
     }
 
-    public class MyNavigation implements IMyNavigation {
+    protected void setupLocalFragment(Fragment fragment) {
 
-        private @NonNull MyNavigationView mMyNavigationView;
+        if(mLocalDrawerLayout != null && fragment instanceof DrawerLayout.DrawerListener)
+            mLocalDrawerLayout.setDrawerListener((DrawerLayout.DrawerListener) fragment);
 
-        MyNavigation(@NonNull MyNavigationView myNavigationView) {
-            mMyNavigationView = myNavigationView;
-            mMyNavigationView.setNavigationItemSelectedListener(this);
-        }
-
-        @Override public @Nullable Menu getMenu() { return mMyNavigationView.getMenu(); }
-        @Override public @Nullable View getHeader() { return mMyNavigationView.getHeader(); }
-
-        @Override public void clearMenu() { mMyNavigationView.clearMenu(); }
-        @Override public void clearHeader() { mMyNavigationView.clearHeader(); }
-
-        @Override public void inflateMenu(@MenuRes int id) { mMyNavigationView.inflateMenu(id); }
-        @Override public void inflateHeader(@LayoutRes int id) { mMyNavigationView.inflateHeader(id); }
-
-        @Override public boolean selectMenuItem(@IdRes int id) { return mMyNavigationView.selectMenuItem(id); }
-
-        @Override
-        public boolean onNavigationItemSelected(MenuItem item) {
-            if(mGlobalDrawerLayout != null)
-                mGlobalDrawerLayout.closeDrawers();
-            if(mLocalDrawerLayout != null)
-                mLocalDrawerLayout.closeDrawers();
-            String ctitle = item.getTitleCondensed().toString();
-            FragmentManager fm = getFragmentManager();
-            Fragment f;
-            if(ctitle.startsWith(PREFIX_FRAGMENT)) {
-                ctitle = ctitle.substring(PREFIX_FRAGMENT.length());
-                boolean ok = onNewLocalFragment(ctitle);
-                if(!ok)
-                    return false;
-                f = Fragment.instantiate(MyActivity.this, ctitle);
-                fm.beginTransaction().replace(R.id.ma_local_frame_layout, f, TAG_LOCAL_FRAGMENT).commit(); //TODO LATER: some animation?
-                return true;
-            }
-            //TODO LATER: support for other prefixes (like starting activities/services) - but first lets make MyIntent work with new MyBlocks
-            //TODO LATER: if we want to have an engine for starting activities/services here - we should put almost all logic from MyIntent to MyBlocks...
-            //TODO LATER: and MyIntent would be only a thin wrapper.. and.. that's a great idea!
-            //TODO LATER: menu api already has some api for launching intents (MenuItem.setIntent) - but our MyIntent engine is better!
-
-            f = fm.findFragmentByTag(TAG_LOCAL_FRAGMENT);
-            if(f instanceof IMyNavigation) {
-                IMyNavigation imn = (IMyNavigation) f;
-                if(imn.onNavigationItemSelected(item))
-                    return true;
-            }
-            return false;
-        }
     }
+
+    /**
+     * You can override it, but you should call super version first and do your custom logic only if it returns false.
+     */
+    @CallSuper
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        if(mGlobalDrawerLayout != null)
+            mGlobalDrawerLayout.closeDrawers();
+        if(mLocalDrawerLayout != null)
+            mLocalDrawerLayout.closeDrawers();
+        String ctitle = item.getTitleCondensed().toString();
+        FragmentManager fm = getFragmentManager();
+        Fragment f;
+        if(ctitle.startsWith(PREFIX_FRAGMENT)) {
+            ctitle = ctitle.substring(PREFIX_FRAGMENT.length());
+            boolean ok = onNewLocalFragment(ctitle);
+            if(!ok)
+                return false;
+
+            f = Fragment.instantiate(MyActivity.this, ctitle);
+
+            setupLocalFragment(f);
+
+            fm.beginTransaction().replace(R.id.ma_local_frame_layout, f, TAG_LOCAL_FRAGMENT).commit(); //TODO LATER: some animation?
+
+            return true;
+        }
+        //TODO LATER: support for other prefixes (like starting activities/services) - but first lets make MyIntent work with new MyBlocks
+        //TODO LATER: if we want to have an engine for starting activities/services here - we should put almost all logic from MyIntent to MyBlocks...
+        //TODO LATER: and MyIntent would be only a thin wrapper.. and.. that's a great idea!
+        //TODO LATER: menu api already has some api for launching intents (MenuItem.setIntent) - but our MyIntent engine is better!
+
+        f = fm.findFragmentByTag(TAG_LOCAL_FRAGMENT);
+        if(f instanceof NavigationView.OnNavigationItemSelectedListener) {
+            if(((NavigationView.OnNavigationItemSelectedListener) f).onNavigationItemSelected(item))
+                return true;
+        }
+        return false;
+    }
+
     @Override
     public IMyNavigation getGlobalNavigation() {
-        return mGlobalNavigation;
+        return mGlobalNavigationView;
     }
 
     @Override
     public IMyNavigation getLocalNavigation() {
-        return mLocalNavigation;
+        return mLocalNavigationView;
     }
 
 

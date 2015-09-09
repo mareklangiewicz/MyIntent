@@ -11,7 +11,7 @@ import android.view.View;
 /**
  * Created by marek on 02.09.15.
  */
-public interface IMyNavigation extends  NavigationView.OnNavigationItemSelectedListener {
+public interface IMyNavigation {
 
     @Nullable Menu getMenu();
     @Nullable View getHeader();

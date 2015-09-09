@@ -8,6 +8,7 @@ import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.MenuRes;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -32,7 +33,7 @@ import static pl.mareklangiewicz.myutils.MyTextUtils.*;
  * - don't add this fragment transactions to back stack
  * or invoke setRetainInstance(false) after MyFragment.onCreate.
  */
-public class MyFragment extends Fragment implements IMyNavigation {
+public class MyFragment extends Fragment implements IMyNavigation, NavigationView.OnNavigationItemSelectedListener {
 
     static final boolean VERBOSE = true;
         //TODO LATER: implement it as a build time switch for user

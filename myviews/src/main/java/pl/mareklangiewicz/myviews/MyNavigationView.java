@@ -6,10 +6,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
-import android.support.annotation.MenuRes;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
 import android.util.AttributeSet;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,7 +18,7 @@ import com.noveogroup.android.log.MyLogger;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class MyNavigationView extends NavigationView implements IMyNavigation {
+public final class MyNavigationView extends NavigationView implements IMyNavigation, NavigationView.OnNavigationItemSelectedListener {
 
     protected final MyLogger log = MyLogger.sMyDefaultUILogger;
 

@@ -18,7 +18,7 @@ import com.noveogroup.android.log.MyLogger;
 public final class MyLogSimpleView extends View {
     private @Nullable MyLogger log;
 
-    private Paint mPaint;
+    private final Paint mPaint = new Paint();
 
     private int mLines = 16;
 
@@ -38,13 +38,12 @@ public final class MyLogSimpleView extends View {
     }
 
     private void init() {
-        mPaint = new Paint();
         mPaint.setTypeface(Typeface.MONOSPACE);
         mPaint.setARGB(255, 0, 0, 0);
     }
 
     public void setPaint(@NonNull Paint paint) {
-        mPaint = new Paint(paint);
+        mPaint.set(paint);
         invalidate();
     }
 

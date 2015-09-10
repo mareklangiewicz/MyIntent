@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/mpt_item_randomize"
+        android:title="On pie click: randomize:"
+        >
+        <menu>
+            <group
+                android:id="@+id/mpt_group_randomize"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/mpt_randomize_from"
+                    android:title="from"
+                    android:icon="@drawable/ic_checkable"
+                    />
+                <item
+                    android:id="@+id/mpt_randomize_to"
+                    android:title="to"
+                    android:icon="@drawable/ic_checkable"
+                    />
+                <item
+                    android:id="@+id/mpt_randomize_minimum"
+                    android:title="minimum"
+                    android:icon="@drawable/ic_checkable"
+                    />
+                <item
+                    android:id="@+id/mpt_randomize_maximum"
+                    android:title="maximum"
+                    android:icon="@drawable/ic_checkable"
+                    />
+                <item
+                    android:id="@+id/mpt_randomize_pie_color"
+                    android:title="pieColor"
+                    android:icon="@drawable/ic_checkable"
+                    />
+                <item
+                    android:id="@+id/mpt_randomize_oval_color"
+                    android:title="ovalColor"
+                    android:icon="@drawable/ic_checkable"
+                    />
+            </group>
+        </menu>
+    </item>
+</menu>

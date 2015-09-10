@@ -2,6 +2,7 @@ package pl.mareklangiewicz.myfragments;
 
 
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,7 +32,7 @@ public final class MyDecoratorsTestsFragment extends MyFragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
+        @IdRes int id = item.getItemId();
         if(id == R.id.action_decorate_views) { // TODO LATER: change this to FAB action!!!
             View view = getView();
             if(view == null)

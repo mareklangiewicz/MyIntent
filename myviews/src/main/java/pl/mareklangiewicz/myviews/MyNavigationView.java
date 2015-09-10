@@ -22,7 +22,7 @@ public final class MyNavigationView extends NavigationView implements IMyNavigat
 
     protected final MyLogger log = MyLogger.sMyDefaultUILogger;
 
-    private View mHeader;
+    private @Nullable View mHeader;
 
     @Nullable
     private OnNavigationItemSelectedListener mMyListener;
@@ -79,6 +79,8 @@ public final class MyNavigationView extends NavigationView implements IMyNavigat
 
     @Override
     public void clearHeader() {
+        if(mHeader == null)
+            return;
         removeHeaderView(mHeader);
         mHeader = null;
     }
@@ -90,7 +92,7 @@ public final class MyNavigationView extends NavigationView implements IMyNavigat
         }
         if(item.isCheckable()) {
             item.setChecked(true);
-            //TODO: handle case when it is just single item with switch (not a group with checkableBehaviour:single)
+            //TODO: CAREFULLY handle case when it is just single checkable item (not a group with checkableBehaviour:single)
         }
         if(mMyListener != null) {
             return mMyListener.onNavigationItemSelected(item);

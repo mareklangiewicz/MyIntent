@@ -89,9 +89,11 @@ public final class MyLogger extends AbstractLogger {
     public static final int COLOR_INFO = 0xFF000000;
     public static final int COLOR_WARNING  = 0xFF0000A0;
     public static final int COLOR_ERROR  = 0xFFA00000;
+    public static final int COLOR_ASSERT  = 0xFFE00000;
 
     static public int getLevelColor(@NonNull Logger.Level level) {
         switch(level) {
+            case ASSERT: return COLOR_ASSERT;
             case ERROR: return COLOR_ERROR;
             case WARN: return COLOR_WARNING;
             case INFO: return COLOR_INFO;

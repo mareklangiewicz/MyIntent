@@ -12,8 +12,6 @@ import pl.mareklangiewicz.myviews.MyExampleView;
 public final class MyExampleFragment extends Fragment {
     private static final String ARG_TEXT = "text";
 
-    public MyExampleView mMyExampleView = null;
-
     public static MyExampleFragment newInstance(String text) {
         MyExampleFragment fragment = new MyExampleFragment();
         Bundle args = new Bundle();
@@ -28,18 +26,17 @@ public final class MyExampleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.my_example_fragment, container, false);
-        mMyExampleView = (MyExampleView) root.findViewById(R.id.my_example_view);
+        MyExampleView  mev = (MyExampleView) root.findViewById(R.id.my_example_view);
         Bundle args = getArguments();
         if (args != null) {
             String text = args.getString(ARG_TEXT);
             if(text != null)
-                mMyExampleView.setText(text);
+                mev.setText(text);
         }
         return root;
     }
     @Override
     public void onDestroyView() {
-        mMyExampleView = null;
         super.onDestroyView();
     }
 }

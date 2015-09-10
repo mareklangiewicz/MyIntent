@@ -4,6 +4,8 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -31,30 +33,32 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, Navig
 
     static final boolean VERBOSE = true;
     //TODO LATER: implement it as a build time switch for user
+    static final boolean VERY_VERBOSE = false;
+    //TODO LATER: implement it as a build time switch for user
 
     /**
      * Default logger for use in UI thread
      */
-    protected MyLogger log = MyLogger.sMyDefaultUILogger;
+    protected @NonNull MyLogger log = MyLogger.sMyDefaultUILogger;
 
     static public final String PREFIX_FRAGMENT = "fragment:";
 
     static public final String TAG_LOCAL_FRAGMENT = "tag_local_fragment";
 
-    protected DrawerLayout mGlobalDrawerLayout;
-    protected CoordinatorLayout mCoordinatorLayout;
-    protected AppBarLayout mAppBarLayout;
-    protected Toolbar mToolbar;
-    protected DrawerLayout mLocalDrawerLayout;
-    protected FrameLayout mLocalFrameLayout;
-    protected MyNavigationView mLocalNavigationView;
-    protected MyNavigationView mGlobalNavigationView;
+    protected @Nullable DrawerLayout mGlobalDrawerLayout;
+    protected @Nullable CoordinatorLayout mCoordinatorLayout;
+    protected @Nullable AppBarLayout mAppBarLayout;
+    protected @Nullable Toolbar mToolbar;
+    protected @Nullable DrawerLayout mLocalDrawerLayout;
+    protected @Nullable FrameLayout mLocalFrameLayout;
+    protected @Nullable MyNavigationView mLocalNavigationView;
+    protected @Nullable MyNavigationView mGlobalNavigationView;
 
-    protected FloatingActionButton mFAB;
+    protected @Nullable FloatingActionButton mFAB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if(VERBOSE) log.v("%s.%s(%s)", this.getClass().getSimpleName(), "onCreate", toStr(savedInstanceState));
+        if(VERBOSE) log.v("%s.%s state=%s", this.getClass().getSimpleName(), "onCreate", toStr(savedInstanceState));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_activity);
 
@@ -67,23 +71,34 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, Navig
         mGlobalNavigationView = (MyNavigationView) findViewById(R.id.ma_global_navigation_view);
         mLocalNavigationView = (MyNavigationView) findViewById(R.id.ma_local_navigation_view);
 
+        if(mGlobalDrawerLayout != null && this instanceof DrawerLayout.DrawerListener)
+            mGlobalDrawerLayout.setDrawerListener((DrawerLayout.DrawerListener) this);
+
+
+        //noinspection ConstantConditions
         mGlobalNavigationView.setNavigationItemSelectedListener(this);
+        //noinspection ConstantConditions
         mLocalNavigationView.setNavigationItemSelectedListener(this);
 
         setSupportActionBar(mToolbar);
 
+        //noinspection ConstantConditions
         mToolbar.setNavigationIcon(R.drawable.ic_menu_black_24dp); //FIXME later: better animated icon (and for local navigation too..)
         mToolbar.setNavigationContentDescription(R.string.ma_global_navigation_description);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mGlobalDrawerLayout.openDrawer(GravityCompat.START);
+                if(mGlobalDrawerLayout == null)
+                    log.e("No global drawer found!");
+                else
+                    mGlobalDrawerLayout.openDrawer(GravityCompat.START);
             }
         });
 
         //TODO: implement icon for right menu (local menu)
 
         mFAB = (FloatingActionButton) findViewById(R.id.ma_fab);
+        //noinspection ConstantConditions
         mFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,8 +117,20 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, Navig
 
     @Override
     protected void onDestroy() {
-        if(VERBOSE) log.v("%s.%s()", this.getClass().getSimpleName(), "onDestroy");
+        if(VERBOSE) log.v("%s.%s", this.getClass().getSimpleName(), "onDestroy");
+
         log.setSnackView(null);
+
+        mGlobalDrawerLayout = null;
+        mCoordinatorLayout = null;
+        mAppBarLayout = null;
+        mToolbar = null;
+        mLocalDrawerLayout = null;
+        mLocalFrameLayout = null;
+        mLocalNavigationView = null;
+        mGlobalNavigationView = null;
+        mFAB = null;
+
         super.onDestroy();
     }
 
@@ -114,13 +141,15 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, Navig
      * @return  False will cancel new fragment creation.
      */
     protected boolean onNewLocalFragment(String name) {
-        if(VERBOSE) log.v("%s.%s(%s)", this.getClass().getSimpleName(), "onNewLocalFragment", name);
+        if(VERY_VERBOSE) log.v("%s.%s name=%s", this.getClass().getSimpleName(), "onNewLocalFragment", name);
+        //noinspection ConstantConditions
         mLocalNavigationView.clearHeader();
         mLocalNavigationView.clearMenu();
         return true;
     }
 
     protected void setupLocalFragment(Fragment fragment) {
+        if(VERY_VERBOSE) log.v("%s.%s fragment=%s", this.getClass().getSimpleName(), "setupLocalFragment", toStr(fragment));
 
         if(mLocalDrawerLayout != null && fragment instanceof DrawerLayout.DrawerListener)
             mLocalDrawerLayout.setDrawerListener((DrawerLayout.DrawerListener) fragment);

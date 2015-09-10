@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/stupid_item_1"
+            android:icon="@drawable/ic_checkable"
+            android:title="stupid item 1"/>
+        <item
+            android:id="@+id/stupid_item_2"
+            android:icon="@drawable/ic_checkable"
+            android:title="stupid item 2"/>
+        <item
+            android:id="@+id/stupid_item_3"
+            android:icon="@drawable/ic_checkable"
+            android:title="stupid item 3"/>
+        <item
+            android:id="@+id/stupid_item_4"
+            android:icon="@drawable/ic_checkable"
+            android:title="stupid item 4"/>
+    </group>
+</menu>

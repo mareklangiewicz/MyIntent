@@ -8,7 +8,7 @@
         android:icon="@mipmap/ic_launcher"
         android:theme="@style/AppTheme">
         <activity
-            android:name="pl.mareklangiewicz.mytestapp.MyTestActivity"
+            android:name="pl.mareklangiewicz.myactivities.MyTestActivity"
             android:label="@string/title_my_test_activity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

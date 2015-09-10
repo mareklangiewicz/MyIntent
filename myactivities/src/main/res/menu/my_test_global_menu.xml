@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group
+        android:id="@+id/grp_sections"
         android:checkableBehavior="single"
         >
         <item
@@ -28,13 +29,21 @@
             android:icon="@drawable/ic_extension_black_24dp"
             />
         <item
+            android:id="@+id/section_my_stupid_tests_fragment"
+            android:title="@string/my_stupid_tests_fragment"
+            android:titleCondensed="fragment:pl.mareklangiewicz.myfragments.MyStupidTestsFragment"
+            android:icon="@drawable/ic_extension_black_24dp"
+            />
+        <item
             android:id="@+id/section_my_log_fragment"
             android:title="@string/my_log_fragment"
             android:titleCondensed="fragment:pl.mareklangiewicz.myfragments.MyLogFragment"
             android:icon="@drawable/ic_bug_report_black_24dp"
             />
     </group>
-    <item android:title="@string/actions">
+    <item
+        android:id="@+id/item_global_actions"
+        android:title="@string/actions">
         <menu>
             <item
                 android:id="@+id/action_whats_up"
@@ -43,7 +52,9 @@
                 />
         </menu>
     </item>
-    <item android:title="@string/more">
+    <item
+        android:id="@+id/item_global_more_actions"
+        android:title="@string/more">
         <menu>
             <item
                 android:id="@+id/action_settings"
@@ -51,8 +62,8 @@
                 android:icon="@drawable/ic_settings_black_24dp"
                 />
             <item
-                android:id="@+id/action_clear_menu"
-                android:title="@string/clear_menu"
+                android:id="@+id/action_destroy_something"
+                android:title="@string/destroy_something"
                 android:icon="@drawable/ic_whatshot_black_24dp"
                 />
         </menu>

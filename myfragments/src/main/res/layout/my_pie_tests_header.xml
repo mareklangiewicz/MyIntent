@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="100dp">
+    android:layout_height="150dp"
+    >
     <pl.mareklangiewicz.myviews.MyPie
         android:id="@+id/header_pie"
         android:layout_weight="1"
@@ -12,6 +13,8 @@
         android:layout_height="0dp"
         android:layout_margin="8dp"
         android:elevation="4dp"
+        app:from="50"
+        app:to="100"
         app:pieColor="?colorPrimaryDark"
         app:ovalColor="@color/cardview_light_background"
         />

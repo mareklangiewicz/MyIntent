@@ -14,8 +14,7 @@ import com.noveogroup.android.log.MyLogger;
  */
 public final class MyLogRecyclerView extends RecyclerView {
 
-    private MyLogAdapter mAdapter;
-    private LinearLayoutManager mLayoutManager;
+    private final MyLogAdapter mAdapter = new MyLogAdapter();
 
     public MyLogRecyclerView(Context context) {
         super(context);
@@ -34,7 +33,7 @@ public final class MyLogRecyclerView extends RecyclerView {
     private void init() {
 
 /*
-        mLayoutManager = new LinearLayoutManager(getContext()) {
+        LinearLayoutManager manager = new LinearLayoutManager(getContext()) {
             @Override
             public void onItemsChanged(RecyclerView recyclerView) {
                 super.onItemsChanged(recyclerView);
@@ -43,12 +42,11 @@ public final class MyLogRecyclerView extends RecyclerView {
         };
 */
 
-        mLayoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager manager = new LinearLayoutManager(getContext());
 
-        mLayoutManager.setReverseLayout(true);
-        setLayoutManager(mLayoutManager);
+        manager.setReverseLayout(true);
+        setLayoutManager(manager);
 
-        mAdapter = new MyLogAdapter();
         setAdapter(mAdapter);
 
     }

@@ -1,9 +1,12 @@
 package pl.mareklangiewicz.myutils;
 
+import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
 
 import java.util.Random;
 
@@ -88,4 +91,14 @@ public final class MyMathUtils {
         return new PointF(getRandomFloat(min.x, max.x), getRandomFloat(min.y, max.y));
     }
 
+    public static @ColorInt
+    int getRandomColor(@ColorInt int colormin, @ColorInt int colormax) {
+        return Color.argb(
+                getRandomInt(Color.alpha(colormin), Color.alpha(colormax)),
+                getRandomInt(Color.red(colormin), Color.red(colormax)),
+                getRandomInt(Color.green(colormin), Color.green(colormax)),
+                getRandomInt(Color.blue(colormin), Color.blue(colormax))
+                );
+
+    }
 }

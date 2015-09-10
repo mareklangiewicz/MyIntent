@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
+    android:layout_height="@dimen/my_local_header_height"
     >
     <pl.mareklangiewicz.myviews.MyPie
         android:id="@+id/header_pie"

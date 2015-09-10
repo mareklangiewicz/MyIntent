@@ -1,11 +1,10 @@
 package pl.mareklangiewicz.myviews;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.util.AttributeSet;
@@ -18,16 +17,11 @@ import com.noveogroup.android.log.MyLogger;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class MyNavigationView extends NavigationView implements IMyNavigation, NavigationView.OnNavigationItemSelectedListener {
+public final class MyNavigationView extends NavigationView implements IMyNavigation {
 
     protected final MyLogger log = MyLogger.sMyDefaultUILogger;
 
     private @Nullable View mHeader;
-
-    @Nullable
-    private OnNavigationItemSelectedListener mMyListener;
-
-    private boolean mFreezeCheckedItems = true;
 
     public MyNavigationView(Context context) {
         super(context);
@@ -45,21 +39,6 @@ public final class MyNavigationView extends NavigationView implements IMyNavigat
     }
 
     private void init(@Nullable AttributeSet attrs, int defStyle) {
-        final TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.MyNavigationView, defStyle, 0);
-        mFreezeCheckedItems = a.getBoolean(R.styleable.MyNavigationView_freezeCheckedItems, mFreezeCheckedItems);
-        a.recycle();
-        super.setNavigationItemSelectedListener(this);
-    }
-
-
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        return selectMenuItem(item);
-    }
-
-    @Override
-    public void setNavigationItemSelectedListener(@Nullable OnNavigationItemSelectedListener listener) {
-        mMyListener = listener;
     }
 
 
@@ -69,6 +48,43 @@ public final class MyNavigationView extends NavigationView implements IMyNavigat
 
     public void inflateHeader(@LayoutRes int id) {
         mHeader = inflateHeaderView(id);
+    }
+
+
+    /**
+     * Finds (recursively: DFS) first checked item in navigation view menu.
+     * WARNING: do not call it too soon!
+     * it works correctly from Fragment.onResume.
+     * it does NOT work correctly from Fragment.onViewStateRestored!!!
+     * @return
+     */
+    @Override
+    public @Nullable MenuItem getFirstCheckedItem() {
+        Menu menu = getMenu();
+        if(menu == null) {
+            log.w("Menu is null");
+            return null;
+        }
+        return getFirstCheckedItem(menu);
+    }
+
+
+    static private @Nullable MenuItem getFirstCheckedItem(@NonNull Menu menu) {
+        int size = menu.size();
+        for(int i = 0; i < size; ++i) {
+            MenuItem item = menu.getItem(i);
+            if(item.isChecked())
+                return item;
+            if(item.hasSubMenu()) {
+                Menu submenu = item.getSubMenu();
+                if(submenu != null) {
+                    MenuItem fci = getFirstCheckedItem(submenu);
+                    if(fci != null)
+                        return fci;
+                }
+            }
+        }
+        return null;
     }
 
 
@@ -85,49 +101,39 @@ public final class MyNavigationView extends NavigationView implements IMyNavigat
         mHeader = null;
     }
 
-    public boolean selectMenuItem(@Nullable MenuItem item) {
-        if(item == null) {
-            log.d("menu item is null!");
-            return false;
-        }
-        if(item.isCheckable()) {
-            item.setChecked(true);
-            //TODO: CAREFULLY handle case when it is just single checkable item (not a group with checkableBehaviour:single)
-        }
-        if(mMyListener != null) {
-            return mMyListener.onNavigationItemSelected(item);
-        }
-        return true;
-    }
-
-    public boolean selectMenuItem(@IdRes int id) {
-        Menu menu = getMenu();
-        if(menu == null) {
-            log.d("menu is null!");
-            return false;
-        }
-        MenuItem item = menu.findItem(id);
-        return selectMenuItem(item);
-    }
-
-
-
-    /**
-     * Default is true.
-     * Only items with id can have their checked state freezed!
-     */
-    public void setFreezeCheckedItems(boolean freeze) { mFreezeCheckedItems = freeze; }
-    public boolean geFreezeCheckedItems() { return mFreezeCheckedItems; }
 
 
 
 
-    void saveCheckedIds(List<Integer> output) {
+
+
+
+
+
+
+/*
+    FIXME: WARNING looks like there is a bug in NavigationView class:
+           It looks like state of checked menu items is preserved after configuration change,
+           but the MenuItem.isChecked returns false for every item...
+           (I think that only views of items are recreated correctly)
+           As a workaround we allow to save checked items manually below.
+    TODO NOW: load checked ids when user inflates new menu!
+    TODO:  Remove code below if NavigationView is fixed..
+*/
+
+
+/*
+
+    private void saveCheckedIds(List<Integer> output) {
         Menu menu = getMenu();
         if(menu == null) {
             log.d("menu is null!");
             return;
         }
+        saveCheckedIds(menu, output);
+    }
+
+    private static void saveCheckedIds(@NonNull Menu menu, @NonNull List<Integer> output) {
         int N = menu.size();
         for(int i = 0; i < N; i++) {
             MenuItem item = menu.getItem(i);
@@ -136,10 +142,14 @@ public final class MyNavigationView extends NavigationView implements IMyNavigat
                 if(id > 0)
                     output.add(id);
             }
+            if(item.hasSubMenu())
+                saveCheckedIds(item.getSubMenu(), output);
         }
     }
 
-    void loadCheckedIds(List<Integer> input) {
+
+
+    private void loadCheckedIds(List<Integer> input) {
         Menu menu = getMenu();
         if(menu == null) {
             log.d("menu is null!");
@@ -159,6 +169,8 @@ public final class MyNavigationView extends NavigationView implements IMyNavigat
             }
         }
     }
+
+
 
 
     static class SavedState extends BaseSavedState {
@@ -201,8 +213,6 @@ public final class MyNavigationView extends NavigationView implements IMyNavigat
     @Override
     public Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
-        if(!mFreezeCheckedItems)
-            return superState;
         SavedState ss = new SavedState(superState);
         saveCheckedIds(ss.mCheckedIds);
         return ss;
@@ -218,4 +228,7 @@ public final class MyNavigationView extends NavigationView implements IMyNavigat
         super.onRestoreInstanceState(ss.getSuperState());
         loadCheckedIds(ss.mCheckedIds);
     }
+
+
+*/
 }

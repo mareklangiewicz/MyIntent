@@ -56,7 +56,7 @@ public final class MyNavigationView extends NavigationView implements IMyNavigat
      * WARNING: do not call it too soon!
      * it works correctly from Fragment.onResume.
      * it does NOT work correctly from Fragment.onViewStateRestored!!!
-     * @return
+     * @return A first checked menu item or null if there is none...
      */
     @Override
     public @Nullable MenuItem getFirstCheckedItem() {

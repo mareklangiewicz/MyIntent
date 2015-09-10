@@ -4,19 +4,31 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/stupid_item_1"
-            android:icon="@drawable/ic_checkable"
+            android:icon="@drawable/ic_radio_button_black_24dp"
             android:title="stupid item 1"/>
         <item
             android:id="@+id/stupid_item_2"
-            android:icon="@drawable/ic_checkable"
+            android:icon="@drawable/ic_radio_button_black_24dp"
             android:title="stupid item 2"/>
         <item
             android:id="@+id/stupid_item_3"
-            android:icon="@drawable/ic_checkable"
+            android:icon="@drawable/ic_radio_button_black_24dp"
             android:title="stupid item 3"/>
         <item
             android:id="@+id/stupid_item_4"
-            android:icon="@drawable/ic_checkable"
+            android:icon="@drawable/ic_radio_button_black_24dp"
             android:title="stupid item 4"/>
     </group>
+    <item
+        android:id="@+id/stupid_check_box_1"
+        android:icon="@drawable/ic_check_bock_black_sl_24dp"
+        android:title="stupid check box 1"
+        android:checkable="true"
+        />
+    <item
+        android:id="@+id/stupid_check_box_2"
+        android:icon="@drawable/ic_check_bock_black_sl_24dp"
+        android:title="stupid check box 2"
+        android:checkable="true"
+        />
 </menu>

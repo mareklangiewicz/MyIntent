@@ -12,32 +12,32 @@
                 <item
                     android:id="@+id/mpt_randomize_from"
                     android:title="from"
-                    android:icon="@drawable/ic_checkable"
+                    android:icon="@drawable/ic_radio_button_black_24dp"
                     />
                 <item
                     android:id="@+id/mpt_randomize_to"
                     android:title="to"
-                    android:icon="@drawable/ic_checkable"
+                    android:icon="@drawable/ic_radio_button_black_24dp"
                     />
                 <item
                     android:id="@+id/mpt_randomize_minimum"
                     android:title="minimum"
-                    android:icon="@drawable/ic_checkable"
+                    android:icon="@drawable/ic_radio_button_black_24dp"
                     />
                 <item
                     android:id="@+id/mpt_randomize_maximum"
                     android:title="maximum"
-                    android:icon="@drawable/ic_checkable"
+                    android:icon="@drawable/ic_radio_button_black_24dp"
                     />
                 <item
                     android:id="@+id/mpt_randomize_pie_color"
                     android:title="pieColor"
-                    android:icon="@drawable/ic_checkable"
+                    android:icon="@drawable/ic_radio_button_black_24dp"
                     />
                 <item
                     android:id="@+id/mpt_randomize_oval_color"
                     android:title="ovalColor"
-                    android:icon="@drawable/ic_checkable"
+                    android:icon="@drawable/ic_radio_button_black_24dp"
                     />
             </group>
         </menu>

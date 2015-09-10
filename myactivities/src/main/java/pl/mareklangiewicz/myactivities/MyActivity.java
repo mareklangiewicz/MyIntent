@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -14,6 +15,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -206,5 +208,16 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, Navig
         return mLocalNavigationView;
     }
 
+    private void selectItem(IMyNavigation nav, @IdRes int id) {
+        Menu menu = nav.getMenu();
+        if(menu == null) {
+            log.e("menu is null!");
+            return;
+        }
+        nav.setCheckedItem(id);
+        onNavigationItemSelected(menu.findItem(id));
+    }
 
+    public void selectGlobalItem(@IdRes int id) { selectItem(getGlobalNavigation(), id); }
+    public void selectLocalItem(@IdRes int id) { selectItem(getLocalNavigation(), id); }
 }

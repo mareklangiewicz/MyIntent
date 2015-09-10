@@ -10,7 +10,4 @@
     <declare-styleable name="MyLLDecorator">
         <attr name="decoration" format="reference" />
     </declare-styleable>
-    <declare-styleable name="MyNavigationView">
-        <attr name="freezeCheckedItems" format="boolean" />
-    </declare-styleable>
 </resources>

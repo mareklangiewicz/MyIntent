@@ -1,12 +1,9 @@
 package pl.mareklangiewicz.myfragments;
 
 import android.os.Bundle;
-import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,17 +46,12 @@ public final class MyLogFragment extends MyFragment {
     }
 
     private void updateCheckedItem() {
-        Menu menu = getMenu();
-        if(menu == null) {
-            log.d("Menu is null!");
-            return;
-        }
         switch (log.getLogHistory().getFilterLevel()) {
-            case ERROR  : menu.findItem(R.id.log_level_error  ).setChecked(true); break;
-            case WARN   : menu.findItem(R.id.log_level_warning).setChecked(true); break;
-            case INFO   : menu.findItem(R.id.log_level_info   ).setChecked(true); break;
-            case DEBUG  : menu.findItem(R.id.log_level_debug  ).setChecked(true); break;
-            case VERBOSE: menu.findItem(R.id.log_level_verbose).setChecked(true); break;
+            case ERROR  : setCheckedItem(R.id.log_level_error);  break;
+            case WARN   : setCheckedItem(R.id.log_level_warning);break;
+            case INFO   : setCheckedItem(R.id.log_level_info);   break;
+            case DEBUG  : setCheckedItem(R.id.log_level_debug);  break;
+            case VERBOSE: setCheckedItem(R.id.log_level_verbose);break;
         }
     }
 

@@ -37,7 +37,7 @@ public final class MyTestActivity extends pl.mareklangiewicz.myactivities.MyActi
         mHeaderAnimator.setInterpolator(new LinearInterpolator());
 
         if(savedInstanceState == null)
-            getGlobalNavigation().selectMenuItem(R.id.section_my_pie_tests);
+            selectGlobalItem(R.id.section_my_pie_tests);
     }
 
 

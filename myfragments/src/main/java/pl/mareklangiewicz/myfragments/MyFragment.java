@@ -58,13 +58,26 @@ public class MyFragment extends Fragment implements IMyNavigation, NavigationVie
 
 
 
-    @Override public           boolean selectMenuItem(@IdRes     int id) { return ((IMyCommander) getActivity()).getLocalNavigation().selectMenuItem(id); }
-    @Override public @Nullable Menu    getMenu       (                 ) { return ((IMyCommander) getActivity()).getLocalNavigation().getMenu       (  ); }
-    @Override public @Nullable View    getHeader     (                 ) { return ((IMyCommander) getActivity()).getLocalNavigation().getHeader     (  ); }
-    @Override public           void    clearMenu     (                 ) {        ((IMyCommander) getActivity()).getLocalNavigation().clearMenu     (  ); }
-    @Override public           void    clearHeader   (                 ) {        ((IMyCommander) getActivity()).getLocalNavigation().clearHeader   (  ); }
-    @Override public           void    inflateMenu   (@MenuRes   int id) {        ((IMyCommander) getActivity()).getLocalNavigation().inflateMenu   (id); }
-    @Override public           void    inflateHeader (@LayoutRes int id) {        ((IMyCommander) getActivity()).getLocalNavigation().inflateHeader (id); }
+    @Override public @Nullable Menu     getMenu       (                 ) { return ((IMyCommander) getActivity()).getLocalNavigation().getMenu            (  ); }
+    @Override public @Nullable View     getHeader     (                 ) { return ((IMyCommander) getActivity()).getLocalNavigation().getHeader          (  ); }
+    @Override public           void     clearMenu     (                 ) {        ((IMyCommander) getActivity()).getLocalNavigation().clearMenu          (  ); }
+    @Override public           void     clearHeader   (                 ) {        ((IMyCommander) getActivity()).getLocalNavigation().clearHeader        (  ); }
+    @Override public           void     inflateMenu   (@MenuRes   int id) {        ((IMyCommander) getActivity()).getLocalNavigation().inflateMenu        (id); }
+    @Override public           void     inflateHeader (@LayoutRes int id) {        ((IMyCommander) getActivity()).getLocalNavigation().inflateHeader      (id); }
+    @Override public           void     setCheckedItem(@IdRes     int id) {        ((IMyCommander) getActivity()).getLocalNavigation().setCheckedItem     (id); }
+    @Override public @Nullable MenuItem getFirstCheckedItem(            ) { return ((IMyCommander) getActivity()).getLocalNavigation().getFirstCheckedItem(  ); }
+
+
+    public void selectItem(@IdRes int id) {
+        Menu menu = getMenu();
+        if(menu == null) {
+            log.e("menu is null!");
+            return;
+        }
+        setCheckedItem(id);
+        onNavigationItemSelected(menu.findItem(id));
+    }
+
 
 
 

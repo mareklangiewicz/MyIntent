@@ -3,21 +3,22 @@ package pl.mareklangiewicz.myfragments;
 
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
-import android.annotation.TargetApi;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
+
+import java.util.ArrayList;
 
 import pl.mareklangiewicz.myutils.MyMathUtils;
 import pl.mareklangiewicz.myviews.MyPie;
@@ -36,15 +37,16 @@ public final class MyPieTestsFragment extends MyFragment implements View.OnClick
         View root = inflater.inflate(R.layout.my_pie_tests_fragment, container, false);
 
 
-        ((MyPie) root.findViewById(R.id.pie1)).setOnClickListener(this);
-        ((MyPie) root.findViewById(R.id.pie2)).setOnClickListener(this);
-        ((MyPie) root.findViewById(R.id.pie3)).setOnClickListener(this);
-        ((MyPie) root.findViewById(R.id.pie4)).setOnClickListener(this);
+        root.findViewById(R.id.pie1).setOnClickListener(this);
+        root.findViewById(R.id.pie2).setOnClickListener(this);
+        root.findViewById(R.id.pie3).setOnClickListener(this);
+        root.findViewById(R.id.pie4).setOnClickListener(this);
 
         inflateHeader(R.layout.my_pie_tests_header);
         inflateMenu(R.menu.my_pie_tests_menu);
 
 
+        //noinspection ConstantConditions
         MyPie hpie = (MyPie) getHeader().findViewById(R.id.header_pie);
 
         float min = hpie.getMinimum();
@@ -58,10 +60,12 @@ public final class MyPieTestsFragment extends MyFragment implements View.OnClick
         mHeaderAnimator.setInterpolator(new AccelerateInterpolator());
 
         if(savedInstanceState == null)
-            selectMenuItem(R.id.mpt_randomize_to);
+            selectItem(R.id.mpt_randomize_to);
 
         return root;
     }
+
+
 
     @Override
     public void onDestroyView() {
@@ -69,12 +73,30 @@ public final class MyPieTestsFragment extends MyFragment implements View.OnClick
         super.onDestroyView();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        MenuItem item = getFirstCheckedItem();
+        if(item == null) {
+            log.e("No item selected");
+            mRandomize = "to";
+        }
+        else
+            mRandomize = item.getTitle().toString();
+    }
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         @IdRes int id = item.getItemId();
-        if (getMenu().findItem(id) == null)
-            return false; // it is item from global menu - we don't handle it.
+        Menu menu = getMenu();
+        if(menu == null) {
+            log.v("Our local menu is null, so we ignore this item");
+            return false;
+        }
+        if (getMenu().findItem(id) == null) {
+            log.v("This item is not from our local menu - ignoring");
+            return false;
+        }
         mRandomize = item.getTitle().toString();
         return true;
     }
@@ -87,7 +109,7 @@ public final class MyPieTestsFragment extends MyFragment implements View.OnClick
                 @ColorInt int value = MyMathUtils.getRandomColor(Color.rgb(0,0,0), Color.rgb(255, 255, 255));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     ObjectAnimator.ofArgb(pie, mRandomize, value).start();
-                    log.i("[SNACK]MyPie:%s = rgb(%x,%x,%x)", mRandomize, Color.red(value), Color.green(value), Color.blue(value));
+                    log.i("[SNACK]MyPie:%s: random color is ... %X %X %X", mRandomize, Color.red(value), Color.green(value), Color.blue(value));
                 }
                 else
                     log.w("[SNACK]Color animation is not supported on platforms before Lollipop");
@@ -95,24 +117,26 @@ public final class MyPieTestsFragment extends MyFragment implements View.OnClick
             else {
                 float min = 0;
                 float max = 100;
-                if(mRandomize.equals("from")) {
-                    min = pie.getMinimum();
-                    max = pie.getTo();
-                }
-                else if(mRandomize.equals("to")) {
-                    min = pie.getFrom();
-                    max = pie.getMaximum();
-                }
-                else if(mRandomize.equals("minimum")) {
-                    max = pie.getFrom();
-                }
-                else if(mRandomize.equals("maximum")) {
-                    min = pie.getTo();
+                switch (mRandomize) {
+                    case "from":
+                        min = pie.getMinimum();
+                        max = pie.getTo();
+                        break;
+                    case "to":
+                        min = pie.getFrom();
+                        max = pie.getMaximum();
+                        break;
+                    case "minimum":
+                        max = pie.getFrom();
+                        break;
+                    case "maximum":
+                        min = pie.getTo();
+                        break;
                 }
 
                 float value = MyMathUtils.getRandomFloat(min, max);
                 ObjectAnimator.ofFloat(pie, mRandomize, value).start();
-                log.i("[SNACK]MyPie:%s   random(%.2f,%.2f) is ..... %.2f", mRandomize, min, max, value);
+                log.i("[SNACK]MyPie:%s: random %.2f..%.2f is ... %.2f", mRandomize, min, max, value);
             }
         }
     }

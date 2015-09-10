@@ -52,7 +52,6 @@
                     android:layout_width="@dimen/my_local_navigation_width"
                     android:layout_height="match_parent"
                     android:layout_gravity="end"
-                    app:freezeCheckedItems="false"
                     />
 
             </android.support.v4.widget.DrawerLayout>
@@ -81,7 +80,6 @@
         android:layout_width="@dimen/my_global_navigation_width"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:freezeCheckedItems="false"
         />
 
 

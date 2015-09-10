@@ -6,6 +6,7 @@ import android.support.annotation.MenuRes;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 /**
@@ -22,6 +23,10 @@ public interface IMyNavigation {
     void inflateMenu(@MenuRes int id);
     void inflateHeader(@LayoutRes int id);
 
-    boolean selectMenuItem(@IdRes int id);
+    void setCheckedItem(@IdRes int id);
 
+    /**
+     * returns first checked item
+     */
+    @Nullable MenuItem getFirstCheckedItem();
 }

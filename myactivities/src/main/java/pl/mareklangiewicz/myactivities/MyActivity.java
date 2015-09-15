@@ -1,7 +1,10 @@
 package pl.mareklangiewicz.myactivities;
 
+import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.IdRes;
@@ -15,9 +18,16 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.transition.AutoTransition;
+import android.transition.ChangeBounds;
+import android.transition.ChangeTransform;
+import android.transition.Explode;
+import android.transition.Fade;
+import android.transition.TransitionManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.noveogroup.android.log.MyLogger;
@@ -153,6 +163,13 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, Navig
     protected void setupLocalFragment(Fragment fragment) {
         if(VERY_VERBOSE) log.v("%s.%s fragment=%s", this.getClass().getSimpleName(), "setupLocalFragment", toStr(fragment));
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            fragment.setSharedElementEnterTransition(new AutoTransition());
+            fragment.setEnterTransition(new Fade());
+            fragment.setSharedElementReturnTransition(new AutoTransition());
+            fragment.setExitTransition(new Fade());
+        }
+
         if(mLocalDrawerLayout != null && fragment instanceof DrawerLayout.DrawerListener)
             mLocalDrawerLayout.setDrawerListener((DrawerLayout.DrawerListener) fragment);
 
@@ -181,7 +198,9 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, Navig
 
             setupLocalFragment(f);
 
-            fm.beginTransaction().replace(R.id.ma_local_frame_layout, f, TAG_LOCAL_FRAGMENT).commit(); //TODO LATER: some animation?
+            FragmentTransaction ft = fm.beginTransaction().replace(R.id.ma_local_frame_layout, f, TAG_LOCAL_FRAGMENT);
+            addAllSharedElementsToFragmentTransaction(findViewById(R.id.ma_local_frame_layout), ft);
+            ft.commit();
 
             return true;
         }
@@ -196,6 +215,22 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, Navig
                 return true;
         }
         return false;
+    }
+
+    public void addAllSharedElementsToFragmentTransaction(View root, FragmentTransaction ft) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            String name = root.getTransitionName();
+            if(name != null)
+                ft.addSharedElement(root, name);
+            else if(root instanceof ViewGroup) {
+                ViewGroup group = (ViewGroup) root;
+                for(int i = 0; i < group.getChildCount(); ++i)
+                    addAllSharedElementsToFragmentTransaction(group.getChildAt(i), ft);
+            }
+        }
+        else {
+            log.w("Can not add shared elements to fragment transaction. API < 21");
+        }
     }
 
     @Override

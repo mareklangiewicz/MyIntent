@@ -17,6 +17,12 @@
             android:icon="@drawable/ic_done_black_24dp"
             />
         <item
+            android:id="@+id/section_my_arrow_tests"
+            android:title="@string/my_arrow_tests"
+            android:titleCondensed="fragment:pl.mareklangiewicz.myfragments.MyMenuArrowTestsFragment"
+            android:icon="@drawable/ic_whatshot_black_24dp"
+            />
+        <item
             android:id="@+id/section_my_lldecorator_tests"
             android:title="@string/my_decorators_tests"
             android:titleCondensed="fragment:pl.mareklangiewicz.myfragments.MyDecoratorsTestsFragment"

@@ -1,6 +1,7 @@
 package pl.mareklangiewicz.myfragments;
 
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -49,8 +50,9 @@ public class MyStupidTestsFragment extends MyFragment {
     @Override
     public void onResume() {
         super.onResume();
-        ObjectAnimator animator = ObjectAnimator.ofFloat(mWarningCardView, "cardElevation", 4f, 16f, 4f, 16f, 4f, 16f, 4f);
-        animator.setDuration(2000);
+        ObjectAnimator animator = ObjectAnimator.ofFloat(mWarningCardView, View.TRANSLATION_Y, 8f);
+        animator.setRepeatMode(ValueAnimator.REVERSE);
+        animator.setRepeatCount(5);
         animator.setInterpolator(new LinearInterpolator());
         animator.start();
 

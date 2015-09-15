@@ -35,8 +35,10 @@ public final class MyDecoratorsTestsFragment extends MyFragment {
         @IdRes int id = item.getItemId();
         if(id == R.id.action_decorate_views) { // TODO LATER: change this to FAB action!!!
             View view = getView();
-            if(view == null)
-                throw new NullPointerException("The root view of this fragment is null.");
+            if(view == null) {
+                log.e("The root view of this fragment is null.");
+                return false;
+            }
             MyViewDecorator.decorateTree(view, "decorate", R.layout.example_decoration, null);
             return true;
         }

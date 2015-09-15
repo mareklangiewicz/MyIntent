@@ -30,8 +30,8 @@ public final class MyTestActivity extends pl.mareklangiewicz.myactivities.MyActi
         //noinspection ConstantConditions
         View target = getGlobalNavigation().getHeader().findViewById(R.id.my_home_page_text_view);
 
-        PropertyValuesHolder pvha = PropertyValuesHolder.ofFloat("alpha", 0f, 0f, 1f);
-        PropertyValuesHolder pvhy = PropertyValuesHolder.ofFloat("translationY", -50f, -50f, 0f);
+        PropertyValuesHolder pvha = PropertyValuesHolder.ofFloat(View.ALPHA, 0f, 0f, 1f);
+        PropertyValuesHolder pvhy = PropertyValuesHolder.ofFloat(View.TRANSLATION_Y, -50f, -50f, 0f);
 
         mHeaderAnimator = ObjectAnimator.ofPropertyValuesHolder(target, pvha, pvhy);
         mHeaderAnimator.setInterpolator(new LinearInterpolator());

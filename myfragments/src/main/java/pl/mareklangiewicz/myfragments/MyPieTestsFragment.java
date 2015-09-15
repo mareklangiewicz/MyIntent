@@ -37,14 +37,13 @@ public final class MyPieTestsFragment extends MyFragment implements View.OnClick
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.my_pie_tests_fragment, container, false);
 
+        inflateHeader(R.layout.my_pie_tests_header);
+        inflateMenu(R.menu.my_pie_tests_menu);
 
         root.findViewById(R.id.pie1).setOnClickListener(this);
         root.findViewById(R.id.pie2).setOnClickListener(this);
         root.findViewById(R.id.pie3).setOnClickListener(this);
         root.findViewById(R.id.pie4).setOnClickListener(this);
-
-        inflateHeader(R.layout.my_pie_tests_header);
-        inflateMenu(R.menu.my_pie_tests_menu);
 
 
         //noinspection ConstantConditions

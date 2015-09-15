@@ -111,13 +111,13 @@ public final class MyPie extends View {
     public float getFrom() { return mFrom; }
     public float getTo() { return mTo; }
 
-    public void setPieColor(@ColorInt int color) { mPieDrawable.getPaint().setColor(color); invalidate(); }
-    public void setOvalColor(@ColorInt int color) { mOvalDrawable.getPaint().setColor(color); invalidate(); }
+    public MyPie setPieColor(@ColorInt int color) { mPieDrawable.getPaint().setColor(color); invalidate(); return this; }
+    public MyPie setOvalColor(@ColorInt int color) { mOvalDrawable.getPaint().setColor(color); invalidate(); return this; }
 
-    public void setMinimum(float minimum) { mMinimum = minimum; invalidate(); }
-    public void setMaximum(float maximum) { mMaximum = maximum; invalidate(); }
-    public void setFrom(float from) { mFrom = from; invalidate(); }
-    public void setTo(float to) { mTo = to; invalidate(); }
+    public MyPie setMinimum(float minimum) { mMinimum = minimum; invalidate(); return this; }
+    public MyPie setMaximum(float maximum) { mMaximum = maximum; invalidate(); return this; }
+    public MyPie setFrom(float from) { mFrom = from; invalidate(); return this; }
+    public MyPie setTo(float to) { mTo = to; invalidate(); return this; }
 
 
     static final class SavedState extends BaseSavedState {

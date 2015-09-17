@@ -39,17 +39,17 @@ public final class MyMenuArrowTestsFragment extends MyFragment implements View.O
         mArrow3 = (MyMenuArrow) root.findViewById(R.id.arrow3);
 
         mAnim1 = ObjectAnimator.ofPropertyValuesHolder(mArrow1,
-                PropertyValuesHolder.ofFloat("direction", 0f, -1f, -1f, 0f, 0f, 1f, 1f, 0f),
-                PropertyValuesHolder.ofFloat("rotation", 0f, -180f, -180f, 0f, 0f, 180f, 180f, 0f)
+                PropertyValuesHolder.ofFloat("direction", 0f, 1f, 1f, 0f),
+                PropertyValuesHolder.ofFloat("rotation", 0f, 180f, 180f, 0f)
         ).setDuration(3000);
 
         mAnim2 = ObjectAnimator.ofPropertyValuesHolder(mArrow2,
-                PropertyValuesHolder.ofFloat("direction", 0f, -1f, -1f, 0f, 0f, 1f, 1f, 0f),
-                PropertyValuesHolder.ofFloat("rotation", 0f, -360f, -360f, 0f, 0f, 360f, 360f, 0f)
+                PropertyValuesHolder.ofFloat("direction", 0f, 1f, 1f, 0f),
+                PropertyValuesHolder.ofFloat("rotation", 0f, 360f, 360f, 0f)
         ).setDuration(3000);
 
         mAnim3 = ObjectAnimator.ofPropertyValuesHolder(mArrow3,
-                PropertyValuesHolder.ofFloat("direction", 0f, -1f, -1f, 0f, 0f, 1f, 1f, 0f)
+                PropertyValuesHolder.ofFloat("direction", 0f, 1f, 1f, 0f)
         ).setDuration(3000);
 
         //noinspection ConstantConditions
@@ -88,7 +88,7 @@ public final class MyMenuArrowTestsFragment extends MyFragment implements View.O
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        float dir = 2f * progress / 100f - 1f;
+        float dir = progress / 100f;
         if (mArrow1 != null) {
             mArrow1.setDirection(dir);
             mArrow1.setRotation(dir * 180);

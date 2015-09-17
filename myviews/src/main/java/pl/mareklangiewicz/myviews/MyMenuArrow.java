@@ -5,9 +5,11 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
+import android.support.annotation.FloatRange;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -35,7 +37,12 @@ public class MyMenuArrow extends View {
     private int mLeftX;
     private int mRightX;
 
-    private Paint mPaint = new Paint();
+    private int mHalfX;
+    private int mHalfY;
+
+    private final Paint mPaint = new Paint();
+
+    private final Path mPath = new Path();
 
     public MyMenuArrow(Context context) {
         super(context);
@@ -82,11 +89,16 @@ public class MyMenuArrow extends View {
         mHighY = mPaddingTop + mContentHeight / 4;
         mLowY = mPaddingTop + mContentHeight * 3 / 4;
 
+        mHalfY = (mLowY - mHighY) / 2;
+
         mLeftX = mPaddingLeft + mContentWidth / 4;
         mRightX = mPaddingLeft + mContentWidth * 3 / 4;
 
-        mPaint.setStrokeWidth(h / 8);
-        mPaint.setStrokeCap(Paint.Cap.ROUND);
+        mHalfX = (mRightX - mLeftX) / 2;
+
+        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setStrokeWidth(h / 10);
+        mPaint.setStrokeJoin(Paint.Join.MITER);
     }
 
     @Override
@@ -94,32 +106,42 @@ public class MyMenuArrow extends View {
 
         super.onDraw(canvas);
 
+        mPath.rewind();
+
         float x1 = mLeftX;
         float x2 = mRightX;
         float y1 = mCenterY;
         float y2 = mCenterY;
 
-        canvas.drawLine(x1, y1, x2, y2, mPaint);
+        mPath.moveTo(x1, y1);
+        mPath.lineTo(x2, y2);
 
-        x1 = mLeftX  + (mDirection < 0 ? 0 : mDirection * (mCenterX - mLeftX  ));
-        x2 = mRightX + (mDirection > 0 ? 0 : mDirection * (mRightX  - mCenterX));
-        y1 = mHighY  - (mDirection > 0 ? 0 : mDirection * (mCenterY - mHighY  ));
-        y2 = mHighY  + (mDirection < 0 ? 0 : mDirection * (mCenterY - mHighY  ));
+        x1 = mLeftX  + mDirection * mHalfX;
+        x2 = mRightX;
+        y1 = mHighY;
+        y2 = mHighY + mDirection * mHalfY;
 
-        canvas.drawLine(x1, y1, x2, y2, mPaint);
+        mPath.moveTo(x1, y1);
+        mPath.lineTo(x2, y2);
 
-        y1 = mLowY   + (mDirection > 0 ? 0 : mDirection * (mLowY    - mCenterY  ));
-        y2 = mLowY   - (mDirection < 0 ? 0 : mDirection * (mLowY    - mCenterY  ));
+        y1 = mLowY;
+        y2 = mLowY - mDirection * mHalfY;
 
-        canvas.drawLine(x1, y1, x2, y2, mPaint);
+        if(Math.abs(y2 - mCenterY) > 1)
+            mPath.moveTo(x2, y2);
+        else
+            mPath.lineTo(x2, y2);
 
+        mPath.lineTo(x1, y1);
+
+        canvas.drawPath(mPath, mPaint);
     }
 
-    public float getDirection() {
+    public @FloatRange(from=0.0,to=1.0) float getDirection() {
         return mDirection;
     }
 
-    public void setDirection(float direction) {
+    public void setDirection(@FloatRange(from=0.0,to=1.0) float direction) {
         mDirection = direction;
         invalidate();
     }

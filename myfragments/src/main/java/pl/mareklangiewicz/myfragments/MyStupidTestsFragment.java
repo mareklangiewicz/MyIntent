@@ -2,9 +2,11 @@ package pl.mareklangiewicz.myfragments;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -12,14 +14,37 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 
+import pl.mareklangiewicz.myviews.MyArrowDrawable;
+import pl.mareklangiewicz.myviews.MyCheckDrawable;
+import pl.mareklangiewicz.myviews.MyLessDrawable;
+import pl.mareklangiewicz.myviews.MyPlusDrawable;
+
+import static pl.mareklangiewicz.myutils.MyMathUtils.scale0d;
+
 /**
- * Created by marek on 10.09.15.
+ * Created by Marek Langiewicz on 10.09.15.
+ * A Place to test some stupid ideas fast.
+ * A kind of scratchpad.
  */
-public class MyStupidTestsFragment extends MyFragment {
+
+
+public class MyStupidTestsFragment extends MyFragment implements DrawerLayout.DrawerListener {
 
     CardView mWarningCardView;
 
-    public MyStupidTestsFragment() {}
+    View mArrowView;
+    View mPlusView;
+    View mCheckView;
+    View mLessView;
+    View mGreaterView;
+
+    Drawable mMyArrowDrawable = new MyArrowDrawable().setStrokeWidth(16).setColor(0xffa00000).setRotateFrom(-180f);
+    Drawable mMyPlusDrawable = new MyPlusDrawable().setStrokeWidth(16).setColor(0xff00a000).setRotateTo(90f);
+    Drawable mMyCheckDrawable = new MyCheckDrawable().setStrokeWidth(16).setColor(0xff0000a0).setRotateTo(90f);
+    Drawable mMyLessDrawable = new MyLessDrawable().setStrokeWidth(16).setColor(0xff00a0a0).setRotateTo(180f);
+    Drawable mMyGreaterDrawable = new MyLessDrawable().setStrokeWidth(16).setColor(0xffa000a0).setRotateFrom(-180f);
+
+    public MyStupidTestsFragment() { }
 
     @Nullable
     @Override
@@ -28,6 +53,21 @@ public class MyStupidTestsFragment extends MyFragment {
         View root = inflater.inflate(R.layout.my_stupid_tests_fragment, container, false);
 
         mWarningCardView = (CardView) root.findViewById(R.id.stupid_warning);
+
+        mArrowView = root.findViewById(R.id.arrow_view);
+        mArrowView.setBackground(mMyArrowDrawable);
+
+        mPlusView = root.findViewById(R.id.plus_view);
+        mPlusView.setBackground(mMyPlusDrawable);
+
+        mCheckView = root.findViewById(R.id.check_view);
+        mCheckView.setBackground(mMyCheckDrawable);
+
+        mLessView = root.findViewById(R.id.less_view);
+        mLessView.setBackground(mMyLessDrawable);
+
+        mGreaterView = root.findViewById(R.id.greater_view);
+        mGreaterView.setBackground(mMyGreaterDrawable);
 
         final NavigationView nv = (NavigationView) root.findViewById(R.id.stupid_navigation_view);
 
@@ -57,4 +97,17 @@ public class MyStupidTestsFragment extends MyFragment {
         animator.start();
 
     }
+
+    @Override
+    public void onDrawerSlide(View drawerView, float slideOffset) {
+        mMyArrowDrawable.setLevel((int) scale0d(slideOffset, 1f, 10000f));
+        mMyPlusDrawable.setLevel((int) scale0d(slideOffset, 1f, 10000f));
+        mMyCheckDrawable.setLevel((int) scale0d(slideOffset, 1f, 10000f));
+        mMyLessDrawable.setLevel((int) scale0d(slideOffset, 1f, 10000f));
+        mMyGreaterDrawable.setLevel((int) scale0d(slideOffset, 1f, 10000f));
+    }
+
+    @Override public void onDrawerOpened(View drawerView) { }
+    @Override public void onDrawerClosed(View drawerView) { }
+    @Override public void onDrawerStateChanged(int newState) { }
 }

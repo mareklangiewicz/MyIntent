@@ -65,7 +65,7 @@ public final class MyTestActivity extends pl.mareklangiewicz.myactivities.MyActi
 
         if     (id == R.id.action_whats_up         ) { log.i("[SNACK][SHORT]What's up mate?"); return true; }
         else if(id == R.id.action_settings         ) { log.w("[SNACK]TODO: some settings (or not).."); return true; }
-        else if(id == R.id.action_destroy_something) { log.a("BUM!"); throw new InternalError(); }
+        else if(id == R.id.action_destroy_something) { log.a("[SNACK]BUM!"); /* throw new InternalError("BUM!"); */ }
 
         return false;
     }

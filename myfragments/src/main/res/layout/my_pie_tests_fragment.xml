@@ -23,6 +23,9 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="8dp"
+            android:elevation="4dp"
+            app:pieColor="@android:color/holo_blue_dark"
+            app:ovalColor="@android:color/white"
             />
         <pl.mareklangiewicz.myviews.MyPie
             android:id="@+id/pie2"
@@ -32,7 +35,7 @@
             android:layout_margin="8dp"
             android:elevation="4dp"
             app:pieColor="@android:color/holo_red_dark"
-            app:ovalColor="@color/cardview_light_background"
+            app:ovalColor="@android:color/white"
             />
         <pl.mareklangiewicz.myviews.MyPie
             android:id="@+id/pie3"
@@ -41,23 +44,25 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="8dp"
-            android:elevation="8dp"
-            app:pieColor="@android:color/holo_orange_dark"
-            app:ovalColor="@color/cardview_light_background"
-            />
-        <pl.mareklangiewicz.myviews.MyPie
-            android:id="@+id/pie4"
-            android:layout_weight="2"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="8dp"
-            android:elevation="8dp"
-            app:pieColor="@android:color/holo_blue_dark"
-            app:ovalColor="@color/cardview_light_background"
+            android:elevation="4dp"
             app:from="12"
             app:to="88"
+            app:pieColor="@android:color/holo_orange_dark"
+            app:ovalColor="@android:color/white"
             />
 
     </LinearLayout>
+    <pl.mareklangiewicz.myviews.MyPie
+        android:id="@+id/pie4"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_margin="8dp"
+        android:elevation="4dp"
+        app:pieColor="@android:color/holo_green_dark"
+        app:ovalColor="@android:color/white"
+        app:from="40"
+        app:to="60"
+        />
 
 </LinearLayout>

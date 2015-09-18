@@ -4,17 +4,21 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/my_global_header_height"
     android:orientation="vertical"
-    android:padding="16dp"
     android:background="@drawable/header_background"
     android:gravity="bottom|end"
     >
-
     <TextView
         android:id="@+id/my_home_page_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="16dp"
         android:text="@string/user_id"
         style="@style/TextAppearance.AppCompat.Subhead"
+        />
+    <View
+        android:id="@+id/magic_underline_view"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
         />
 
 </LinearLayout>

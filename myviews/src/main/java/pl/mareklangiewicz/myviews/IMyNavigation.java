@@ -10,7 +10,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 /**
- * Created by marek on 02.09.15.
+ * Created by Marek Langiewicz on 02.09.15.
+ * An interface usually implemented by our navigation views and used by fragments.
  */
 public interface IMyNavigation {
 
@@ -27,6 +28,7 @@ public interface IMyNavigation {
 
     /**
      * returns first checked item
+     * WARNING: see MyNavigationView.getFirstCheckedItem warning!
      */
     @Nullable MenuItem getFirstCheckedItem();
 }

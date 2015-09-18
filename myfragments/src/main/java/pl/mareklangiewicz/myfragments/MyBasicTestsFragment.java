@@ -3,7 +3,6 @@ package pl.mareklangiewicz.myfragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.DrawerLayout;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +15,7 @@ import pl.mareklangiewicz.myviews.MyMenuArrow;
 import pl.mareklangiewicz.myviews.MyPie;
 
 
-public final class MyBasicTestsFragment extends MyFragment implements DrawerLayout.DrawerListener {
+public final class MyBasicTestsFragment extends MyFragment {
 
     private @Nullable MyPie mPie1;
     private @Nullable MyPie mPie3;
@@ -64,6 +63,8 @@ public final class MyBasicTestsFragment extends MyFragment implements DrawerLayo
 
     @Override
     public void onDrawerSlide(View view, float slideOffset) {
+        if(view != getLocalNavigation())
+            return;
         if (mPie1 != null) {
             mPie1.setRotation(slideOffset * 360);
         }

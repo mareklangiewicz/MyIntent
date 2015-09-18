@@ -10,7 +10,6 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,14 +17,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 
-import java.util.ArrayList;
-
 import pl.mareklangiewicz.myutils.MyMathUtils;
 import pl.mareklangiewicz.myviews.MyPie;
 
 //TODO LATER: create UI to change animation speed (in local menu header)
 
-public final class MyPieTestsFragment extends MyFragment implements View.OnClickListener, DrawerLayout.DrawerListener {
+public final class MyPieTestsFragment extends MyFragment implements View.OnClickListener {
 
     private @NonNull String mRandomize = "to";
 
@@ -76,7 +73,8 @@ public final class MyPieTestsFragment extends MyFragment implements View.OnClick
     @Override
     public void onResume() {
         super.onResume();
-        MenuItem item = getFirstCheckedItem();
+        MenuItem item = getFirstCheckedItem(); //see MyNavigationView.getFirstCheckedItem warning..
+
         if(item == null) {
             log.e("No item selected");
             mRandomize = "to";
@@ -89,16 +87,14 @@ public final class MyPieTestsFragment extends MyFragment implements View.OnClick
     public boolean onNavigationItemSelected(MenuItem item) {
         @IdRes int id = item.getItemId();
         Menu menu = getMenu();
-        if(menu == null) {
-            log.v("Our local menu is null, so we ignore this item");
-            return false;
+        boolean done = false;
+        if(menu == null) log.v("Our local menu is null, so we ignore this item");
+        else if(getMenu().findItem(id) == null) log.v("This item is not from our local menu - ignoring");
+        else {
+            mRandomize = item.getTitle().toString();
+            done = true;
         }
-        if (getMenu().findItem(id) == null) {
-            log.v("This item is not from our local menu - ignoring");
-            return false;
-        }
-        mRandomize = item.getTitle().toString();
-        return true;
+        return done;
     }
 
     @Override
@@ -150,6 +146,9 @@ public final class MyPieTestsFragment extends MyFragment implements View.OnClick
 
     @Override
     public void onDrawerSlide(View view, float slideOffset) {
+        if(view != getLocalNavigation())
+            return;
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
             if(mHeaderAnimator != null)
                 mHeaderAnimator.setCurrentFraction(slideOffset);

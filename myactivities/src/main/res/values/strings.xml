@@ -1,6 +1,4 @@
 <resources>
-    <string name="ma_global_navigation_description">Main menu</string>
-    <string name="title_my_test_activity">MyTestActivity</string>
     <string name="actions">Actions</string>
     <string name="more">More</string>
     <string name="my_basic_tests">Basic tests</string>

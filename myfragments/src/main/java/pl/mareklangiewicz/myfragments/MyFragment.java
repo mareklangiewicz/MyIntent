@@ -1,15 +1,18 @@
 package pl.mareklangiewicz.myfragments;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.annotation.CallSuper;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.MenuRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -34,7 +37,7 @@ import static pl.mareklangiewicz.myutils.MyTextUtils.*;
  * - don't add this fragment transactions to back stack
  * or invoke setRetainInstance(false) after MyFragment.onCreate.
  */
-public class MyFragment extends Fragment implements IMyNavigation, NavigationView.OnNavigationItemSelectedListener {
+public class MyFragment extends Fragment implements IMyCommander, IMyNavigation, NavigationView.OnNavigationItemSelectedListener, DrawerLayout.DrawerListener {
 
     static final boolean VERBOSE = true;
         //TODO LATER: implement it as a build time switch for user
@@ -57,16 +60,35 @@ public class MyFragment extends Fragment implements IMyNavigation, NavigationVie
     }
 
 
+    public @Nullable IMyNavigation getLocalNavigation() {
+        Activity a = getActivity();
+        if(!(a instanceof IMyCommander))
+            return null;
+        return ((IMyCommander)a).getLocalNavigation();
+    }
 
-    @Override public @Nullable Menu     getMenu       (                 ) { return ((IMyCommander) getActivity()).getLocalNavigation().getMenu            (  ); }
-    @Override public @Nullable View     getHeader     (                 ) { return ((IMyCommander) getActivity()).getLocalNavigation().getHeader          (  ); }
-    @Override public           void     clearMenu     (                 ) {        ((IMyCommander) getActivity()).getLocalNavigation().clearMenu          (  ); }
-    @Override public           void     clearHeader   (                 ) {        ((IMyCommander) getActivity()).getLocalNavigation().clearHeader        (  ); }
-    @Override public           void     inflateMenu   (@MenuRes   int id) {        ((IMyCommander) getActivity()).getLocalNavigation().inflateMenu        (id); }
-    @Override public           void     inflateHeader (@LayoutRes int id) {        ((IMyCommander) getActivity()).getLocalNavigation().inflateHeader      (id); }
-    @Override public           void     setCheckedItem(@IdRes     int id) {        ((IMyCommander) getActivity()).getLocalNavigation().setCheckedItem     (id); }
-    @Override public @Nullable MenuItem getFirstCheckedItem(            ) { return ((IMyCommander) getActivity()).getLocalNavigation().getFirstCheckedItem(  ); }
+    public @Nullable IMyNavigation getGlobalNavigation() {
+        Activity a = getActivity();
+        if(!(a instanceof IMyCommander))
+            return null;
+        return ((IMyCommander)a).getGlobalNavigation();
+    }
 
+    private @NonNull IMyNavigation gln() {
+        IMyNavigation n = getLocalNavigation();
+        if(n == null) throw new IllegalStateException("No local navigation available.");
+        return n;
+    }
+
+    @Override public @Nullable Menu     getMenu       (                 ) { return gln().getMenu            (  ); }
+    @Override public @Nullable View     getHeader     (                 ) { return gln().getHeader          (  ); }
+    @Override public           void     clearMenu     (                 ) {        gln().clearMenu          (  ); }
+    @Override public           void     clearHeader   (                 ) {        gln().clearHeader        (  ); }
+    @Override public           void     inflateMenu   (@MenuRes   int id) {        gln().inflateMenu        (id); }
+    @Override public           void     inflateHeader (@LayoutRes int id) {        gln().inflateHeader      (id); }
+    @Override public           void     setCheckedItem(@IdRes     int id) {        gln().setCheckedItem     (id); }
+    /** WARNING: see MyNavigationView.getFirstCheckedItem warning! */
+    @Override public @Nullable MenuItem getFirstCheckedItem(            ) { return gln().getFirstCheckedItem(  ); }
 
     public void selectItem(@IdRes int id) {
         Menu menu = getMenu();
@@ -79,17 +101,24 @@ public class MyFragment extends Fragment implements IMyNavigation, NavigationVie
     }
 
 
+    // These will be called by MyActivity for both global and local drawer events...
+
+    @Override public void onDrawerSlide(View drawerView, float slideOffset) { }
+    @Override public void onDrawerOpened(View drawerView) { }
+    @Override public void onDrawerClosed(View drawerView) { }
+    @Override public void onDrawerStateChanged(int newState) { }
 
 
 
-    // Below I only add some verbose logging to lifecycle fragment methods.
 
+    @CallSuper
     @Override
     public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
         if(VERY_VERBOSE) log.v("%s.%s context=%s attrs=%s  state=%s)", this.getClass().getSimpleName(), "onInflate", toStr(context), toStr(attrs), toStr(savedInstanceState));
         super.onInflate(context, attrs, savedInstanceState);
     }
 
+    @CallSuper
     @Override
     public void onCreate(Bundle savedInstanceState) {
         if(VERBOSE) log.v("%s.%s state=%s", this.getClass().getSimpleName(), "onCreate", toStr(savedInstanceState));
@@ -97,12 +126,14 @@ public class MyFragment extends Fragment implements IMyNavigation, NavigationVie
         setRetainInstance(true);
     }
 
+    @CallSuper
     @Override
     public void onAttach(Context context) {
         if(VERY_VERBOSE) log.v("%s.%s context=%s", this.getClass().getSimpleName(), "onAttach", toStr(context));
         super.onAttach(context);
     }
 
+    @CallSuper
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         if(VERY_VERBOSE) log.v("%s.%s state=%s", this.getClass().getSimpleName(), "onActivityCreated", toStr(savedInstanceState));
@@ -116,66 +147,75 @@ public class MyFragment extends Fragment implements IMyNavigation, NavigationVie
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
+    @CallSuper
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         if(VERY_VERBOSE) log.v("%s.%s view=%s state=%s", this.getClass().getSimpleName(), "onViewCreated", toStr(view), toStr(savedInstanceState));
         super.onViewCreated(view, savedInstanceState);
     }
 
+    @CallSuper
     @Override
     public void onViewStateRestored(Bundle savedInstanceState) {
         if(VERY_VERBOSE) log.v("%s.%s state=%s", this.getClass().getSimpleName(), "onViewStateRestored", toStr(savedInstanceState));
         super.onViewStateRestored(savedInstanceState);
     }
 
+    @CallSuper
     @Override
     public void onStart() {
         if(VERBOSE) log.v("%s.%s", this.getClass().getSimpleName(), "onStart");
         super.onStart();
     }
 
+    @CallSuper
     @Override
     public void onResume() {
         if(VERBOSE) log.v("%s.%s", this.getClass().getSimpleName(), "onResume");
         super.onResume();
     }
 
+    @CallSuper
     @Override
     public void onPause() {
         if(VERBOSE) log.v("%s.%s", this.getClass().getSimpleName(), "onPause");
         super.onPause();
     }
 
+    @CallSuper
     @Override
     public void onSaveInstanceState(Bundle outState) {
         if(VERY_VERBOSE) log.v("%s.%s outState=%s", this.getClass().getSimpleName(), "onSaveInstanceState", toStr(outState));
         super.onSaveInstanceState(outState);
     }
 
+    @CallSuper
     @Override
     public void onStop() {
         if(VERBOSE) log.v("%s.%s", this.getClass().getSimpleName(), "onStop");
         super.onStop();
     }
 
+    @CallSuper
     @Override
     public void onDestroyView() {
         if(VERY_VERBOSE) log.v("%s.%s", this.getClass().getSimpleName(), "onDestroyView");
         super.onDestroyView();
     }
 
+    @CallSuper
     @Override
     public void onDestroy() {
         if(VERBOSE) log.v("%s.%s", this.getClass().getSimpleName(), "onDestroy");
         super.onDestroy();
     }
 
+    @CallSuper
     @Override
     public void onDetach() {
         if(VERY_VERBOSE) log.v("%s.%s", this.getClass().getSimpleName(), "onDetach");
         super.onDetach();
     }
-
 
 
 }

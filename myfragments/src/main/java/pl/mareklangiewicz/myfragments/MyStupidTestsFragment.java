@@ -14,10 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 
-import pl.mareklangiewicz.myviews.MyArrowDrawable;
-import pl.mareklangiewicz.myviews.MyCheckDrawable;
-import pl.mareklangiewicz.myviews.MyLessDrawable;
-import pl.mareklangiewicz.myviews.MyPlusDrawable;
+import pl.mareklangiewicz.mydrawables.MyArrowDrawable;
+import pl.mareklangiewicz.mydrawables.MyCheckDrawable;
+import pl.mareklangiewicz.mydrawables.MyLessDrawable;
+import pl.mareklangiewicz.mydrawables.MyPlusDrawable;
 
 import static pl.mareklangiewicz.myutils.MyMathUtils.scale0d;
 
@@ -38,11 +38,11 @@ public class MyStupidTestsFragment extends MyFragment implements DrawerLayout.Dr
     View mLessView;
     View mGreaterView;
 
-    Drawable mMyArrowDrawable = new MyArrowDrawable().setStrokeWidth(16).setColor(0xffa00000).setRotateFrom(-180f);
-    Drawable mMyPlusDrawable = new MyPlusDrawable().setStrokeWidth(16).setColor(0xff00a000).setRotateTo(90f);
-    Drawable mMyCheckDrawable = new MyCheckDrawable().setStrokeWidth(16).setColor(0xff0000a0).setRotateTo(90f);
-    Drawable mMyLessDrawable = new MyLessDrawable().setStrokeWidth(16).setColor(0xff00a0a0).setRotateTo(180f);
-    Drawable mMyGreaterDrawable = new MyLessDrawable().setStrokeWidth(16).setColor(0xffa000a0).setRotateFrom(-180f);
+    Drawable mMyArrowDrawable = new MyArrowDrawable().setStrokeWidth(12).setColor(0xffa00000).setRotateFrom(-180f);
+    Drawable mMyPlusDrawable = new MyPlusDrawable().setStrokeWidth(12).setColor(0xff00a000).setRotateTo(90f);
+    Drawable mMyCheckDrawable = new MyCheckDrawable().setStrokeWidth(12).setColor(0xff0000a0).setRotateTo(90f);
+    Drawable mMyLessDrawable = new MyLessDrawable().setStrokeWidth(12).setColor(0xff00a0a0).setRotateTo(180f);
+    Drawable mMyGreaterDrawable = new MyLessDrawable().setStrokeWidth(12).setColor(0xffa000a0).setRotateFrom(-180f);
 
     public MyStupidTestsFragment() { }
 
@@ -100,6 +100,9 @@ public class MyStupidTestsFragment extends MyFragment implements DrawerLayout.Dr
 
     @Override
     public void onDrawerSlide(View drawerView, float slideOffset) {
+        if(drawerView != getLocalNavigation())
+            return;
+
         mMyArrowDrawable.setLevel((int) scale0d(slideOffset, 1f, 10000f));
         mMyPlusDrawable.setLevel((int) scale0d(slideOffset, 1f, 10000f));
         mMyCheckDrawable.setLevel((int) scale0d(slideOffset, 1f, 10000f));

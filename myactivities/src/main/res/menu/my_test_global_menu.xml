@@ -17,9 +17,9 @@
             android:icon="@drawable/ic_done_black_24dp"
             />
         <item
-            android:id="@+id/section_my_arrow_tests"
-            android:title="@string/my_arrow_tests"
-            android:titleCondensed="fragment:pl.mareklangiewicz.myfragments.MyMenuArrowTestsFragment"
+            android:id="@+id/section_my_drawable_tests"
+            android:title="@string/my_drawable_tests"
+            android:titleCondensed="fragment:pl.mareklangiewicz.myfragments.MyDrawableTestsFragment"
             android:icon="@drawable/ic_whatshot_black_24dp"
             />
         <item

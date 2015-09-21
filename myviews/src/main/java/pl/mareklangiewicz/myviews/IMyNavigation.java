@@ -4,7 +4,6 @@ import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.MenuRes;
 import android.support.annotation.Nullable;
-import android.support.design.widget.NavigationView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,4 +30,20 @@ public interface IMyNavigation {
      * WARNING: see MyNavigationView.getFirstCheckedItem warning!
      */
     @Nullable MenuItem getFirstCheckedItem();
+
+    boolean isEmpty();
+
+    void setListener(@Nullable Listener listener);
+
+    Listener getListener();
+
+    interface Listener {
+        boolean onItemSelected(IMyNavigation nav, MenuItem item);
+        void onClearHeader(IMyNavigation nav);
+        void onClearMenu(IMyNavigation nav);
+        void onInflateHeader(IMyNavigation nav);
+        void onInflateMenu(IMyNavigation nav);
+    }
+
+
 }

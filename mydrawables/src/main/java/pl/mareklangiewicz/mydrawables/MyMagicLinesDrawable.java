@@ -4,6 +4,8 @@ import android.graphics.Path;
 import android.graphics.Rect;
 import android.support.annotation.IntRange;
 
+import java.util.Random;
+
 
 /**
  * Created by Marek Langiewicz on 16.09.15.
@@ -11,19 +13,47 @@ import android.support.annotation.IntRange;
  */
 public class MyMagicLinesDrawable extends MyLivingDrawable {
 
-    @Override
-    public void drawLivingPath(Path path, @IntRange(from=0,to=10000) int level, Rect bounds, int cx, int cy) {
-        int h4 = bounds.height() / 4;
+    private int[] mLines;
+    private final Random RANDOM = new Random();
 
-        ln(bounds.left, cy - h4, lvl(   0,  5000, bounds.left, bounds.right), cy - h4);
-        ln(bounds.left, cy     , lvl(5000, 10000, bounds.left, bounds.right), cy     );
-        ln(bounds.left, cy + h4, lvl(5000, 10000, bounds.left, bounds.right), cy + h4);
+    public MyMagicLinesDrawable setLines(int... lines) {
+        mLines = lines;
+        return this;
     }
 
-    // TODO LATER: setLinesCount
-    // TODO LATER: setShowingStyle - like one line following another; or outrunning another etc..
-    // TODO LATER: setRandomShowingStyle - we generate random delay and random speed for every line
-    // TODO LATER: allow random with seed
-    // TODO SOMEDAY MAYBE: setAlphaChangingStyle - although it can be done easily by user (ObjectAnimator)
+    public MyMagicLinesDrawable setRandomLines(int count, long seed) {
+        RANDOM.setSeed(seed);
+        setRandomLines(count);
+        return this;
+    }
 
+    public MyMagicLinesDrawable setRandomLines(int count) {
+        mLines = new int[count * 2];
+        for(int i = 0; i < count; ++i) {
+            mLines[i * 2] = RANDOM.nextInt(RANDOM.nextInt(10001));
+            mLines[i * 2 + 1] = 10000 - RANDOM.nextInt(RANDOM.nextInt(10001 - mLines[i * 2]));
+        }
+        return this;
+    }
+
+    public MyMagicLinesDrawable setRandomLines() {
+        setRandomLines(3);
+        return this;
+    }
+
+
+    @Override
+    public void drawLivingPath(Path path, @IntRange(from=0,to=10000) int level, Rect bounds, int cx, int cy) {
+
+        if(mLines == null)
+            setRandomLines();
+
+        int count = mLines.length / 2;
+        for(int i = 0; i < count; ++i) {
+            int from = mLines[i * 2];
+            int to = mLines[i * 2 + 1];
+            int height = (i+1) * bounds.height() / (count+1);
+            ln(bounds.left, height, lvl(from, to, bounds.left, bounds.right), height);
+        }
+    }
 }

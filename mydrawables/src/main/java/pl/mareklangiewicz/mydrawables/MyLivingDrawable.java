@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IntRange;
 
+import static pl.mareklangiewicz.myutils.MyMathUtils.scale0d;
 import static pl.mareklangiewicz.myutils.MyMathUtils.scale1d;
 
 /**
@@ -22,6 +23,9 @@ public class MyLivingDrawable extends Drawable {
 
     protected float mRotateFrom = 0f;
     protected float mRotateTo = 0f;
+
+    protected int mColorFrom = -1;
+    protected int mColorTo = -1;
 
     protected final Paint mPaint = new Paint();
     protected final Path mPath = new Path();
@@ -55,10 +59,24 @@ public class MyLivingDrawable extends Drawable {
     }
 
     public MyLivingDrawable setColor(@ColorInt int color) {
-        if (color != mPaint.getColor()) {
-            mPaint.setColor(color);
-            invalidateSelf();
-        }
+        mPaint.setColor(color);
+        mColorFrom = -1;
+        mColorTo = -1;
+        invalidateSelf();
+        return this;
+    }
+
+    public MyLivingDrawable setColorFrom(@ColorInt int color) {
+        mColorFrom = color;
+        if(mColorTo == -1)
+            mColorTo = mPaint.getColor();
+        return this;
+    }
+
+    public MyLivingDrawable setColorTo(@ColorInt int color) {
+        mColorTo = color;
+        if(mColorFrom == -1)
+            mColorFrom = mPaint.getColor();
         return this;
     }
 
@@ -132,6 +150,23 @@ public class MyLivingDrawable extends Drawable {
     }
     protected float lvl(float from, float to) { return lvl(0, 10000, from, to); }
 
+    protected int lvlcolor(int colorFrom, int colorTo) {
+        float fraction = scale0d((float) getLevel(), 10000f, 1f);
+        int startA = (colorFrom >> 24) & 0xff;
+        int startR = (colorFrom >> 16) & 0xff;
+        int startG = (colorFrom >> 8) & 0xff;
+        int startB = colorFrom & 0xff;
+
+        int endA = (colorTo >> 24) & 0xff;
+        int endR = (colorTo >> 16) & 0xff;
+        int endG = (colorTo >> 8) & 0xff;
+        int endB = colorTo & 0xff;
+
+        return ((startA + (int)(fraction * (endA - startA))) << 24) |
+                ((startR + (int)(fraction * (endR - startR))) << 16) |
+                ((startG + (int)(fraction * (endG - startG))) << 8) |
+                ((startB + (int)(fraction * (endB - startB))));
+    }
 
 
     /**
@@ -165,6 +200,8 @@ public class MyLivingDrawable extends Drawable {
         Rect bounds = getBounds();
         int cx = bounds.centerX();
         int cy = bounds.centerY();
+        if(mColorFrom != -1)
+            mPaint.setColor(lvlcolor(mColorFrom, mColorTo));
         mPath.rewind();
         drawLivingPath(mPath, getLevel(), bounds, cx, cy);
         if(mRotateFrom != 0 || mRotateTo != 0) {

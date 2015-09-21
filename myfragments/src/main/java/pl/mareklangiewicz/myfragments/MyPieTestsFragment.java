@@ -7,17 +7,16 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
-import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 
 import pl.mareklangiewicz.myutils.MyMathUtils;
+import pl.mareklangiewicz.myviews.IMyNavigation;
 import pl.mareklangiewicz.myviews.MyPie;
 
 //TODO LATER: create UI to change animation speed (in local menu header)
@@ -84,17 +83,13 @@ public final class MyPieTestsFragment extends MyFragment implements View.OnClick
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        @IdRes int id = item.getItemId();
-        Menu menu = getMenu();
-        boolean done = false;
-        if(menu == null) log.v("Our local menu is null, so we ignore this item");
-        else if(getMenu().findItem(id) == null) log.v("This item is not from our local menu - ignoring");
-        else {
-            mRandomize = item.getTitle().toString();
-            done = true;
+    public boolean onItemSelected(IMyNavigation nav, MenuItem item) {
+        if(nav != getLocalNavigation()) {
+            log.v("This item is not from our local menu.");
+            return false;
         }
-        return done;
+        mRandomize = item.getTitle().toString();
+        return true;
     }
 
     @Override

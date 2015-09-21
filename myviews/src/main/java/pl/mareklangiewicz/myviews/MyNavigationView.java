@@ -1,8 +1,6 @@
 package pl.mareklangiewicz.myviews;
 
 import android.content.Context;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,14 +12,13 @@ import android.view.View;
 
 import com.noveogroup.android.log.MyLogger;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public final class MyNavigationView extends NavigationView implements IMyNavigation {
+public final class MyNavigationView extends NavigationView implements IMyNavigation, NavigationView.OnNavigationItemSelectedListener {
 
     protected final MyLogger log = MyLogger.sMyDefaultUILogger;
 
     private @Nullable View mHeader;
+
+    private @Nullable Listener mListener;
 
     public MyNavigationView(Context context) {
         super(context);
@@ -39,6 +36,7 @@ public final class MyNavigationView extends NavigationView implements IMyNavigat
     }
 
     private void init(@Nullable AttributeSet attrs, int defStyle) {
+        super.setNavigationItemSelectedListener(this);
     }
 
 
@@ -48,8 +46,16 @@ public final class MyNavigationView extends NavigationView implements IMyNavigat
 
     public void inflateHeader(@LayoutRes int id) {
         mHeader = inflateHeaderView(id);
+        if(mListener != null)
+            mListener.onInflateHeader(this);
     }
 
+    @Override
+    public void inflateMenu(int resId) {
+        super.inflateMenu(resId);
+        if(mListener != null)
+            mListener.onInflateMenu(this);
+    }
 
     /**
      * Finds (recursively: DFS) first checked item in navigation view menu.
@@ -91,6 +97,8 @@ public final class MyNavigationView extends NavigationView implements IMyNavigat
     @Override
     public void clearMenu() {
         getMenu().clear();
+        if(mListener != null)
+            mListener.onClearMenu(this);
     }
 
     @Override
@@ -99,6 +107,34 @@ public final class MyNavigationView extends NavigationView implements IMyNavigat
             return;
         removeHeaderView(mHeader);
         mHeader = null;
+        if(mListener != null)
+            mListener.onClearHeader(this);
+    }
+
+    public boolean isEmpty() {
+        return getMenu().size() == 0 && mHeader == null;
+    }
+
+    @Override
+    public void setListener(@Nullable Listener listener) {
+        mListener = listener;
+    }
+
+    @Override
+    public Listener getListener() {
+        return mListener;
+    }
+
+
+
+    @Override
+    public void setNavigationItemSelectedListener(OnNavigationItemSelectedListener listener) {
+        throw new IllegalAccessError("This method is blocked. Use setListener.");
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem menuItem) {
+        return mListener != null && mListener.onItemSelected(this, menuItem);
     }
 
 }

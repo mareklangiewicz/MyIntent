@@ -2,17 +2,18 @@ package pl.mareklangiewicz.myactivities;
 
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.view.GravityCompat;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 
+import pl.mareklangiewicz.mydrawables.MyLivingDrawable;
 import pl.mareklangiewicz.mydrawables.MyMagicLinesDrawable;
+import pl.mareklangiewicz.myviews.IMyNavigation;
 
 /**
  * Test activity presenting most of the MyBlocks functionality
@@ -22,7 +23,7 @@ import pl.mareklangiewicz.mydrawables.MyMagicLinesDrawable;
     
 public final class MyTestActivity extends pl.mareklangiewicz.myactivities.MyActivity {
 
-    private @Nullable Drawable mMyMagicLinesDrawable;
+    private final MyLivingDrawable mMyMagicLinesDrawable = new MyMagicLinesDrawable();
     private @Nullable ObjectAnimator mHomePageAnimator;
     private @Nullable ObjectAnimator mMagicLinesAnimator;
 
@@ -30,14 +31,18 @@ public final class MyTestActivity extends pl.mareklangiewicz.myactivities.MyActi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        log.i("Hello world!");
+
+        //noinspection ConstantConditions
         getGlobalNavigation().inflateMenu(R.menu.my_test_global_menu);
         getGlobalNavigation().inflateHeader(R.layout.my_test_global_header);
 
+        //noinspection ConstantConditions
         View underline = getGlobalNavigation().getHeader().findViewById(R.id.magic_underline_view);
-        mMyMagicLinesDrawable = new MyMagicLinesDrawable().setColor(0x30ffffff).setStrokeWidth(8);
+        mMyMagicLinesDrawable.setColor(0x30ffffff).setStrokeWidth(8);
         underline.setBackground(mMyMagicLinesDrawable);
 
-        //noinspection ConstantConditions
         View homepage = getGlobalNavigation().getHeader().findViewById(R.id.my_home_page_text_view);
 
         PropertyValuesHolder pvha = PropertyValuesHolder.ofFloat(View.ALPHA, 0f, 0f, 1f);
@@ -83,15 +88,13 @@ public final class MyTestActivity extends pl.mareklangiewicz.myactivities.MyActi
             return;
         if(mMagicLinesAnimator != null)
             mMagicLinesAnimator.cancel();
-        if (mMyMagicLinesDrawable != null) {
-            mMyMagicLinesDrawable.setLevel(0);
-        }
+        mMyMagicLinesDrawable.setLevel(0);
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onItemSelected(IMyNavigation nav, MenuItem item) {
 
-        boolean done = super.onNavigationItemSelected(item);
+        boolean done = super.onItemSelected(nav, item);
 
         if(done)
             return true;

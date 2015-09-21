@@ -2,16 +2,15 @@ package pl.mareklangiewicz.myfragments;
 
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.annotation.CallSuper;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.MenuRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -24,8 +23,9 @@ import com.noveogroup.android.log.MyLogger;
 
 import pl.mareklangiewicz.myviews.IMyCommander;
 import pl.mareklangiewicz.myviews.IMyNavigation;
+import pl.mareklangiewicz.myviews.MyNavigationView;
 
-import static pl.mareklangiewicz.myutils.MyTextUtils.*;
+import static pl.mareklangiewicz.myutils.MyTextUtils.toStr;
 
 /**
  * This is my base class for common fragments.
@@ -37,7 +37,7 @@ import static pl.mareklangiewicz.myutils.MyTextUtils.*;
  * - don't add this fragment transactions to back stack
  * or invoke setRetainInstance(false) after MyFragment.onCreate.
  */
-public class MyFragment extends Fragment implements IMyCommander, IMyNavigation, NavigationView.OnNavigationItemSelectedListener, DrawerLayout.DrawerListener {
+public class MyFragment extends Fragment implements IMyCommander, IMyNavigation, MyNavigationView.Listener, DrawerLayout.DrawerListener {
 
     static final boolean VERBOSE = true;
         //TODO LATER: implement it as a build time switch for user
@@ -51,14 +51,18 @@ public class MyFragment extends Fragment implements IMyCommander, IMyNavigation,
 
     /**
      * Override it to your needs
+     * @param nav Local or Global navigation.
      * @param item Selected menu item from global or local menu.
      * @return True if item was successfully selected.
      */
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onItemSelected(IMyNavigation nav, MenuItem item) {
         return false;
     }
-
+    @Override public void onClearHeader(IMyNavigation nav) { }
+    @Override public void onClearMenu(IMyNavigation nav) { }
+    @Override public void onInflateHeader(IMyNavigation nav) { }
+    @Override public void onInflateMenu(IMyNavigation nav) { }
 
     public @Nullable IMyNavigation getLocalNavigation() {
         Activity a = getActivity();
@@ -80,15 +84,22 @@ public class MyFragment extends Fragment implements IMyCommander, IMyNavigation,
         return n;
     }
 
-    @Override public @Nullable Menu     getMenu       (                 ) { return gln().getMenu            (  ); }
-    @Override public @Nullable View     getHeader     (                 ) { return gln().getHeader          (  ); }
-    @Override public           void     clearMenu     (                 ) {        gln().clearMenu          (  ); }
-    @Override public           void     clearHeader   (                 ) {        gln().clearHeader        (  ); }
-    @Override public           void     inflateMenu   (@MenuRes   int id) {        gln().inflateMenu        (id); }
-    @Override public           void     inflateHeader (@LayoutRes int id) {        gln().inflateHeader      (id); }
-    @Override public           void     setCheckedItem(@IdRes     int id) {        gln().setCheckedItem     (id); }
+    @Override public @Nullable Menu     getMenu       (                 ) { return gln().getMenu(); }
+    @Override public @Nullable View     getHeader     (                 ) { return gln().getHeader(); }
+    @Override public           void     clearMenu     (                 ) {        gln().clearMenu(); }
+    @Override public           void     clearHeader   (                 ) {        gln().clearHeader(); }
+    @Override public           void     inflateMenu   (@MenuRes   int id) {        gln().inflateMenu(id); }
+    @Override public           void     inflateHeader (@LayoutRes int id) {        gln().inflateHeader(id); }
+    @Override public           void     setCheckedItem(@IdRes     int id) {        gln().setCheckedItem(id); }
     /** WARNING: see MyNavigationView.getFirstCheckedItem warning! */
-    @Override public @Nullable MenuItem getFirstCheckedItem(            ) { return gln().getFirstCheckedItem(  ); }
+    @Override public @Nullable MenuItem getFirstCheckedItem(            ) { return gln().getFirstCheckedItem(); }
+    @Override public        boolean     isEmpty       (                 ) { return gln().isEmpty(); }
+    @Override public       Listener     getListener   (                 ) { return gln().getListener(); }
+
+    @Override public void setListener(@Nullable Listener listener) {
+        throw new IllegalStateException("MyFragments can not change navigation listeners.");
+    }
+
 
     public void selectItem(@IdRes int id) {
         Menu menu = getMenu();
@@ -97,7 +108,7 @@ public class MyFragment extends Fragment implements IMyCommander, IMyNavigation,
             return;
         }
         setCheckedItem(id);
-        onNavigationItemSelected(menu.findItem(id));
+        onItemSelected(gln(), menu.findItem(id));
     }
 
 

@@ -3,7 +3,6 @@ package pl.mareklangiewicz.myactivities;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
@@ -13,10 +12,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.transition.AutoTransition;
@@ -29,10 +26,11 @@ import android.widget.FrameLayout;
 
 import com.noveogroup.android.log.MyLogger;
 
+import pl.mareklangiewicz.mydrawables.MyArrowDrawable;
+import pl.mareklangiewicz.mydrawables.MyLivingDrawable;
 import pl.mareklangiewicz.myfragments.MyFragment;
 import pl.mareklangiewicz.myviews.IMyCommander;
 import pl.mareklangiewicz.myviews.IMyNavigation;
-import pl.mareklangiewicz.mydrawables.MyArrowDrawable;
 import pl.mareklangiewicz.myviews.MyNavigationView;
 
 import static pl.mareklangiewicz.myutils.MyMathUtils.scale0d;
@@ -43,7 +41,7 @@ import static pl.mareklangiewicz.myutils.MyTextUtils.toStr;
 
 // TODO: check menu/arrow icons state after changing orientation (with drawer open)
 
-public class MyActivity extends AppCompatActivity implements IMyCommander, NavigationView.OnNavigationItemSelectedListener, DrawerLayout.DrawerListener {
+public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNavigation.Listener, DrawerLayout.DrawerListener {
 
     static final boolean VERBOSE = true;
     //TODO LATER: implement it as a build time switch for user
@@ -70,8 +68,8 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, Navig
 
     protected @Nullable FloatingActionButton mFAB;
 
-    protected @Nullable Drawable mGlobalArrowDrawable = new MyArrowDrawable().setStrokeWidth(8).setRotateTo(360f + 180f);
-    protected @Nullable Drawable mLocalArrowDrawable = new MyArrowDrawable().setStrokeWidth(8).setRotateFrom(180f);
+    protected final MyLivingDrawable mGlobalArrowDrawable = new MyArrowDrawable();
+    protected final MyLivingDrawable mLocalArrowDrawable = new MyArrowDrawable();
 
     protected @Nullable View mLocalArrowView;
 
@@ -102,18 +100,21 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, Navig
 
 
         //noinspection ConstantConditions
-        mGlobalNavigationView.setNavigationItemSelectedListener(this);
+        mGlobalNavigationView.setListener(this);
         //noinspection ConstantConditions
-        mLocalNavigationView.setNavigationItemSelectedListener(this);
+        mLocalNavigationView.setListener(this);
 
         setSupportActionBar(mToolbar);
+
+        mGlobalArrowDrawable.setStrokeWidth(6).setRotateTo(360f + 180f).setAlpha(0xa0);
+        mLocalArrowDrawable.setStrokeWidth(6).setRotateFrom(180f).setAlpha(0xa0);
 
         //noinspection ConstantConditions
         mToolbar.setNavigationIcon(mGlobalArrowDrawable);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleDrawer(mGlobalDrawerLayout, GravityCompat.START);
+                toggleDrawerIfUnlocked(mGlobalDrawerLayout, GravityCompat.START);
             }
         });
 
@@ -122,7 +123,7 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, Navig
         mLocalArrowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleDrawer(mLocalDrawerLayout, GravityCompat.END);
+                toggleDrawerIfUnlocked(mLocalDrawerLayout, GravityCompat.END);
             }
         });
         int h = mToolbar.getMinimumHeight();
@@ -149,15 +150,17 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, Navig
         }
     }
 
-    private void toggleDrawer(@Nullable DrawerLayout drawerLayout, int gravity) {
+    private void toggleDrawerIfUnlocked(@Nullable DrawerLayout drawerLayout, int gravity) {
         if (drawerLayout == null)
             log.e("No drawer found!");
-        else {
+        else if(drawerLayout.getDrawerLockMode(gravity) == DrawerLayout.LOCK_MODE_UNLOCKED) {
             if (drawerLayout.isDrawerVisible(gravity))
                 drawerLayout.closeDrawer(gravity);
             else
                 drawerLayout.openDrawer(gravity);
         }
+        else
+            log.d("Drawer is locked.");
     }
 
     @CallSuper
@@ -168,7 +171,9 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, Navig
             onDrawerSlide(mGlobalNavigationView, mGlobalDrawerLayout.isDrawerOpen(GravityCompat.START) ? 1f : 0f);
         if(mLocalDrawerLayout != null)
             onDrawerSlide(mLocalNavigationView, mLocalDrawerLayout.isDrawerOpen(GravityCompat.END) ? 1f : 0f);
-
+        // ensure that drawers and menu icons are updated:
+        onNavigationContentChanged(getGlobalNavigation());
+        onNavigationContentChanged(getLocalNavigation());
     }
 
     @CallSuper
@@ -187,8 +192,6 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, Navig
         mLocalNavigationView = null;
         mGlobalNavigationView = null;
         mFAB = null;
-        mGlobalArrowDrawable = null;
-        mLocalArrowDrawable = null;
         mLocalArrowView = null;
 
         updateLocalFragment(null);
@@ -205,8 +208,8 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, Navig
     protected boolean onNewLocalFragment(String name) {
         if(VERY_VERBOSE) log.v("%s.%s name=%s", this.getClass().getSimpleName(), "onNewLocalFragment", name);
         //noinspection ConstantConditions
-        mLocalNavigationView.clearHeader();
-        mLocalNavigationView.clearMenu();
+        getLocalNavigation().clearHeader();
+        getLocalNavigation().clearMenu();
         return true;
     }
 
@@ -240,7 +243,7 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, Navig
      */
     @CallSuper
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onItemSelected(IMyNavigation nav, MenuItem item) {
         if(mGlobalDrawerLayout != null)
             mGlobalDrawerLayout.closeDrawers();
         if(mLocalDrawerLayout != null)
@@ -254,7 +257,7 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, Navig
             if(!ok)
                 return false;
 
-            f = Fragment.instantiate(MyActivity.this, ctitle);
+            f = Fragment.instantiate(this, ctitle);
 
             updateLocalFragment(f);
 
@@ -270,11 +273,56 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, Navig
         //TODO LATER: menu api already has some api for launching intents (MenuItem.setIntent) - but our MyIntent engine is better!
 
         if(mMyLocalFragment != null) {
-            boolean done = mMyLocalFragment.onNavigationItemSelected(item);
+            boolean done = mMyLocalFragment.onItemSelected(nav, item);
             if(done) return true;
         }
-
         return false;
+    }
+
+    @CallSuper
+    protected void onNavigationContentChanged(IMyNavigation nav) {
+        boolean empty = nav.isEmpty();
+        if(nav == getGlobalNavigation()) {
+            mGlobalArrowDrawable.setAlpha(empty ? 0 : 0xa0);
+            if(mGlobalDrawerLayout != null)
+                mGlobalDrawerLayout.setDrawerLockMode(empty ? DrawerLayout.LOCK_MODE_LOCKED_CLOSED : DrawerLayout.LOCK_MODE_UNLOCKED);
+        }
+        else if(nav == getLocalNavigation()) {
+            //noinspection ConstantConditions
+            mLocalArrowView.setVisibility(empty ? View.GONE : View.VISIBLE);
+            if(mLocalDrawerLayout != null)
+                mLocalDrawerLayout.setDrawerLockMode(empty ? DrawerLayout.LOCK_MODE_LOCKED_CLOSED : DrawerLayout.LOCK_MODE_UNLOCKED);
+        }
+        else
+            log.e("Unknown IMyNavigation object.");
+    }
+
+    @Override
+    public void onClearHeader(IMyNavigation nav) {
+        onNavigationContentChanged(nav);
+        if(mMyLocalFragment != null)
+            mMyLocalFragment.onClearHeader(nav);
+    }
+
+    @Override
+    public void onClearMenu(IMyNavigation nav) {
+        onNavigationContentChanged(nav);
+        if(mMyLocalFragment != null)
+            mMyLocalFragment.onClearMenu(nav);
+    }
+
+    @Override
+    public void onInflateHeader(IMyNavigation nav) {
+        onNavigationContentChanged(nav);
+        if(mMyLocalFragment != null)
+            mMyLocalFragment.onInflateHeader(nav);
+    }
+
+    @Override
+    public void onInflateMenu(IMyNavigation nav) {
+        onNavigationContentChanged(nav);
+        if(mMyLocalFragment != null)
+            mMyLocalFragment.onInflateMenu(nav);
     }
 
     private void addAllSharedElementsToFragmentTransaction(View root, FragmentTransaction ft) {
@@ -310,7 +358,7 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, Navig
             return;
         }
         nav.setCheckedItem(id);
-        onNavigationItemSelected(menu.findItem(id));
+        onItemSelected(nav, menu.findItem(id));
     }
 
     public void selectGlobalItem(@IdRes int id) { selectItem(getGlobalNavigation(), id); }
@@ -320,14 +368,10 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, Navig
     @Override
     public void onDrawerSlide(View drawerView, float slideOffset) {
         if(drawerView == mGlobalNavigationView) {
-            if (mGlobalArrowDrawable != null) {
-                mGlobalArrowDrawable.setLevel((int) scale0d(slideOffset, 1f, 10000f));
-            }
+            mGlobalArrowDrawable.setLevel((int) scale0d(slideOffset, 1f, 10000f));
         }
         else if(drawerView == mLocalNavigationView) {
-            if (mLocalArrowDrawable != null) {
-                mLocalArrowDrawable.setLevel((int) scale0d(slideOffset, 1f, 10000f));
-            }
+            mLocalArrowDrawable.setLevel((int) scale0d(slideOffset, 1f, 10000f));
         }
         if(mMyLocalFragment != null)
             mMyLocalFragment.onDrawerSlide(drawerView, slideOffset);
@@ -350,4 +394,6 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, Navig
         if(mMyLocalFragment != null)
             mMyLocalFragment.onDrawerStateChanged(newState);
     }
+
+
 }

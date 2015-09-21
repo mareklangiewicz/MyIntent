@@ -18,37 +18,6 @@
             android:layout_height="wrap_content"
             android:text="STUPID EXPERIMENTS - THIS FRAGMENT IS ONLY FOR MYSELF - NOTHING INTERESTING HERE"/>
     </android.support.v7.widget.CardView>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-        <View
-            android:id="@+id/arrow_view"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            />
-        <View
-            android:id="@+id/plus_view"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            />
-        <View
-            android:id="@+id/check_view"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            />
-        <View
-            android:id="@+id/less_view"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            />
-        <View
-            android:id="@+id/greater_view"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            />
-    </LinearLayout>
     <android.support.design.widget.NavigationView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.noveogroup.android.log.Logger;
 
 import pl.mareklangiewicz.myloggers.MyLogRecyclerView;
+import pl.mareklangiewicz.myviews.IMyNavigation;
 
 /**
  * MyFragment showing MyLogger messages.
@@ -29,7 +30,7 @@ public final class MyLogFragment extends MyFragment {
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onItemSelected(IMyNavigation nav, MenuItem item) {
         @IdRes int id = item.getItemId();
         if     (id == R.id.log_level_error  ) { log.setHistoryFilterLevel(Logger.Level.ERROR);   return true; }
         else if(id == R.id.log_level_warning) { log.setHistoryFilterLevel(Logger.Level.WARN);    return true; }
@@ -42,7 +43,7 @@ public final class MyLogFragment extends MyFragment {
         else if(id == R.id.log_some_info    ) { log.i("some info"   ); return true; }
         else if(id == R.id.log_some_debug   ) { log.d("some debug"  ); return true; }
         else if(id == R.id.log_some_verbose ) { log.v("some verbose"); return true; }
-        return super.onNavigationItemSelected(item);
+        return super.onItemSelected(nav, item);
     }
 
     private void updateCheckedItem() {

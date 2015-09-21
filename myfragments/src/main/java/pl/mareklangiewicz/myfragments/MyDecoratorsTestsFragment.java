@@ -19,11 +19,10 @@ public final class MyDecoratorsTestsFragment extends MyFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        inflateHeader(R.layout.my_basic_header);
         setHasOptionsMenu(true);
         return inflater.inflate(R.layout.my_decorators_tests_fragment, container, false);
     }
-
-    //TODO: move menu to local menu (right side drawer)
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

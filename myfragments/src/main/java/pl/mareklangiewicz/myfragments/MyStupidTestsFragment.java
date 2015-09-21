@@ -32,18 +32,6 @@ public class MyStupidTestsFragment extends MyFragment implements DrawerLayout.Dr
 
     CardView mWarningCardView;
 
-    View mArrowView;
-    View mPlusView;
-    View mCheckView;
-    View mLessView;
-    View mGreaterView;
-
-    Drawable mMyArrowDrawable = new MyArrowDrawable().setStrokeWidth(12).setColor(0xffa00000).setRotateFrom(-180f);
-    Drawable mMyPlusDrawable = new MyPlusDrawable().setStrokeWidth(12).setColor(0xff00a000).setRotateTo(90f);
-    Drawable mMyCheckDrawable = new MyCheckDrawable().setStrokeWidth(12).setColor(0xff0000a0).setRotateTo(90f);
-    Drawable mMyLessDrawable = new MyLessDrawable().setStrokeWidth(12).setColor(0xff00a0a0).setRotateTo(180f);
-    Drawable mMyGreaterDrawable = new MyLessDrawable().setStrokeWidth(12).setColor(0xffa000a0).setRotateFrom(-180f);
-
     public MyStupidTestsFragment() { }
 
     @Nullable
@@ -53,21 +41,6 @@ public class MyStupidTestsFragment extends MyFragment implements DrawerLayout.Dr
         View root = inflater.inflate(R.layout.my_stupid_tests_fragment, container, false);
 
         mWarningCardView = (CardView) root.findViewById(R.id.stupid_warning);
-
-        mArrowView = root.findViewById(R.id.arrow_view);
-        mArrowView.setBackground(mMyArrowDrawable);
-
-        mPlusView = root.findViewById(R.id.plus_view);
-        mPlusView.setBackground(mMyPlusDrawable);
-
-        mCheckView = root.findViewById(R.id.check_view);
-        mCheckView.setBackground(mMyCheckDrawable);
-
-        mLessView = root.findViewById(R.id.less_view);
-        mLessView.setBackground(mMyLessDrawable);
-
-        mGreaterView = root.findViewById(R.id.greater_view);
-        mGreaterView.setBackground(mMyGreaterDrawable);
 
         final NavigationView nv = (NavigationView) root.findViewById(R.id.stupid_navigation_view);
 
@@ -97,20 +70,4 @@ public class MyStupidTestsFragment extends MyFragment implements DrawerLayout.Dr
         animator.start();
 
     }
-
-    @Override
-    public void onDrawerSlide(View drawerView, float slideOffset) {
-        if(drawerView != getLocalNavigation())
-            return;
-
-        mMyArrowDrawable.setLevel((int) scale0d(slideOffset, 1f, 10000f));
-        mMyPlusDrawable.setLevel((int) scale0d(slideOffset, 1f, 10000f));
-        mMyCheckDrawable.setLevel((int) scale0d(slideOffset, 1f, 10000f));
-        mMyLessDrawable.setLevel((int) scale0d(slideOffset, 1f, 10000f));
-        mMyGreaterDrawable.setLevel((int) scale0d(slideOffset, 1f, 10000f));
-    }
-
-    @Override public void onDrawerOpened(View drawerView) { }
-    @Override public void onDrawerClosed(View drawerView) { }
-    @Override public void onDrawerStateChanged(int newState) { }
 }

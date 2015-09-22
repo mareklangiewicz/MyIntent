@@ -11,7 +11,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import pl.mareklangiewicz.myviews.MyMenuArrow;
 import pl.mareklangiewicz.myviews.MyPie;
 
 
@@ -19,7 +18,6 @@ public final class MyBasicTestsFragment extends MyFragment {
 
     private @Nullable MyPie mPie1;
     private @Nullable MyPie mPie3;
-    private @Nullable MyMenuArrow mArrow;
 
     public MyBasicTestsFragment() { }
 
@@ -49,7 +47,6 @@ public final class MyBasicTestsFragment extends MyFragment {
         mPie1 = (MyPie) root.findViewById(R.id.pie1);
         mPie3 = (MyPie) root.findViewById(R.id.pie3);
 
-        mArrow = (MyMenuArrow) root.findViewById(R.id.my_first_menu_arrow);
         return root;
     }
 
@@ -58,7 +55,6 @@ public final class MyBasicTestsFragment extends MyFragment {
         super.onDestroyView();
         mPie1 = null;
         mPie3 = null;
-        mArrow = null;
     }
 
     @Override
@@ -70,12 +66,6 @@ public final class MyBasicTestsFragment extends MyFragment {
         }
         if (mPie3 != null) {
             mPie3.setTo(75 - slideOffset * 50);
-        }
-        if (mArrow != null) {
-            mArrow.setDirection(slideOffset);
-        }
-        if (mArrow != null) {
-            mArrow.setRotation(slideOffset * 180);
         }
     }
 

@@ -28,11 +28,6 @@
                 android:layout_gravity="start"
                 app:pieColor="@android:color/holo_green_dark"
                 />
-            <pl.mareklangiewicz.myviews.MyMenuArrow
-                android:id="@+id/my_first_menu_arrow"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_gravity="left"/>
 
             <TextView android:text="@string/hello_world"
                 android:layout_width="match_parent"

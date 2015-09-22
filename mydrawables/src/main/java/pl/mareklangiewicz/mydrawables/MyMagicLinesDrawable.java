@@ -3,6 +3,7 @@ package pl.mareklangiewicz.mydrawables;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.support.annotation.IntRange;
+import android.support.annotation.NonNull;
 
 import java.util.Random;
 
@@ -43,7 +44,7 @@ public class MyMagicLinesDrawable extends MyLivingDrawable {
 
 
     @Override
-    public void drawLivingPath(Path path, @IntRange(from=0,to=10000) int level, Rect bounds, int cx, int cy) {
+    public void drawLivingPath(@NonNull Path path, @IntRange(from=0,to=10000) int level, Rect bounds, int cx, int cy) {
 
         if(mLines == null)
             setRandomLines();

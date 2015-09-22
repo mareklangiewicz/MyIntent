@@ -10,9 +10,4 @@
     <declare-styleable name="MyLLDecorator">
         <attr name="decoration" format="reference" />
     </declare-styleable>
-    <declare-styleable name="MyMenuArrow">
-        <attr name="arrDirection" format="float" />
-        <attr name="arrColor" format="color" />
-    </declare-styleable>
-
 </resources>

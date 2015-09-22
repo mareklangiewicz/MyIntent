@@ -3,6 +3,7 @@ package pl.mareklangiewicz.mydrawables;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.support.annotation.IntRange;
+import android.support.annotation.NonNull;
 
 
 /**
@@ -12,7 +13,7 @@ import android.support.annotation.IntRange;
 public class MyPlusDrawable extends MyLivingDrawable {
 
     @Override
-    public void drawLivingPath(Path path, @IntRange(from=0,to=10000) int level, Rect bounds, int cx, int cy) {
+    public void drawLivingPath(@NonNull Path path, @IntRange(from=0,to=10000) int level, Rect bounds, int cx, int cy) {
         int w4 = bounds.width() / 4;
         int h4 = bounds.height() / 4;
 

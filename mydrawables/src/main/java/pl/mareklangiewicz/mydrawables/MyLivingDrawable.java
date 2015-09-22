@@ -10,6 +10,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IntRange;
+import android.support.annotation.NonNull;
 
 import static pl.mareklangiewicz.myutils.MyMathUtils.scale0d;
 import static pl.mareklangiewicz.myutils.MyMathUtils.scale1d;
@@ -24,7 +25,7 @@ public class MyLivingDrawable extends Drawable {
     protected float mRotateFrom = 0f;
     protected float mRotateTo = 0f;
 
-    protected int mColorFrom = -1;
+    protected @ColorInt int mColorFrom = -1;
     protected int mColorTo = -1;
 
     protected final Paint mPaint = new Paint();
@@ -93,11 +94,21 @@ public class MyLivingDrawable extends Drawable {
     }
 
     @Override
-    public void setAlpha(int alpha) {
+    public @IntRange(from=0, to=0xff) int getAlpha() {
+        return mPaint.getAlpha();
+    }
+
+    @Override
+    public void setAlpha(@IntRange(from=0, to=0xff) int alpha) {
         if (alpha != mPaint.getAlpha()) {
             mPaint.setAlpha(alpha);
             invalidateSelf();
         }
+    }
+
+    @Override
+    public ColorFilter getColorFilter() {
+        return mPaint.getColorFilter();
     }
 
     @Override
@@ -118,7 +129,7 @@ public class MyLivingDrawable extends Drawable {
      * @param to end returned value
      * @return a value in range: from .. to corresponding to level in range lfrom..lto
      */
-    protected int lvl(int lfrom, int lto, int from, int to) {
+    protected int lvl(@IntRange(from=0, to=10000) int lfrom,@IntRange(from=0, to=10000) int lto, int from, int to) {
         int val = scale1d(getLevel(), lfrom, lto, from, to);
         int min = from < to ? from : to;
         int max = from < to ? to : from;
@@ -138,7 +149,7 @@ public class MyLivingDrawable extends Drawable {
      * @param to end returned value
      * @return a value in range: from .. to corresponding to level in range lfrom..lto
      */
-    protected float lvl(int lfrom, int lto, float from, float to) {
+    protected float lvl(@IntRange(from=0, to=10000) int lfrom,@IntRange(from=0, to=10000)  int lto, float from, float to) {
         float val = scale1d(getLevel(), lfrom, lto, from, to);
         float min = from < to ? from : to;
         float max = from < to ? to : from;
@@ -150,7 +161,7 @@ public class MyLivingDrawable extends Drawable {
     }
     protected float lvl(float from, float to) { return lvl(0, 10000, from, to); }
 
-    protected int lvlcolor(int colorFrom, int colorTo) {
+    protected int lvlcolor(@ColorInt int colorFrom,@ColorInt int colorTo) {
         float fraction = scale0d((float) getLevel(), 10000f, 1f);
         int startA = (colorFrom >> 24) & 0xff;
         int startR = (colorFrom >> 16) & 0xff;
@@ -170,12 +181,7 @@ public class MyLivingDrawable extends Drawable {
 
 
     /**
-     * TODO LATER: description
-     * @param x1
-     * @param y1
-     * @param x2
-     * @param y2
-     * @return
+     * Just look at the code..
      */
     protected boolean ln(int x1, int y1, int x2, int y2) {
         if(x1 == x2 && y1 == y2)
@@ -193,10 +199,10 @@ public class MyLivingDrawable extends Drawable {
      * @param cx bounds.centerX()
      * @param cy bounds.centerY()
      */
-    public void drawLivingPath(Path path, @IntRange(from=0,to=10000) int level, Rect bounds, int cx, int cy) {}
+    public void drawLivingPath(@NonNull Path path, @IntRange(from=0,to=10000) int level, Rect bounds, int cx, int cy) {}
 
     @Override
-    public void draw(Canvas canvas) {
+    public void draw(@NonNull Canvas canvas) {
         Rect bounds = getBounds();
         int cx = bounds.centerX();
         int cy = bounds.centerY();
@@ -213,7 +219,7 @@ public class MyLivingDrawable extends Drawable {
     }
 
     @Override
-    protected boolean onLevelChange(int level) {
+    protected boolean onLevelChange(@IntRange(from=0, to=10000) int level) {
         invalidateSelf();
         return true;
     }

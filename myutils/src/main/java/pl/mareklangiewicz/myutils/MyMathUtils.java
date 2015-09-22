@@ -7,6 +7,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
+import android.support.annotation.NonNull;
 
 import java.util.Random;
 
@@ -33,13 +34,13 @@ public final class MyMathUtils {
         return scale0d(old-oldMin, oldMax-oldMin, newMax-newMin) + newMin;
     }
 
-    static public Point scale2d(Point old, Point oldMin, Point oldMax, Point newMin, Point newMax) {
+    static public @NonNull Point scale2d(@NonNull Point old, @NonNull Point oldMin, @NonNull Point oldMax, @NonNull Point newMin, @NonNull Point newMax) {
         return new Point(
                 scale1d(old.x, oldMin.x, oldMax.x, newMin.x, newMax.x),
                 scale1d(old.y, oldMin.y, oldMax.y, newMin.y, newMax.y));
     }
 
-    static public Point scale2d(Point old, Rect oldRange, Rect newRange) {
+    static public @NonNull Point scale2d(@NonNull Point old, @NonNull Rect oldRange, @NonNull Rect newRange) {
         return scale2d(
                 old,
                 new Point(oldRange.left, oldRange.top),
@@ -53,7 +54,7 @@ public final class MyMathUtils {
         return scale1d(RANDOM.nextInt(), 0, 1, min, max);
     }
 
-    static public Point getRandomPoint(Point min, Point max) {
+    static public @NonNull Point getRandomPoint(@NonNull Point min, @NonNull Point max) {
         return new Point(getRandomInt(min.x, max.x), getRandomInt(min.y, max.y));
     }
 
@@ -67,13 +68,13 @@ public final class MyMathUtils {
         return scale0d(old-oldMin, oldMax-oldMin, newMax-newMin) + newMin;
     }
 
-    static public PointF scale2d(PointF old, PointF oldMin, PointF oldMax, PointF newMin, PointF newMax) {
+    static public @NonNull PointF scale2d(@NonNull PointF old, @NonNull PointF oldMin, @NonNull PointF oldMax, @NonNull PointF newMin, @NonNull PointF newMax) {
         return new PointF(
                 scale1d(old.x, oldMin.x, oldMax.x, newMin.x, newMax.x),
                 scale1d(old.y, oldMin.y, oldMax.y, newMin.y, newMax.y));
     }
 
-    static public PointF scale2d(PointF old, RectF oldRange, RectF newRange) {
+    static public @NonNull PointF scale2d(@NonNull PointF old, @NonNull RectF oldRange, @NonNull RectF newRange) {
         return scale2d(
                 old,
                 new PointF(oldRange.left, oldRange.top),
@@ -87,7 +88,7 @@ public final class MyMathUtils {
         return scale1d(RANDOM.nextFloat(), 0, 1, min, max);
     }
 
-    static public PointF getRandomPointF(PointF min, PointF max) {
+    static public @NonNull PointF getRandomPointF(@NonNull PointF min, @NonNull PointF max) {
         return new PointF(getRandomFloat(min.x, max.x), getRandomFloat(min.y, max.y));
     }
 

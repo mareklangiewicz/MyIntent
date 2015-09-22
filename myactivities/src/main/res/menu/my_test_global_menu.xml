@@ -68,6 +68,12 @@
                 android:icon="@drawable/ic_settings_black_24dp"
                 />
             <item
+                android:id="@+id/action_start_example_activity"
+                android:title="@string/start_example_activity"
+                android:titleCondensed="activity:pl.mareklangiewicz.myactivities.MyExampleActivity"
+                android:icon="@drawable/ic_whatshot_black_24dp"
+                />
+            <item
                 android:id="@+id/action_destroy_something"
                 android:title="@string/destroy_something"
                 android:icon="@drawable/ic_whatshot_black_24dp"

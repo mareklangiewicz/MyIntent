@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/my_example_fragment_1"
+        android:title="@string/my_example_fragment"
+        android:titleCondensed="fragment:pl.mareklangiewicz.myfragments.MyExampleFragment"
+        android:icon="@drawable/ic_extension_black_24dp"
+        />
+    <item
+        android:id="@+id/my_example_fragment_2"
+        android:title="@string/my_example_fragment"
+        android:titleCondensed="fragment:pl.mareklangiewicz.myfragments.MyExampleFragment"
+        android:icon="@drawable/ic_extension_black_24dp"
+        />
+    <item
+        android:id="@+id/my_example_action"
+        android:title="My example action"
+        android:icon="@drawable/ic_chat_black_24dp"
+        />
+
+</menu>

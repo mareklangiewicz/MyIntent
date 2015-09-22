@@ -9,7 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 /**
- * Created by marek on 24.06.15.
+ * Created by Marek Langiewicz on 24.06.15.
+ *
  */
 
 // Flagged as UiThread to be on the safe side - we will change this requirement if needed.
@@ -72,12 +73,12 @@ public final class MyLogger extends AbstractLogger {
     }
 
     @Override
-    public void print(@NonNull Level level, @NonNull String message, @Nullable Throwable throwable) {
+    public void print(@NonNull Level level, @Nullable String message, @Nullable Throwable throwable) {
         mHandler.print(getName(), level, throwable, message);
     }
 
     @Override
-    public void print(@NonNull Level level, @Nullable Throwable throwable, @NonNull String messageFormat, @NonNull Object... args) {
+    public void print(@NonNull Level level, @Nullable Throwable throwable, @Nullable String messageFormat, @Nullable Object... args) {
         mHandler.print(getName(), level, throwable, messageFormat, args);
     }
 

@@ -3,6 +3,9 @@ package pl.mareklangiewicz.myactivities;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
@@ -54,6 +57,7 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
     protected @NonNull MyLogger log = MyLogger.sMyDefaultUILogger;
 
     static public final String PREFIX_FRAGMENT = "fragment:";
+    static public final String PREFIX_ACTIVITY = "activity:";
 
     static public final String TAG_LOCAL_FRAGMENT = "tag_local_fragment";
 
@@ -84,7 +88,7 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
         setContentView(R.layout.my_activity);
 
         mGlobalDrawerLayout = (DrawerLayout) findViewById(R.id.ma_global_drawer_layout);
-        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.ma_global_coordinator_layout);
+        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.ma_coordinator_layout);
         mAppBarLayout = (AppBarLayout) findViewById(R.id.ma_app_bar_layout);
         mToolbar = (Toolbar) findViewById(R.id.ma_toolbar);
         mLocalDrawerLayout = (DrawerLayout) findViewById(R.id.ma_local_drawer_layout);
@@ -139,8 +143,6 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
             }
         });
 
-        log.setSnackView(mCoordinatorLayout);
-
         if(savedInstanceState != null) {
             FragmentManager fm = getFragmentManager();
             Fragment f = fm.findFragmentByTag(TAG_LOCAL_FRAGMENT);
@@ -176,12 +178,22 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
         onNavigationContentChanged(getLocalNavigation());
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        log.setSnackView(mCoordinatorLayout);
+    }
+
+    @Override
+    protected void onPause() {
+        log.setSnackView(null);
+        super.onPause();
+    }
+
     @CallSuper
     @Override
     protected void onDestroy() {
         if(VERBOSE) log.v("%s.%s", this.getClass().getSimpleName(), "onDestroy");
-
-        log.setSnackView(null);
 
         mGlobalDrawerLayout = null;
         mCoordinatorLayout = null;
@@ -259,6 +271,8 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
 
             f = Fragment.instantiate(this, ctitle);
 
+            //TODO: allow to get some string arguments from titleCondensed
+
             updateLocalFragment(f);
 
             FragmentTransaction ft = fm.beginTransaction().replace(R.id.ma_local_frame_layout, f, TAG_LOCAL_FRAGMENT);
@@ -267,7 +281,20 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
 
             return true;
         }
-        //TODO LATER: support for other prefixes (like starting activities/services) - but first lets make MyIntent work with new MyBlocks
+        if(ctitle.startsWith(PREFIX_ACTIVITY)) {
+            ctitle = ctitle.substring(PREFIX_ACTIVITY.length());
+            Intent intent = new Intent();
+            intent.setComponent(new ComponentName(this, ctitle));
+            try {
+                startActivity(intent);
+            }
+            catch (ActivityNotFoundException e) {
+                log.e(e);
+                return false;
+            }
+            return true;
+        }
+        //TODO LATER: better support for other prefixes (like starting activities/services) - but first lets make MyIntent work with new MyBlocks
         //TODO LATER: if we want to have an engine for starting activities/services here - we should put almost all logic from MyIntent to MyBlocks...
         //TODO LATER: and MyIntent would be only a thin wrapper.. and.. that's a great idea!
         //TODO LATER: menu api already has some api for launching intents (MenuItem.setIntent) - but our MyIntent engine is better!

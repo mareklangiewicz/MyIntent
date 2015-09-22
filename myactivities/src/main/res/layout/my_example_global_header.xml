@@ -8,18 +8,11 @@
     android:gravity="bottom|end"
     >
     <TextView
-        android:id="@+id/my_home_page_text_view"
+        android:id="@+id/my_example_header_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:text="@string/user_id"
+        android:padding="8dp"
+        android:text="My example activity..."
         style="@style/TextAppearance.AppCompat.Subhead"
         />
-    <View
-        android:id="@+id/magic_underline_view"
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        />
-
 </LinearLayout>

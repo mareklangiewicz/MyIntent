@@ -8,23 +8,22 @@
     tools:context="pl.mareklangiewicz.myactivities.MyActivity">
 
     <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/ma_global_coordinator_layout"
+        android:id="@+id/ma_coordinator_layout"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         >
 
-        <LinearLayout
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/ma_app_bar_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
             >
 
-            <android.support.design.widget.AppBarLayout
-                android:id="@+id/ma_app_bar_layout"
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/ma_collapsing_toolbar_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-                >
+                android:layout_height="match_parent">
 
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/ma_toolbar"
@@ -33,31 +32,32 @@
                     android:background="?attr/colorPrimary"
                     />
 
-            </android.support.design.widget.AppBarLayout>
+            </android.support.design.widget.CollapsingToolbarLayout>
 
-            <android.support.v4.widget.DrawerLayout
-                android:id="@+id/ma_local_drawer_layout"
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v4.widget.DrawerLayout
+            android:id="@+id/ma_local_drawer_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="?android:actionBarSize"
+            >
+
+            <FrameLayout
+                android:id="@+id/ma_local_frame_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                >
+                />
 
-                <FrameLayout
-                    android:id="@+id/ma_local_frame_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    />
+            <pl.mareklangiewicz.myviews.MyNavigationView
+                android:id="@+id/ma_local_navigation_view"
+                android:layout_width="@dimen/my_local_navigation_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                />
 
-                <pl.mareklangiewicz.myviews.MyNavigationView
-                    android:id="@+id/ma_local_navigation_view"
-                    android:layout_width="@dimen/my_local_navigation_width"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="end"
-                    />
+        </android.support.v4.widget.DrawerLayout>
 
-            </android.support.v4.widget.DrawerLayout>
-
-
-        </LinearLayout>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/ma_fab"

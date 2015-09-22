@@ -86,7 +86,10 @@ public final class MyHandler extends PatternHandler {
     }
 
     @Override
-    public void print(@NonNull String loggerName, @NonNull Logger.Level level, @Nullable Throwable throwable, @NonNull String message) throws IllegalArgumentException {
+    public void print(@NonNull String loggerName, @NonNull Logger.Level level, @Nullable Throwable throwable, @Nullable String message) throws IllegalArgumentException {
+
+        if(message == null)
+            message = "";
 
         if(message.startsWith(SNACK_TAG)) {
             message = message.substring(SNACK_TAG.length());

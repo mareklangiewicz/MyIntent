@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="my_primary">@color/my_default_primary</color>
+    <color name="my_primary_dark">@color/my_default_primary_dark</color>
+    <color name="my_accent">@color/my_default_accent</color>
+    <color name="my_default_primary">#ff00a0ff</color>
+    <color name="my_default_primary_dark">#ff0040a0</color>
+    <color name="my_default_accent">#fff02020</color>
+</resources>

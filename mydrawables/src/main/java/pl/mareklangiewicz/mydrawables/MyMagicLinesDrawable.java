@@ -31,8 +31,16 @@ public class MyMagicLinesDrawable extends MyLivingDrawable {
     public MyMagicLinesDrawable setRandomLines(int count) {
         mLines = new int[count * 2];
         for(int i = 0; i < count; ++i) {
-            mLines[i * 2] = RANDOM.nextInt(RANDOM.nextInt(10001));
-            mLines[i * 2 + 1] = 10000 - RANDOM.nextInt(RANDOM.nextInt(10001 - mLines[i * 2]));
+            mLines[i * 2] =
+                    RANDOM.nextInt(
+                            1 + RANDOM.nextInt(10000)
+                    );
+            mLines[i * 2 + 1] =
+                    10000 - RANDOM.nextInt(
+                            1 + RANDOM.nextInt(
+                                    10000 - mLines[i * 2]
+                            )
+                    );
         }
         return this;
     }

@@ -1,14 +1,7 @@
 <resources>
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/my_primary</item>
         <item name="colorPrimaryDark">@color/my_primary_dark</item>
         <item name="colorAccent">@color/my_accent</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <!--<item name="pieColor">?colorAccent</item>-->
     </style>
-
-    <color name="my_primary">#ff00b1ff</color>
-    <color name="my_primary_dark">#ff004388</color>
-    <color name="my_accent">#ffe51b0e</color>
 </resources>

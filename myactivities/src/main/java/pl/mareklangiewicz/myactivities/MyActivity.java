@@ -26,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.noveogroup.android.log.MyLogger;
 
@@ -38,11 +39,7 @@ import pl.mareklangiewicz.myviews.MyNavigationView;
 
 import static pl.mareklangiewicz.myutils.MyMathUtils.scale0d;
 import static pl.mareklangiewicz.myutils.MyTextUtils.toStr;
-// TODO: Hide left menu icon and block left drawer if global menu is empty
-// TODO: Hide right menu icon and block right drawer if local menu is empty
 // TODO LATER: use Leak Canary: https://github.com/square/leakcanary
-
-// TODO: check menu/arrow icons state after changing orientation (with drawer open)
 
 public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNavigation.Listener, DrawerLayout.DrawerListener {
 
@@ -62,10 +59,12 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
     static public final String TAG_LOCAL_FRAGMENT = "tag_local_fragment";
 
     protected @Nullable DrawerLayout mGlobalDrawerLayout;
+    protected @Nullable LinearLayout mGlobalLinearLayout; // either this or mGlobalDrawerLayout will remain null
     protected @Nullable CoordinatorLayout mCoordinatorLayout;
     protected @Nullable AppBarLayout mAppBarLayout;
     protected @Nullable Toolbar mToolbar;
     protected @Nullable DrawerLayout mLocalDrawerLayout;
+    protected @Nullable LinearLayout mLocalLinearLayout; // either this or mLocalDrawerLayout will remain null
     protected @Nullable FrameLayout mLocalFrameLayout;
     protected @Nullable MyNavigationView mLocalNavigationView;
     protected @Nullable MyNavigationView mGlobalNavigationView;
@@ -83,15 +82,20 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
     @CallSuper
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if(VERBOSE) log.v("%s.%s state=%s", this.getClass().getSimpleName(), "onCreate", toStr(savedInstanceState));
+        if(VERBOSE) {
+            log.d("%s.%s state=%s", this.getClass().getSimpleName(), "onCreate", toStr(savedInstanceState));
+            log.v(toStr(getResources().getDisplayMetrics()));
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_activity);
 
         mGlobalDrawerLayout = (DrawerLayout) findViewById(R.id.ma_global_drawer_layout);
+        mGlobalLinearLayout = (LinearLayout) findViewById(R.id.ma_global_linear_layout);
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.ma_coordinator_layout);
         mAppBarLayout = (AppBarLayout) findViewById(R.id.ma_app_bar_layout);
         mToolbar = (Toolbar) findViewById(R.id.ma_toolbar);
         mLocalDrawerLayout = (DrawerLayout) findViewById(R.id.ma_local_drawer_layout);
+        mLocalLinearLayout = (LinearLayout) findViewById(R.id.ma_local_linear_layout);
         mLocalFrameLayout = (FrameLayout) findViewById(R.id.ma_local_frame_layout);
         mGlobalNavigationView = (MyNavigationView) findViewById(R.id.ma_global_navigation_view);
         mLocalNavigationView = (MyNavigationView) findViewById(R.id.ma_local_navigation_view);
@@ -147,7 +151,7 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
 
     private void toggleDrawerIfUnlocked(@Nullable DrawerLayout drawerLayout, int gravity) {
         if (drawerLayout == null)
-            log.e("No drawer found!");
+            log.w("No drawer found.");
         else if(drawerLayout.getDrawerLockMode(gravity) == DrawerLayout.LOCK_MODE_UNLOCKED) {
             if (drawerLayout.isDrawerVisible(gravity))
                 drawerLayout.closeDrawer(gravity);
@@ -186,13 +190,15 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
     @CallSuper
     @Override
     protected void onDestroy() {
-        if(VERBOSE) log.v("%s.%s", this.getClass().getSimpleName(), "onDestroy");
+        if(VERBOSE) log.d("%s.%s", this.getClass().getSimpleName(), "onDestroy");
 
         mGlobalDrawerLayout = null;
+        mGlobalLinearLayout = null;
         mCoordinatorLayout = null;
         mAppBarLayout = null;
         mToolbar = null;
         mLocalDrawerLayout = null;
+        mLocalLinearLayout = null;
         mLocalFrameLayout = null;
         mLocalNavigationView = null;
         mGlobalNavigationView = null;
@@ -202,20 +208,6 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
         updateLocalFragment(null);
 
         super.onDestroy();
-    }
-
-    /**
-     * Override if you want to do something different that clearing local navigation menu and header
-     * before new local fragment creation, or if you want to cancel it (by returning false)
-     * @param name Class name of new fragment to instantiate
-     * @return  False will cancel new fragment creation.
-     */
-    protected boolean onNewLocalFragment(String name) {
-        if(VERY_VERBOSE) log.v("%s.%s name=%s", this.getClass().getSimpleName(), "onNewLocalFragment", name);
-        //noinspection ConstantConditions
-        getLocalNavigation().clearHeader();
-        getLocalNavigation().clearMenu();
-        return true;
     }
 
     protected void updateLocalFragment(@Nullable Fragment fragment) {
@@ -258,9 +250,6 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
         Fragment f;
         if(ctitle.startsWith(PREFIX_FRAGMENT)) {
             ctitle = ctitle.substring(PREFIX_FRAGMENT.length());
-            boolean ok = onNewLocalFragment(ctitle);
-            if(!ok)
-                return false;
 
             f = Fragment.instantiate(this, ctitle);
 
@@ -303,15 +292,23 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
     protected void onNavigationContentChanged(IMyNavigation nav) {
         boolean empty = nav.isEmpty();
         if(nav == getGlobalNavigation()) {
-            mGlobalArrowDrawable.setAlpha(empty ? 0 : 0xa0);
+            mGlobalArrowDrawable.setAlpha(empty || mGlobalDrawerLayout == null ? 0 : 0xa0);
             if(mGlobalDrawerLayout != null)
                 mGlobalDrawerLayout.setDrawerLockMode(empty ? DrawerLayout.LOCK_MODE_LOCKED_CLOSED : DrawerLayout.LOCK_MODE_UNLOCKED);
+            else if(mGlobalDrawerLayout == null) {
+                //noinspection ConstantConditions
+                mGlobalNavigationView.setVisibility(empty ? View.GONE : View.VISIBLE);
+            }
         }
         else if(nav == getLocalNavigation()) {
             //noinspection ConstantConditions
-            mLocalArrowView.setVisibility(empty ? View.GONE : View.VISIBLE);
+            mLocalArrowView.setVisibility(empty || mLocalDrawerLayout == null ? View.GONE : View.VISIBLE);
             if(mLocalDrawerLayout != null)
                 mLocalDrawerLayout.setDrawerLockMode(empty ? DrawerLayout.LOCK_MODE_LOCKED_CLOSED : DrawerLayout.LOCK_MODE_UNLOCKED);
+            else if(mLocalDrawerLayout == null) {
+                //noinspection ConstantConditions
+                mLocalNavigationView.setVisibility(empty ? View.GONE : View.VISIBLE);
+            }
         }
         else
             log.e("Unknown IMyNavigation object.");

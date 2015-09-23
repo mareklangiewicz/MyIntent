@@ -235,6 +235,8 @@ public class MyFragment extends Fragment implements IMyCommander, IMyNavigation,
     public void onDestroyView() {
         if(VERY_VERBOSE) log.v("%s.%s", this.getClass().getSimpleName(), "onDestroyView");
         super.onDestroyView();
+        clearMenu();
+        clearHeader();
     }
 
     @CallSuper

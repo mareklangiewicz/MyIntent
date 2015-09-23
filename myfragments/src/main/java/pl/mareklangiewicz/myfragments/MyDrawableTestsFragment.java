@@ -128,6 +128,28 @@ public final class MyDrawableTestsFragment extends MyFragment implements View.On
         return root;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        final Drawable d = new MyCheckDrawable().setStrokeWidth(6).setColorFrom(0xff0000f0).setColorTo(0xff00f000).setRotateTo(360f);
+        //noinspection ConstantConditions
+        getFAB().setImageDrawable(d);
+        getFAB().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ObjectAnimator.ofInt(d, "level", 0, 10000, 10000, 0).setDuration(7000).start();
+                log.w("[SNACK]FAB Clicked!");
+            }
+        });
+        getFAB().show();
+    }
+
+    @Override
+    public void onPause() {
+        //noinspection ConstantConditions
+        getFAB().hide();
+        super.onPause();
+    }
 
     @Override
     public void onDestroyView() {
@@ -157,5 +179,12 @@ public final class MyDrawableTestsFragment extends MyFragment implements View.On
     }
 
     @Override public void onStartTrackingTouch(SeekBar seekBar) { }
-    @Override public void onStopTrackingTouch(SeekBar seekBar) { }
+    @Override public void onStopTrackingTouch(SeekBar seekBar) {
+        if(seekBar == mLevelSeekBar)
+            log.i("level = %d", seekBar.getProgress());
+        else if(seekBar == mStrokeWidthSeekBar)
+            log.i("stroke width = %d", seekBar.getProgress());
+        else
+            log.e("Unknown seek bar.");
+    }
 }

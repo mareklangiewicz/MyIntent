@@ -4,6 +4,7 @@
         <item name="colorPrimary">@color/my_primary</item>
         <item name="colorPrimaryDark">@color/my_primary_dark</item>
         <item name="colorAccent">@color/my_accent</item>
+        <item name="android:windowTranslucentStatus">true</item>
         <!--<item name="pieColor">?colorAccent</item>-->
     </style>
 

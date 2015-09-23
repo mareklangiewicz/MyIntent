@@ -135,13 +135,6 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
         mToolbar.addView(mLocalArrowView);
 
         mFAB = (FloatingActionButton) findViewById(R.id.ma_fab);
-        //noinspection ConstantConditions
-        mFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                log.w("[SNACK]FAB Clicked!");
-            }
-        });
 
         if(savedInstanceState != null) {
             FragmentManager fm = getFragmentManager();
@@ -368,13 +361,11 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
         }
     }
 
-    @Override
-    public IMyNavigation getGlobalNavigation() {
+    @Override public @Nullable FloatingActionButton getFAB() { return mFAB; }
+    @Override public IMyNavigation getGlobalNavigation() {
         return mGlobalNavigationView;
     }
-
-    @Override
-    public IMyNavigation getLocalNavigation() {
+    @Override public IMyNavigation getLocalNavigation() {
         return mLocalNavigationView;
     }
 

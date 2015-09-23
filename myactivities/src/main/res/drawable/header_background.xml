@@ -8,3 +8,4 @@
         android:endColor="?colorPrimaryDark"
         android:angle="90"/>
 </shape>
+    <!--android:endColor="@android:color/holo_red_dark"-->

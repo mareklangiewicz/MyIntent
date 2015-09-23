@@ -11,6 +11,7 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.MenuRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -69,6 +70,28 @@ public class MyFragment extends Fragment implements IMyCommander, IMyNavigation,
         if(!(a instanceof IMyCommander))
             return null;
         return ((IMyCommander)a).getLocalNavigation();
+    }
+
+    @NonNull
+    @Override
+    public CharSequence getTitle() {
+        Activity a = getActivity();
+        return a.getTitle();
+    }
+
+    @Override
+    public void setTitle(@NonNull CharSequence title) {
+        Activity a = getActivity();
+        a.setTitle(title);
+    }
+
+
+    @Override
+    public @Nullable FloatingActionButton getFAB() {
+        Activity a = getActivity();
+        if(!(a instanceof IMyCommander))
+            return null;
+        return ((IMyCommander)a).getFAB();
     }
 
     public @Nullable IMyNavigation getGlobalNavigation() {

@@ -27,7 +27,7 @@ public final class MyHandler extends PatternHandler {
     static public final String SNACK_TAG = "[SNACK]";
     static public final String SHORT_TAG = "[SHORT]";
 
-    static private final int HISTORY_LEN = 40;
+    static private final int HISTORY_LEN = 80;
 
     private final LogHistory history = new LogHistory(HISTORY_LEN);
 

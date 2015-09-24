@@ -14,7 +14,8 @@ import com.noveogroup.android.log.Logger;
 import com.noveogroup.android.log.MyLogger;
 
 /**
- * Created by marek on 25.06.15.
+ * Created by Marek Langiewicz on 25.06.15.
+ *
  */
 public final class MyLogAdapter extends RecyclerView.Adapter<MyLogAdapter.ViewHolder> {
 

@@ -18,7 +18,7 @@
             android:layout_margin="16dp"
             android:layout_gravity="center"
             app:pieColor="@android:color/holo_blue_dark"
-            />
+            tools:ignore="UnusedAttribute" />
         <pl.mareklangiewicz.myviews.MyPie
             android:id="@+id/pie3"
             android:transitionName="pie3"
@@ -26,7 +26,7 @@
             android:layout_height="100dp"
             android:layout_gravity="start"
             app:pieColor="@android:color/holo_green_dark"
-            />
+            tools:ignore="UnusedAttribute" />
 
         <TextView android:text="@string/hello_world"
             android:layout_width="match_parent"

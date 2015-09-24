@@ -1,7 +1,6 @@
 package pl.mareklangiewicz.myloggers;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,7 +9,8 @@ import android.util.AttributeSet;
 import com.noveogroup.android.log.MyLogger;
 
 /**
- * Created by marek on 22.07.15.
+ * Created by Marek Langiewicz on 22.07.15.
+ * Recycler view lis that displays log messages
  */
 public final class MyLogRecyclerView extends RecyclerView {
 

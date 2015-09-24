@@ -25,65 +25,14 @@
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/ma_coordinator_layout"
         android:layout_height="match_parent"
-        android:layout_width="0dp"
-        android:layout_weight="1"
+        android:layout_width="match_parent"
         >
 
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/ma_app_bar_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            >
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/ma_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?android:actionBarSize"
-                android:background="?attr/colorPrimary"
-                />
-        </android.support.design.widget.AppBarLayout>
+        <include layout="@layout/ma_app_bar_layout" />
 
-        <LinearLayout
-            android:id="@+id/ma_local_linear_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            >
+        <include layout="@layout/ma_local_linear_layout" />
 
-            <FrameLayout
-                android:id="@+id/ma_local_frame_layout"
-                android:layout_height="match_parent"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                />
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:background="@color/li_separator"
-                />
-
-
-            <pl.mareklangiewicz.myviews.MyNavigationView
-                android:id="@+id/ma_local_navigation_view"
-                android:layout_width="@dimen/my_local_navigation_width"
-                android:layout_height="match_parent"
-                app:elevation="0dp"
-                />
-
-        </LinearLayout>
-
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/ma_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_margin="16dp"
-            android:visibility="gone"
-            app:elevation="4dp"
-            />
-
+        <include layout="@layout/ma_fab" />
 
     </android.support.design.widget.CoordinatorLayout>
 

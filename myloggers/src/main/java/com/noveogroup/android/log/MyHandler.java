@@ -1,5 +1,6 @@
 /**
- * Created by marek on 24.06.15.
+ * Created by Marek Langiewicz on 24.06.15.
+ *
  */
 
 package com.noveogroup.android.log;

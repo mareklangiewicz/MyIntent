@@ -6,19 +6,19 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 
 import java.util.Random;
 
 /**
- * Created by marek on 15.07.15.
+ * Created by Marek Langiewicz on 15.07.15.
+ *
  */
 public final class MyMathUtils {
 
     static public final Random RANDOM = new Random();
 
-    private MyMathUtils() {};
+    private MyMathUtils() {}
 
 
 

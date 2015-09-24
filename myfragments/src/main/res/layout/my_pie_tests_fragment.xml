@@ -26,7 +26,7 @@
             android:elevation="4dp"
             app:pieColor="@android:color/holo_blue_dark"
             app:ovalColor="@android:color/white"
-            />
+            tools:ignore="NestedWeights,UnusedAttribute" />
         <pl.mareklangiewicz.myviews.MyPie
             android:id="@+id/pie2"
             android:layout_weight="1"
@@ -36,7 +36,7 @@
             android:elevation="4dp"
             app:pieColor="@android:color/holo_red_dark"
             app:ovalColor="@android:color/white"
-            />
+            tools:ignore="UnusedAttribute" />
         <pl.mareklangiewicz.myviews.MyPie
             android:id="@+id/pie3"
             android:transitionName="pie3"
@@ -49,7 +49,7 @@
             app:to="88"
             app:pieColor="@android:color/holo_orange_dark"
             app:ovalColor="@android:color/white"
-            />
+            tools:ignore="UnusedAttribute" />
 
     </LinearLayout>
     <pl.mareklangiewicz.myviews.MyPie
@@ -63,6 +63,6 @@
         app:ovalColor="@android:color/white"
         app:from="40"
         app:to="60"
-        />
+        tools:ignore="UnusedAttribute" />
 
 </LinearLayout>

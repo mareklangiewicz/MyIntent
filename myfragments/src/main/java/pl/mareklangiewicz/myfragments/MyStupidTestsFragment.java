@@ -2,7 +2,6 @@ package pl.mareklangiewicz.myfragments;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -13,13 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
-
-import pl.mareklangiewicz.mydrawables.MyArrowDrawable;
-import pl.mareklangiewicz.mydrawables.MyCheckDrawable;
-import pl.mareklangiewicz.mydrawables.MyLessDrawable;
-import pl.mareklangiewicz.mydrawables.MyPlusDrawable;
-
-import static pl.mareklangiewicz.myutils.MyMathUtils.scale0d;
 
 /**
  * Created by Marek Langiewicz on 10.09.15.

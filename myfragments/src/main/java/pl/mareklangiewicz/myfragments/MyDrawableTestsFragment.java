@@ -3,13 +3,11 @@ package pl.mareklangiewicz.myfragments;
 
 import android.animation.ObjectAnimator;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.transition.Slide;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -126,10 +124,6 @@ public final class MyDrawableTestsFragment extends MyFragment implements View.On
         mRecyclerView.setAdapter(mMyAdapter);
 
         mStrokeWidthSeekBar.setProgress(12);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            setExitTransition(new Slide(Gravity.START));
-        }
 
         return root;
     }

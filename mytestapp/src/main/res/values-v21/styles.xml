@@ -4,7 +4,6 @@
         <item name="colorPrimary">@color/my_default_primary</item>
         <item name="colorPrimaryDark">@color/my_default_primary_dark</item>
         <item name="colorAccent">@color/my_default_accent</item>
-        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentStatus">@bool/window_transluctent_status</item>
     </style>
-
 </resources>

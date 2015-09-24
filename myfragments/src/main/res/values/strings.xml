@@ -3,6 +3,5 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_decorate_views">Decorate some views</string>
     <string name="enter_name">Enter your name. (not Marek)</string>
-    <string name="my_decorators_tests">My decorators tests</string>
     <string name="blabla">blabla</string>
 </resources>

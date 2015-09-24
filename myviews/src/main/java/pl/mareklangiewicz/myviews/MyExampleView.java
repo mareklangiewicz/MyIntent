@@ -18,6 +18,7 @@ public final class MyExampleView extends TextView {
     static {
         sPaint = new Paint();
         sPaint.setColor(Color.BLACK);
+        sPaint.setAntiAlias(true);
     }
 
     public MyExampleView(Context context) {

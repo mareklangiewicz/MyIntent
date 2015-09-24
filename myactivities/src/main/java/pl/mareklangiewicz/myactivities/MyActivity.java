@@ -79,6 +79,8 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
     protected @Nullable Fragment mLocalFragment;
     protected @Nullable MyFragment mMyLocalFragment; // the same as mLocalFragment - if mLocalFragment instanceof MyFragment - or null otherwise..
 
+    protected @Nullable String mMyPendingLocalFragment;
+
     @CallSuper
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,15 +116,20 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
 
         setSupportActionBar(mToolbar);
 
-        mGlobalArrowDrawable.setStrokeWidth(6).setRotateTo(360f + 180f).setAlpha(0xa0);
-        mLocalArrowDrawable.setStrokeWidth(6).setRotateFrom(180f).setAlpha(0xa0);
+        mGlobalArrowDrawable.setStrokeWidth(5).setRotateTo(360f + 180f).setAlpha(0xa0);
+        mLocalArrowDrawable.setStrokeWidth(5).setRotateFrom(180f).setAlpha(0xa0);
 
         //noinspection ConstantConditions
         mToolbar.setNavigationIcon(mGlobalArrowDrawable);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleDrawerIfUnlocked(mGlobalDrawerLayout, GravityCompat.START);
+                //noinspection ConstantConditions
+                boolean empty = getGlobalNavigation().isEmpty();
+                if(!empty)
+                    toggleGlobalNavigation();
+                else
+                    log.d("Global navigation is empty.");
             }
         });
 
@@ -131,10 +138,15 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
         mLocalArrowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleDrawerIfUnlocked(mLocalDrawerLayout, GravityCompat.END);
+                //noinspection ConstantConditions
+                boolean empty = getLocalNavigation().isEmpty();
+                if(!empty)
+                    toggleLocalNavigation();
+                else
+                    log.d("Local navigation is empty.");
             }
         });
-        int h = mToolbar.getMinimumHeight();
+        int h = mToolbar.getMinimumHeight() * 3 / 4;
         mLocalArrowView.setLayoutParams(new Toolbar.LayoutParams(h, h, GravityCompat.END));
         mToolbar.addView(mLocalArrowView);
 
@@ -149,17 +161,47 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
         }
     }
 
-    private void toggleDrawerIfUnlocked(@Nullable DrawerLayout drawerLayout, int gravity) {
-        if (drawerLayout == null)
-            log.w("No drawer found.");
-        else if(drawerLayout.getDrawerLockMode(gravity) == DrawerLayout.LOCK_MODE_UNLOCKED) {
+    private void toggleGlobalNavigation() {
+        if(mGlobalDrawerLayout != null)
+            toggleDrawer(mGlobalDrawerLayout, GravityCompat.START);
+        else if(mGlobalLinearLayout != null)
+            toggleMNVAndArrow(mGlobalNavigationView, mGlobalArrowDrawable);
+        else
+            log.e("No global drawer or linear layout with global navigation.");
+    }
+
+    private void toggleLocalNavigation() {
+        if(mLocalDrawerLayout != null)
+            toggleDrawer(mLocalDrawerLayout, GravityCompat.END);
+        else if(mLocalLinearLayout != null)
+            toggleMNVAndArrow(mLocalNavigationView, mLocalArrowDrawable);
+        else
+            log.e("No local drawer or linear layout with local navigation.");
+    }
+
+    private void toggleDrawer(@NonNull DrawerLayout drawerLayout, int gravity) {
+        if(drawerLayout.getDrawerLockMode(gravity) == DrawerLayout.LOCK_MODE_UNLOCKED) {
             if (drawerLayout.isDrawerVisible(gravity))
                 drawerLayout.closeDrawer(gravity);
             else
                 drawerLayout.openDrawer(gravity);
         }
         else
-            log.d("Drawer is locked.");
+            log.e("Drawer is locked.");
+    }
+
+    private void toggleMNVAndArrow(MyNavigationView mnv, MyLivingDrawable arrow) {
+        setMNVAndArrow(arrow.getLevel() < 10000, mnv, arrow);
+    }
+
+    void setMNVAndArrow(boolean open, MyNavigationView mnv, MyLivingDrawable arrow) {
+/*  Scene transitions disabled - flickering issue..
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            TransitionManager.beginDelayedTransition((ViewGroup)mnv.getParent(), new Fade());
+        }
+*/
+        mnv.setVisibility(open ? View.VISIBLE : View.GONE);
+        arrow.setLevel(open ? 10000 : 0);
     }
 
     @CallSuper
@@ -210,6 +252,28 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
         super.onDestroy();
     }
 
+    protected void startPendingLocalFragment() {
+
+        if(mMyPendingLocalFragment == null)
+            return;
+
+        FragmentManager fm = getFragmentManager();
+        Fragment f;
+
+        f = Fragment.instantiate(MyActivity.this, mMyPendingLocalFragment);
+
+        //TODO: allow to get some string arguments from mMyPendingLocalFramgnet
+
+        updateLocalFragment(f);
+
+        FragmentTransaction ft = fm.beginTransaction().replace(R.id.ma_local_frame_layout, f, TAG_LOCAL_FRAGMENT);
+        addAllSharedElementsToFragmentTransaction(findViewById(R.id.ma_local_frame_layout), ft);
+        ft.commit();
+
+        mMyPendingLocalFragment = null;
+    }
+
+
     protected void updateLocalFragment(@Nullable Fragment fragment) {
         if(VERY_VERBOSE) log.v("%s.%s fragment=%s", this.getClass().getSimpleName(), "updateLocalFragment", toStr(fragment));
 
@@ -246,22 +310,13 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
         if(mLocalDrawerLayout != null)
             mLocalDrawerLayout.closeDrawers();
         String ctitle = item.getTitleCondensed().toString();
-        FragmentManager fm = getFragmentManager();
-        Fragment f;
         if(ctitle.startsWith(PREFIX_FRAGMENT)) {
-            ctitle = ctitle.substring(PREFIX_FRAGMENT.length());
-
-            f = Fragment.instantiate(this, ctitle);
-
-            //TODO: allow to get some string arguments from titleCondensed
-
-            updateLocalFragment(f);
-
-            FragmentTransaction ft = fm.beginTransaction().replace(R.id.ma_local_frame_layout, f, TAG_LOCAL_FRAGMENT);
-            addAllSharedElementsToFragmentTransaction(findViewById(R.id.ma_local_frame_layout), ft);
-            ft.commit();
-
-            return true;
+            mMyPendingLocalFragment = ctitle.substring(PREFIX_FRAGMENT.length());
+            if (
+                    (mGlobalDrawerLayout != null && mGlobalDrawerLayout.isDrawerVisible(GravityCompat.START)) ||
+                    (mLocalDrawerLayout != null && mLocalDrawerLayout.isDrawerVisible(GravityCompat.END)))
+                return true; // we will start fragment transaction after drawers are closed.
+            startPendingLocalFragment();
         }
         if(ctitle.startsWith(PREFIX_ACTIVITY)) {
             ctitle = ctitle.substring(PREFIX_ACTIVITY.length());
@@ -292,23 +347,22 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
     protected void onNavigationContentChanged(IMyNavigation nav) {
         boolean empty = nav.isEmpty();
         if(nav == getGlobalNavigation()) {
-            mGlobalArrowDrawable.setAlpha(empty || mGlobalDrawerLayout == null ? 0 : 0xa0);
+            mGlobalArrowDrawable.setAlpha(empty ? 0 : 0xa0);
             if(mGlobalDrawerLayout != null)
                 mGlobalDrawerLayout.setDrawerLockMode(empty ? DrawerLayout.LOCK_MODE_LOCKED_CLOSED : DrawerLayout.LOCK_MODE_UNLOCKED);
-            else if(mGlobalDrawerLayout == null) {
-                //noinspection ConstantConditions
-                mGlobalNavigationView.setVisibility(empty ? View.GONE : View.VISIBLE);
-            }
+            else if(mGlobalLinearLayout != null)
+                setMNVAndArrow(!empty, mGlobalNavigationView, mGlobalArrowDrawable);
+            else
+                log.e("No global drawer or linear layout with global navigation.");
         }
         else if(nav == getLocalNavigation()) {
-            //noinspection ConstantConditions
-            mLocalArrowView.setVisibility(empty || mLocalDrawerLayout == null ? View.GONE : View.VISIBLE);
+            mLocalArrowDrawable.setAlpha(empty ? 0 : 0xa0);
             if(mLocalDrawerLayout != null)
                 mLocalDrawerLayout.setDrawerLockMode(empty ? DrawerLayout.LOCK_MODE_LOCKED_CLOSED : DrawerLayout.LOCK_MODE_UNLOCKED);
-            else if(mLocalDrawerLayout == null) {
-                //noinspection ConstantConditions
-                mLocalNavigationView.setVisibility(empty ? View.GONE : View.VISIBLE);
-            }
+            else if(mLocalLinearLayout != null)
+                setMNVAndArrow(!empty, mLocalNavigationView, mLocalArrowDrawable);
+            else
+                log.e("No local drawer or linear layout with local navigation.");
         }
         else
             log.e("Unknown IMyNavigation object.");
@@ -354,14 +408,12 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
             }
         }
         else {
-            log.w("Can not add shared elements to fragment transaction. API < 21");
+            log.d("Can not add shared elements to fragment transaction. API < 21");
         }
     }
 
     @Override public @Nullable FloatingActionButton getFAB() { return mFAB; }
-    @Override public IMyNavigation getGlobalNavigation() {
-        return mGlobalNavigationView;
-    }
+    @Override public IMyNavigation getGlobalNavigation() { return mGlobalNavigationView; }
     @Override public IMyNavigation getLocalNavigation() {
         return mLocalNavigationView;
     }
@@ -378,6 +430,7 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
 
     public void selectGlobalItem(@IdRes int id) { selectItem(getGlobalNavigation(), id); }
     public void selectLocalItem(@IdRes int id) { selectItem(getLocalNavigation(), id); }
+
 
     @CallSuper
     @Override
@@ -400,6 +453,7 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
 
     @CallSuper
     @Override public void onDrawerClosed(View drawerView) {
+        startPendingLocalFragment();
         if(mMyLocalFragment != null)
             mMyLocalFragment.onDrawerClosed(drawerView);
     }

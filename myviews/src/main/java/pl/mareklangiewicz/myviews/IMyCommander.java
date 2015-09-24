@@ -5,7 +5,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 
 /**
- * Created by marek on 03.09.15.
+ * Created by Marek Langiewicz on 03.09.15.
+ * An object that manages ui navigation etc.. usually it's an activity
  */
 public interface IMyCommander {
     @NonNull CharSequence getTitle();

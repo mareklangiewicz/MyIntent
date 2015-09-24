@@ -11,4 +11,5 @@
     <string name="my_stupid_tests_fragment">My stupid experiments</string>
     <string name="my_drawable_tests">My drawable tests</string>
     <string name="start_example_activity">Start example activity</string>
+    <string name="my_decorators_tests">My stupid decorators tests</string>
 </resources>

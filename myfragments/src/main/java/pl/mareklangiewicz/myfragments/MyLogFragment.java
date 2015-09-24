@@ -1,8 +1,11 @@
 package pl.mareklangiewicz.myfragments;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
+import android.transition.Slide;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,15 +21,29 @@ import pl.mareklangiewicz.myviews.IMyNavigation;
  */
 public final class MyLogFragment extends MyFragment {
 
+    private @Nullable MyLogRecyclerView mMLRView;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.my_log_fragment, container, false);
-        ((MyLogRecyclerView) rootView.findViewById(R.id.my_log_recycler_view)).setLog(log);
+        mMLRView = (MyLogRecyclerView) rootView.findViewById(R.id.my_log_recycler_view);
+        mMLRView.setLog(log);
         //TODO LATER: some nice simple header with fragment title
         inflateMenu(R.menu.my_log_menu);
         updateCheckedItem();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setExitTransition(new Slide(Gravity.START));
+        }
         return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        //noinspection ConstantConditions
+        mMLRView.setLog(null);
+        mMLRView = null;
+        super.onDestroyView();
     }
 
     @Override

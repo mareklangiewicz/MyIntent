@@ -23,10 +23,10 @@
             android:icon="@drawable/ic_whatshot_black_24dp"
             />
         <item
-            android:id="@+id/section_my_lldecorator_tests"
-            android:title="@string/my_decorators_tests"
-            android:titleCondensed="fragment:pl.mareklangiewicz.myfragments.MyDecoratorsTestsFragment"
-            android:icon="@drawable/ic_create_black_24dp"
+            android:id="@+id/section_my_log_fragment"
+            android:title="@string/my_log_fragment"
+            android:titleCondensed="fragment:pl.mareklangiewicz.myfragments.MyLogFragment"
+            android:icon="@drawable/ic_bug_report_black_24dp"
             />
         <item
             android:id="@+id/section_my_example_fragment"
@@ -41,10 +41,10 @@
             android:icon="@drawable/ic_extension_black_24dp"
             />
         <item
-            android:id="@+id/section_my_log_fragment"
-            android:title="@string/my_log_fragment"
-            android:titleCondensed="fragment:pl.mareklangiewicz.myfragments.MyLogFragment"
-            android:icon="@drawable/ic_bug_report_black_24dp"
+            android:id="@+id/section_my_lldecorator_tests"
+            android:title="@string/my_decorators_tests"
+            android:titleCondensed="fragment:pl.mareklangiewicz.myfragments.MyDecoratorsTestsFragment"
+            android:icon="@drawable/ic_create_black_24dp"
             />
     </group>
     <item

@@ -18,6 +18,7 @@ import pl.mareklangiewicz.myutils.MyMathUtils;
 
 public final class MyPie extends View {
 
+    private final ShapeDrawable mOvalDrawable = new ShapeDrawable(new OvalShape());
     private float mMinimum = 0;
     private float mMaximum = 100;
     private float mFrom = 0;
@@ -32,7 +33,6 @@ public final class MyPie extends View {
             );
         }
     });
-    private final ShapeDrawable mOvalDrawable = new ShapeDrawable(new OvalShape());
 
     public MyPie(Context context) {
         super(context);
@@ -90,11 +90,16 @@ public final class MyPie extends View {
     }
 
     private void invalidateData() {
-        if(mMaximum < mMinimum) mMaximum = mMinimum;
-        if(mFrom < mMinimum) mFrom = mMinimum;
-        if(mFrom > mMaximum) mFrom = mMaximum;
-        if(mTo < mFrom) mTo = mFrom;
-        if(mTo > mMaximum) mTo = mMaximum;
+        if(mMaximum < mMinimum)
+            mMaximum = mMinimum;
+        if(mFrom < mMinimum)
+            mFrom = mMinimum;
+        if(mFrom > mMaximum)
+            mFrom = mMaximum;
+        if(mTo < mFrom)
+            mTo = mFrom;
+        if(mTo > mMaximum)
+            mTo = mMaximum;
     }
 
     @Override
@@ -105,25 +110,93 @@ public final class MyPie extends View {
     }
 
     @ColorInt public int getPieColor() { return mPieDrawable.getPaint().getColor(); }
+
+    public MyPie setPieColor(@ColorInt int color) {
+        mPieDrawable.getPaint().setColor(color);
+        invalidate();
+        return this;
+    }
+
     @ColorInt public int getOvalColor() { return mOvalDrawable.getPaint().getColor(); }
+
+    public MyPie setOvalColor(@ColorInt int color) {
+        mOvalDrawable.getPaint().setColor(color);
+        invalidate();
+        return this;
+    }
+
     public float getMinimum() { return mMinimum; }
+
+    public MyPie setMinimum(float minimum) {
+        mMinimum = minimum;
+        invalidate();
+        return this;
+    }
+
     public float getMaximum() { return mMaximum; }
+
+    public MyPie setMaximum(float maximum) {
+        mMaximum = maximum;
+        invalidate();
+        return this;
+    }
+
     public float getFrom() { return mFrom; }
+
+    public MyPie setFrom(float from) {
+        mFrom = from;
+        invalidate();
+        return this;
+    }
+
     public float getTo() { return mTo; }
 
-    public MyPie setPieColor(@ColorInt int color) { mPieDrawable.getPaint().setColor(color); invalidate(); return this; }
-    public MyPie setOvalColor(@ColorInt int color) { mOvalDrawable.getPaint().setColor(color); invalidate(); return this; }
+    public MyPie setTo(float to) {
+        mTo = to;
+        invalidate();
+        return this;
+    }
 
-    public MyPie setMinimum(float minimum) { mMinimum = minimum; invalidate(); return this; }
-    public MyPie setMaximum(float maximum) { mMaximum = maximum; invalidate(); return this; }
-    public MyPie setFrom(float from) { mFrom = from; invalidate(); return this; }
-    public MyPie setTo(float to) { mTo = to; invalidate(); return this; }
+    @Override
+    public Parcelable onSaveInstanceState() {
+        Parcelable superState = super.onSaveInstanceState();
+        SavedState ss = new SavedState(superState);
+        ss.mMinimum = getMinimum();
+        ss.mMaximum = getMaximum();
+        ss.mFrom = getFrom();
+        ss.mTo = getTo();
+        return ss;
+    }
 
+    @Override
+    public void onRestoreInstanceState(Parcelable state) {
+        if(!(state instanceof SavedState)) {
+            super.onRestoreInstanceState(state);
+            return;
+        }
+        SavedState ss = (SavedState) state;
+        super.onRestoreInstanceState(ss.getSuperState());
+
+        setMinimum(ss.mMinimum);
+        setMaximum(ss.mMaximum);
+        setFrom(ss.mFrom);
+        setTo(ss.mTo);
+    }
 
     static final class SavedState extends BaseSavedState {
 
         //TODO LATER: we should save colors too
 
+        public static final Parcelable.Creator<SavedState> CREATOR =
+                new Parcelable.Creator<SavedState>() {
+                    public SavedState createFromParcel(Parcel in) {
+                        return new SavedState(in);
+                    }
+
+                    public SavedState[] newArray(int size) {
+                        return new SavedState[size];
+                    }
+                };
         float mMinimum;
         float mMaximum;
         float mFrom;
@@ -149,43 +222,6 @@ public final class MyPie extends View {
             out.writeFloat(mFrom);
             out.writeFloat(mTo);
         }
-
-        public static final Parcelable.Creator<SavedState> CREATOR =
-                new Parcelable.Creator<SavedState>() {
-                    public SavedState createFromParcel(Parcel in) {
-                        return new SavedState(in);
-                    }
-                    public SavedState[] newArray(int size) {
-                        return new SavedState[size];
-                    }
-                };
     }
-
-    @Override
-    public Parcelable onSaveInstanceState() {
-        Parcelable superState = super.onSaveInstanceState();
-        SavedState ss = new SavedState(superState);
-        ss.mMinimum = getMinimum();
-        ss.mMaximum = getMaximum();
-        ss.mFrom = getFrom();
-        ss.mTo = getTo();
-        return ss;
-    }
-
-    @Override
-    public void onRestoreInstanceState(Parcelable state) {
-        if(!(state instanceof SavedState)) {
-            super.onRestoreInstanceState(state);
-            return;
-        }
-        SavedState ss = (SavedState)state;
-        super.onRestoreInstanceState(ss.getSuperState());
-
-        setMinimum(ss.mMinimum);
-        setMaximum(ss.mMaximum);
-        setFrom(ss.mFrom);
-        setTo(ss.mTo);
-    }
-
 
 }

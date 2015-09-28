@@ -19,17 +19,14 @@ import android.view.View;
 @UiThread
 public final class MyHandler extends PatternHandler {
 
+    static public final String SNACK_TAG = "[SNACK]";
+    static public final String SHORT_TAG = "[SHORT]";
+    static private final int HISTORY_LEN = 80;
     /**
      * User can swith it on for all MyHandlers to additionally print all messages
      * using System.out.println(...). It's a hack, but it can be useful in unit tests.
      */
-    static public boolean SystemOutPrintLn = false;
-
-    static public final String SNACK_TAG = "[SNACK]";
-    static public final String SHORT_TAG = "[SHORT]";
-
-    static private final int HISTORY_LEN = 80;
-
+    static public @Nullable Logger.Level sPrintLnLevel = null;
     private final LogHistory history = new LogHistory(HISTORY_LEN);
 
     private @Nullable View mSnackView;
@@ -37,6 +34,16 @@ public final class MyHandler extends PatternHandler {
     private @Nullable RecyclerView.Adapter mAdapter;
 
 
+    /**
+     * Creates new {@link MyHandler}.
+     *
+     * @param level          the level.
+     * @param tagPattern     the tag pattern.
+     * @param messagePattern the message pattern.
+     */
+    public MyHandler(@NonNull Logger.Level level, @NonNull String tagPattern, @NonNull String messagePattern) {
+        super(level, tagPattern, messagePattern);
+    }
 
     /**
      * WARNING: remember to set it back to null if the view is not used anymore - to avoid memory leaks
@@ -75,19 +82,9 @@ public final class MyHandler extends PatternHandler {
             mInvalidateView.invalidate();
     }
 
-    /**
-     * Creates new {@link MyHandler}.
-     *
-     * @param level          the level.
-     * @param tagPattern     the tag pattern.
-     * @param messagePattern the message pattern.
-     */
-    public MyHandler(@NonNull Logger.Level level, @NonNull String tagPattern, @NonNull String messagePattern) {
-        super(level, tagPattern, messagePattern);
-    }
-
     @Override
-    public void print(@NonNull String loggerName, @NonNull Logger.Level level, @Nullable Throwable throwable, @Nullable String message) throws IllegalArgumentException {
+    public void print(@NonNull String loggerName, @NonNull Logger.Level level, @Nullable Throwable throwable, @Nullable String message) throws
+            IllegalArgumentException {
 
         if(message == null)
             message = "";
@@ -112,10 +109,11 @@ public final class MyHandler extends PatternHandler {
 
         super.print(loggerName, level, throwable, message);
 
-        if(SystemOutPrintLn) {
-            message = String.format("%s     %s", Utils.getCaller().toString(), message);
-            System.out.println(message);
-        }
+        if(sPrintLnLevel != null)
+            if(sPrintLnLevel.includes(level)) {
+                message = String.format("%s     %s", Utils.getCaller().toString(), message);
+                System.out.println(message);
+            }
     }
 }
 

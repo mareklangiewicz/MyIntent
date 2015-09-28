@@ -15,26 +15,24 @@ import pl.mareklangiewicz.myviews.MyViewDecorator;
 
 public final class MyDecoratorsTestsFragment extends MyFragment {
 
-    public MyDecoratorsTestsFragment() { }
+    public MyDecoratorsTestsFragment() {
+    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         inflateHeader(R.layout.my_basic_header);
         setHasOptionsMenu(true);
         return inflater.inflate(R.layout.my_decorators_tests_fragment, container, false);
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.my_decorators_options_menu, menu);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
         @IdRes int id = item.getItemId();
-        if(id == R.id.action_decorate_views) { // TODO LATER: change this to FAB action!!!
+        if (id == R.id.action_decorate_views) {
             View view = getView();
-            if(view == null) {
+            if (view == null) {
                 log.e("The root view of this fragment is null.");
                 return false;
             }

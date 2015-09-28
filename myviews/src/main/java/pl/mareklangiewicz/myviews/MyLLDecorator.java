@@ -41,7 +41,6 @@ public final class MyLLDecorator extends LinearLayout {
     public MyLLDecorator(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr);
 
-
         // Load attributes
         final TypedArray a = context.obtainStyledAttributes(
                 attrs, R.styleable.MyLLDecorator, defStyleAttr, defStyleRes);
@@ -57,7 +56,6 @@ public final class MyLLDecorator extends LinearLayout {
 
         mInflater = LayoutInflater.from(context);
     }
-
 
 
     @Override

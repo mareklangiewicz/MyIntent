@@ -19,23 +19,23 @@ public final class MyBasicTestsFragment extends MyFragment {
     private @Nullable MyPie mPie1;
     private @Nullable MyPie mPie3;
 
-    public MyBasicTestsFragment() { }
+    public MyBasicTestsFragment() {
+    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         inflateHeader(R.layout.my_basic_header);
 
         View root = inflater.inflate(R.layout.my_basic_tests_fragment, container, false);
         EditText et = (EditText) root.findViewById(R.id.edit_text_name);
         et.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    if ((v.getText().toString().equalsIgnoreCase("Marek"))) {
+            @Override public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_SEND) {
+                    if((v.getText().toString().equalsIgnoreCase("Marek"))) {
                         v.setError("You are not Marek! I am Marek!!");
                         log.e("[SNACK]You are not Marek! I am Marek!!");
-                    } else {
+                    }
+                    else {
                         log.i("[SNACK]Hello %s!", v.getText());
                     }
                     return false; //false so keyboard is hidden anyway
@@ -50,27 +50,26 @@ public final class MyBasicTestsFragment extends MyFragment {
         return root;
     }
 
-    @Override
-    public void onDestroyView() {
+    @Override public void onDestroyView() {
         super.onDestroyView();
         mPie1 = null;
         mPie3 = null;
     }
 
-    @Override
-    public void onDrawerSlide(View view, float slideOffset) {
+    @Override public void onDrawerSlide(View view, float slideOffset) {
         if(view != getLocalNavigation())
             return;
-        if (mPie1 != null) {
+        if(mPie1 != null) {
             mPie1.setRotation(slideOffset * 360);
         }
-        if (mPie3 != null) {
+        if(mPie3 != null) {
             mPie3.setTo(75 - slideOffset * 50);
         }
     }
 
     @Override public void onDrawerOpened(View view) { }
-    @Override public void onDrawerClosed(View view) { }
-    @Override public void onDrawerStateChanged(int i) { }
 
+    @Override public void onDrawerClosed(View view) { }
+
+    @Override public void onDrawerStateChanged(int i) { }
 }

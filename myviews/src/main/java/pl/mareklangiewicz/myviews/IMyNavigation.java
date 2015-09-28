@@ -15,12 +15,15 @@ import android.view.View;
 public interface IMyNavigation {
 
     @Nullable Menu getMenu();
+
     @Nullable View getHeader();
 
     void clearMenu();
+
     void clearHeader();
 
     void inflateMenu(@MenuRes int id);
+
     void inflateHeader(@LayoutRes int id);
 
     void setCheckedItem(@IdRes int id);
@@ -33,17 +36,20 @@ public interface IMyNavigation {
 
     boolean isEmpty();
 
-    void setListener(@Nullable Listener listener);
-
     Listener getListener();
+
+    void setListener(@Nullable Listener listener);
 
     interface Listener {
         boolean onItemSelected(IMyNavigation nav, MenuItem item);
+
         void onClearHeader(IMyNavigation nav);
+
         void onClearMenu(IMyNavigation nav);
+
         void onInflateHeader(IMyNavigation nav);
+
         void onInflateMenu(IMyNavigation nav);
     }
-
 
 }

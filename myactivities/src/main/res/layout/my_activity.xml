@@ -1,5 +1,4 @@
-<android.support.v4.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ma_global_drawer_layout"
     android:layout_width="match_parent"
@@ -10,15 +9,15 @@
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/ma_coordinator_layout"
-        android:layout_height="match_parent"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         >
 
-        <include layout="@layout/ma_app_bar_layout" />
+        <include layout="@layout/ma_app_bar_layout"/>
 
-        <include layout="@layout/ma_local_drawer_layout" />
+        <include layout="@layout/ma_local_drawer_layout"/>
 
-        <include layout="@layout/ma_fab" />
+        <include layout="@layout/ma_fab"/>
 
     </android.support.design.widget.CoordinatorLayout>
 

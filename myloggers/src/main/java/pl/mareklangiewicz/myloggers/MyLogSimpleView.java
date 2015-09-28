@@ -16,10 +16,8 @@ import com.noveogroup.android.log.MyLogger;
  * TODO LATER: example tests - copy from MyIntent (remember to setLog(null) in Fragment.onDestroyView)
  */
 public final class MyLogSimpleView extends View {
-    private @Nullable MyLogger log;
-
     private final Paint mPaint = new Paint();
-
+    private @Nullable MyLogger log;
     private int mLines = 16;
 
     public MyLogSimpleView(Context context) {
@@ -47,14 +45,14 @@ public final class MyLogSimpleView extends View {
         invalidate();
     }
 
+    public int getLines() { return mLines; }
+
     public void setLines(int lines) {
         if(lines < 0 || lines > 200)
             throw new IllegalArgumentException();
         mLines = lines;
         invalidate();
     }
-
-    public int getLines() { return mLines; }
 
     /**
      * WARNING: remember to set it back to null if the view is not used anymore - to avoid memory leaks

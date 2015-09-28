@@ -10,7 +10,6 @@ import android.view.View;
 
 /**
  * Created by Marek Langiewicz on 24.06.15.
- *
  */
 
 // Flagged as UiThread to be on the safe side - we will change this requirement if needed.
@@ -21,8 +20,22 @@ public final class MyLogger extends AbstractLogger {
      * Default logger for use in UI thread
      */
     static public final MyLogger sMyDefaultUILogger = new MyLogger("ML");
-
-
+    public static final int COLOR_VERBOSE = 0xFFB0B0B0;
+    public static final int COLOR_DEBUG = 0xFF606060;
+    public static final int COLOR_INFO = 0xFF000000;
+    public static final int COLOR_WARNING = 0xFF0000A0;
+    public static final int COLOR_ERROR = 0xFFA00000;
+    public static final int COLOR_ASSERT = 0xFFE00000;
+    static private final char LEVEL_CHARS[] = {
+            'X',
+            'X',
+            'V',
+            'D',
+            'I',
+            'W',
+            'E',
+            'A'
+    };
     @NonNull
     private final MyHandler mHandler;
 
@@ -37,6 +50,27 @@ public final class MyLogger extends AbstractLogger {
     public MyLogger(String name, Logger.Level level, String tagPattern, String messagePattern) {
         super(name);
         mHandler = new MyHandler(level, tagPattern, messagePattern);
+    }
+
+    static public char getLevelChar(@NonNull Logger.Level level) { return LEVEL_CHARS[level.intValue()]; }
+
+    static public int getLevelColor(@NonNull Logger.Level level) {
+        switch(level) {
+            case ASSERT:
+                return COLOR_ASSERT;
+            case ERROR:
+                return COLOR_ERROR;
+            case WARN:
+                return COLOR_WARNING;
+            case INFO:
+                return COLOR_INFO;
+            case DEBUG:
+                return COLOR_DEBUG;
+            case VERBOSE:
+                return COLOR_VERBOSE;
+            default:
+                throw new IllegalArgumentException();
+        }
     }
 
     /**
@@ -82,28 +116,6 @@ public final class MyLogger extends AbstractLogger {
         mHandler.print(getName(), level, throwable, messageFormat, args);
     }
 
-    static private final char LEVEL_CHARS[] = { 'X', 'X', 'V', 'D', 'I', 'W', 'E', 'A' };
-    static public char getLevelChar(@NonNull Logger.Level level) { return LEVEL_CHARS[level.intValue()]; }
-
-    public static final int COLOR_VERBOSE = 0xFFB0B0B0;
-    public static final int COLOR_DEBUG = 0xFF606060;
-    public static final int COLOR_INFO = 0xFF000000;
-    public static final int COLOR_WARNING  = 0xFF0000A0;
-    public static final int COLOR_ERROR  = 0xFFA00000;
-    public static final int COLOR_ASSERT  = 0xFFE00000;
-
-    static public int getLevelColor(@NonNull Logger.Level level) {
-        switch(level) {
-            case ASSERT: return COLOR_ASSERT;
-            case ERROR: return COLOR_ERROR;
-            case WARN: return COLOR_WARNING;
-            case INFO: return COLOR_INFO;
-            case DEBUG: return COLOR_DEBUG;
-            case VERBOSE: return COLOR_VERBOSE;
-            default: throw new IllegalArgumentException();
-        }
-    }
-
     public void drawHistoryOnCanvas(@NonNull Canvas canvas, int x, int y, @NonNull Paint paint, int lines) {
         int minY = canvas.getClipBounds().top;
         LogHistory history = getLogHistory();
@@ -129,7 +141,5 @@ public final class MyLogger extends AbstractLogger {
         }
 
     }
-
-
 
 }

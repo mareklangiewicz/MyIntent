@@ -43,21 +43,17 @@ import static pl.mareklangiewicz.myutils.MyTextUtils.toStr;
 
 public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNavigation.Listener, DrawerLayout.DrawerListener {
 
-    static final boolean VERBOSE = true;
-    //TODO LATER: implement it as a build time switch for user
-    static final boolean VERY_VERBOSE = false;
-    //TODO LATER: implement it as a build time switch for user
-
+    static public final String PREFIX_FRAGMENT = "fragment:";
+    static public final String PREFIX_ACTIVITY = "activity:";
+    static public final String TAG_LOCAL_FRAGMENT = "tag_local_fragment";
+    static final boolean VERBOSE = true; //TODO LATER: implement it as a build time switch for user
+    static final boolean VERY_VERBOSE = false; //TODO LATER: implement it as a build time switch for user
+    protected final MyLivingDrawable mGlobalArrowDrawable = new MyArrowDrawable();
+    protected final MyLivingDrawable mLocalArrowDrawable = new MyArrowDrawable();
     /**
      * Default logger for use in UI thread
      */
     protected @NonNull MyLogger log = MyLogger.sMyDefaultUILogger;
-
-    static public final String PREFIX_FRAGMENT = "fragment:";
-    static public final String PREFIX_ACTIVITY = "activity:";
-
-    static public final String TAG_LOCAL_FRAGMENT = "tag_local_fragment";
-
     protected @Nullable DrawerLayout mGlobalDrawerLayout;
     protected @Nullable LinearLayout mGlobalLinearLayout; // either this or mGlobalDrawerLayout will remain null
     protected @Nullable CoordinatorLayout mCoordinatorLayout;
@@ -68,22 +64,16 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
     protected @Nullable FrameLayout mLocalFrameLayout;
     protected @Nullable MyNavigationView mLocalNavigationView;
     protected @Nullable MyNavigationView mGlobalNavigationView;
-
     protected @Nullable FloatingActionButton mFAB;
-
-    protected final MyLivingDrawable mGlobalArrowDrawable = new MyArrowDrawable();
-    protected final MyLivingDrawable mLocalArrowDrawable = new MyArrowDrawable();
-
     protected @Nullable View mLocalArrowView;
 
     protected @Nullable Fragment mLocalFragment;
-    protected @Nullable MyFragment mMyLocalFragment; // the same as mLocalFragment - if mLocalFragment instanceof MyFragment - or null otherwise..
+    protected @Nullable MyFragment mMyLocalFragment; // the same as mLocalFragment - if mLocalFragment instanceof MyFragment - or null
+    // otherwise..
 
     protected @Nullable String mMyPendingLocalFragment;
 
-    @CallSuper
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    @CallSuper @Override protected void onCreate(Bundle savedInstanceState) {
         if(VERBOSE) {
             log.d("%s.%s state=%s", this.getClass().getSimpleName(), "onCreate", toStr(savedInstanceState));
             log.v(toStr(getResources().getDisplayMetrics()));
@@ -122,8 +112,7 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
         //noinspection ConstantConditions
         mToolbar.setNavigationIcon(mGlobalArrowDrawable);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 //noinspection ConstantConditions
                 boolean empty = getGlobalNavigation().isEmpty();
                 if(!empty)
@@ -136,8 +125,7 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
         mLocalArrowView = new View(this);
         mLocalArrowView.setBackground(mLocalArrowDrawable);
         mLocalArrowView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 //noinspection ConstantConditions
                 boolean empty = getLocalNavigation().isEmpty();
                 if(!empty)
@@ -146,7 +134,7 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
                     log.d("Local navigation is empty.");
             }
         });
-        int h = mToolbar.getMinimumHeight() * 3 / 4;
+        int h = mToolbar.getMinimumHeight()*3/4;
         mLocalArrowView.setLayoutParams(new Toolbar.LayoutParams(h, h, GravityCompat.END));
         mToolbar.addView(mLocalArrowView);
 
@@ -181,7 +169,7 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
 
     private void toggleDrawer(@NonNull DrawerLayout drawerLayout, int gravity) {
         if(drawerLayout.getDrawerLockMode(gravity) == DrawerLayout.LOCK_MODE_UNLOCKED) {
-            if (drawerLayout.isDrawerVisible(gravity))
+            if(drawerLayout.isDrawerVisible(gravity))
                 drawerLayout.closeDrawer(gravity);
             else
                 drawerLayout.openDrawer(gravity);
@@ -204,9 +192,7 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
         arrow.setLevel(open ? 10000 : 0);
     }
 
-    @CallSuper
-    @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+    @CallSuper @Override protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         if(mGlobalDrawerLayout != null)
             onDrawerSlide(mGlobalNavigationView, mGlobalDrawerLayout.isDrawerOpen(GravityCompat.START) ? 1f : 0f);
@@ -217,22 +203,19 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
         onNavigationContentChanged(getLocalNavigation());
     }
 
-    @Override
-    protected void onResume() {
+    @Override protected void onResume() {
         super.onResume();
         log.setSnackView(mCoordinatorLayout);
     }
 
-    @Override
-    protected void onPause() {
+    @Override protected void onPause() {
         log.setSnackView(null);
         super.onPause();
     }
 
-    @CallSuper
-    @Override
-    protected void onDestroy() {
-        if(VERBOSE) log.d("%s.%s", this.getClass().getSimpleName(), "onDestroy");
+    @CallSuper @Override protected void onDestroy() {
+        if(VERBOSE)
+            log.d("%s.%s", this.getClass().getSimpleName(), "onDestroy");
 
         mGlobalDrawerLayout = null;
         mGlobalLinearLayout = null;
@@ -275,7 +258,8 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
 
 
     protected void updateLocalFragment(@Nullable Fragment fragment) {
-        if(VERY_VERBOSE) log.v("%s.%s fragment=%s", this.getClass().getSimpleName(), "updateLocalFragment", toStr(fragment));
+        if(VERY_VERBOSE)
+            log.v("%s.%s fragment=%s", this.getClass().getSimpleName(), "updateLocalFragment", toStr(fragment));
 
         mLocalFragment = fragment;
         mMyLocalFragment = null;
@@ -286,7 +270,7 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
         if(fragment instanceof MyFragment)
             mMyLocalFragment = (MyFragment) fragment;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if(fragment.getSharedElementEnterTransition() == null)
                 fragment.setSharedElementEnterTransition(new AutoTransition());
             if(fragment.getEnterTransition() == null)
@@ -302,9 +286,7 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
     /**
      * You can override it, but you should call super version first and do your custom logic only if it returns false.
      */
-    @CallSuper
-    @Override
-    public boolean onItemSelected(IMyNavigation nav, MenuItem item) {
+    @CallSuper @Override public boolean onItemSelected(IMyNavigation nav, MenuItem item) {
         if(mGlobalDrawerLayout != null)
             mGlobalDrawerLayout.closeDrawers();
         if(mLocalDrawerLayout != null)
@@ -312,9 +294,8 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
         String ctitle = item.getTitleCondensed().toString();
         if(ctitle.startsWith(PREFIX_FRAGMENT)) {
             mMyPendingLocalFragment = ctitle.substring(PREFIX_FRAGMENT.length());
-            if (
-                    (mGlobalDrawerLayout != null && mGlobalDrawerLayout.isDrawerVisible(GravityCompat.START)) ||
-                    (mLocalDrawerLayout != null && mLocalDrawerLayout.isDrawerVisible(GravityCompat.END)))
+            if((mGlobalDrawerLayout != null && mGlobalDrawerLayout.isDrawerVisible(GravityCompat.START)) || (mLocalDrawerLayout != null && mLocalDrawerLayout
+                    .isDrawerVisible(GravityCompat.END)))
                 return true; // we will start fragment transaction after drawers are closed.
             startPendingLocalFragment();
         }
@@ -324,27 +305,29 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
             intent.setComponent(new ComponentName(this, ctitle));
             try {
                 startActivity(intent);
-            }
-            catch (ActivityNotFoundException e) {
+            } catch(ActivityNotFoundException e) {
                 log.e(e);
                 return false;
             }
             return true;
         }
-        //TODO LATER: better support for other prefixes (like starting activities/services) - but first lets make MyIntent work with new MyBlocks
-        //TODO LATER: if we want to have an engine for starting activities/services here - we should put almost all logic from MyIntent to MyBlocks...
-        //TODO LATER: and MyIntent would be only a thin wrapper.. and.. that's a great idea!
-        //TODO LATER: menu api already has some api for launching intents (MenuItem.setIntent) - but our MyIntent engine is better!
+        //TODO: better support for other prefixes (like starting activities/services) - but first lets make MyIntent
+        // work with new MyBlocks
+        //TODO: if we want to have an engine for starting activities/services here - we should put almost all logic
+        // from MyIntent to MyBlocks...
+        //TODO: and MyIntent would be only a thin wrapper.. and.. that's a great idea!
+        //TODO: menu api already has some api for launching intents (MenuItem.setIntent) - but our MyIntent engine is
+        // better!
 
         if(mMyLocalFragment != null) {
             boolean done = mMyLocalFragment.onItemSelected(nav, item);
-            if(done) return true;
+            if(done)
+                return true;
         }
         return false;
     }
 
-    @CallSuper
-    protected void onNavigationContentChanged(IMyNavigation nav) {
+    @CallSuper protected void onNavigationContentChanged(IMyNavigation nav) {
         boolean empty = nav.isEmpty();
         if(nav == getGlobalNavigation()) {
             mGlobalArrowDrawable.setAlpha(empty ? 0 : 0xa0);
@@ -368,36 +351,32 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
             log.e("Unknown IMyNavigation object.");
     }
 
-    @Override
-    public void onClearHeader(IMyNavigation nav) {
+    @Override public void onClearHeader(IMyNavigation nav) {
         onNavigationContentChanged(nav);
         if(mMyLocalFragment != null)
             mMyLocalFragment.onClearHeader(nav);
     }
 
-    @Override
-    public void onClearMenu(IMyNavigation nav) {
+    @Override public void onClearMenu(IMyNavigation nav) {
         onNavigationContentChanged(nav);
         if(mMyLocalFragment != null)
             mMyLocalFragment.onClearMenu(nav);
     }
 
-    @Override
-    public void onInflateHeader(IMyNavigation nav) {
+    @Override public void onInflateHeader(IMyNavigation nav) {
         onNavigationContentChanged(nav);
         if(mMyLocalFragment != null)
             mMyLocalFragment.onInflateHeader(nav);
     }
 
-    @Override
-    public void onInflateMenu(IMyNavigation nav) {
+    @Override public void onInflateMenu(IMyNavigation nav) {
         onNavigationContentChanged(nav);
         if(mMyLocalFragment != null)
             mMyLocalFragment.onInflateMenu(nav);
     }
 
     private void addAllSharedElementsToFragmentTransaction(View root, FragmentTransaction ft) {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             String name = root.getTransitionName();
             if(name != null)
                 ft.addSharedElement(root, name);
@@ -412,8 +391,14 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
         }
     }
 
-    @Override public @Nullable FloatingActionButton getFAB() { return mFAB; }
-    @Override public IMyNavigation getGlobalNavigation() { return mGlobalNavigationView; }
+    @Override public @Nullable FloatingActionButton getFAB() {
+        return mFAB;
+    }
+
+    @Override public IMyNavigation getGlobalNavigation() {
+        return mGlobalNavigationView;
+    }
+
     @Override public IMyNavigation getLocalNavigation() {
         return mLocalNavigationView;
     }
@@ -428,13 +413,16 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
         onItemSelected(nav, menu.findItem(id));
     }
 
-    public void selectGlobalItem(@IdRes int id) { selectItem(getGlobalNavigation(), id); }
-    public void selectLocalItem(@IdRes int id) { selectItem(getLocalNavigation(), id); }
+    public void selectGlobalItem(@IdRes int id) {
+        selectItem(getGlobalNavigation(), id);
+    }
+
+    public void selectLocalItem(@IdRes int id) {
+        selectItem(getLocalNavigation(), id);
+    }
 
 
-    @CallSuper
-    @Override
-    public void onDrawerSlide(View drawerView, float slideOffset) {
+    @CallSuper @Override public void onDrawerSlide(View drawerView, float slideOffset) {
         if(drawerView == mGlobalNavigationView) {
             mGlobalArrowDrawable.setLevel((int) scale0d(slideOffset, 1f, 10000f));
         }
@@ -445,21 +433,18 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
             mMyLocalFragment.onDrawerSlide(drawerView, slideOffset);
     }
 
-    @CallSuper
-    @Override public void onDrawerOpened(View drawerView) {
+    @CallSuper @Override public void onDrawerOpened(View drawerView) {
         if(mMyLocalFragment != null)
             mMyLocalFragment.onDrawerOpened(drawerView);
     }
 
-    @CallSuper
-    @Override public void onDrawerClosed(View drawerView) {
+    @CallSuper @Override public void onDrawerClosed(View drawerView) {
         startPendingLocalFragment();
         if(mMyLocalFragment != null)
             mMyLocalFragment.onDrawerClosed(drawerView);
     }
 
-    @CallSuper
-    @Override public void onDrawerStateChanged(int newState) {
+    @CallSuper @Override public void onDrawerStateChanged(int newState) {
         if(mMyLocalFragment != null)
             mMyLocalFragment.onDrawerStateChanged(newState);
     }

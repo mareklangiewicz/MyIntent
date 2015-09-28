@@ -13,13 +13,14 @@ import android.widget.TextView;
 public final class MyExampleView extends TextView {
 
     static private Paint sPaint;
-    private @NonNull Rect mArea = new Rect();
 
     static {
         sPaint = new Paint();
         sPaint.setColor(Color.BLACK);
         sPaint.setAntiAlias(true);
     }
+
+    private @NonNull Rect mArea = new Rect();
 
     public MyExampleView(Context context) {
         super(context);

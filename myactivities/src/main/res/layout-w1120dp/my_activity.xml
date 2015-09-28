@@ -1,13 +1,13 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ma_global_linear_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
     android:fitsSystemWindows="true"
-    tools:context="pl.mareklangiewicz.myactivities.MyActivity">
+    android:orientation="horizontal"
+    tools:context="pl.mareklangiewicz.myactivities.MyActivity"
+    >
 
     <pl.mareklangiewicz.myviews.MyNavigationView
         android:id="@+id/ma_global_navigation_view"
@@ -24,15 +24,15 @@
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/ma_coordinator_layout"
-        android:layout_height="match_parent"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         >
 
-        <include layout="@layout/ma_app_bar_layout" />
+        <include layout="@layout/ma_app_bar_layout"/>
 
-        <include layout="@layout/ma_local_linear_layout" />
+        <include layout="@layout/ma_local_linear_layout"/>
 
-        <include layout="@layout/ma_fab" />
+        <include layout="@layout/ma_fab"/>
 
     </android.support.design.widget.CoordinatorLayout>
 

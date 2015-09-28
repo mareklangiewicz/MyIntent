@@ -35,10 +35,27 @@ public final class MyNavigationView extends NavigationView implements IMyNavigat
         init(attrs, defStyle);
     }
 
+    static private @Nullable MenuItem getFirstCheckedItem(@NonNull Menu menu) {
+        int size = menu.size();
+        for(int i = 0; i < size; ++i) {
+            MenuItem item = menu.getItem(i);
+            if(item.isChecked())
+                return item;
+            if(item.hasSubMenu()) {
+                Menu submenu = item.getSubMenu();
+                if(submenu != null) {
+                    MenuItem fci = getFirstCheckedItem(submenu);
+                    if(fci != null)
+                        return fci;
+                }
+            }
+        }
+        return null;
+    }
+
     private void init(@Nullable AttributeSet attrs, int defStyle) {
         super.setNavigationItemSelectedListener(this);
     }
-
 
     public @Nullable View getHeader() {
         return mHeader;
@@ -62,6 +79,7 @@ public final class MyNavigationView extends NavigationView implements IMyNavigat
      * WARNING: do not call it too soon!
      * it works correctly from Fragment.onResume.
      * it does NOT work correctly from Fragment.onViewStateRestored!!!
+     *
      * @return A first checked menu item or null if there is none...
      */
     @Override
@@ -73,26 +91,6 @@ public final class MyNavigationView extends NavigationView implements IMyNavigat
         }
         return getFirstCheckedItem(menu);
     }
-
-
-    static private @Nullable MenuItem getFirstCheckedItem(@NonNull Menu menu) {
-        int size = menu.size();
-        for(int i = 0; i < size; ++i) {
-            MenuItem item = menu.getItem(i);
-            if(item.isChecked())
-                return item;
-            if(item.hasSubMenu()) {
-                Menu submenu = item.getSubMenu();
-                if(submenu != null) {
-                    MenuItem fci = getFirstCheckedItem(submenu);
-                    if(fci != null)
-                        return fci;
-                }
-            }
-        }
-        return null;
-    }
-
 
     @Override
     public void clearMenu() {
@@ -116,16 +114,14 @@ public final class MyNavigationView extends NavigationView implements IMyNavigat
     }
 
     @Override
-    public void setListener(@Nullable Listener listener) {
-        mListener = listener;
-    }
-
-    @Override
     public Listener getListener() {
         return mListener;
     }
 
-
+    @Override
+    public void setListener(@Nullable Listener listener) {
+        mListener = listener;
+    }
 
     @Override
     public void setNavigationItemSelectedListener(OnNavigationItemSelectedListener listener) {

@@ -21,17 +21,12 @@ public final class MyMathUtils {
     private MyMathUtils() {}
 
 
-
-
-
-
-
     static public int scale0d(int old, int oldMax, int newMax) {
         return old * newMax / oldMax;
     }
 
     static public int scale1d(int old, int oldMin, int oldMax, int newMin, int newMax) {
-        return scale0d(old-oldMin, oldMax-oldMin, newMax-newMin) + newMin;
+        return scale0d(old - oldMin, oldMax - oldMin, newMax - newMin) + newMin;
     }
 
     static public @NonNull Point scale2d(@NonNull Point old, @NonNull Point oldMin, @NonNull Point oldMax, @NonNull Point newMin, @NonNull Point newMax) {
@@ -59,13 +54,12 @@ public final class MyMathUtils {
     }
 
 
-
     static public float scale0d(float old, float oldMax, float newMax) {
         return old * newMax / oldMax;
     }
 
     static public float scale1d(float old, float oldMin, float oldMax, float newMin, float newMax) {
-        return scale0d(old-oldMin, oldMax-oldMin, newMax-newMin) + newMin;
+        return scale0d(old - oldMin, oldMax - oldMin, newMax - newMin) + newMin;
     }
 
     static public @NonNull PointF scale2d(@NonNull PointF old, @NonNull PointF oldMin, @NonNull PointF oldMax, @NonNull PointF newMin, @NonNull PointF newMax) {
@@ -92,14 +86,13 @@ public final class MyMathUtils {
         return new PointF(getRandomFloat(min.x, max.x), getRandomFloat(min.y, max.y));
     }
 
-    public static @ColorInt
-    int getRandomColor(@ColorInt int colormin, @ColorInt int colormax) {
+    public static @ColorInt int getRandomColor(@ColorInt int colormin, @ColorInt int colormax) {
         return Color.argb(
                 getRandomInt(Color.alpha(colormin), Color.alpha(colormax)),
                 getRandomInt(Color.red(colormin), Color.red(colormax)),
                 getRandomInt(Color.green(colormin), Color.green(colormax)),
                 getRandomInt(Color.blue(colormin), Color.blue(colormax))
-                );
+        );
 
     }
 }

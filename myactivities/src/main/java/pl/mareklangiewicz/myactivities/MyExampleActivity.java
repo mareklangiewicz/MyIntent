@@ -11,8 +11,7 @@ import pl.mareklangiewicz.myviews.IMyNavigation;
  * Simple example activity using MyBlock stuff...
  */
 public class MyExampleActivity extends MyActivity {
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         log.i("Hi, I am the example activity..");
         //noinspection ConstantConditions
@@ -22,8 +21,8 @@ public class MyExampleActivity extends MyActivity {
             selectGlobalItem(R.id.my_example_fragment_1);
         }
     }
-    @Override
-    public boolean onItemSelected(IMyNavigation nav, MenuItem item) {
+
+    @Override public boolean onItemSelected(IMyNavigation nav, MenuItem item) {
         boolean done = super.onItemSelected(nav, item);
         if(done)
             return true;

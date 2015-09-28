@@ -30,6 +30,7 @@ public final class MyLogRecyclerView extends RecyclerView {
         super(context, attrs, defStyle);
         init();
     }
+
     private void init() {
 
 /*

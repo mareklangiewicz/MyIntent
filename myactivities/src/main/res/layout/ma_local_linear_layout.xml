@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ma_local_linear_layout"
@@ -16,18 +15,21 @@
         android:id="@+id/ma_local_frame_layout"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        />
 
     <View
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:background="@color/li_separator" />
+        android:background="@color/li_separator"
+        />
 
     <pl.mareklangiewicz.myviews.MyNavigationView
         android:id="@+id/ma_local_navigation_view"
         android:layout_width="@dimen/my_local_navigation_width"
         android:layout_height="match_parent"
-        app:elevation="0dp" />
+        app:elevation="0dp"
+        />
 
 </LinearLayout>
 

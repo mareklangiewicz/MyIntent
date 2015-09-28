@@ -6,77 +6,79 @@
         >
         <item
             android:id="@+id/section_my_pie_tests"
+            android:icon="@drawable/ic_whatshot_black_24dp"
             android:title="@string/my_pie_tests"
             android:titleCondensed="fragment:pl.mareklangiewicz.myfragments.MyPieTestsFragment"
-            android:icon="@drawable/ic_whatshot_black_24dp"
             />
         <item
             android:id="@+id/section_my_basic_tests"
+            android:icon="@drawable/ic_done_black_24dp"
             android:title="@string/my_basic_tests"
             android:titleCondensed="fragment:pl.mareklangiewicz.myfragments.MyBasicTestsFragment"
-            android:icon="@drawable/ic_done_black_24dp"
             />
         <item
             android:id="@+id/section_my_drawable_tests"
+            android:icon="@drawable/ic_whatshot_black_24dp"
             android:title="@string/my_drawable_tests"
             android:titleCondensed="fragment:pl.mareklangiewicz.myfragments.MyDrawableTestsFragment"
-            android:icon="@drawable/ic_whatshot_black_24dp"
             />
         <item
             android:id="@+id/section_my_log_fragment"
+            android:icon="@drawable/ic_bug_report_black_24dp"
             android:title="@string/my_log_fragment"
             android:titleCondensed="fragment:pl.mareklangiewicz.myfragments.MyLogFragment"
-            android:icon="@drawable/ic_bug_report_black_24dp"
             />
         <item
             android:id="@+id/section_my_example_fragment"
+            android:icon="@drawable/ic_extension_black_24dp"
             android:title="@string/my_example_fragment"
             android:titleCondensed="fragment:pl.mareklangiewicz.myfragments.MyExampleFragment"
-            android:icon="@drawable/ic_extension_black_24dp"
             />
         <item
             android:id="@+id/section_my_stupid_tests_fragment"
+            android:icon="@drawable/ic_extension_black_24dp"
             android:title="@string/my_stupid_tests_fragment"
             android:titleCondensed="fragment:pl.mareklangiewicz.myfragments.MyStupidTestsFragment"
-            android:icon="@drawable/ic_extension_black_24dp"
             />
         <item
             android:id="@+id/section_my_lldecorator_tests"
+            android:icon="@drawable/ic_create_black_24dp"
             android:title="@string/my_decorators_tests"
             android:titleCondensed="fragment:pl.mareklangiewicz.myfragments.MyDecoratorsTestsFragment"
-            android:icon="@drawable/ic_create_black_24dp"
             />
     </group>
     <item
         android:id="@+id/item_global_actions"
-        android:title="@string/actions">
+        android:title="@string/actions"
+        >
         <menu>
             <item
                 android:id="@+id/action_whats_up"
-                android:title="@string/action_whats_up"
                 android:icon="@drawable/ic_chat_black_24dp"
+                android:title="@string/action_whats_up"
                 />
         </menu>
     </item>
     <item
         android:id="@+id/item_global_more_actions"
-        android:title="@string/more">
+        android:title="@string/more"
+        >
         <menu>
             <item
                 android:id="@+id/action_settings"
-                android:title="@string/action_settings"
                 android:icon="@drawable/ic_settings_black_24dp"
+                android:title="@string/action_settings"
                 />
             <item
                 android:id="@+id/action_start_example_activity"
+                android:icon="@drawable/ic_whatshot_black_24dp"
                 android:title="@string/start_example_activity"
                 android:titleCondensed="activity:pl.mareklangiewicz.myactivities.MyExampleActivity"
-                android:icon="@drawable/ic_whatshot_black_24dp"
                 />
             <item
                 android:id="@+id/action_destroy_something"
-                android:title="@string/destroy_something"
                 android:icon="@drawable/ic_whatshot_black_24dp"
+                android:title="@string/destroy_something"
                 />
         </menu>
     </item>

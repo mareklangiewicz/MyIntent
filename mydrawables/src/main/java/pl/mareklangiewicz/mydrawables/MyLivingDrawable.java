@@ -22,14 +22,12 @@ import static pl.mareklangiewicz.myutils.MyMathUtils.scale1d;
  */
 public class MyLivingDrawable extends Drawable {
 
-    protected float mRotateFrom = 0f;
-    protected float mRotateTo = 0f;
-
-    protected @ColorInt int mColorFrom = -1;
-    protected int mColorTo = -1;
-
     protected final Paint mPaint = new Paint();
     protected final Path mPath = new Path();
+    protected float mRotateFrom = 0f;
+    protected float mRotateTo = 0f;
+    protected @ColorInt int mColorFrom = -1;
+    protected int mColorTo = -1;
 
     public MyLivingDrawable() {
         mPaint.setStyle(Paint.Style.STROKE);
@@ -39,7 +37,9 @@ public class MyLivingDrawable extends Drawable {
         mPaint.setAntiAlias(true);
     }
 
-    public float getRotateFrom() { return mRotateFrom; }
+    public float getRotateFrom() {
+        return mRotateFrom;
+    }
 
     public MyLivingDrawable setRotateFrom(float from) {
         mRotateFrom = from;
@@ -47,7 +47,9 @@ public class MyLivingDrawable extends Drawable {
         return this;
     }
 
-    public float getRotateTo() { return mRotateTo; }
+    public float getRotateTo() {
+        return mRotateTo;
+    }
 
     public MyLivingDrawable setRotateTo(float to) {
         mRotateTo = to;
@@ -86,50 +88,47 @@ public class MyLivingDrawable extends Drawable {
     }
 
     public MyLivingDrawable setStrokeWidth(float width) {
-        if (mPaint.getStrokeWidth() != width) {
+        if(mPaint.getStrokeWidth() != width) {
             mPaint.setStrokeWidth(width);
             invalidateSelf();
         }
         return this;
     }
 
-    @Override
-    public @IntRange(from=0, to=0xff) int getAlpha() {
+    @Override public @IntRange(from = 0, to = 0xff) int getAlpha() {
         return mPaint.getAlpha();
     }
 
-    @Override
-    public void setAlpha(@IntRange(from=0, to=0xff) int alpha) {
-        if (alpha != mPaint.getAlpha()) {
+    @Override public void setAlpha(@IntRange(from = 0, to = 0xff) int alpha) {
+        if(alpha != mPaint.getAlpha()) {
             mPaint.setAlpha(alpha);
             invalidateSelf();
         }
     }
 
-    @Override
-    public ColorFilter getColorFilter() {
+    @Override public ColorFilter getColorFilter() {
         return mPaint.getColorFilter();
     }
 
-    @Override
-    public void setColorFilter(ColorFilter colorFilter) {
-        mPaint.setColorFilter(colorFilter); invalidateSelf();
+    @Override public void setColorFilter(ColorFilter colorFilter) {
+        mPaint.setColorFilter(colorFilter);
+        invalidateSelf();
     }
 
-    @Override
-    public int getOpacity() {
+    @Override public int getOpacity() {
         return PixelFormat.TRANSLUCENT;
     }
 
     /**
      * TODO LATER: description
+     *
      * @param lfrom start level
-     * @param lto end level
-     * @param from start returned value
-     * @param to end returned value
+     * @param lto   end level
+     * @param from  start returned value
+     * @param to    end returned value
      * @return a value in range: from .. to corresponding to level in range lfrom..lto
      */
-    protected int lvl(@IntRange(from=0, to=10000) int lfrom,@IntRange(from=0, to=10000) int lto, int from, int to) {
+    protected int lvl(@IntRange(from = 0, to = 10000) int lfrom, @IntRange(from = 0, to = 10000) int lto, int from, int to) {
         int val = scale1d(getLevel(), lfrom, lto, from, to);
         int min = from < to ? from : to;
         int max = from < to ? to : from;
@@ -139,17 +138,21 @@ public class MyLivingDrawable extends Drawable {
             val = max;
         return val;
     }
-    protected int lvl(int from, int to) { return lvl(0, 10000, from, to); }
+
+    protected int lvl(int from, int to) {
+        return lvl(0, 10000, from, to);
+    }
 
     /**
      * TODO LATER: description
+     *
      * @param lfrom start level
-     * @param lto end level
-     * @param from start returned value
-     * @param to end returned value
+     * @param lto   end level
+     * @param from  start returned value
+     * @param to    end returned value
      * @return a value in range: from .. to corresponding to level in range lfrom..lto
      */
-    protected float lvl(@IntRange(from=0, to=10000) int lfrom,@IntRange(from=0, to=10000)  int lto, float from, float to) {
+    protected float lvl(@IntRange(from = 0, to = 10000) int lfrom, @IntRange(from = 0, to = 10000) int lto, float from, float to) {
         float val = scale1d(getLevel(), lfrom, lto, from, to);
         float min = from < to ? from : to;
         float max = from < to ? to : from;
@@ -159,9 +162,12 @@ public class MyLivingDrawable extends Drawable {
             val = max;
         return val;
     }
-    protected float lvl(float from, float to) { return lvl(0, 10000, from, to); }
 
-    protected int lvlcolor(@ColorInt int colorFrom,@ColorInt int colorTo) {
+    protected float lvl(float from, float to) {
+        return lvl(0, 10000, from, to);
+    }
+
+    protected int lvlcolor(@ColorInt int colorFrom, @ColorInt int colorTo) {
         float fraction = scale0d((float) getLevel(), 10000f, 1f);
         int startA = (colorFrom >> 24) & 0xff;
         int startR = (colorFrom >> 16) & 0xff;
@@ -173,10 +179,10 @@ public class MyLivingDrawable extends Drawable {
         int endG = (colorTo >> 8) & 0xff;
         int endB = colorTo & 0xff;
 
-        return ((startA + (int)(fraction * (endA - startA))) << 24) |
-                ((startR + (int)(fraction * (endR - startR))) << 16) |
-                ((startG + (int)(fraction * (endG - startG))) << 8) |
-                ((startB + (int)(fraction * (endB - startB))));
+        return ((startA + (int) (fraction * (endA - startA))) << 24) |
+                ((startR + (int) (fraction * (endR - startR))) << 16) |
+                ((startG + (int) (fraction * (endG - startG))) << 8) |
+                ((startB + (int) (fraction * (endB - startB))));
     }
 
 
@@ -193,16 +199,17 @@ public class MyLivingDrawable extends Drawable {
 
     /**
      * Override it, and draw some lines etc on given path object.
-     * @param path A path to draw on (path.moveTo(3,4); path.lineTo(15,20); etc...
-     * @param level An animation progress. Animation starts at 0 and ends at 10000
+     *
+     * @param path   A path to draw on (path.moveTo(3,4); path.lineTo(15,20); etc...
+     * @param level  An animation progress. Animation starts at 0 and ends at 10000
      * @param bounds Bounds of this drawable
-     * @param cx bounds.centerX()
-     * @param cy bounds.centerY()
+     * @param cx     bounds.centerX()
+     * @param cy     bounds.centerY()
      */
-    public void drawLivingPath(@NonNull Path path, @IntRange(from=0,to=10000) int level, Rect bounds, int cx, int cy) {}
+    public void drawLivingPath(@NonNull Path path, @IntRange(from = 0, to = 10000) int level, Rect bounds, int cx, int cy) {
+    }
 
-    @Override
-    public void draw(@NonNull Canvas canvas) {
+    @Override public void draw(@NonNull Canvas canvas) {
         Rect bounds = getBounds();
         int cx = bounds.centerX();
         int cy = bounds.centerY();
@@ -218,8 +225,7 @@ public class MyLivingDrawable extends Drawable {
         canvas.drawPath(mPath, mPaint);
     }
 
-    @Override
-    protected boolean onLevelChange(@IntRange(from=0, to=10000) int level) {
+    @Override protected boolean onLevelChange(@IntRange(from = 0, to = 10000) int level) {
         invalidateSelf();
         return true;
     }

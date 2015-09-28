@@ -14,8 +14,8 @@ import java.util.Random;
  */
 public class MyMagicLinesDrawable extends MyLivingDrawable {
 
-    private int[] mLines;
     private final Random RANDOM = new Random();
+    private int[] mLines;
 
     public MyMagicLinesDrawable setLines(int... lines) {
         mLines = lines;
@@ -52,7 +52,7 @@ public class MyMagicLinesDrawable extends MyLivingDrawable {
 
 
     @Override
-    public void drawLivingPath(@NonNull Path path, @IntRange(from=0,to=10000) int level, Rect bounds, int cx, int cy) {
+    public void drawLivingPath(@NonNull Path path, @IntRange(from = 0, to = 10000) int level, Rect bounds, int cx, int cy) {
 
         if(mLines == null)
             setRandomLines();
@@ -61,7 +61,7 @@ public class MyMagicLinesDrawable extends MyLivingDrawable {
         for(int i = 0; i < count; ++i) {
             int from = mLines[i * 2];
             int to = mLines[i * 2 + 1];
-            int height = (i+1) * bounds.height() / (count+1);
+            int height = (i + 1) * bounds.height() / (count + 1);
             ln(bounds.left, height, lvl(from, to, bounds.left, bounds.right), height);
         }
     }

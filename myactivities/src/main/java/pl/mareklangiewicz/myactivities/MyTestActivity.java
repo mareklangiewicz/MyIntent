@@ -18,8 +18,6 @@ import pl.mareklangiewicz.myviews.IMyNavigation;
  * Test activity presenting most of the MyBlocks functionality
  */
 
-// TODO: set lint to fatal and remove all problems before putting MyBlocks on github
-    
 public final class MyTestActivity extends pl.mareklangiewicz.myactivities.MyActivity {
 
     private final MyLivingDrawable mMyMagicLinesDrawable = new MyMagicLinesDrawable();
@@ -27,8 +25,7 @@ public final class MyTestActivity extends pl.mareklangiewicz.myactivities.MyActi
     private @Nullable ObjectAnimator mMagicLinesAnimator;
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
 
@@ -61,20 +58,18 @@ public final class MyTestActivity extends pl.mareklangiewicz.myactivities.MyActi
         }
     }
 
-    @Override
-    public void onDrawerSlide(View drawerView, float slideOffset) {
+    @Override public void onDrawerSlide(View drawerView, float slideOffset) {
         super.onDrawerSlide(drawerView, slideOffset);
         if(drawerView != mGlobalNavigationView)
             return;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
             if(mHomePageAnimator != null)
                 mHomePageAnimator.setCurrentFraction(slideOffset);
         }
     }
 
 
-    @Override
-    public void onDrawerOpened(View drawerView) {
+    @Override public void onDrawerOpened(View drawerView) {
         super.onDrawerOpened(drawerView);
         if(drawerView != mGlobalNavigationView)
             return;
@@ -83,8 +78,7 @@ public final class MyTestActivity extends pl.mareklangiewicz.myactivities.MyActi
                 mMagicLinesAnimator.start();
     }
 
-    @Override
-    public void onDrawerClosed(View drawerView) {
+    @Override public void onDrawerClosed(View drawerView) {
         super.onDrawerClosed(drawerView);
         if(drawerView != mGlobalNavigationView)
             return;
@@ -93,8 +87,7 @@ public final class MyTestActivity extends pl.mareklangiewicz.myactivities.MyActi
         mMyMagicLinesDrawable.setLevel(0);
     }
 
-    @Override
-    public boolean onItemSelected(IMyNavigation nav, MenuItem item) {
+    @Override public boolean onItemSelected(IMyNavigation nav, MenuItem item) {
 
         boolean done = super.onItemSelected(nav, item);
 
@@ -103,9 +96,18 @@ public final class MyTestActivity extends pl.mareklangiewicz.myactivities.MyActi
 
         @IdRes int id = item.getItemId();
 
-        if     (id == R.id.action_whats_up         ) { log.i("[SNACK][SHORT]What's up mate?"); return true; }
-        else if(id == R.id.action_settings         ) { log.w("[SNACK]TODO: some settings (or not).."); return true; }
-        else if(id == R.id.action_destroy_something) { log.a("[SNACK]BUM!"); /* throw new InternalError("BUM!"); */ return true; }
+        if(id == R.id.action_whats_up) {
+            log.i("[SNACK][SHORT]What's up mate?");
+            return true;
+        }
+        else if(id == R.id.action_settings) {
+            log.w("[SNACK]TODO: some settings (or not)..");
+            return true;
+        }
+        else if(id == R.id.action_destroy_something) {
+            log.a("[SNACK]BUM!"); /* throw new InternalError("BUM!"); */
+            return true;
+        }
 
         return false;
     }

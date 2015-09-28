@@ -2,31 +2,32 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group
         android:id="@+id/group_log_level"
-        android:checkableBehavior="single">
+        android:checkableBehavior="single"
+        >
         <item
             android:id="@+id/log_level_error"
-            android:title="Log level: ERROR"
             android:icon="@drawable/ic_radio_button_black_24dp"
+            android:title="Log level: ERROR"
             />
         <item
             android:id="@+id/log_level_warning"
-            android:title="Log level: WARNING"
             android:icon="@drawable/ic_radio_button_black_24dp"
+            android:title="Log level: WARNING"
             />
         <item
             android:id="@+id/log_level_info"
-            android:title="Log level: INFO"
             android:icon="@drawable/ic_radio_button_black_24dp"
+            android:title="Log level: INFO"
             />
         <item
             android:id="@+id/log_level_debug"
-            android:title="Log level: DEBUG"
             android:icon="@drawable/ic_radio_button_black_24dp"
+            android:title="Log level: DEBUG"
             />
         <item
             android:id="@+id/log_level_verbose"
-            android:title="Log level: VERBOSE"
             android:icon="@drawable/ic_radio_button_black_24dp"
+            android:title="Log level: VERBOSE"
             />
     </group>
     <item

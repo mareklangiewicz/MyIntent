@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 /**
  * Created by marek on 24.06.15.
- *
+ * <p>
  * This class is not thread-safe
  * We don't allocate any objects after constructor,
  * so it should be fast and it shouldn't launch garbage collection.
@@ -12,23 +12,18 @@ import android.support.annotation.NonNull;
 public final class LogHistory {
 
     private final int capacity;
-
-    private int size = 0;
-    private int cursor = 0;
-
-    private long id = 0;
-
     private final long arrid[];
     private final long arrtime[];
     private final String arrlogger[];
     private final Logger.Level arrlevel[];
     private final String arrmessage[];
-
+    private final int filter_arrindexes[]; // indexes of elements that pass the filter
+    private int size = 0;
+    private int cursor = 0;
+    private long id = 0;
     private @NonNull Logger.Level filter_level = Logger.Level.VERBOSE;
-
     private int filter_size = 0;
     private int filter_cursor = 0;
-    private final int filter_arrindexes[]; // indexes of elements that pass the filter
 
     LogHistory(int acapacity) {
         capacity = acapacity;
@@ -43,12 +38,12 @@ public final class LogHistory {
 
     }
 
+    public @NonNull Logger.Level getFilterLevel() { return filter_level; }
+
     void setFilterLevel(@NonNull Logger.Level level) {
         filter_level = level;
         filter_refresh();
     }
-
-    public @NonNull Logger.Level getFilterLevel() { return filter_level; }
 
     private void filter_refresh() {
         filter_cursor = 0;
@@ -61,17 +56,17 @@ public final class LogHistory {
         for(int i = 0; i < size; ++i) {
             if(filter_matches(arrlevel[pos]))
                 filter_add(pos);
-            pos ++;
+            pos++;
             pos %= capacity;
         }
     }
 
     private void filter_add(int pos) {
         filter_arrindexes[filter_cursor] = pos;
-        filter_cursor ++;
+        filter_cursor++;
         filter_cursor %= capacity;
         if(filter_size < capacity)
-            filter_size ++;
+            filter_size++;
     }
 
     private boolean filter_matches(@NonNull Logger.Level level) {
@@ -85,19 +80,19 @@ public final class LogHistory {
             if(fidx < 0)
                 fidx += capacity; // fidx points to the oldest element in filter array.
             if(arrid[filter_arrindexes[fidx]] == arrid[cursor])
-                filter_size --; // here we remove the oldest element from filter.
+                filter_size--; // here we remove the oldest element from filter.
         }
-        arrid[cursor] = id ++;
+        arrid[cursor] = id++;
         arrtime[cursor] = System.currentTimeMillis();
         arrlogger[cursor] = logger;
         arrlevel[cursor] = level;
         arrmessage[cursor] = message;
         if(filter_matches(level))
             filter_add(cursor);
-        cursor ++;
+        cursor++;
         cursor %= capacity;
         if(size < capacity) {
-            size ++;
+            size++;
         }
     }
 
@@ -111,12 +106,17 @@ public final class LogHistory {
     }
 
     public int getCapacity() { return capacity; }
+
     public int getSize() { return size; }
 
     public long getId(int idx) { return arrid[getRealIdx(idx)]; }
+
     public long getTime(int idx) { return arrtime[getRealIdx(idx)]; }
+
     public @NonNull String getLogger(int idx) { return arrlogger[getRealIdx(idx)]; }
+
     public @NonNull Logger.Level getLevel(int idx) { return arrlevel[getRealIdx(idx)]; }
+
     public @NonNull String getMessage(int idx) { return arrmessage[getRealIdx(idx)]; }
 
     private int getFilteredIdx(int idx) {
@@ -132,9 +132,13 @@ public final class LogHistory {
     public int getFilteredSize() { return filter_size; }
 
     public long getFilteredId(int idx) { return arrid[getFilteredIdx(idx)]; }
+
     public long getFilteredTime(int idx) { return arrtime[getFilteredIdx(idx)]; }
+
     public @NonNull String getFilteredLogger(int idx) { return arrlogger[getFilteredIdx(idx)]; }
+
     public @NonNull Logger.Level getFilteredLevel(int idx) { return arrlevel[getFilteredIdx(idx)]; }
+
     public @NonNull String getFilteredMessage(int idx) { return arrmessage[getFilteredIdx(idx)]; }
 
 }

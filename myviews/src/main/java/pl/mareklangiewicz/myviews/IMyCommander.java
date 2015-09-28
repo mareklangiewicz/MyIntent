@@ -10,8 +10,12 @@ import android.support.design.widget.FloatingActionButton;
  */
 public interface IMyCommander {
     @NonNull CharSequence getTitle();
+
     void setTitle(@NonNull CharSequence title);
+
     @Nullable FloatingActionButton getFAB();
+
     @Nullable IMyNavigation getGlobalNavigation();
+
     @Nullable IMyNavigation getLocalNavigation();
 }

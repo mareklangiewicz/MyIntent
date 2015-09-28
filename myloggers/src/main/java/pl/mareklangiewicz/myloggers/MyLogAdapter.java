@@ -15,30 +15,15 @@ import com.noveogroup.android.log.MyLogger;
 
 /**
  * Created by Marek Langiewicz on 25.06.15.
- *
  */
 public final class MyLogAdapter extends RecyclerView.Adapter<MyLogAdapter.ViewHolder> {
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        public @NonNull CardView mCardView;
-        public @NonNull TextView mHeadView;
-        public @NonNull TextView mMessageView;
-        public ViewHolder(View v) {
-            super(v);
-            mCardView = (CardView) v.findViewById(R.id.li_card_view);
-            mHeadView = (TextView) v.findViewById(R.id.li_head);
-            mMessageView = (TextView) v.findViewById(R.id.li_message);
-        }
-    }
-
     private @Nullable MyLogger log;
     private @Nullable LogHistory history;
-
     public MyLogAdapter() {
         setLog(null);
         setHasStableIds(true);
     }
-
 
     /**
      * WARNING: remember to set it back to null if the adapter is not used anymore - to avoid memory leaks
@@ -53,7 +38,6 @@ public final class MyLogAdapter extends RecyclerView.Adapter<MyLogAdapter.ViewHo
             this.log.setAdapter(this);
         notifyDataSetChanged();
     }
-
 
     @Override
     public @NonNull ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -90,7 +74,7 @@ public final class MyLogAdapter extends RecyclerView.Adapter<MyLogAdapter.ViewHo
         message = String.format("%tT: %s", time, message);
 
         holder.mCardView.setCardElevation(elevation);
-        holder.mHeadView.setText(String.format("%03d %c", nr, MyLogger.getLevelChar(level) ));
+        holder.mHeadView.setText(String.format("%03d %c", nr, MyLogger.getLevelChar(level)));
 
         holder.mMessageView.setTextColor(color);
         holder.mMessageView.setText(message);
@@ -108,5 +92,18 @@ public final class MyLogAdapter extends RecyclerView.Adapter<MyLogAdapter.ViewHo
             return history.getFilteredId(position);
         }
         return super.getItemId(position);
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        public @NonNull CardView mCardView;
+        public @NonNull TextView mHeadView;
+        public @NonNull TextView mMessageView;
+
+        public ViewHolder(View v) {
+            super(v);
+            mCardView = (CardView) v.findViewById(R.id.li_card_view);
+            mHeadView = (TextView) v.findViewById(R.id.li_head);
+            mMessageView = (TextView) v.findViewById(R.id.li_message);
+        }
     }
 }

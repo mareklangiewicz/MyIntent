@@ -13,7 +13,7 @@ import android.support.annotation.NonNull;
 public class MyCheckDrawable extends MyLivingDrawable {
 
     @Override
-    public void drawLivingPath(@NonNull Path path, @IntRange(from=0,to=10000) int level, Rect bounds, int cx, int cy) {
+    public void drawLivingPath(@NonNull Path path, @IntRange(from = 0, to = 10000) int level, Rect bounds, int cx, int cy) {
 
         int w4 = bounds.width() / 4;
         int h4 = bounds.height() / 4;
@@ -21,8 +21,7 @@ public class MyCheckDrawable extends MyLivingDrawable {
         ln(cx - w4, lvl(cy, cy - h4), lvl(cx, cx + w4), cy + h4);
 
         int x = lvl(cx, cx - w4);
-        if(x != cx)
-            path.moveTo(x, cy + h4);
+        if (x != cx) path.moveTo(x, cy + h4);
 
         path.lineTo(cx + w4, cy - h4);
 

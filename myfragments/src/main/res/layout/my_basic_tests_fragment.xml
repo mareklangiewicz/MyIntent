@@ -1,89 +1,108 @@
-<ScrollView
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="pl.mareklangiewicz.myfragments.MyBasicTestsFragment"
     >
+
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
         <pl.mareklangiewicz.myviews.MyPie
             android:id="@+id/pie1"
-            android:transitionName="pie1"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_margin="16dp"
             android:layout_gravity="center"
+            android:layout_margin="16dp"
+            android:transitionName="pie1"
             app:pieColor="@android:color/holo_blue_dark"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"
+            />
+
         <pl.mareklangiewicz.myviews.MyPie
             android:id="@+id/pie3"
-            android:transitionName="pie3"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="start"
+            android:transitionName="pie3"
             app:pieColor="@android:color/holo_green_dark"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"
+            />
 
-        <TextView android:text="@string/hello_world"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:padding="8dp"
-            android:gravity="center"
             android:background="@android:color/white"
             android:elevation="2dp"
-            android:textStyle="bold"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="@string/hello_world"
             android:textSize="20sp"
-            tools:ignore="UnusedAttribute" />
+            android:textStyle="bold"
+            tools:ignore="UnusedAttribute"
+            />
+
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
+
             <EditText
                 android:id="@+id/edit_text_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:imeOptions="actionSend"
                 android:hint="@string/enter_name"
+                android:imeOptions="actionSend"
+                android:inputType="textPersonName"
                 />
         </android.support.design.widget.TextInputLayout>
-        <TextView android:text="@string/hello_world"
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:padding="8dp"
-            android:gravity="center"
             android:background="@android:color/white"
             android:elevation="2dp"
-            android:textStyle="bold"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="@string/hello_world"
             android:textSize="20sp"
-            tools:ignore="UnusedAttribute" />
-        <TextView android:text="@string/hello_world"
+            android:textStyle="bold"
+            tools:ignore="UnusedAttribute"
+            />
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:padding="8dp"
-            android:gravity="center"
             android:background="@android:color/white"
             android:elevation="2dp"
-            android:textStyle="bold"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="@string/hello_world"
             android:textSize="20sp"
-            tools:ignore="UnusedAttribute" />
-        <TextView android:text="@string/hello_world"
+            android:textStyle="bold"
+            tools:ignore="UnusedAttribute"
+            />
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:padding="8dp"
-            android:gravity="center"
             android:background="@android:color/white"
             android:elevation="2dp"
-            android:textStyle="bold"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="@string/hello_world"
             android:textSize="20sp"
-            tools:ignore="UnusedAttribute" />
+            android:textStyle="bold"
+            tools:ignore="UnusedAttribute"
+            />
     </LinearLayout>
 
 </ScrollView>

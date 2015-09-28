@@ -41,7 +41,6 @@ public final class MyPieTestsFragment extends MyFragment implements View.OnClick
         root.findViewById(R.id.pie3).setOnClickListener(this);
         root.findViewById(R.id.pie4).setOnClickListener(this);
 
-
         //noinspection ConstantConditions
         MyPie hpie = (MyPie) getHeader().findViewById(R.id.header_pie);
 
@@ -49,7 +48,7 @@ public final class MyPieTestsFragment extends MyFragment implements View.OnClick
         float max = hpie.getMaximum();
 
         PropertyValuesHolder pvh1 = PropertyValuesHolder.ofFloat("to", min, max);
-        PropertyValuesHolder pvh2 = PropertyValuesHolder.ofFloat("from", min, max - (max-min)/2);
+        PropertyValuesHolder pvh2 = PropertyValuesHolder.ofFloat("from", min, max - (max - min) / 2);
 
         mHeaderAnimator = ObjectAnimator.ofPropertyValuesHolder(hpie, pvh1, pvh2);
 
@@ -60,7 +59,6 @@ public final class MyPieTestsFragment extends MyFragment implements View.OnClick
 
         return root;
     }
-
 
 
     @Override
@@ -94,11 +92,11 @@ public final class MyPieTestsFragment extends MyFragment implements View.OnClick
 
     @Override
     public void onClick(View v) {
-        if( v instanceof MyPie) {
+        if(v instanceof MyPie) {
             MyPie pie = (MyPie) v;
             if(mRandomize.equals("pieColor") || mRandomize.equals("ovalColor")) {
-                @ColorInt int value = MyMathUtils.getRandomColor(Color.rgb(0,0,0), Color.rgb(255, 255, 255));
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                @ColorInt int value = MyMathUtils.getRandomColor(Color.rgb(0, 0, 0), Color.rgb(255, 255, 255));
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     ObjectAnimator.ofArgb(pie, mRandomize, value).start();
                     log.i("[SNACK]MyPie:%s: random color is ... %X %X %X", mRandomize, Color.red(value), Color.green(value), Color.blue(value));
                 }
@@ -108,7 +106,7 @@ public final class MyPieTestsFragment extends MyFragment implements View.OnClick
             else {
                 float min = 0;
                 float max = 100;
-                switch (mRandomize) {
+                switch(mRandomize) {
                     case "from":
                         min = pie.getMinimum();
                         max = pie.getTo();
@@ -133,24 +131,20 @@ public final class MyPieTestsFragment extends MyFragment implements View.OnClick
     }
 
 
-
-
-
-
-
-
     @Override
     public void onDrawerSlide(View view, float slideOffset) {
         if(view != getLocalNavigation())
             return;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
             if(mHeaderAnimator != null)
                 mHeaderAnimator.setCurrentFraction(slideOffset);
         }
     }
 
     @Override public void onDrawerOpened(View view) { }
+
     @Override public void onDrawerClosed(View view) { }
+
     @Override public void onDrawerStateChanged(int i) { }
 }

@@ -17,30 +17,35 @@ public final class MyTextUtils {
     //TODO LATER: implement it as a build time switch for user
 
     static public @NonNull String toStr(int x) {
-        if(VERY_VERBOSE) return toVeryLongStr(x);
-        if(VERBOSE) return toLongStr(x);
+        if(VERY_VERBOSE)
+            return toVeryLongStr(x);
+        if(VERBOSE)
+            return toLongStr(x);
         return toShortStr(x);
     }
-    //TODO: toStr for other primitive types..
+    //TODO LATER: toStr for other primitive types..
 
     static public @NonNull String toStr(@Nullable Object x) {
-        if(VERY_VERBOSE) return toVeryLongStr(x);
-        if(VERBOSE) return toLongStr(x);
+        if(VERY_VERBOSE)
+            return toVeryLongStr(x);
+        if(VERBOSE)
+            return toLongStr(x);
         return toShortStr(x);
     }
 
     static public @NonNull String toShortStr(int x) {
-        throw new UnsupportedOperationException(); //TODO
+        throw new UnsupportedOperationException(); //TODO LATER
     }
-    //TODO: toShortStr for other primitive types..
+    //TODO LATER: toShortStr for other primitive types..
 
     static public @NonNull String toShortStr(@Nullable Object x) {
-        throw new UnsupportedOperationException(); //TODO
+        throw new UnsupportedOperationException(); //TODO LATER
     }
+
     static public @NonNull String toLongStr(int x) {
-        throw new UnsupportedOperationException(); //TODO
+        throw new UnsupportedOperationException(); //TODO LATER
     }
-    //TODO: toLongStr for other primitive types..
+    //TODO LATER: toLongStr for other primitive types..
 
     static public @NonNull String toLongStr(@Nullable Object x) {
 
@@ -53,22 +58,22 @@ public final class MyTextUtils {
         if(x instanceof View)
             return String.format("%s{hash:%x}", x.getClass().getSimpleName(), x.hashCode());
 
-        //TODO: pretty print our android special cases.
+        //TODO LATER: pretty print our android special cases.
 
         return x.toString();
     }
 
     static public @NonNull String toVeryLongStr(int x) {
-        throw new UnsupportedOperationException(); //TODO
+        throw new UnsupportedOperationException(); //TODO LATER
     }
-    //TODO: toVeryLongStr for other primitive types..
+    //TODO LATER: toVeryLongStr for other primitive types..
 
     static public @NonNull String toVeryLongStr(@Nullable Object x) {
 
         if(x == null)
             return "null";
 
-        //TODO: very long and pretty print our android special cases.
+        //TODO LATER: very long and pretty print our android special cases.
 
         return x.toString();
     }

@@ -4,13 +4,13 @@
         android:id="@+id/my_example_fragment_1"
         android:icon="@drawable/ic_extension_black_24dp"
         android:title="@string/my_example_fragment"
-        android:titleCondensed="fragment:pl.mareklangiewicz.myfragments.MyExampleFragment"
+        android:titleCondensed="cmd:fragment pl.mareklangiewicz.myfragments.MyExampleFragment"
         />
     <item
         android:id="@+id/my_example_fragment_2"
         android:icon="@drawable/ic_extension_black_24dp"
         android:title="@string/my_example_fragment"
-        android:titleCondensed="fragment:pl.mareklangiewicz.myfragments.MyExampleFragment"
+        android:titleCondensed="cmd:fragment pl.mareklangiewicz.myfragments.MyExampleFragment"
         />
     <item
         android:id="@+id/my_example_action"

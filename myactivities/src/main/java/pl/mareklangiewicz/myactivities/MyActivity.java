@@ -4,7 +4,6 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.transition.AutoTransition;
 import android.transition.Fade;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,30 +30,37 @@ import android.widget.LinearLayout;
 
 import com.noveogroup.android.log.MyLogger;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import pl.mareklangiewicz.mydrawables.MyArrowDrawable;
 import pl.mareklangiewicz.mydrawables.MyLivingDrawable;
 import pl.mareklangiewicz.myfragments.MyFragment;
-import pl.mareklangiewicz.myviews.IMyCommander;
+import pl.mareklangiewicz.myutils.MyCommands;
+import pl.mareklangiewicz.myviews.IMyManager;
 import pl.mareklangiewicz.myviews.IMyNavigation;
 import pl.mareklangiewicz.myviews.MyNavigationView;
 
 import static pl.mareklangiewicz.myutils.MyMathUtils.scale0d;
-import static pl.mareklangiewicz.myutils.MyTextUtils.toStr;
-// TODO LATER: use Leak Canary: https://github.com/square/leakcanary
+import static pl.mareklangiewicz.myutils.MyTextUtils.str;
+// TODO LATER: use Leak Canary: https://github.com/square/leakcanary (check U+2020 example...)
 
-public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNavigation.Listener, DrawerLayout.DrawerListener {
+public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavigation.Listener, DrawerLayout.DrawerListener {
 
-    static public final String PREFIX_FRAGMENT = "fragment:";
-    static public final String PREFIX_ACTIVITY = "activity:";
+
+    static public final String COMMAND_PREFIX = "cmd:";
     static public final String TAG_LOCAL_FRAGMENT = "tag_local_fragment";
     static final boolean VERBOSE = true; //TODO LATER: implement it as a build time switch for user
     static final boolean VERY_VERBOSE = false; //TODO LATER: implement it as a build time switch for user
+    private static final String DEFAULT_COMMAND_NAME = "activity";
+    private static final String DEFAULT_INTENT_ACTION = Intent.ACTION_VIEW;
     protected final MyLivingDrawable mGlobalArrowDrawable = new MyArrowDrawable();
     protected final MyLivingDrawable mLocalArrowDrawable = new MyArrowDrawable();
     /**
      * Default logger for use in UI thread
      */
     protected @NonNull MyLogger log = MyLogger.sMyDefaultUILogger;
+    protected @Nullable DisplayMetrics mDisplayMetrics;
     protected @Nullable DrawerLayout mGlobalDrawerLayout;
     protected @Nullable LinearLayout mGlobalLinearLayout; // either this or mGlobalDrawerLayout will remain null
     protected @Nullable CoordinatorLayout mCoordinatorLayout;
@@ -71,12 +78,13 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
     protected @Nullable MyFragment mMyLocalFragment; // the same as mLocalFragment - if mLocalFragment instanceof MyFragment - or null
     // otherwise..
 
-    protected @Nullable String mMyPendingLocalFragment;
+    protected @Nullable String mMyPendingCommand;
 
     @CallSuper @Override protected void onCreate(Bundle savedInstanceState) {
+        mDisplayMetrics = getResources().getDisplayMetrics();
         if(VERBOSE) {
-            log.d("%s.%s state=%s", this.getClass().getSimpleName(), "onCreate", toStr(savedInstanceState));
-            log.v(toStr(getResources().getDisplayMetrics()));
+            log.d("%s.%s state=%s", this.getClass().getSimpleName(), "onCreate", str(savedInstanceState));
+            log.v(str(mDisplayMetrics));
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_activity);
@@ -97,7 +105,6 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
 
         if(mLocalDrawerLayout != null)
             mLocalDrawerLayout.setDrawerListener(this);
-
 
         //noinspection ConstantConditions
         mGlobalNavigationView.setListener(this);
@@ -134,7 +141,7 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
                     log.d("Local navigation is empty.");
             }
         });
-        int h = mToolbar.getMinimumHeight()*3/4;
+        int h = mToolbar.getMinimumHeight() * 3 / 4;
         mLocalArrowView.setLayoutParams(new Toolbar.LayoutParams(h, h, GravityCompat.END));
         mToolbar.addView(mLocalArrowView);
 
@@ -229,37 +236,28 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
         mGlobalNavigationView = null;
         mFAB = null;
         mLocalArrowView = null;
+        mDisplayMetrics = null;
 
         updateLocalFragment(null);
 
         super.onDestroy();
     }
 
-    protected void startPendingLocalFragment() {
+    protected void startPendingCommand() {
 
-        if(mMyPendingLocalFragment == null)
+        if(mMyPendingCommand == null)
             return;
 
-        FragmentManager fm = getFragmentManager();
-        Fragment f;
+        onCommand(mMyPendingCommand);
 
-        f = Fragment.instantiate(MyActivity.this, mMyPendingLocalFragment);
+        mMyPendingCommand = null;
 
-        //TODO: allow to get some string arguments from mMyPendingLocalFramgnet
-
-        updateLocalFragment(f);
-
-        FragmentTransaction ft = fm.beginTransaction().replace(R.id.ma_local_frame_layout, f, TAG_LOCAL_FRAGMENT);
-        addAllSharedElementsToFragmentTransaction(findViewById(R.id.ma_local_frame_layout), ft);
-        ft.commit();
-
-        mMyPendingLocalFragment = null;
     }
 
 
     protected void updateLocalFragment(@Nullable Fragment fragment) {
         if(VERY_VERBOSE)
-            log.v("%s.%s fragment=%s", this.getClass().getSimpleName(), "updateLocalFragment", toStr(fragment));
+            log.v("%s.%s fragment=%s", this.getClass().getSimpleName(), "updateLocalFragment", str(fragment));
 
         mLocalFragment = fragment;
         mMyLocalFragment = null;
@@ -283,44 +281,159 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
 
     }
 
+
+    /**
+     * Override it if you want to manage commands by yourself
+     * @param command A command to perform
+     */
+    public void onCommand(@NonNull String command) {
+
+        command = MyCommands.applyRERulesLists(command, MyCommands.RE_RULES, log);
+
+        Map<String, String> map = new HashMap<>(20);
+
+        MyCommands.parseCommand(command, map);
+
+        String start = map.get("start");
+        String component = map.get("component");
+        String action = map.get("action");
+
+        String pkg = getPackageName();
+
+        if(start == null) {
+            start = DEFAULT_COMMAND_NAME;
+            map.put("start", start);
+        }
+
+        if(start.equals("activity")) {
+            if(component == null && action == null) {
+                action = DEFAULT_INTENT_ACTION;
+                map.put("action", action);
+            }
+            if(component != null && !component.contains("/")) {
+                component = pkg + "/" + component;
+                map.put("component", component);
+            }
+        }
+        else if(map.get("start").equals("fragment")) {
+            if(component == null) {
+                log.e("Fragment component is null.");
+                return;
+            }
+            if(component.startsWith(".")) { //TODO LATER: test this shortcut later when I have fragments in the same package as app itself..
+                component = pkg + component;
+                map.put("component", component);
+            }
+
+        }
+
+        onCommand(map);
+    }
+
+    /**
+     * Override it if you want to manage all (parsed) commands by yourself
+     * @param command A parsed command
+     */
+    public void onCommand(@NonNull Map<String, String> command) {
+
+        switch(command.get("start")) {
+            case "activity":
+                onCommandStartActivity(command);
+                break;
+            case "service":
+                onCommandStartService(command);
+                break;
+            case "broadcast":
+                onCommandStartBroadcast(command);
+                break;
+            case "fragment":
+                onCommandStartFragment(command);
+                break;
+            //TODO NOW: other commands
+            default:
+                log.e("Unsupported command: %s", str(command));
+        }
+    }
+
+    public void onCommandStartActivity(@NonNull Map<String, String> command) {
+
+        Intent intent = new Intent();
+
+        MyCommands.setIntentFromCommand(intent, command, log);
+
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            try {
+                startActivity(intent);
+            }
+            catch(ActivityNotFoundException e) {
+                log.e(e); //FIXME LATER: error message on device shows only time in this case..
+                // but still we have full exception details in logcat.
+            }
+            catch(SecurityException e) {
+                log.e(e); //FIXME LATER: error message on device shows only time in this case..
+                // but still we have full exception details in logcat.
+            }
+        }
+        else
+            log.e("No activity found for this intent: %s", str(intent));
+    }
+
+    public void onCommandStartService(@NonNull Map<String, String> command) {
+
+        Intent intent = new Intent();
+
+        MyCommands.setIntentFromCommand(intent, command, log);
+
+        if(startService(intent) == null)
+            log.e("Service not found for this intent: %s", str(intent));
+    }
+
+    public void onCommandStartBroadcast(@NonNull Map<String, String> command) {
+
+        Intent intent = new Intent();
+        MyCommands.setIntentFromCommand(intent, command, log);
+        sendBroadcast(intent);
+    }
+
+    public void onCommandStartFragment(@NonNull Map<String, String> command) {
+
+        FragmentManager fm = getFragmentManager();
+        Fragment f;
+
+        f = Fragment.instantiate(MyActivity.this, command.get("component"));
+
+        //TODO: allow to get some arguments
+
+        updateLocalFragment(f);
+
+        FragmentTransaction ft = fm.beginTransaction().replace(R.id.ma_local_frame_layout, f, TAG_LOCAL_FRAGMENT);
+        addAllSharedElementsToFragmentTransaction(findViewById(R.id.ma_local_frame_layout), ft);
+        ft.commit();
+
+    }
+
     /**
      * You can override it, but you should call super version first and do your custom logic only if it returns false.
      */
     @CallSuper @Override public boolean onItemSelected(IMyNavigation nav, MenuItem item) {
+        boolean done;
         if(mGlobalDrawerLayout != null)
             mGlobalDrawerLayout.closeDrawers();
         if(mLocalDrawerLayout != null)
             mLocalDrawerLayout.closeDrawers();
         String ctitle = item.getTitleCondensed().toString();
-        if(ctitle.startsWith(PREFIX_FRAGMENT)) {
-            mMyPendingLocalFragment = ctitle.substring(PREFIX_FRAGMENT.length());
-            if((mGlobalDrawerLayout != null && mGlobalDrawerLayout.isDrawerVisible(GravityCompat.START)) || (mLocalDrawerLayout != null && mLocalDrawerLayout
-                    .isDrawerVisible(GravityCompat.END)))
-                return true; // we will start fragment transaction after drawers are closed.
-            startPendingLocalFragment();
-        }
-        if(ctitle.startsWith(PREFIX_ACTIVITY)) {
-            ctitle = ctitle.substring(PREFIX_ACTIVITY.length());
-            Intent intent = new Intent();
-            intent.setComponent(new ComponentName(this, ctitle));
-            try {
-                startActivity(intent);
-            } catch(ActivityNotFoundException e) {
-                log.e(e);
-                return false;
-            }
+        if(ctitle.startsWith(COMMAND_PREFIX)) {
+            mMyPendingCommand = ctitle.substring(COMMAND_PREFIX.length());
+            if( (mGlobalDrawerLayout != null && mGlobalDrawerLayout.isDrawerVisible(GravityCompat.START)) ||
+                    (mLocalDrawerLayout != null && mLocalDrawerLayout .isDrawerVisible(GravityCompat.END)) )
+                return true; // we will start pending command after drawers are closed.
+            startPendingCommand();
             return true;
         }
-        //TODO: better support for other prefixes (like starting activities/services) - but first lets make MyIntent
-        // work with new MyBlocks
-        //TODO: if we want to have an engine for starting activities/services here - we should put almost all logic
-        // from MyIntent to MyBlocks...
-        //TODO: and MyIntent would be only a thin wrapper.. and.. that's a great idea!
-        //TODO: menu api already has some api for launching intents (MenuItem.setIntent) - but our MyIntent engine is
-        // better!
 
+        // maybe our local fragment will handle this item:
         if(mMyLocalFragment != null) {
-            boolean done = mMyLocalFragment.onItemSelected(nav, item);
+            done = mMyLocalFragment.onItemSelected(nav, item);
             if(done)
                 return true;
         }
@@ -439,7 +552,7 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
     }
 
     @CallSuper @Override public void onDrawerClosed(View drawerView) {
-        startPendingLocalFragment();
+        startPendingCommand();
         if(mMyLocalFragment != null)
             mMyLocalFragment.onDrawerClosed(drawerView);
     }
@@ -449,5 +562,14 @@ public class MyActivity extends AppCompatActivity implements IMyCommander, IMyNa
             mMyLocalFragment.onDrawerStateChanged(newState);
     }
 
+    public float dp2px(float dp) {
+        if(mDisplayMetrics == null)
+            throw new IllegalStateException("display metrics not ready");
+        return dp * mDisplayMetrics.density; }
+    public float px2dp(float px) {
+        if(mDisplayMetrics == null)
+            throw new IllegalStateException("display metrics not ready");
+        return px / mDisplayMetrics.density;
+    }
 
 }

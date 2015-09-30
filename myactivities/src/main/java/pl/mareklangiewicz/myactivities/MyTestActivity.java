@@ -39,7 +39,7 @@ public final class MyTestActivity extends pl.mareklangiewicz.myactivities.MyActi
 
         //noinspection ConstantConditions
         View underline = getGlobalNavigation().getHeader().findViewById(R.id.magic_underline_view);
-        mMyMagicLinesDrawable.setColor(0x30ffffff).setStrokeWidth(6);
+        mMyMagicLinesDrawable.setColor(0x30ffffff).setStrokeWidth(dp2px(4));
         underline.setBackground(mMyMagicLinesDrawable);
 
         View homepage = getGlobalNavigation().getHeader().findViewById(R.id.my_home_page_text_view);

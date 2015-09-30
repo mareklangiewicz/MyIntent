@@ -1,6 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="pl.mareklangiewicz.mytestapp"
     >
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
 
     <application
         android:allowBackup="true"
@@ -20,7 +22,11 @@
         <activity
             android:name="pl.mareklangiewicz.myactivities.MyExampleActivity"
             android:label="@string/title_my_example_activity"
-            ></activity>
+            />
+        <activity
+            android:name="pl.mareklangiewicz.mytestapp.MyExampleActivity2"
+            android:label="@string/title_my_example_activity_2"
+            />
 
     </application>
 

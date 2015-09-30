@@ -8,7 +8,7 @@ import android.support.design.widget.FloatingActionButton;
  * Created by Marek Langiewicz on 03.09.15.
  * An object that manages ui navigation etc.. usually it's an activity
  */
-public interface IMyCommander {
+public interface IMyManager {
     @NonNull CharSequence getTitle();
 
     void setTitle(@NonNull CharSequence title);

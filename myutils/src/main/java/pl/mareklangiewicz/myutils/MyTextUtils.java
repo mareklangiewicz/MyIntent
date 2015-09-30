@@ -11,21 +11,19 @@ import android.view.View;
  */
 public final class MyTextUtils {
 
-    static final boolean VERBOSE = true;
-    //TODO LATER: implement it as a build time switch for user
-    static final boolean VERY_VERBOSE = false;
-    //TODO LATER: implement it as a build time switch for user
+    static final boolean VERBOSE = true; //TODO LATER: implement it as a build time switch for user
+    static final boolean VERY_VERBOSE = false; //TODO LATER: implement it as a build time switch for user
 
-    static public @NonNull String toStr(int x) {
+    static public @NonNull String str(int x) {
         if(VERY_VERBOSE)
             return toVeryLongStr(x);
         if(VERBOSE)
             return toLongStr(x);
         return toShortStr(x);
     }
-    //TODO LATER: toStr for other primitive types..
+    //TODO LATER: str for other primitive types..
 
-    static public @NonNull String toStr(@Nullable Object x) {
+    static public @NonNull String str(@Nullable Object x) {
         if(VERY_VERBOSE)
             return toVeryLongStr(x);
         if(VERBOSE)

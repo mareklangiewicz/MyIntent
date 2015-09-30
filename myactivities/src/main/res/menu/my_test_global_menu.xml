@@ -35,6 +35,12 @@
             android:titleCondensed="cmd:fragment pl.mareklangiewicz.myfragments.MyExampleFragment"
             />
         <item
+            android:id="@+id/section_my_example_fragment_2"
+            android:icon="@drawable/ic_extension_black_24dp"
+            android:title="@string/my_example_fragment_2"
+            android:titleCondensed="cmd:fragment pl.mareklangiewicz.myfragments.MyExampleFragment extra integer nr 332 extra double progress 0.667"
+            />
+        <item
             android:id="@+id/section_my_stupid_tests_fragment"
             android:icon="@drawable/ic_extension_black_24dp"
             android:title="@string/my_stupid_tests_fragment"

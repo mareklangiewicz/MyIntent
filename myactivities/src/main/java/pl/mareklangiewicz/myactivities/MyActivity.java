@@ -395,6 +395,9 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         sendBroadcast(intent);
     }
 
+    /**
+     * Extras in fragment command are delivered as fragment arguments bundle.
+     */
     public void onCommandStartFragment(@NonNull Map<String, String> command) {
 
         FragmentManager fm = getFragmentManager();
@@ -402,7 +405,12 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
 
         f = Fragment.instantiate(MyActivity.this, command.get("component"));
 
-        //TODO: allow to get some arguments
+        Bundle args = new Bundle();
+
+        MyCommands.setBundleFromCommandExtras(args, command);
+
+        if(args.size() > 0)
+            f.setArguments(args);
 
         updateLocalFragment(f);
 

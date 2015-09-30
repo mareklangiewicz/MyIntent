@@ -10,7 +10,7 @@
         android:id="@+id/my_example_fragment_2"
         android:icon="@drawable/ic_extension_black_24dp"
         android:title="@string/my_example_fragment"
-        android:titleCondensed="cmd:fragment pl.mareklangiewicz.myfragments.MyExampleFragment"
+        android:titleCondensed="cmd:fragment pl.mareklangiewicz.myfragments.MyExampleFragment extra string text AAAAAARRRGGGHHHTTHHH!!!"
         />
     <item
         android:id="@+id/my_example_action"

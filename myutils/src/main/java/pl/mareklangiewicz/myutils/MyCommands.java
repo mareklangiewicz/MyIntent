@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.AlarmClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -58,6 +59,9 @@ public class MyCommands {
     public static @NonNull <T> T valOrDef(@Nullable T val,@NonNull T def){ return MoreObjects.firstNonNull(val, def); }
     public static @NonNull <T> T mapOrNot(@NonNull T val, @NonNull Map<T, T> map) { return valOrDef(map.get(val), val); }
 
+
+
+    //TODO LATER: keep regular expressions precompiled already..
 
 
     public static final String RE_ID = "([_a-zA-Z][_a-zA-Z0-9]*)";
@@ -342,7 +346,7 @@ public class MyCommands {
                     break;
                 default:
                     if(key.startsWith("extra "))
-                        setIntentExtra(intent, key, value);
+                        setIntentExtra(intent, key.substring("extra ".length()), value);
                     else
                         throw new IllegalArgumentException("Illegal intent parameter:" + key);
             }
@@ -350,7 +354,6 @@ public class MyCommands {
     }
 
     private static void setIntentExtra(Intent intent, String key, String value) {
-        key = key.substring("extra ".length()); // remove "extra " prefix. (still there is type)
         Pattern pattern = Pattern.compile(RE_EXTRA_ELEM_TYPE_AND_KEY);
         Matcher matcher = pattern.matcher(key);
         boolean ok = matcher.matches();
@@ -378,4 +381,42 @@ public class MyCommands {
         }
     }
 
+
+    public static void setBundleFromCommandExtras(Bundle bundle, Map<String, String> cmd) {
+
+        for(String key:cmd.keySet()) {
+            String value = cmd.get(key);
+            if(key.startsWith("extra ")) {
+                setBundleFromExtra(bundle, key.substring("extra ".length()), value);
+            }
+        }
+    }
+
+    private static void setBundleFromExtra(Bundle bundle, String key, String value) {
+        Pattern pattern = Pattern.compile(RE_EXTRA_ELEM_TYPE_AND_KEY);
+        Matcher matcher = pattern.matcher(key);
+        boolean ok = matcher.matches();
+        if(!ok)
+            throw new IllegalArgumentException("Illegal extra type or key: " + key);
+        int N = matcher.groupCount();
+        if(N != 6)
+            throw new InternalError();
+
+        String type = matcher.group(2);
+        key = matcher.group(3); // now key contains only key (no type)
+
+        switch(type) {
+            case "string" :bundle.putString(key, value); break;
+            case "boolean":bundle.putBoolean(key, Boolean.parseBoolean(value)); break;
+            case "byte"   :bundle.putByte(key, Byte.parseByte(value)); break;
+            case "char"   :bundle.putChar(key, value.charAt(0)); break;
+            case "double" :bundle.putDouble(key, Double.parseDouble(value)); break;
+            case "float"  :bundle.putFloat(key, Float.parseFloat(value)); break;
+            case "integer":bundle.putInt(key, Integer.parseInt(value)); break;
+            case "long"   :bundle.putLong(key, Long.parseLong(value)); break;
+            case "short"  :bundle.putShort(key, Short.parseShort(value)); break;
+            default:
+                throw new IllegalArgumentException("Illegal extra segment type: " + type);
+        }
+    }
 }

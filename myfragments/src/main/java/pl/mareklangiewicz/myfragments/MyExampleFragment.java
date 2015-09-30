@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 
 import pl.mareklangiewicz.myviews.MyExampleView;
 
+import static pl.mareklangiewicz.myutils.MyTextUtils.str;
+
 
 public final class MyExampleFragment extends Fragment {
     private static final String ARG_TEXT = "text";
@@ -29,9 +31,14 @@ public final class MyExampleFragment extends Fragment {
         MyExampleView mev = (MyExampleView) root.findViewById(R.id.my_example_view);
         Bundle args = getArguments();
         if(args != null) {
-            String text = args.getString(ARG_TEXT);
-            if(text != null)
-                mev.setText(text);
+            StringBuilder text = new StringBuilder();
+            for(String key: args.keySet()) {
+                text.append(key);
+                text.append(": ");
+                text.append(str(args.get(key)));
+                text.append("\n");
+            }
+            mev.setText(text.toString());
         }
         return root;
     }

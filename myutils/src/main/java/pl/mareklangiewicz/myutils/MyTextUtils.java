@@ -11,39 +11,51 @@ import android.view.View;
  */
 public final class MyTextUtils {
 
-    static final boolean VERBOSE = true; //TODO LATER: implement it as a build time switch for user
-    static final boolean VERY_VERBOSE = false; //TODO LATER: implement it as a build time switch for user
+    /*
+        private static final boolean V = BuildConfig.VERBOSE;
+        private static final boolean VV = BuildConfig.VERY_VERBOSE;
+
+        FIXME SOMEDAY: enable version with BuildConfig when Google fix issue with propagating build types to libraries.
+        Now it is always 'release' in libraries.. see:
+        https://code.google.com/p/android/issues/detail?id=52962
+        http://stackoverflow.com/questions/20176284/buildconfig-debug-always-false-when-building-library-projects-with-gradle
+        http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Library-Publication
+    */
+    private static final boolean V = true;
+    private static final boolean VV = false;
+
 
     static public @NonNull String str(int x) {
-        if(VERY_VERBOSE)
+        if(VV)
             return toVeryLongStr(x);
-        if(VERBOSE)
+        if(V)
             return toLongStr(x);
         return toShortStr(x);
     }
-    //TODO LATER: str for other primitive types..
+    //TODO SOMEDAY: str for other primitive types..
 
     static public @NonNull String str(@Nullable Object x) {
-        if(VERY_VERBOSE)
+        if(VV)
             return toVeryLongStr(x);
-        if(VERBOSE)
+        else if(V)
             return toLongStr(x);
-        return toShortStr(x);
+        else
+            return toShortStr(x);
     }
 
     static public @NonNull String toShortStr(int x) {
-        throw new UnsupportedOperationException(); //TODO LATER
+        throw new UnsupportedOperationException(); //TODO SOMEDAY
     }
-    //TODO LATER: toShortStr for other primitive types..
+    //TODO SOMEDAY: toShortStr for other primitive types..
 
     static public @NonNull String toShortStr(@Nullable Object x) {
-        throw new UnsupportedOperationException(); //TODO LATER
+        throw new UnsupportedOperationException(); //TODO SOMEDAY
     }
 
     static public @NonNull String toLongStr(int x) {
-        throw new UnsupportedOperationException(); //TODO LATER
+        throw new UnsupportedOperationException(); //TODO SOMEDAY
     }
-    //TODO LATER: toLongStr for other primitive types..
+    //TODO SOMEDAY: toLongStr for other primitive types..
 
     static public @NonNull String toLongStr(@Nullable Object x) {
 
@@ -56,22 +68,22 @@ public final class MyTextUtils {
         if(x instanceof View)
             return String.format("%s{hash:%x}", x.getClass().getSimpleName(), x.hashCode());
 
-        //TODO LATER: pretty print our android special cases.
+        //TODO SOMEDAY: pretty print our android special cases.
 
         return x.toString();
     }
 
     static public @NonNull String toVeryLongStr(int x) {
-        throw new UnsupportedOperationException(); //TODO LATER
+        throw new UnsupportedOperationException(); //TODO SOMEDAY
     }
-    //TODO LATER: toVeryLongStr for other primitive types..
+    //TODO SOMEDAY: toVeryLongStr for other primitive types..
 
     static public @NonNull String toVeryLongStr(@Nullable Object x) {
 
         if(x == null)
             return "null";
 
-        //TODO LATER: very long and pretty print our android special cases.
+        //TODO SOMEDAY: very long and pretty print our android special cases.
 
         return x.toString();
     }

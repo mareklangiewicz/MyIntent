@@ -19,7 +19,7 @@ import pl.mareklangiewicz.myutils.MyMathUtils;
 import pl.mareklangiewicz.myviews.IMyNavigation;
 import pl.mareklangiewicz.myviews.MyPie;
 
-//TODO LATER: create UI to change animation speed (in local menu header)
+//TODO SOMEDAY: create UI to change animation speed (in local menu header)
 
 public final class MyPieTestsFragment extends MyFragment implements View.OnClickListener {
 

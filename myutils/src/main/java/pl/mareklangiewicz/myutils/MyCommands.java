@@ -6,14 +6,10 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.AlarmClock;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.annotation.StringDef;
+import android.support.v4.util.Pair;
 
-import com.google.common.base.MoreObjects;
 import com.noveogroup.android.log.MyLogger;
-
-import org.javatuples.KeyValue;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -22,6 +18,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+//import com.google.common.base.MoreObjects;
+//import org.javatuples.KeyValue;
 
 /**
  * Created by Marek Langiewicz on 29.09.15.
@@ -32,8 +31,20 @@ public class MyCommands {
 
     static boolean sUT = false; // FIXME LATER: this is temporary hack to detect unit tests.. remove it.
 
-    static final boolean VERBOSE = false; //TODO LATER: implement it as a build time switch for user
-    static final boolean VERY_VERBOSE = false; //TODO LATER: implement it as a build time switch for user
+
+    /*
+        private static final boolean V = BuildConfig.VERBOSE;
+        private static final boolean VV = BuildConfig.VERY_VERBOSE;
+
+        FIXME SOMEDAY: enable version with BuildConfig when Google fix issue with propagating build types to libraries.
+        Now it is always 'release' in libraries.. see:
+        https://code.google.com/p/android/issues/detail?id=52962
+        http://stackoverflow.com/questions/20176284/buildconfig-debug-always-false-when-building-library-projects-with-gradle
+        http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Library-Publication
+    */
+    private static final boolean V = /*true;*/ false;
+    private static final boolean VV = false;
+
 
 
     @Retention(RetentionPolicy.SOURCE)
@@ -41,9 +52,7 @@ public class MyCommands {
             CMD_ACTIVITY,
             CMD_SERVICE,
             CMD_BROADCAST,
-            CMD_FRAGMENT,
-            CMD_SCROLL,
-            CMD_SAY
+            CMD_FRAGMENT
     })
     public @interface CommandName {}
 
@@ -51,17 +60,14 @@ public class MyCommands {
     public static final String CMD_SERVICE = "service";
     public static final String CMD_BROADCAST = "broadcast";
     public static final String CMD_FRAGMENT = "fragment";
-    public static final String CMD_SCROLL = "scroll";
-    public static final String CMD_SAY = "say";
+
+
+//    public static @NonNull <T> T valOrDef(@Nullable T val,@NonNull T def){ return MoreObjects.firstNonNull(val, def); }
+//    public static @NonNull <T> T mapOrNot(@NonNull T val, @NonNull Map<T, T> map) { return valOrDef(map.get(val), val); }
 
 
 
-    public static @NonNull <T> T valOrDef(@Nullable T val,@NonNull T def){ return MoreObjects.firstNonNull(val, def); }
-    public static @NonNull <T> T mapOrNot(@NonNull T val, @NonNull Map<T, T> map) { return valOrDef(map.get(val), val); }
-
-
-
-    //TODO LATER: keep regular expressions precompiled already..
+    //TODO LATER: generate and use compiled versions of regular expressions..
 
 
     public static final String RE_ID = "([_a-zA-Z][_a-zA-Z0-9]*)";
@@ -82,7 +88,7 @@ public class MyCommands {
             "(?:extra))";
     // $1: keyword
 
-    public static final String RE_VALUE = "(.*?)"; // TODO LATER: don't we need some always forbidden characters?
+    public static final String RE_VALUE = "(.*?)";
     // $1: value
 
     public static final String RE_END = "(?: |\\Z)";
@@ -120,50 +126,50 @@ public class MyCommands {
 
 
 
-    static public final List<KeyValue<String, List<KeyValue<String, String>>>> RE_RULES = Arrays.asList(
+    static public final List<Pair<String, List<Pair<String, String>>>> RE_RULES = Arrays.asList(
 
-            KeyValue.with(".+", Arrays.asList( // first rules for all nonempty commands
-                            KeyValue.with("(?:\\s|;)+", " ") // change semicolons to spaces (set it to only one in a row)
+            Pair.create(".+", Arrays.asList( // first rules for all nonempty commands
+                            Pair.create("(?:\\s|;)+", " ") // change semicolons to spaces (set it to only one in a row)
                     )
             ),
 
-            KeyValue.with("((wake me)|(set alarm)|(set an alarm)).*", Arrays.asList(
-                            KeyValue.with("^wake me up", "set alarm"),
-                            KeyValue.with("^set an alarm", "set alarm"),
-                            KeyValue.with("^set alarm ((for)|(to)|(at))", "set alarm"),
-                            KeyValue.with("^set alarm (\\d+)(?::| )(\\d+)", "set alarm extra hour $1 extra minutes $2"),
-                            KeyValue.with("^set alarm (\\d+)", "set alarm extra hour $1"),
-                            KeyValue.with("^set alarm", "action set alarm"),
-                            KeyValue.with("\\bextra hour (\\d+)\\b", "extra integer " + AlarmClock.EXTRA_HOUR + " $1"),
-                            KeyValue.with("\\bextra minutes (\\d+)\\b", "extra integer " + AlarmClock.EXTRA_MINUTES + " $1"),
-                            KeyValue.with("^action set alarm (.*) with message (.*?)$", "action set alarm $1 extra string " + AlarmClock.EXTRA_MESSAGE + " $2"),
-                            KeyValue.with("(.*) quickly$", "$1 extra boolean " + AlarmClock.EXTRA_SKIP_UI + " true")
+            Pair.create("((wake me)|(set alarm)|(set an alarm)).*", Arrays.asList(
+                            Pair.create("^wake me up", "set alarm"),
+                            Pair.create("^set an alarm", "set alarm"),
+                            Pair.create("^set alarm ((for)|(to)|(at))", "set alarm"),
+                            Pair.create("^set alarm (\\d+)(?::| )(\\d+)", "set alarm extra hour $1 extra minutes $2"),
+                            Pair.create("^set alarm (\\d+)", "set alarm extra hour $1"),
+                            Pair.create("^set alarm", "action set alarm"),
+                            Pair.create("\\bextra hour (\\d+)\\b", "extra integer " + AlarmClock.EXTRA_HOUR + " $1"),
+                            Pair.create("\\bextra minutes (\\d+)\\b", "extra integer " + AlarmClock.EXTRA_MINUTES + " $1"),
+                            Pair.create("^action set alarm (.*) with message (.*?)$", "action set alarm $1 extra string " + AlarmClock.EXTRA_MESSAGE + " $2"),
+                            Pair.create("(.*) quickly$", "$1 extra boolean " + AlarmClock.EXTRA_SKIP_UI + " true")
                     )
             ),
 
-            KeyValue.with("((set timer)|(set a timer)).*", Arrays.asList(
-                            KeyValue.with("^set a timer", "set timer"),
-                            KeyValue.with("^set timer ((for)|(to)|(at))", "set timer"),
-                            KeyValue.with("^set timer (\\d+)( seconds)?", "set timer extra length $1"),
-                            KeyValue.with("^set timer", "action set timer"),
-                            KeyValue.with("\\bextra length (\\d+)\\b", "extra integer " + AlarmClock.EXTRA_LENGTH + " $1"),
-                            KeyValue.with("^action set timer (.*) with message (.*?)$", "action set timer $1 extra string " + AlarmClock.EXTRA_MESSAGE + " $2"),
-                            KeyValue.with("(.*) quickly$", "$1 extra boolean " + AlarmClock.EXTRA_SKIP_UI + " true")
+            Pair.create("((set timer)|(set a timer)).*", Arrays.asList(
+                            Pair.create("^set a timer", "set timer"),
+                            Pair.create("^set timer ((for)|(to)|(at))", "set timer"),
+                            Pair.create("^set timer (\\d+)( seconds)?", "set timer extra length $1"),
+                            Pair.create("^set timer", "action set timer"),
+                            Pair.create("\\bextra length (\\d+)\\b", "extra integer " + AlarmClock.EXTRA_LENGTH + " $1"),
+                            Pair.create("^action set timer (.*) with message (.*?)$", "action set timer $1 extra string " + AlarmClock.EXTRA_MESSAGE + " $2"),
+                            Pair.create("(.*) quickly$", "$1 extra boolean " + AlarmClock.EXTRA_SKIP_UI + " true")
                     )
             ),
 
-            KeyValue.with("((activity)|(fragment)).*", Arrays.asList(
-                            KeyValue.with("^((?:activity)|(?:fragment)) " + RE_KEYWORD, "start $1 $2"), //no keyword can be activity or fragment class name..
-                            KeyValue.with("^((?:activity)|(?:fragment)) " + RE_MULTI_ID, "start $1 component $2"),
-                            KeyValue.with("^((?:activity)|(?:fragment)) ", "start $1 ")
+            Pair.create("((activity)|(fragment)).*", Arrays.asList(
+                            Pair.create("^((?:activity)|(?:fragment)) " + RE_KEYWORD, "start $1 $2"), //no keyword can be activity or fragment class name..
+                            Pair.create("^((?:activity)|(?:fragment)) " + RE_MULTI_ID, "start $1 component $2"),
+                            Pair.create("^((?:activity)|(?:fragment)) ", "start $1 ")
                     )
             ),
 
-            KeyValue.with(".+", Arrays.asList( // last rules for all nonempty commands:
-                            KeyValue.with("\\baction view\\b", "action " + Intent.ACTION_VIEW),
-                            KeyValue.with("\\baction send\\b", "action " + Intent.ACTION_SEND),
-                            KeyValue.with("\\baction set alarm\\b", "action " + AlarmClock.ACTION_SET_ALARM),
-                            KeyValue.with("\\baction set timer\\b", "action " + AlarmClock.ACTION_SET_TIMER)
+            Pair.create(".+", Arrays.asList( // last rules for all nonempty commands:
+                            Pair.create("\\baction view\\b", "action " + Intent.ACTION_VIEW),
+                            Pair.create("\\baction send\\b", "action " + Intent.ACTION_SEND),
+                            Pair.create("\\baction set alarm\\b", "action " + AlarmClock.ACTION_SET_ALARM),
+                            Pair.create("\\baction set timer\\b", "action " + AlarmClock.ACTION_SET_TIMER)
                     )
             )
 
@@ -174,20 +180,20 @@ public class MyCommands {
     /**
      * WARNING: It's NOT optimized for memory usage AT ALL, so DON't USE IT TOO OFTEN..
      */
-    public static String applyRERulesList(String command, List<KeyValue<String, String>> rules, MyLogger log) {
-        String oldcommand = null;
-        for (KeyValue<String, String> rule : rules) {
+    public static String applyRERulesList(String command, List<Pair<String, String>> rules, MyLogger log) {
+        String oldcommand;
+        for (Pair<String, String> rule : rules) {
             oldcommand = command;
-            String key = rule.getKey();
-            String val = rule.getValue();
+            String key = rule.first;
+            String val = rule.second;
             command = command.replaceAll(key, val);
-            if(VERBOSE) {
+            if(V) {
                 if (!command.equals(oldcommand)) {
                     log.v("    rule matched:");
                     log.d("            rule: \"%s\" -> \"%s\"", key, val);
                     log.i("         command: \"%s\"", command);
                 }
-                else if(VERY_VERBOSE){
+                else if(VV){
                     log.v("rule NOT matched:");
                     log.v("            rule: \"%s\" -> \"%s\"", key, val);
                     log.v("         command: \"%s\"", command);
@@ -201,28 +207,28 @@ public class MyCommands {
     /**
      * WARNING: It's NOT optimized for memory usage AT ALL, so DON't USE IT TOO OFTEN..
      */
-    public static String applyRERulesLists(String command, List<KeyValue<String, List<KeyValue<String, String>>>> rules, MyLogger log) {
-        if(VERBOSE) {
+    public static String applyRERulesLists(String command, List<Pair<String, List<Pair<String, String>>>> rules, MyLogger log) {
+        if(V) {
             log.v("Applying all matching RE rules to:");
             log.w("    >>>  command: \"%s\"", command);
         }
         else
             log.v("> cmd: \"%s\"", command);
-        for(KeyValue<String, List<KeyValue<String, String>>> category: rules) {
-            String catkey = category.getKey();
+        for(Pair<String, List<Pair<String, String>>> category: rules) {
+            String catkey = category.first;
             if(command.matches(catkey)) {
-                if(VERBOSE) {
+                if(V) {
                     log.v("category matched:");
                     log.d("        category: \"%s\"", catkey);
                 }
-                command = applyRERulesList(command, category.getValue(), log);
+                command = applyRERulesList(command, category.second, log);
             }
-            else if(VERY_VERBOSE) {
+            else if(VV) {
                 log.v("category NOT matched:");
                 log.v("            category: \"%s\"", catkey);
             }
         }
-        if(VERBOSE) {
+        if(V) {
             log.v("All matching RE rules applied. Result:");
             log.w("    <<<  command: \"%s\"", command);
         }

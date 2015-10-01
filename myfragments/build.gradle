@@ -12,8 +12,14 @@ android {
     }
     buildTypes {
         release {
+            buildConfigField "boolean", "VERBOSE", "false"
+            buildConfigField "boolean", "VERY_VERBOSE", "false"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            buildConfigField "boolean", "VERBOSE", "true"
+            buildConfigField "boolean", "VERY_VERBOSE", "false"
         }
     }
 }

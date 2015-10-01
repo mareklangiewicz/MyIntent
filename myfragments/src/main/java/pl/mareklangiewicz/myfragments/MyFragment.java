@@ -40,8 +40,20 @@ import static pl.mareklangiewicz.myutils.MyTextUtils.str;
  */
 public class MyFragment extends Fragment implements IMyManager, IMyNavigation, MyNavigationView.Listener, DrawerLayout.DrawerListener {
 
-    static final boolean VERBOSE = true; //TODO LATER: implement it as a build time switch for user
-    static final boolean VERY_VERBOSE = false; //TODO LATER: implement it as a build time switch for user
+    /*
+        private static final boolean V = BuildConfig.VERBOSE;
+        private static final boolean VV = BuildConfig.VERY_VERBOSE;
+
+        FIXME SOMEDAY: enable version with BuildConfig when Google fix issue with propagating build types to libraries.
+        Now it is always 'release' in libraries.. see:
+        https://code.google.com/p/android/issues/detail?id=52962
+        http://stackoverflow.com/questions/20176284/buildconfig-debug-always-false-when-building-library-projects-with-gradle
+        http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Library-Publication
+    */
+    private static final boolean V = true;
+    private static final boolean VV = false;
+
+
 
     protected @NonNull MyLogger log = MyLogger.sMyDefaultUILogger;
 
@@ -163,7 +175,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, M
     @CallSuper
     @Override
     public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
-        if(VERY_VERBOSE)
+        if(VV)
             log.v("%s.%s context=%s attrs=%s  state=%s)", this.getClass().getSimpleName(), "onInflate", str(context), str(attrs), str
                     (savedInstanceState));
         super.onInflate(context, attrs, savedInstanceState);
@@ -172,8 +184,8 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, M
     @CallSuper
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        if(VERBOSE)
-            log.v("%s.%s state=%s", this.getClass().getSimpleName(), "onCreate", str(savedInstanceState));
+        if(V)
+            log.v("%s.%s state=%s args=%s", this.getClass().getSimpleName(), "onCreate", str(savedInstanceState), str(getArguments()));
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
     }
@@ -181,7 +193,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, M
     @CallSuper
     @Override
     public void onAttach(Context context) {
-        if(VERY_VERBOSE)
+        if(VV)
             log.v("%s.%s context=%s", this.getClass().getSimpleName(), "onAttach", str(context));
         super.onAttach(context);
     }
@@ -189,7 +201,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, M
     @CallSuper
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        if(VERY_VERBOSE)
+        if(VV)
             log.v("%s.%s state=%s", this.getClass().getSimpleName(), "onActivityCreated", str(savedInstanceState));
         super.onActivityCreated(savedInstanceState);
     }
@@ -197,7 +209,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, M
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if(VERY_VERBOSE)
+        if(VV)
             log.v("%s.%s inflater=%s container=%s state=%s", this.getClass().getSimpleName(), "onCreateView", str(inflater), str(container), str
                     (savedInstanceState));
         return super.onCreateView(inflater, container, savedInstanceState);
@@ -206,7 +218,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, M
     @CallSuper
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        if(VERY_VERBOSE)
+        if(VV)
             log.v("%s.%s view=%s state=%s", this.getClass().getSimpleName(), "onViewCreated", str(view), str(savedInstanceState));
         super.onViewCreated(view, savedInstanceState);
     }
@@ -214,7 +226,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, M
     @CallSuper
     @Override
     public void onViewStateRestored(Bundle savedInstanceState) {
-        if(VERY_VERBOSE)
+        if(VV)
             log.v("%s.%s state=%s", this.getClass().getSimpleName(), "onViewStateRestored", str(savedInstanceState));
         super.onViewStateRestored(savedInstanceState);
     }
@@ -222,7 +234,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, M
     @CallSuper
     @Override
     public void onStart() {
-        if(VERBOSE)
+        if(V)
             log.v("%s.%s", this.getClass().getSimpleName(), "onStart");
         super.onStart();
     }
@@ -230,7 +242,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, M
     @CallSuper
     @Override
     public void onResume() {
-        if(VERBOSE)
+        if(V)
             log.v("%s.%s", this.getClass().getSimpleName(), "onResume");
         super.onResume();
     }
@@ -238,7 +250,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, M
     @CallSuper
     @Override
     public void onPause() {
-        if(VERBOSE)
+        if(V)
             log.v("%s.%s", this.getClass().getSimpleName(), "onPause");
         super.onPause();
     }
@@ -246,7 +258,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, M
     @CallSuper
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        if(VERY_VERBOSE)
+        if(VV)
             log.v("%s.%s outState=%s", this.getClass().getSimpleName(), "onSaveInstanceState", str(outState));
         super.onSaveInstanceState(outState);
     }
@@ -254,7 +266,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, M
     @CallSuper
     @Override
     public void onStop() {
-        if(VERBOSE)
+        if(V)
             log.v("%s.%s", this.getClass().getSimpleName(), "onStop");
         super.onStop();
     }
@@ -262,7 +274,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, M
     @CallSuper
     @Override
     public void onDestroyView() {
-        if(VERY_VERBOSE)
+        if(VV)
             log.v("%s.%s", this.getClass().getSimpleName(), "onDestroyView");
         super.onDestroyView();
         clearMenu();
@@ -272,7 +284,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, M
     @CallSuper
     @Override
     public void onDestroy() {
-        if(VERBOSE)
+        if(V)
             log.v("%s.%s", this.getClass().getSimpleName(), "onDestroy");
         super.onDestroy();
     }
@@ -280,7 +292,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, M
     @CallSuper
     @Override
     public void onDetach() {
-        if(VERY_VERBOSE)
+        if(VV)
             log.v("%s.%s", this.getClass().getSimpleName(), "onDetach");
         super.onDetach();
     }

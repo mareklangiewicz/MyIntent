@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 
+import pl.mareklangiewicz.myloggers.MyLogSimpleView;
+
 /**
  * Created by Marek Langiewicz on 10.09.15.
  * A Place to test some stupid ideas fast.
@@ -23,6 +25,7 @@ import android.view.animation.LinearInterpolator;
 public class MyStupidTestsFragment extends MyFragment implements DrawerLayout.DrawerListener {
 
     CardView mWarningCardView;
+    MyLogSimpleView mMyLogSimpleView;
 
     public MyStupidTestsFragment() { }
 
@@ -33,6 +36,12 @@ public class MyStupidTestsFragment extends MyFragment implements DrawerLayout.Dr
         View root = inflater.inflate(R.layout.my_stupid_tests_fragment, container, false);
 
         mWarningCardView = (CardView) root.findViewById(R.id.stupid_warning);
+
+        mMyLogSimpleView = (MyLogSimpleView) root.findViewById(R.id.my_stupid_log_simple_view);
+
+        mMyLogSimpleView.setLog(log);
+
+
 
         final NavigationView nv = (NavigationView) root.findViewById(R.id.stupid_navigation_view);
 
@@ -61,5 +70,12 @@ public class MyStupidTestsFragment extends MyFragment implements DrawerLayout.Dr
         animator.setInterpolator(new LinearInterpolator());
         animator.start();
 
+    }
+
+    @Override public void onDestroyView() {
+        mWarningCardView = null;
+        mMyLogSimpleView.setLog(null);
+        mMyLogSimpleView = null;
+        super.onDestroyView();
     }
 }

@@ -29,7 +29,7 @@ public final class MyLogFragment extends MyFragment {
         View rootView = inflater.inflate(R.layout.my_log_fragment, container, false);
         mMLRView = (MyLogRecyclerView) rootView.findViewById(R.id.my_log_recycler_view);
         mMLRView.setLog(log);
-        //TODO LATER: some nice simple header with fragment title
+        //TODO SOMEDAY: some nice simple header with fragment title
         inflateMenu(R.menu.my_log_menu);
         updateCheckedItem();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

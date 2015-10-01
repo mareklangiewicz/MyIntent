@@ -37,6 +37,7 @@ import pl.mareklangiewicz.mydrawables.MyArrowDrawable;
 import pl.mareklangiewicz.mydrawables.MyLivingDrawable;
 import pl.mareklangiewicz.myfragments.MyFragment;
 import pl.mareklangiewicz.myutils.MyCommands;
+import pl.mareklangiewicz.myutils.MyTextUtils;
 import pl.mareklangiewicz.myviews.IMyManager;
 import pl.mareklangiewicz.myviews.IMyNavigation;
 import pl.mareklangiewicz.myviews.MyNavigationView;
@@ -48,10 +49,23 @@ import static pl.mareklangiewicz.myutils.MyTextUtils.str;
 public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavigation.Listener, DrawerLayout.DrawerListener {
 
 
+/*
+    private static final boolean V = BuildConfig.VERBOSE;
+    private static final boolean VV = BuildConfig.VERY_VERBOSE;
+
+    FIXME SOMEDAY: enable version with BuildConfig when Google fix issue with propagating build types to libraries.
+    Now it is always 'release' in libraries.. see:
+    https://code.google.com/p/android/issues/detail?id=52962
+    http://stackoverflow.com/questions/20176284/buildconfig-debug-always-false-when-building-library-projects-with-gradle
+    http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Library-Publication
+*/
+    private static final boolean V = true;
+    private static final boolean VV = false;
+
+
+
     static public final String COMMAND_PREFIX = "cmd:";
     static public final String TAG_LOCAL_FRAGMENT = "tag_local_fragment";
-    static final boolean VERBOSE = true; //TODO LATER: implement it as a build time switch for user
-    static final boolean VERY_VERBOSE = false; //TODO LATER: implement it as a build time switch for user
     private static final String DEFAULT_COMMAND_NAME = "activity";
     private static final String DEFAULT_INTENT_ACTION = Intent.ACTION_VIEW;
     protected final MyLivingDrawable mGlobalArrowDrawable = new MyArrowDrawable();
@@ -82,7 +96,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
 
     @CallSuper @Override protected void onCreate(Bundle savedInstanceState) {
         mDisplayMetrics = getResources().getDisplayMetrics();
-        if(VERBOSE) {
+        if(V) {
             log.d("%s.%s state=%s", this.getClass().getSimpleName(), "onCreate", str(savedInstanceState));
             log.v(str(mDisplayMetrics));
         }
@@ -150,8 +164,6 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         if(savedInstanceState != null) {
             FragmentManager fm = getFragmentManager();
             Fragment f = fm.findFragmentByTag(TAG_LOCAL_FRAGMENT);
-            // TODO LATER: isn't it too soon? What if it is not MyFragment (and retaininstance is false)
-            // TODO LATER: analyze if findFragmentByTag will always have our fragment ready here.
             updateLocalFragment(f); // can be null.
         }
     }
@@ -221,7 +233,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
     }
 
     @CallSuper @Override protected void onDestroy() {
-        if(VERBOSE)
+        if(V)
             log.d("%s.%s", this.getClass().getSimpleName(), "onDestroy");
 
         mGlobalDrawerLayout = null;
@@ -256,7 +268,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
 
 
     protected void updateLocalFragment(@Nullable Fragment fragment) {
-        if(VERY_VERBOSE)
+        if(VV)
             log.v("%s.%s fragment=%s", this.getClass().getSimpleName(), "updateLocalFragment", str(fragment));
 
         mLocalFragment = fragment;
@@ -320,7 +332,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
                 log.e("Fragment component is null.");
                 return;
             }
-            if(component.startsWith(".")) { //TODO LATER: test this shortcut later when I have fragments in the same package as app itself..
+            if(component.startsWith(".")) {
                 component = pkg + component;
                 map.put("component", component);
             }
@@ -349,7 +361,6 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
             case "fragment":
                 onCommandStartFragment(command);
                 break;
-            //TODO NOW: other commands
             default:
                 log.e("Unsupported command: %s", str(command));
         }
@@ -366,12 +377,10 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
                 startActivity(intent);
             }
             catch(ActivityNotFoundException e) {
-                log.e(e); //FIXME LATER: error message on device shows only time in this case..
-                // but still we have full exception details in logcat.
+                log.e("Activity not found.", e);
             }
             catch(SecurityException e) {
-                log.e(e); //FIXME LATER: error message on device shows only time in this case..
-                // but still we have full exception details in logcat.
+                log.e("Security exception.", e);
             }
         }
         else

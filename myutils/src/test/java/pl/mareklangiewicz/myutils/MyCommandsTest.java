@@ -216,6 +216,13 @@ public class MyCommandsTest {
     }
 
 
+    @Test
+    public void testRE_RULES() throws Exception {
+        log.i(str(MyCommands.RE_RULES.get(0).first));
+        log.i(str(MyCommands.RE_RULES.get(0).second));
+    }
+
+
     public void testApplyRERulesLists(String input, String expected) {
         String command = MyCommands.applyRERulesLists(input, MyCommands.RE_RULES, log);
         EXPECT.that(command).isEqualTo(expected);

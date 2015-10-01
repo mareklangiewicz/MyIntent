@@ -11,7 +11,9 @@ import java.util.Map;
 
 /**
  * Created by Marek Langiewicz on 31.05.15.
- * TODO LATER: javadocs and tests
+ * This class contains some static methods that allow to inject some decorations
+ * to selected views in view hierarchy. It is probably bad idea to mess with
+ * default view hierarchy generation, so... don't use this class. :-)
  * We do not decorate inside already decorated view.
  */
 public final class MyViewDecorator {

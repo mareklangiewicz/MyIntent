@@ -185,7 +185,7 @@ public final class MyPie extends View {
 
     static final class SavedState extends BaseSavedState {
 
-        //TODO LATER: we should save colors too
+        //TODO SOMEDAY: we should save colors too
 
         public static final Parcelable.Creator<SavedState> CREATOR =
                 new Parcelable.Creator<SavedState>() {

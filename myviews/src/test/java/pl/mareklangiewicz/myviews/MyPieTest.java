@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
  * some dummy tests..
  */
 public class MyPieTest {
-//    TODO LATER: some real tests
+//    TODO SOMEDAY: some real tests
 
     int x;
 

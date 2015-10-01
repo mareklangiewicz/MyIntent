@@ -10,7 +10,8 @@ import java.util.Random;
 
 /**
  * Created by Marek Langiewicz on 16.09.15.
- * TODO LATER: description
+ * Generates cool effect of animated lines (random)
+ * Check MyBlocks app for demo (look at left drawer header).
  */
 public class MyMagicLinesDrawable extends MyLivingDrawable {
 

@@ -123,6 +123,7 @@ public class MyLivingDrawable extends Drawable {
      * similar to MyMathUtils.scale1d, but uses drawable level as input;
      * Also it keeps output between 'from' and 'to' even if level is not between 'lfrom' and 'lto'
      * See code for details.
+     *
      * @param lfrom start level
      * @param lto   end level
      * @param from  start returned value
@@ -146,6 +147,7 @@ public class MyLivingDrawable extends Drawable {
 
     /**
      * Floating point version of the above
+     *
      * @param lfrom start level
      * @param lto   end level
      * @param from  start returned value

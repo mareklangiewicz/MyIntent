@@ -12,8 +12,7 @@ import android.view.View;
 import com.noveogroup.android.log.MyLogger;
 
 /**
- * Created by marek on 30.06.15.
- *
+ * Created by Marek Langiewicz on 30.06.15.
  */
 public final class MyLogSimpleView extends View {
     private final Paint mPaint = new Paint();

@@ -21,7 +21,8 @@ public class MyCheckDrawable extends MyLivingDrawable {
         ln(cx - w4, lvl(cy, cy - h4), lvl(cx, cx + w4), cy + h4);
 
         int x = lvl(cx, cx - w4);
-        if (x != cx) path.moveTo(x, cy + h4);
+        if(x != cx)
+            path.moveTo(x, cy + h4);
 
         path.lineTo(cx + w4, cy - h4);
 

@@ -41,8 +41,6 @@ public class MyStupidTestsFragment extends MyFragment implements DrawerLayout.Dr
 
         mMyLogSimpleView.setLog(log);
 
-
-
         final NavigationView nv = (NavigationView) root.findViewById(R.id.stupid_navigation_view);
 
         nv.inflateMenu(R.menu.my_stupid_tests_menu);

@@ -30,9 +30,9 @@ public final class MyDecoratorsTestsFragment extends MyFragment {
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         @IdRes int id = item.getItemId();
-        if (id == R.id.action_decorate_views) {
+        if(id == R.id.action_decorate_views) {
             View view = getView();
-            if (view == null) {
+            if(view == null) {
                 log.e("The root view of this fragment is null.");
                 return false;
             }

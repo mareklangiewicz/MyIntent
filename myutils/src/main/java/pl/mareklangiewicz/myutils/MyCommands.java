@@ -6,13 +6,10 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.AlarmClock;
-import android.support.annotation.StringDef;
 import android.support.v4.util.Pair;
 
 import com.noveogroup.android.log.MyLogger;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -24,107 +21,78 @@ import java.util.regex.Pattern;
 
 /**
  * Created by Marek Langiewicz on 29.09.15.
- *
+ * <p>
+ * TODO LATER: generate and use compiled versions of regular expressions..
  */
 public class MyCommands {
 
-
-    static boolean sUT = false; // FIXME LATER: this is temporary hack to detect unit tests.. remove it.
-
-
-    /*
-        private static final boolean V = BuildConfig.VERBOSE;
-        private static final boolean VV = BuildConfig.VERY_VERBOSE;
-
-        FIXME SOMEDAY: enable version with BuildConfig when Google fix issue with propagating build types to libraries.
-        Now it is always 'release' in libraries.. see:
-        https://code.google.com/p/android/issues/detail?id=52962
-        http://stackoverflow.com/questions/20176284/buildconfig-debug-always-false-when-building-library-projects-with-gradle
-        http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Library-Publication
-    */
-    private static final boolean V = /*true;*/ false;
-    private static final boolean VV = false;
-
-
-
-    @Retention(RetentionPolicy.SOURCE)
-    @StringDef({
-            CMD_ACTIVITY,
-            CMD_SERVICE,
-            CMD_BROADCAST,
-            CMD_FRAGMENT
-    })
-    public @interface CommandName {}
 
     public static final String CMD_ACTIVITY = "activity";
     public static final String CMD_SERVICE = "service";
     public static final String CMD_BROADCAST = "broadcast";
     public static final String CMD_FRAGMENT = "fragment";
-
+    /**
+     * $1: id
+     */
+    public static final String RE_ID = "([_a-zA-Z][_a-zA-Z0-9]*)";
+    /**
+     * $1: whole multi id (a multipart ident. divided by dots and/or slashes; can start with dot)
+     * $2: id (first part - until first divider)
+     * $3: rest (all after id - starting with divider - if not empty)
+     * $4: subid (last part of multi id - after last divider)
+     */
+    public static final String RE_MULTI_ID = "(\\.?" + RE_ID + "((?:(?:\\.|/)" + RE_ID + ")*))";
+    /**
+     * $1: datatype
+     */
+    public static final String RE_EXTRA_TYPE = "((?:string)|(?:boolean)|(?:byte)|(?:char)|(?:double)|(?:float)|(?:integer)|(?:long)|(?:short))";
+    /**
+     * $1: keyword
+     */
+    public static final String RE_KEYWORD = "((?:start)|(?:action)|(?:category)|(?:type)|(?:data)|(?:flags)|(?:package)|(?:component)|(?:scheme)|(?:bounds)|" +
+            "(?:extra))";
 
 //    public static @NonNull <T> T valOrDef(@Nullable T val,@NonNull T def){ return MoreObjects.firstNonNull(val, def); }
 //    public static @NonNull <T> T mapOrNot(@NonNull T val, @NonNull Map<T, T> map) { return valOrDef(map.get(val), val); }
 
-
-
-    //TODO LATER: generate and use compiled versions of regular expressions..
-
-
-    public static final String RE_ID = "([_a-zA-Z][_a-zA-Z0-9]*)";
-    // $1: id
-
-    public static final String RE_MULTI_ID = "(\\.?" + RE_ID + "((?:(?:\\.|/)" + RE_ID + ")*))";
-    // $1: whole multi id (a multipart ident. divided by dots and/or slashes; can start with dot)
-    // $2: id (first part - until first divider)
-    // $3: rest (all after id - starting with divider - if not empty)
-    // $4: subid (last part of multi id - after last divider)
-
-
-
-    public static final String RE_EXTRA_TYPE = "((?:string)|(?:boolean)|(?:byte)|(?:char)|(?:double)|(?:float)|(?:integer)|(?:long)|(?:short))";
-    // $1: datatype
-
-    public static final String RE_KEYWORD = "((?:start)|(?:action)|(?:category)|(?:type)|(?:data)|(?:flags)|(?:package)|(?:component)|(?:scheme)|(?:bounds)|" +
-            "(?:extra))";
-    // $1: keyword
-
+    /**
+     * $1: value
+     */
     public static final String RE_VALUE = "(.*?)";
-    // $1: value
-
     public static final String RE_END = "(?: |\\Z)";
-
+    /**
+     * $1: segment
+     * $2: keyword
+     * $3: value
+     * $4: next keyword or the end (empty string) - probably not important for us.
+     */
     public static final String RE_SEGMENT = "(" + RE_KEYWORD + " " + RE_VALUE + RE_END + "(?=\\Z|" + RE_KEYWORD + "))";
-    // $1: segment
-    // $2: keyword
-    // $3: value
-    // $4: next keyword or the end (empty string) - probably not important for us.
-
+    /**
+     * $1: whole key
+     * $2: first part - until first dot
+     * $3: rest
+     * $4: last part - not important here..
+     */
     public static final String RE_EXTRA_KEY = RE_MULTI_ID;
-    // $1: whole key
-    // $2: first part - until first dot
-    // $3: rest
-    // $4: last part - not important here..
-
+    /**
+     * $1: whole extra elem
+     * $2: datatype
+     * $3: extra key
+     * $4: extra key - first part - not important
+     * $5: extra key - the rest - not important
+     * $6: extra key - last part - not important
+     * $7: value
+     */
     public static final String RE_EXTRA_ELEM = "(" + RE_EXTRA_TYPE + " " + RE_EXTRA_KEY + " " + RE_VALUE + ")";
-    // $1: whole extra elem
-    // $2: datatype
-    // $3: extra key
-    // $4: extra key - first part - not important
-    // $5: extra key - the rest - not important
-    // $6: extra key - last part - not important
-    // $7: value
-
+    /**
+     * $1: whole thing
+     * $2: datatype
+     * $3: extra key
+     * $4: extra key - first part - not important
+     * $5: extra key - the rest - not important
+     * $6: extra key - last part - not important
+     */
     public static final String RE_EXTRA_ELEM_TYPE_AND_KEY = "(" + RE_EXTRA_TYPE + " " + RE_EXTRA_KEY + ")";
-    // $1: whole thing
-    // $2: datatype
-    // $3: extra key
-    // $4: extra key - first part - not important
-    // $5: extra key - the rest - not important
-    // $6: extra key - last part - not important
-
-
-
-
 
     static public final List<Pair<String, List<Pair<String, String>>>> RE_RULES = Arrays.asList(
 
@@ -174,26 +142,37 @@ public class MyCommands {
             )
 
     );
+    /*
+        private static final boolean V = BuildConfig.VERBOSE;
+        private static final boolean VV = BuildConfig.VERY_VERBOSE;
 
-
+        FIXME SOMEDAY: enable version with BuildConfig when Google fix issue with propagating build types to libraries.
+        Now it is always 'release' in libraries.. see:
+        https://code.google.com/p/android/issues/detail?id=52962
+        http://stackoverflow.com/questions/20176284/buildconfig-debug-always-false-when-building-library-projects-with-gradle
+        http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Library-Publication
+    */
+    private static final boolean V = /*true;*/ false;
+    private static final boolean VV = false;
+    static boolean sUT = false; // FIXME LATER: this is temporary hack to detect unit tests.. remove it.
 
     /**
      * WARNING: It's NOT optimized for memory usage AT ALL, so DON't USE IT TOO OFTEN..
      */
     public static String applyRERulesList(String command, List<Pair<String, String>> rules, MyLogger log) {
         String oldcommand;
-        for (Pair<String, String> rule : rules) {
+        for(Pair<String, String> rule : rules) {
             oldcommand = command;
             String key = rule.first;
             String val = rule.second;
             command = command.replaceAll(key, val);
             if(V) {
-                if (!command.equals(oldcommand)) {
+                if(!command.equals(oldcommand)) {
                     log.v("    rule matched:");
                     log.d("            rule: \"%s\" -> \"%s\"", key, val);
                     log.i("         command: \"%s\"", command);
                 }
-                else if(VV){
+                else if(VV) {
                     log.v("rule NOT matched:");
                     log.v("            rule: \"%s\" -> \"%s\"", key, val);
                     log.v("         command: \"%s\"", command);
@@ -203,9 +182,8 @@ public class MyCommands {
         return command;
     }
 
-
     /**
-     * WARNING: It's NOT optimized for memory usage AT ALL, so DON't USE IT TOO OFTEN..
+     * WARNING: It's NOT optimized for memory usage AT ALL, so DON'T USE IT TOO OFTEN..
      */
     public static String applyRERulesLists(String command, List<Pair<String, List<Pair<String, String>>>> rules, MyLogger log) {
         if(V) {
@@ -214,7 +192,7 @@ public class MyCommands {
         }
         else
             log.v("> cmd: \"%s\"", command);
-        for(Pair<String, List<Pair<String, String>>> category: rules) {
+        for(Pair<String, List<Pair<String, String>>> category : rules) {
             String catkey = category.first;
             if(command.matches(catkey)) {
                 if(V) {
@@ -236,9 +214,6 @@ public class MyCommands {
             log.v("< cmd: \"%s\"", command);
         return command;
     }
-
-
-
 
     static public void parseCommand(String in, Map<String, String> out) {
         int length = in.length();
@@ -276,7 +251,6 @@ public class MyCommands {
                     out.put(keyword, value);
             }
 
-
             int end = matcher.end();
             if(end == length)
                 break;
@@ -303,12 +277,11 @@ public class MyCommands {
 
     }
 
-
     public static void setIntentFromCommand(Intent intent, Map<String, String> cmd, MyLogger log) {
 
-        for(String key:cmd.keySet()) {
+        for(String key : cmd.keySet()) {
             String value = cmd.get(key);
-            switch (key) {
+            switch(key) {
                 case "start":
                     // we don't care here. Should be checked on higher level
                     break;
@@ -320,14 +293,14 @@ public class MyCommands {
                     break;
                 case "type":
                     Uri data = intent.getData();
-                    if (data == null)
+                    if(data == null)
                         intent.setType(value);
                     else
                         intent.setDataAndType(data, value);
                     break;
                 case "data":
                     String type = intent.getType();
-                    if (type == null)
+                    if(type == null)
                         intent.setData(Uri.parse(value));
                     else
                         intent.setDataAndType(Uri.parse(value), type);
@@ -373,24 +346,41 @@ public class MyCommands {
         key = matcher.group(3); // now key contains only key (no type)
 
         switch(type) {
-            case "string" :intent.putExtra(key, value); break;
-            case "boolean":intent.putExtra(key, Boolean.parseBoolean(value)); break;
-            case "byte"   :intent.putExtra(key, Byte.parseByte(value)); break;
-            case "char"   :intent.putExtra(key, value.charAt(0)); break;
-            case "double" :intent.putExtra(key, Double.parseDouble(value)); break;
-            case "float"  :intent.putExtra(key, Float.parseFloat(value)); break;
-            case "integer":intent.putExtra(key, Integer.parseInt(value)); break;
-            case "long"   :intent.putExtra(key, Long.parseLong(value)); break;
-            case "short"  :intent.putExtra(key, Short.parseShort(value)); break;
+            case "string":
+                intent.putExtra(key, value);
+                break;
+            case "boolean":
+                intent.putExtra(key, Boolean.parseBoolean(value));
+                break;
+            case "byte":
+                intent.putExtra(key, Byte.parseByte(value));
+                break;
+            case "char":
+                intent.putExtra(key, value.charAt(0));
+                break;
+            case "double":
+                intent.putExtra(key, Double.parseDouble(value));
+                break;
+            case "float":
+                intent.putExtra(key, Float.parseFloat(value));
+                break;
+            case "integer":
+                intent.putExtra(key, Integer.parseInt(value));
+                break;
+            case "long":
+                intent.putExtra(key, Long.parseLong(value));
+                break;
+            case "short":
+                intent.putExtra(key, Short.parseShort(value));
+                break;
             default:
                 throw new IllegalArgumentException("Illegal extra segment type: " + type);
         }
     }
 
-
     public static void setBundleFromCommandExtras(Bundle bundle, Map<String, String> cmd) {
 
-        for(String key:cmd.keySet()) {
+        for(String key : cmd.keySet()) {
             String value = cmd.get(key);
             if(key.startsWith("extra ")) {
                 setBundleFromExtra(bundle, key.substring("extra ".length()), value);
@@ -412,15 +402,33 @@ public class MyCommands {
         key = matcher.group(3); // now key contains only key (no type)
 
         switch(type) {
-            case "string" :bundle.putString(key, value); break;
-            case "boolean":bundle.putBoolean(key, Boolean.parseBoolean(value)); break;
-            case "byte"   :bundle.putByte(key, Byte.parseByte(value)); break;
-            case "char"   :bundle.putChar(key, value.charAt(0)); break;
-            case "double" :bundle.putDouble(key, Double.parseDouble(value)); break;
-            case "float"  :bundle.putFloat(key, Float.parseFloat(value)); break;
-            case "integer":bundle.putInt(key, Integer.parseInt(value)); break;
-            case "long"   :bundle.putLong(key, Long.parseLong(value)); break;
-            case "short"  :bundle.putShort(key, Short.parseShort(value)); break;
+            case "string":
+                bundle.putString(key, value);
+                break;
+            case "boolean":
+                bundle.putBoolean(key, Boolean.parseBoolean(value));
+                break;
+            case "byte":
+                bundle.putByte(key, Byte.parseByte(value));
+                break;
+            case "char":
+                bundle.putChar(key, value.charAt(0));
+                break;
+            case "double":
+                bundle.putDouble(key, Double.parseDouble(value));
+                break;
+            case "float":
+                bundle.putFloat(key, Float.parseFloat(value));
+                break;
+            case "integer":
+                bundle.putInt(key, Integer.parseInt(value));
+                break;
+            case "long":
+                bundle.putLong(key, Long.parseLong(value));
+                break;
+            case "short":
+                bundle.putShort(key, Short.parseShort(value));
+                break;
             default:
                 throw new IllegalArgumentException("Illegal extra segment type: " + type);
         }

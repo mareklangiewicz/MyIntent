@@ -13,9 +13,9 @@ import android.support.annotation.NonNull;
 public class MyArrowDrawable extends MyLivingDrawable {
 
     @Override public void drawLivingPath(@NonNull Path path, @IntRange(from = 0, to = 10000) int level, Rect bounds, int cx, int cy) {
-        int w4 = bounds.width()/4;
-        int h4 = bounds.height()/4;
-        int h8 = bounds.height()/8;
+        int w4 = bounds.width() / 4;
+        int h4 = bounds.height() / 4;
+        int h8 = bounds.height() / 8;
         int topBarY = cy - h8;
         int bottomBarY = cy + h8;
         int topArrY = cy - h4;

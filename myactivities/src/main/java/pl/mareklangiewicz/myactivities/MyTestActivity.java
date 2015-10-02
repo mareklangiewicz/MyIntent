@@ -28,7 +28,6 @@ public final class MyTestActivity extends pl.mareklangiewicz.myactivities.MyActi
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         log.i("Hello world!");
         log.d("some boring debug message...");
         log.w("Warning!... just kidding...");

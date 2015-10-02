@@ -37,7 +37,6 @@ import pl.mareklangiewicz.mydrawables.MyArrowDrawable;
 import pl.mareklangiewicz.mydrawables.MyLivingDrawable;
 import pl.mareklangiewicz.myfragments.MyFragment;
 import pl.mareklangiewicz.myutils.MyCommands;
-import pl.mareklangiewicz.myutils.MyTextUtils;
 import pl.mareklangiewicz.myviews.IMyManager;
 import pl.mareklangiewicz.myviews.IMyNavigation;
 import pl.mareklangiewicz.myviews.MyNavigationView;
@@ -49,23 +48,20 @@ import static pl.mareklangiewicz.myutils.MyTextUtils.str;
 public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavigation.Listener, DrawerLayout.DrawerListener {
 
 
-/*
-    private static final boolean V = BuildConfig.VERBOSE;
-    private static final boolean VV = BuildConfig.VERY_VERBOSE;
-
-    FIXME SOMEDAY: enable version with BuildConfig when Google fix issue with propagating build types to libraries.
-    Now it is always 'release' in libraries.. see:
-    https://code.google.com/p/android/issues/detail?id=52962
-    http://stackoverflow.com/questions/20176284/buildconfig-debug-always-false-when-building-library-projects-with-gradle
-    http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Library-Publication
-*/
-    private static final boolean V = true;
-    private static final boolean VV = false;
-
-
-
     static public final String COMMAND_PREFIX = "cmd:";
     static public final String TAG_LOCAL_FRAGMENT = "tag_local_fragment";
+    /*
+        private static final boolean V = BuildConfig.VERBOSE;
+        private static final boolean VV = BuildConfig.VERY_VERBOSE;
+
+        FIXME SOMEDAY: enable version with BuildConfig when Google fix issue with propagating build types to libraries.
+        Now it is always 'release' in libraries.. see:
+        https://code.google.com/p/android/issues/detail?id=52962
+        http://stackoverflow.com/questions/20176284/buildconfig-debug-always-false-when-building-library-projects-with-gradle
+        http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Library-Publication
+    */
+    private static final boolean V = true;
+    private static final boolean VV = false;
     private static final String DEFAULT_COMMAND_NAME = "activity";
     private static final String DEFAULT_INTENT_ACTION = Intent.ACTION_VIEW;
     protected final MyLivingDrawable mGlobalArrowDrawable = new MyArrowDrawable();
@@ -222,6 +218,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         onNavigationContentChanged(getLocalNavigation());
     }
 
+
     @Override protected void onResume() {
         super.onResume();
         log.setSnackView(mCoordinatorLayout);
@@ -296,6 +293,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
 
     /**
      * Override it if you want to manage commands by yourself
+     *
      * @param command A command to perform
      */
     public void onCommand(@NonNull String command) {
@@ -344,6 +342,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
 
     /**
      * Override it if you want to manage all (parsed) commands by yourself
+     *
      * @param command A parsed command
      */
     public void onCommand(@NonNull Map<String, String> command) {
@@ -372,7 +371,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
 
         MyCommands.setIntentFromCommand(intent, command, log);
 
-        if (intent.resolveActivity(getPackageManager()) != null) {
+        if(intent.resolveActivity(getPackageManager()) != null) {
             try {
                 startActivity(intent);
             }
@@ -441,8 +440,8 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         String ctitle = item.getTitleCondensed().toString();
         if(ctitle.startsWith(COMMAND_PREFIX)) {
             mMyPendingCommand = ctitle.substring(COMMAND_PREFIX.length());
-            if( (mGlobalDrawerLayout != null && mGlobalDrawerLayout.isDrawerVisible(GravityCompat.START)) ||
-                    (mLocalDrawerLayout != null && mLocalDrawerLayout .isDrawerVisible(GravityCompat.END)) )
+            if((mGlobalDrawerLayout != null && mGlobalDrawerLayout.isDrawerVisible(GravityCompat.START)) ||
+                    (mLocalDrawerLayout != null && mLocalDrawerLayout.isDrawerVisible(GravityCompat.END)))
                 return true; // we will start pending command after drawers are closed.
             startPendingCommand();
             return true;
@@ -582,7 +581,9 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
     public float dp2px(float dp) {
         if(mDisplayMetrics == null)
             throw new IllegalStateException("display metrics not ready");
-        return dp * mDisplayMetrics.density; }
+        return dp * mDisplayMetrics.density;
+    }
+
     public float px2dp(float px) {
         if(mDisplayMetrics == null)
             throw new IllegalStateException("display metrics not ready");

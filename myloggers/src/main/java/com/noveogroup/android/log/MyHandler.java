@@ -1,6 +1,6 @@
 /**
  * Created by Marek Langiewicz on 24.06.15.
- *
+ * A log handler with features I need. Like log history, tags, etc..
  */
 
 package com.noveogroup.android.log;

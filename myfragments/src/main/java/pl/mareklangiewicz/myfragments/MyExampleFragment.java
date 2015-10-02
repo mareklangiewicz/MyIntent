@@ -32,7 +32,7 @@ public final class MyExampleFragment extends Fragment {
         Bundle args = getArguments();
         if(args != null) {
             StringBuilder text = new StringBuilder();
-            for(String key: args.keySet()) {
+            for(String key : args.keySet()) {
                 text.append(key);
                 text.append(": ");
                 text.append(str(args.get(key)));

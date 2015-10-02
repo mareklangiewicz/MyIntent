@@ -110,7 +110,7 @@
                 android:icon="@drawable/ic_whatshot_black_24dp"
                 android:title="@string/start_dialer_explicitly"
                 android:titleCondensed="cmd:activity com.google.android.dialer/com.android.dialer.DialtactsActivity"
-            />
+                />
             <item
                 android:id="@+id/action_start_example_activity"
                 android:icon="@drawable/ic_whatshot_black_24dp"

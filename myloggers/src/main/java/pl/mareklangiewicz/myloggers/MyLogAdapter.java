@@ -20,6 +20,7 @@ public final class MyLogAdapter extends RecyclerView.Adapter<MyLogAdapter.ViewHo
 
     private @Nullable MyLogger log;
     private @Nullable LogHistory history;
+
     public MyLogAdapter() {
         setLog(null);
         setHasStableIds(true);

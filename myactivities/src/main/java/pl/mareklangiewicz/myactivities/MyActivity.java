@@ -1,5 +1,6 @@
 package pl.mareklangiewicz.myactivities;
 
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -45,6 +46,7 @@ import static pl.mareklangiewicz.myutils.MyMathUtils.scale0d;
 import static pl.mareklangiewicz.myutils.MyTextUtils.str;
 // TODO LATER: use Leak Canary: https://github.com/square/leakcanary (check U+2020 example...)
 
+@SuppressLint("Registered")
 public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavigation.Listener, DrawerLayout.DrawerListener {
 
 
@@ -62,7 +64,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
     */
     private static final boolean V = true;
     private static final boolean VV = false;
-    private static final String DEFAULT_COMMAND_NAME = "activity";
+    private static final String DEFAULT_COMMAND_NAME = MyCommands.CMD_ACTIVITY;
     private static final String DEFAULT_INTENT_ACTION = Intent.ACTION_VIEW;
     protected final MyLivingDrawable mGlobalArrowDrawable = new MyArrowDrawable();
     protected final MyLivingDrawable mLocalArrowDrawable = new MyArrowDrawable();
@@ -315,7 +317,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
             map.put("start", start);
         }
 
-        if(start.equals("activity")) {
+        if(start.equals(MyCommands.CMD_ACTIVITY)) {
             if(component == null && action == null) {
                 action = DEFAULT_INTENT_ACTION;
                 map.put("action", action);
@@ -325,7 +327,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
                 map.put("component", component);
             }
         }
-        else if(map.get("start").equals("fragment")) {
+        else if(map.get("start").equals(MyCommands.CMD_FRAGMENT)) {
             if(component == null) {
                 log.e("Fragment component is null.");
                 return;
@@ -348,16 +350,16 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
     public void onCommand(@NonNull Map<String, String> command) {
 
         switch(command.get("start")) {
-            case "activity":
+            case MyCommands.CMD_ACTIVITY:
                 onCommandStartActivity(command);
                 break;
-            case "service":
+            case MyCommands.CMD_SERVICE:
                 onCommandStartService(command);
                 break;
-            case "broadcast":
+            case MyCommands.CMD_BROADCAST:
                 onCommandStartBroadcast(command);
                 break;
-            case "fragment":
+            case MyCommands.CMD_FRAGMENT:
                 onCommandStartFragment(command);
                 break;
             default:
@@ -422,6 +424,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
 
         updateLocalFragment(f);
 
+        @SuppressLint("CommitTransaction")
         FragmentTransaction ft = fm.beginTransaction().replace(R.id.ma_local_frame_layout, f, TAG_LOCAL_FRAGMENT);
         addAllSharedElementsToFragmentTransaction(findViewById(R.id.ma_local_frame_layout), ft);
         ft.commit();

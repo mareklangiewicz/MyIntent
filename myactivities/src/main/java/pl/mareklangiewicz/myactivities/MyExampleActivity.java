@@ -1,5 +1,6 @@
 package pl.mareklangiewicz.myactivities;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.view.MenuItem;
@@ -10,6 +11,7 @@ import pl.mareklangiewicz.myviews.IMyNavigation;
  * Created by Marek Langiewicz on 22.09.15.
  * Simple example activity using MyBlock stuff...
  */
+@SuppressLint("Registered")
 public class MyExampleActivity extends MyActivity {
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

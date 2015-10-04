@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/grp_sections"
+        android:checkableBehavior="single"
+        >
+        <item
+            android:id="@+id/mi_start"
+            android:icon="@drawable/ic_whatshot_black_24dp"
+            android:title="@string/mi_start"
+            android:titleCondensed="cmd:fragment .MIStartFragment"
+            />
+    </group>
+
+    <item
+        android:id="@+id/item_global_actions"
+        android:title="@string/mi_actions"
+        >
+        <menu>
+            <item
+                android:id="@+id/action_whats_up"
+                android:icon="@drawable/ic_chat_black_24dp"
+                android:title="@string/action_whats_up"
+                />
+            <item
+                android:id="@+id/action_start_dialer"
+                android:icon="@drawable/ic_whatshot_black_24dp"
+                android:title="@string/start_dialer"
+                android:titleCondensed="cmd:action android.intent.action.DIAL"
+                />
+            <item
+                android:id="@+id/action_set_timer_5"
+                android:icon="@drawable/ic_whatshot_black_24dp"
+                android:title="@string/set_timer_5"
+                android:titleCondensed="cmd:set timer 5"
+                />
+            <item
+                android:id="@+id/action_set_alarm_8_30"
+                android:icon="@drawable/ic_whatshot_black_24dp"
+                android:title="@string/set_alarm_8_30"
+                android:titleCondensed="cmd:set alarm 8 30"
+                />
+            <item
+                android:id="@+id/action_set_alarm_9_30_quickly"
+                android:icon="@drawable/ic_whatshot_black_24dp"
+                android:title="@string/set_alarm_9_30_quickly"
+                android:titleCondensed="cmd:set alarm 9 30 quickly"
+                />
+            <item
+                android:id="@+id/action_start_dialer_explicitly"
+                android:icon="@drawable/ic_whatshot_black_24dp"
+                android:title="@string/start_dialer_explicitly"
+                android:titleCondensed="cmd:activity com.google.android.dialer/com.android.dialer.DialtactsActivity"
+                />
+            <item
+                android:id="@+id/action_start_mytest_activity"
+                android:icon="@drawable/ic_whatshot_black_24dp"
+                android:title="TMP:MyTestActivity"
+                android:titleCondensed="cmd:activity pl.mareklangiewicz.myactivities.MyTestActivity"
+                />
+        </menu>
+    </item>
+</menu>

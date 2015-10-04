@@ -14,7 +14,7 @@
         -c, --color <color>     Which color version to use (black or white or all) [default: all]
         -s, --size <size>       Which size to use (number in dp units or 'all') [default: all]
         -i, --input <path>      Path where local copy of material-design-icons repo is located [default: /media/data/android_big/material-design-icons]
-        -o, --output <path>     Path of top android module directory where icons will be copied [default: /home/marek/code/android/MyBlocks/myres]
+        -o, --output <path>     Path of top android module directory where icons will be copied [default: /home/marek/code/android/MyIntent/myres]
         -h, --help              Show help screen.
         -v, --version           Show version.
 

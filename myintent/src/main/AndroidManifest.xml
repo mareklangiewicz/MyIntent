@@ -1,0 +1,29 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="pl.mareklangiewicz.myintent">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+
+    <!-- TODO SOMEDAY: automatic backup for user defined RE rules. (to synchronize between marshmallow devices)-->
+    
+    <application android:allowBackup="false"
+        android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher"
+        android:supportsRtl="false"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".MIActivity"
+            android:label="@string/title_mi_activity"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="pl.mareklangiewicz.myactivities.MyTestActivity"
+            android:label="TMP:MyTestActivity"
+            />
+    </application>
+
+</manifest>

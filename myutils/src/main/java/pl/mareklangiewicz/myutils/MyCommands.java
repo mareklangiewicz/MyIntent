@@ -94,6 +94,15 @@ public class MyCommands {
      */
     public static final String RE_EXTRA_ELEM_TYPE_AND_KEY = "(" + RE_EXTRA_TYPE + " " + RE_EXTRA_KEY + ")";
 
+    private static final String EX_HOUR = AlarmClock.EXTRA_HOUR;
+    private static final String EX_MINUTES = AlarmClock.EXTRA_MINUTES;
+    private static final String EX_MESSAGE = AlarmClock.EXTRA_MESSAGE;
+    private static final String EX_LENGTH = "android.intent.extra.alarm.LENGTH";
+    private static final String EX_SKIP_UI = AlarmClock.EXTRA_SKIP_UI;
+    private static final String ACT_SET_ALARM = AlarmClock.ACTION_SET_ALARM;
+    private static final String ACT_SET_TIMER = "android.intent.action.SET_TIMER";
+
+    @SuppressWarnings("ArraysAsListWithZeroOrOneArgument")
     static public final List<Pair<String, List<Pair<String, String>>>> RE_RULES = Arrays.asList(
 
             Pair.create(".+", Arrays.asList( // first rules for all nonempty commands
@@ -108,10 +117,10 @@ public class MyCommands {
                             Pair.create("^set alarm (\\d+)(?::| )(\\d+)", "set alarm extra hour $1 extra minutes $2"),
                             Pair.create("^set alarm (\\d+)", "set alarm extra hour $1"),
                             Pair.create("^set alarm", "action set alarm"),
-                            Pair.create("\\bextra hour (\\d+)\\b", "extra integer " + AlarmClock.EXTRA_HOUR + " $1"),
-                            Pair.create("\\bextra minutes (\\d+)\\b", "extra integer " + AlarmClock.EXTRA_MINUTES + " $1"),
-                            Pair.create("^action set alarm (.*) with message (.*?)$", "action set alarm $1 extra string " + AlarmClock.EXTRA_MESSAGE + " $2"),
-                            Pair.create("(.*) quickly$", "$1 extra boolean " + AlarmClock.EXTRA_SKIP_UI + " true")
+                            Pair.create("\\bextra hour (\\d+)\\b", "extra integer " + EX_HOUR + " $1"),
+                            Pair.create("\\bextra minutes (\\d+)\\b", "extra integer " + EX_MINUTES + " $1"),
+                            Pair.create("^action set alarm (.*) with message (.*?)$", "action set alarm $1 extra string " + EX_MESSAGE + " $2"),
+                            Pair.create("(.*) quickly$", "$1 extra boolean " + EX_SKIP_UI + " true")
                     )
             ),
 
@@ -120,9 +129,9 @@ public class MyCommands {
                             Pair.create("^set timer ((for)|(to)|(at))", "set timer"),
                             Pair.create("^set timer (\\d+)( seconds)?", "set timer extra length $1"),
                             Pair.create("^set timer", "action set timer"),
-                            Pair.create("\\bextra length (\\d+)\\b", "extra integer " + AlarmClock.EXTRA_LENGTH + " $1"),
-                            Pair.create("^action set timer (.*) with message (.*?)$", "action set timer $1 extra string " + AlarmClock.EXTRA_MESSAGE + " $2"),
-                            Pair.create("(.*) quickly$", "$1 extra boolean " + AlarmClock.EXTRA_SKIP_UI + " true")
+                            Pair.create("\\bextra length (\\d+)\\b", "extra integer " + EX_LENGTH + " $1"),
+                            Pair.create("^action set timer (.*) with message (.*?)$", "action set timer $1 extra string " + EX_MESSAGE + " $2"),
+                            Pair.create("(.*) quickly$", "$1 extra boolean " + EX_SKIP_UI + " true")
                     )
             ),
 
@@ -136,8 +145,8 @@ public class MyCommands {
             Pair.create(".+", Arrays.asList( // last rules for all nonempty commands:
                             Pair.create("\\baction view\\b", "action " + Intent.ACTION_VIEW),
                             Pair.create("\\baction send\\b", "action " + Intent.ACTION_SEND),
-                            Pair.create("\\baction set alarm\\b", "action " + AlarmClock.ACTION_SET_ALARM),
-                            Pair.create("\\baction set timer\\b", "action " + AlarmClock.ACTION_SET_TIMER)
+                            Pair.create("\\baction set alarm\\b", "action " + ACT_SET_ALARM),
+                            Pair.create("\\baction set timer\\b", "action " + ACT_SET_TIMER)
                     )
             )
 
@@ -162,6 +171,7 @@ public class MyCommands {
     public static String applyRERulesList(String command, List<Pair<String, String>> rules, MyLogger log) {
         String oldcommand;
         for(Pair<String, String> rule : rules) {
+            //noinspection UnusedAssignment
             oldcommand = command;
             String key = rule.first;
             String val = rule.second;

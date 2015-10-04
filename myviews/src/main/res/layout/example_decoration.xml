@@ -7,7 +7,7 @@
     android:background="@android:color/background_light"
     android:elevation="4dp"
     android:padding="4dp"
-    tools:ignore="UnusedAttribute"
+    tools:ignore="Overdraw,UnusedAttribute"
     >
 
     <FrameLayout

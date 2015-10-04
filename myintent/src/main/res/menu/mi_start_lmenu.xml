@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:id="@+id/group_log_level"
+        android:checkableBehavior="single"
+        >
+        <item
+            android:id="@+id/log_level_error"
+            android:icon="@drawable/ic_radio_button_black_24dp"
+            android:title="Log level: ERROR"
+            />
+        <item
+            android:id="@+id/log_level_warning"
+            android:icon="@drawable/ic_radio_button_black_24dp"
+            android:title="Log level: WARNING"
+            />
+        <item
+            android:id="@+id/log_level_info"
+            android:icon="@drawable/ic_radio_button_black_24dp"
+            android:title="Log level: INFO"
+            />
+        <item
+            android:id="@+id/log_level_debug"
+            android:icon="@drawable/ic_radio_button_black_24dp"
+            android:title="Log level: DEBUG"
+            />
+        <item
+            android:id="@+id/log_level_verbose"
+            android:icon="@drawable/ic_radio_button_black_24dp"
+            android:title="Log level: VERBOSE"
+            />
+    </group>
+    <item
+        android:id="@+id/item_global_actions"
+        android:title="@string/mi_actions"
+        >
+        <menu>
+            <item
+                android:id="@+id/log_some_assert"
+                android:title='log.a("some assert")'
+                />
+            <item
+                android:id="@+id/log_some_error"
+                android:title='log.e("some error")'
+                />
+            <item
+                android:id="@+id/log_some_warning"
+                android:title='log.w("some warning")'
+                />
+            <item
+                android:id="@+id/log_some_info"
+                android:title='log.i("some info")'
+                />
+            <item
+                android:id="@+id/log_some_debug"
+                android:title='log.d("some debug")'
+                />
+            <item
+                android:id="@+id/log_some_verbose"
+                android:title='log.v("some verbose")'
+                />
+        </menu>
+    </item>
+</menu>

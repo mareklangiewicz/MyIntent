@@ -3,4 +3,6 @@
     <string name="title_mi_activity">@string/app_name</string>
     <string name="mi_start">Start</string>
     <string name="mi_actions">Actions</string>
+    <string name="ask_for_intent">What\'s your intent?</string>
+    <string name="action_listen">Listen</string>
 </resources>

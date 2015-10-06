@@ -2,30 +2,41 @@ package pl.mareklangiewicz.myintent;
 
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.app.SearchManager;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.SearchRecentSuggestions;
+import android.speech.RecognizerIntent;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
+import android.support.v4.view.GravityCompat;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.List;
+
 import pl.mareklangiewicz.myactivities.MyActivity;
 import pl.mareklangiewicz.mydrawables.MyLivingDrawable;
 import pl.mareklangiewicz.mydrawables.MyMagicLinesDrawable;
 import pl.mareklangiewicz.myviews.IMyNavigation;
 
+import static pl.mareklangiewicz.myutils.MyTextUtils.str;
+
 /**
  * Created by Marek Langiewicz on 02.10.15.
  * My Intent main activity.
  */
-public class MIActivity extends MyActivity{
+public class MIActivity extends MyActivity {
 
+    private static final int SPEECH_REQUEST_CODE = 0;
+    private static boolean greeted = false;
     private @Nullable MyLivingDrawable mMyMagicLinesDrawable;
     private @Nullable View mMagicLinesView;
-    @SuppressWarnings("unused")
     private @Nullable ImageView mLogoImageView;
     private @Nullable TextView mLogoTextView;
     private @Nullable TextView mHomePageTextView;
@@ -36,12 +47,9 @@ public class MIActivity extends MyActivity{
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        log.i("TODO: hello, and where is help..");
-
         //noinspection ConstantConditions
         getGlobalNavigation().inflateMenu(R.menu.mi_menu);
         getGlobalNavigation().inflateHeader(R.layout.mi_header);
-
 
         //noinspection ConstantConditions
         mMyMagicLinesDrawable = new MyMagicLinesDrawable();
@@ -52,6 +60,20 @@ public class MIActivity extends MyActivity{
         mLogoImageView = (ImageView) getGlobalNavigation().getHeader().findViewById(R.id.image_logo);
         mLogoTextView = (TextView) getGlobalNavigation().getHeader().findViewById(R.id.text_logo);
         mHomePageTextView = (TextView) getGlobalNavigation().getHeader().findViewById(R.id.text_home_page);
+
+        //noinspection ConstantConditions
+        mLogoImageView.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                mMyPendingCommand = "listen";
+                if((mGlobalDrawerLayout != null && mGlobalDrawerLayout.isDrawerVisible(GravityCompat.START))) {
+                    mGlobalDrawerLayout.closeDrawers();
+                    // we will start pending command after drawer is closed.
+                }
+                else
+                    startPendingCommand();
+            }
+        });
+
         //noinspection ConstantConditions
         mHomePageTextView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
@@ -75,6 +97,130 @@ public class MIActivity extends MyActivity{
         if(savedInstanceState == null) {
             selectGlobalItem(R.id.mi_start);
         }
+    }
+
+    @Override public void onIntent(@Nullable Intent intent) {
+
+        super.onIntent(intent);
+
+        try {
+            if(intent == null)
+                log.d("null intent received - ignoring");
+            else if(Intent.ACTION_SEARCH.equals(intent.getAction()) || "com.google.android.gms.actions.SEARCH_ACTION".equals(intent.getAction()))
+                onSearchIntent(intent);
+            else if(intent.getAction().equals(Intent.ACTION_VIEW))
+                onUri(intent.getData());
+            else if(intent.getAction().equals(Intent.ACTION_MAIN)) {
+                if(!greeted) {
+                    log.i("TODO: hello, and where is help..");
+                    greeted = true;
+                }
+            }
+            else
+                log.e("Unknown intent received: %s", str(intent));
+        }
+        catch(RuntimeException e) {
+            log.e("Intent exception.", e);
+        }
+
+    }
+
+    private void intro() {
+
+    }
+
+
+    public void onUri(@Nullable Uri uri) {
+
+        if(uri == null) {
+            log.d("null uri received - ignoring");
+            return;
+        }
+
+        String command = uri.getFragment();
+
+        if(command == null) {
+            log.d("uri with empty fragment received - ignoring");
+            log.v("uri: %s", str(uri));
+            return;
+
+        }
+
+        boolean ok = onCommand(command);
+        if(!ok)
+            return;
+        SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, MISuggestionProvider.AUTHORITY, MISuggestionProvider.MODE);
+        suggestions.saveRecentQuery(command, null);
+    }
+
+
+    private void onSearchIntent(Intent intent) {
+
+        String command = intent.getStringExtra(SearchManager.QUERY);
+        boolean ok = onCommand(command);
+        if(!ok)
+            return;
+        SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, MISuggestionProvider.AUTHORITY, MISuggestionProvider.MODE);
+        suggestions.saveRecentQuery(command, null);
+    }
+
+    // TODO LATER: make option in settings for this:
+    // TODO LATER: move it to start fragment?
+    private void clearSearchSuggestions() {
+        SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, MISuggestionProvider.AUTHORITY, MISuggestionProvider.MODE);
+        suggestions.clearHistory();
+    }
+
+    void startSpeechRecognizer() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.ask_for_intent));
+        // Start the activity, the intent will be populated with the speech text
+        //TODO: check if it is available first..
+        startActivityForResult(intent, SPEECH_REQUEST_CODE);
+    }
+
+    // This callback is invoked when the Speech Recognizer returns.
+    // This is where we process the intent and extract the speech text from the intent.
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode,
+                                    Intent data) {
+        if(requestCode == SPEECH_REQUEST_CODE) {
+            if(resultCode == RESULT_OK) {
+                List<String> results = data.getStringArrayListExtra(
+                        RecognizerIntent.EXTRA_RESULTS);
+                String command = results.get(0);
+
+                //TODO real code: set fragment with command and enable super button there
+                boolean ok = onCommand(command);
+                if(ok) {
+                    SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, MISuggestionProvider.AUTHORITY, MISuggestionProvider.MODE);
+                    suggestions.saveRecentQuery(command, null);
+                }
+            }
+            else if(resultCode == RESULT_CANCELED) {
+                log.d("Voice recognition cancelled.");
+            }
+            else {
+                log.e("Voice recognition error. code: %d", resultCode); //TODO: better resultCode recognition
+            }
+        }
+        else
+            super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override public boolean onCommand(@Nullable String command) {
+
+        if(command == null) {
+            log.d("null command received - ignoring");
+            return false;
+        }
+        if(command.equals("listen")) {
+            startSpeechRecognizer();
+            return true;
+        }
+        return super.onCommand(command);
     }
 
     @Override protected void onDestroy() {

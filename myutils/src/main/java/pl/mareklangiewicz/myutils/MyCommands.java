@@ -106,7 +106,7 @@ public class MyCommands {
     static public final List<Pair<String, List<Pair<String, String>>>> RE_RULES = Arrays.asList(
 
             Pair.create(".+", Arrays.asList( // first rules for all nonempty commands
-                            Pair.create("(?:\\s|;)+", " ") // change semicolons to spaces (set it to only one in a row)
+                            Pair.create("(?:\\s|;|=)+", " ") // change ; and = to spaces (set it to only one in a row)
                     )
             ),
 
@@ -161,7 +161,7 @@ public class MyCommands {
         http://stackoverflow.com/questions/20176284/buildconfig-debug-always-false-when-building-library-projects-with-gradle
         http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Library-Publication
     */
-    private static final boolean V = /*true;*/ false;
+    private static final boolean V = true;
     private static final boolean VV = false;
     static boolean sUT = false; // FIXME LATER: this is temporary hack to detect unit tests.. remove it.
 
@@ -178,14 +178,14 @@ public class MyCommands {
             command = command.replaceAll(key, val);
             if(V) {
                 if(!command.equals(oldcommand)) {
-                    log.v("    rule matched:");
-                    log.d("            rule: \"%s\" -> \"%s\"", key, val);
-                    log.i("         command: \"%s\"", command);
+                    log.v("rule matched:");
+                    log.d("rule: %s -> %s", key, val);
+                    log.i("= cmd: %s", command);
                 }
                 else if(VV) {
                     log.v("rule NOT matched:");
-                    log.v("            rule: \"%s\" -> \"%s\"", key, val);
-                    log.v("         command: \"%s\"", command);
+                    log.v("rule: %s -> %s", key, val);
+                    log.v("= cmd: %s", command);
                 }
             }
         }
@@ -198,30 +198,30 @@ public class MyCommands {
     public static String applyRERulesLists(String command, List<Pair<String, List<Pair<String, String>>>> rules, MyLogger log) {
         if(V) {
             log.v("Applying all matching RE rules to:");
-            log.w("    >>>  command: \"%s\"", command);
+            log.w("> cmd: %s", command);
         }
         else
-            log.v("> cmd: \"%s\"", command);
+            log.v("> cmd: %s", command);
         for(Pair<String, List<Pair<String, String>>> category : rules) {
             String catkey = category.first;
             if(command.matches(catkey)) {
                 if(V) {
                     log.v("category matched:");
-                    log.d("        category: \"%s\"", catkey);
+                    log.d("category: %s", catkey);
                 }
                 command = applyRERulesList(command, category.second, log);
             }
             else if(VV) {
                 log.v("category NOT matched:");
-                log.v("            category: \"%s\"", catkey);
+                log.v("category: %s", catkey);
             }
         }
         if(V) {
             log.v("All matching RE rules applied. Result:");
-            log.w("    <<<  command: \"%s\"", command);
+            log.i("< cmd: %s", command);
         }
         else
-            log.v("< cmd: \"%s\"", command);
+            log.v("< cmd: %s", command);
         return command;
     }
 

@@ -1,5 +1,7 @@
 package pl.mareklangiewicz.myintent;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
@@ -7,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 
 import com.noveogroup.android.log.Logger;
 
@@ -14,24 +17,39 @@ import pl.mareklangiewicz.myfragments.MyFragment;
 import pl.mareklangiewicz.myloggers.MyLogRecyclerView;
 import pl.mareklangiewicz.myviews.IMyNavigation;
 
-public final class MIStartFragment extends MyFragment {
+public final class MILogFragment extends MyFragment {
 
+    private @Nullable SearchView mSearchView;
     private @Nullable MyLogRecyclerView mMLRView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.mi_start_fragment, container, false);
+
+        View rootView = inflater.inflate(R.layout.mi_log_fragment, container, false);
+
+        mSearchView = (SearchView) rootView.findViewById(R.id.search_view);
+
+        SearchManager manager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        //noinspection ConstantConditions
+        mSearchView.setSearchableInfo(manager.getSearchableInfo(getActivity().getComponentName()));
+        mSearchView.setSubmitButtonEnabled(true); // FIXME: probably not needed - remove when I implement my animated play button
+        mSearchView.setQueryRefinementEnabled(true); // TODO: test it
+
         mMLRView = (MyLogRecyclerView) rootView.findViewById(R.id.my_log_recycler_view);
         mMLRView.setLog(log);
+
         //TODO SOMEDAY: some nice simple header with fragment title
-        inflateMenu(R.menu.mi_start_lmenu);
+        inflateMenu(R.menu.mi_log_lmenu);
         updateCheckedItem();
+
         return rootView;
+
     }
 
     @Override
     public void onDestroyView() {
+        mSearchView = null;
         //noinspection ConstantConditions
         mMLRView.setLog(null);
         mMLRView = null;

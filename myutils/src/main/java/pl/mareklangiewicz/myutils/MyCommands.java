@@ -24,8 +24,7 @@ import java.util.regex.Pattern;
  * <p>
  * TODO LATER: generate and use compiled versions of regular expressions..
  */
-public class MyCommands {
-
+public final class MyCommands {
 
     public static final String CMD_ACTIVITY = "activity";
     public static final String CMD_SERVICE = "service";
@@ -51,14 +50,13 @@ public class MyCommands {
      */
     public static final String RE_KEYWORD = "((?:start)|(?:action)|(?:category)|(?:type)|(?:data)|(?:flags)|(?:package)|(?:component)|(?:scheme)|(?:bounds)|" +
             "(?:extra))";
-
-//    public static @NonNull <T> T valOrDef(@Nullable T val,@NonNull T def){ return MoreObjects.firstNonNull(val, def); }
-//    public static @NonNull <T> T mapOrNot(@NonNull T val, @NonNull Map<T, T> map) { return valOrDef(map.get(val), val); }
-
     /**
      * $1: value
      */
     public static final String RE_VALUE = "(.*?)";
+
+    //    public static @NonNull <T> T valOrDef(@Nullable T val,@NonNull T def){ return MoreObjects.firstNonNull(val, def); }
+//    public static @NonNull <T> T mapOrNot(@NonNull T val, @NonNull Map<T, T> map) { return valOrDef(map.get(val), val); }
     public static final String RE_END = "(?: |\\Z)";
     /**
      * $1: segment
@@ -93,6 +91,18 @@ public class MyCommands {
      * $6: extra key - last part - not important
      */
     public static final String RE_EXTRA_ELEM_TYPE_AND_KEY = "(" + RE_EXTRA_TYPE + " " + RE_EXTRA_KEY + ")";
+    static public final List<String> DEFAULT_EXAMPLE_COMMANDS = Arrays.asList(
+            "action view data http://mareklangiewicz.pl",
+            "action view data mareklangiewicz.pl",
+            "wake me up at 7",
+            "set alarm to 7:30",
+            "set an alarm at 8 30",
+            "set a timer for 300",
+            "set timer for 200 seconds",
+            "set timer for 200 seconds quickly",
+            "fragment .MIHelpFragment",
+            "listen"
+    ); //TODO: unit test with this whole list
 
     private static final String EX_HOUR = AlarmClock.EXTRA_HOUR;
     private static final String EX_MINUTES = AlarmClock.EXTRA_MINUTES;
@@ -110,9 +120,9 @@ public class MyCommands {
                     )
             ),
 
-            Pair.create("((wake me)|(set alarm)|(set an alarm)).*", Arrays.asList(
-                            Pair.create("^wake me up", "set alarm"),
-                            Pair.create("^set an alarm", "set alarm"),
+            Pair.create("((wake me)|(set( an | the | )alarm)).*", Arrays.asList(
+                            Pair.create("^wake me( up)?", "set alarm"),
+                            Pair.create("^set (an|the) alarm", "set alarm"),
                             Pair.create("^set alarm ((for)|(to)|(at))", "set alarm"),
                             Pair.create("^set alarm (\\d+)(?::| )(\\d+)", "set alarm extra hour $1 extra minutes $2"),
                             Pair.create("^set alarm (\\d+)", "set alarm extra hour $1"),
@@ -165,6 +175,10 @@ public class MyCommands {
     private static final boolean VV = false;
     static boolean sUT = false; // FIXME LATER: this is temporary hack to detect unit tests.. remove it.
 
+    private MyCommands() {
+        throw new AssertionError("MyCommands class is noninstantiable.");
+    }
+
     /**
      * WARNING: It's NOT optimized for memory usage AT ALL, so DON't USE IT TOO OFTEN..
      */
@@ -202,18 +216,18 @@ public class MyCommands {
         }
         else
             log.v("> cmd: %s", command);
-        for(Pair<String, List<Pair<String, String>>> category : rules) {
-            String catkey = category.first;
+        for(Pair<String, List<Pair<String, String>>> group : rules) {
+            String catkey = group.first;
             if(command.matches(catkey)) {
                 if(V) {
-                    log.v("category matched:");
-                    log.d("category: %s", catkey);
+                    log.v("group matched:");
+                    log.d("group: %s", catkey);
                 }
-                command = applyRERulesList(command, category.second, log);
+                command = applyRERulesList(command, group.second, log);
             }
             else if(VV) {
-                log.v("category NOT matched:");
-                log.v("category: %s", catkey);
+                log.v("group NOT matched:");
+                log.v("group: %s", catkey);
             }
         }
         if(V) {

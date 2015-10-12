@@ -24,8 +24,6 @@ public class MyTextUtilsTest {
 
     @Test
     public void testStr() throws Exception {
-        System.out.println(MyTextUtils.V);
-        System.out.println(MyTextUtils.VV);
         List<String> list = Arrays.asList("bla", "ble");
         System.out.println(MyTextUtils.str(list));
     }

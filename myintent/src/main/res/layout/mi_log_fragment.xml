@@ -29,8 +29,9 @@
             android:focusable="true"
             android:focusableInTouchMode="true"
             >
+
             <requestFocus/>
-            </TextView>
+        </TextView>
 
     </LinearLayout>
 

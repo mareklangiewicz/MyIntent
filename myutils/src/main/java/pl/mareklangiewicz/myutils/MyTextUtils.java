@@ -11,6 +11,10 @@ import android.view.View;
  */
 public final class MyTextUtils {
 
+    private MyTextUtils() {
+        throw new AssertionError("MyTextUtils class is noninstantiable.");
+    }
+
     /*
         private static final boolean V = BuildConfig.VERBOSE;
         private static final boolean VV = BuildConfig.VERY_VERBOSE;
@@ -44,7 +48,7 @@ public final class MyTextUtils {
     }
 
     static public @NonNull String toShortStr(int x) {
-        throw new UnsupportedOperationException(); //TODO SOMEDAY
+        return Integer.toString(x);
     }
     //TODO SOMEDAY: toShortStr for other primitive types..
 
@@ -53,7 +57,7 @@ public final class MyTextUtils {
     }
 
     static public @NonNull String toLongStr(int x) {
-        throw new UnsupportedOperationException(); //TODO SOMEDAY
+        return Integer.toString(x);
     }
     //TODO SOMEDAY: toLongStr for other primitive types..
 
@@ -74,7 +78,7 @@ public final class MyTextUtils {
     }
 
     static public @NonNull String toVeryLongStr(int x) {
-        throw new UnsupportedOperationException(); //TODO SOMEDAY
+        return Integer.toString(x);
     }
     //TODO SOMEDAY: toVeryLongStr for other primitive types..
 

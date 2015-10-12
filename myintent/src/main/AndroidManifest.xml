@@ -1,18 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="pl.mareklangiewicz.myintent">
+    package="pl.mareklangiewicz.myintent"
+    >
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
 
-    <!-- TODO SOMEDAY: automatic backup for user defined RE rules. (to synchronize between marshmallow devices)-->
-    
-    <application android:allowBackup="false"
-        android:label="@string/app_name"
+    <permission
+        android:name="pl.mareklangiewicz.myintent.permission.READ"
+        android:label="Read My Intent rules and commands"
+        />
+
+    <permission
+        android:name="pl.mareklangiewicz.myintent.permission.WRITE"
+        android:label="Read My Intent rules and commands"
+        />
+    <!-- TODO SOMEDAY: automatic backup for user defined RE rules. (to synchronize between marshmallow devices) -->
+    <application
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
         android:supportsRtl="false"
-        android:theme="@style/AppTheme">
-        <provider android:name=".MISuggestionProvider"
-            android:authorities="pl.mareklangiewicz.myintent.MISuggestionProvider" />
+        android:theme="@style/AppTheme"
+        >
         <activity
             android:name=".MIActivity"
             android:label="@string/title_mi_activity"
@@ -20,52 +30,79 @@
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH"/>
             </intent-filter>
-            <meta-data android:name="android.app.searchable"
-                android:resource="@xml/searchable"/>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable"
+                />
+
             <intent-filter>
                 <action android:name="com.google.android.gms.actions.SEARCH_ACTION"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
             <intent-filter android:priority="999">
-                <action android:name="android.intent.action.VIEW" />
-                <data
-                    android:scheme="mi"
-                    />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <action android:name="android.intent.action.VIEW"/>
+
+                <data android:scheme="mi"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
             </intent-filter>
             <intent-filter android:priority="999">
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW"/>
+
                 <data
-                    android:scheme="http"
                     android:host="mi"
                     android:path="/"
-                    />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-            </intent-filter>
-            <intent-filter android:priority="999">
-                <action android:name="android.intent.action.VIEW" />
-                <data
                     android:scheme="http"
+                    />
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+            </intent-filter>
+            <intent-filter
+                android:autoVerify="true"
+                android:priority="999"
+                >
+                <action android:name="android.intent.action.VIEW"/>
+
+                <data
                     android:host="mareklangiewicz.pl"
-                    android:path="/mi.html" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                    android:path="/mi.html"
+                    android:scheme="http"
+                    />
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
             </intent-filter>
         </activity>
-
 
         <!-- TODO SOMEDAY: remove MyTestActivity -->
         <activity
             android:name="pl.mareklangiewicz.myactivities.MyTestActivity"
             android:label="TMP:MyTestActivity"
             />
+
+        <provider
+            android:name=".MIContentProvider"
+            android:authorities="pl.mareklangiewicz.myintent.provider"
+            android:enabled="true"
+            android:exported="true"
+            android:readPermission="pl.mareklangiewicz.myintent.permission.READ"
+            android:writePermission="pl.mareklangiewicz.myintent.permission.WRITE"
+            >
+            <path-permission
+                android:pathPrefix="/cmd/search_suggest_query"
+                android:readPermission="android.permission.GLOBAL_SEARCH"
+                />
+        </provider>
     </application>
 
 </manifest>

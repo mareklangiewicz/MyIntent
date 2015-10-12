@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.SearchRecentSuggestions;
 import android.speech.RecognizerIntent;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
@@ -34,7 +33,7 @@ import static pl.mareklangiewicz.myutils.MyTextUtils.str;
 public class MIActivity extends MyActivity {
 
     private static final int SPEECH_REQUEST_CODE = 0;
-    private static boolean greeted = false;
+    private static boolean sGreeted = false;
     private @Nullable MyLivingDrawable mMyMagicLinesDrawable;
     private @Nullable View mMagicLinesView;
     private @Nullable ImageView mLogoImageView;
@@ -111,9 +110,9 @@ public class MIActivity extends MyActivity {
             else if(intent.getAction().equals(Intent.ACTION_VIEW))
                 onUri(intent.getData());
             else if(intent.getAction().equals(Intent.ACTION_MAIN)) {
-                if(!greeted) {
-                    log.i("TODO: hello, and where is help..");
-                    greeted = true;
+                if(!sGreeted) {
+                    intro();
+                    sGreeted = true;
                 }
             }
             else
@@ -126,7 +125,7 @@ public class MIActivity extends MyActivity {
     }
 
     private void intro() {
-
+        log.i("TODO: hello, and where is help..");
     }
 
 
@@ -149,8 +148,7 @@ public class MIActivity extends MyActivity {
         boolean ok = onCommand(command);
         if(!ok)
             return;
-        SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, MISuggestionProvider.AUTHORITY, MISuggestionProvider.MODE);
-        suggestions.saveRecentQuery(command, null);
+        MIContract.CmdRecent.insert(this, command);
     }
 
 
@@ -160,15 +158,13 @@ public class MIActivity extends MyActivity {
         boolean ok = onCommand(command);
         if(!ok)
             return;
-        SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, MISuggestionProvider.AUTHORITY, MISuggestionProvider.MODE);
-        suggestions.saveRecentQuery(command, null);
+        MIContract.CmdRecent.insert(this, command);
     }
 
-    // TODO LATER: make option in settings for this:
+    // TODO LATER: make option in local menu? for this.
     // TODO LATER: move it to start fragment?
-    private void clearSearchSuggestions() {
-        SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, MISuggestionProvider.AUTHORITY, MISuggestionProvider.MODE);
-        suggestions.clearHistory();
+    private void clearRecentCommands() {
+        MIContract.CmdRecent.clear(this);
     }
 
     void startSpeechRecognizer() {
@@ -195,8 +191,7 @@ public class MIActivity extends MyActivity {
                 //TODO real code: set fragment with command and enable super button there
                 boolean ok = onCommand(command);
                 if(ok) {
-                    SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, MISuggestionProvider.AUTHORITY, MISuggestionProvider.MODE);
-                    suggestions.saveRecentQuery(command, null);
+                    MIContract.CmdRecent.insert(this, command);
                 }
             }
             else if(resultCode == RESULT_CANCELED) {

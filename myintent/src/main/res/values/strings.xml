@@ -5,4 +5,5 @@
     <string name="mi_actions">Actions</string>
     <string name="ask_for_intent">What\'s your intent?</string>
     <string name="action_listen">Listen</string>
+    <string name="search_settings_description">Saved MyIntent commands.</string>
 </resources>

@@ -25,8 +25,10 @@ public final class MyExampleFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        super.onCreateView(inflater, container, savedInstanceState); //just for logging
+
         View root = inflater.inflate(R.layout.my_example_fragment, container, false);
         MyExampleView mev = (MyExampleView) root.findViewById(R.id.my_example_view);
         Bundle args = getArguments();

@@ -6,4 +6,7 @@
     <string name="ask_for_intent">What\'s your intent?</string>
     <string name="action_listen">Listen</string>
     <string name="search_settings_description">Saved MyIntent commands.</string>
+    <string name="user_agent_suffix">MyIntent/0.2</string>
+    <string name="mi_rules">Rules</string>
+    <string name="mi_help">Help</string>
 </resources>

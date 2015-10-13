@@ -3,6 +3,7 @@ package pl.mareklangiewicz.myintent;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.app.SearchManager;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -172,9 +173,23 @@ public class MIActivity extends MyActivity {
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.ask_for_intent));
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en_US"); //TODO SOMEDAY: remove this line so default user language is chosen.
+        intent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true); //TODO SOMEDAY: check if works online if language data is not downloaded
         // Start the activity, the intent will be populated with the speech text
-        //TODO: check if it is available first..
-        startActivityForResult(intent, SPEECH_REQUEST_CODE);
+        if(intent.resolveActivity(getPackageManager()) != null) {
+            try {
+                startActivityForResult(intent, SPEECH_REQUEST_CODE);
+            }
+            catch(ActivityNotFoundException e) {
+                log.e("Activity not found.", e);
+            }
+            catch(SecurityException e) {
+                log.e("Security exception.", e);
+            }
+        }
+        else {
+            log.e("No activity found for this intent: %s", str(intent));
+        }
     }
 
     // This callback is invoked when the Speech Recognizer returns.
@@ -184,8 +199,14 @@ public class MIActivity extends MyActivity {
                                     Intent data) {
         if(requestCode == SPEECH_REQUEST_CODE) {
             if(resultCode == RESULT_OK) {
-                List<String> results = data.getStringArrayListExtra(
-                        RecognizerIntent.EXTRA_RESULTS);
+                List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                float[] scores = data.getFloatArrayExtra(RecognizerIntent.EXTRA_CONFIDENCE_SCORES);
+                log.v("Voice recognition results:"); //TODO LATER: remove this whole results logging
+                for(int i = 0; i < results.size(); ++i) {
+                    String result = results.get(i);
+                    float score = scores == null ? -1 : scores[i];
+                    log.v("   %f:%s", score, result);
+                }
                 String command = results.get(0);
 
                 //TODO real code: set fragment with command and enable super button there
@@ -197,8 +218,23 @@ public class MIActivity extends MyActivity {
             else if(resultCode == RESULT_CANCELED) {
                 log.d("Voice recognition cancelled.");
             }
+            else if(resultCode == RecognizerIntent.RESULT_AUDIO_ERROR) {
+                log.e("Voice recognition: audio error.");
+            }
+            else if(resultCode == RecognizerIntent.RESULT_CLIENT_ERROR) {
+                log.e("Voice recognition: generic client error.");
+            }
+            else if(resultCode == RecognizerIntent.RESULT_NETWORK_ERROR) {
+                log.e("Voice recognition: network error.");
+            }
+            else if(resultCode == RecognizerIntent.RESULT_NO_MATCH) {
+                log.e("Voice recognition: no match.");
+            }
+            else if(resultCode == RecognizerIntent.RESULT_SERVER_ERROR) {
+                log.e("Voice recognition: server error.");
+            }
             else {
-                log.e("Voice recognition error. code: %d", resultCode); //TODO: better resultCode recognition
+                log.e("Voice recognition: error code: %d", resultCode);
             }
         }
         else

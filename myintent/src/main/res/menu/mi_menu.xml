@@ -11,6 +11,18 @@
             android:title="@string/mi_start"
             android:titleCondensed="cmd:fragment .MILogFragment"
             />
+        <item
+            android:id="@+id/mi_rules"
+            android:icon="@drawable/ic_whatshot_black_24dp"
+            android:title="@string/mi_rules"
+            android:titleCondensed="cmd:fragment .MIRulesFragment"
+            />
+        <item
+            android:id="@+id/mi_help"
+            android:icon="@drawable/ic_whatshot_black_24dp"
+            android:title="@string/mi_help"
+            android:titleCondensed="cmd:fragment .MIHelpFragment"
+            />
     </group>
 
     <item

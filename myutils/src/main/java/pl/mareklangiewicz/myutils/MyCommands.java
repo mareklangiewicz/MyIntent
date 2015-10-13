@@ -102,7 +102,7 @@ public final class MyCommands {
             "set timer for 200 seconds quickly",
             "fragment .MIHelpFragment",
             "listen"
-    ); //TODO: unit test with this whole list
+    );
 
     private static final String EX_HOUR = AlarmClock.EXTRA_HOUR;
     private static final String EX_MINUTES = AlarmClock.EXTRA_MINUTES;

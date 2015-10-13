@@ -33,6 +33,8 @@ public class MyStupidTestsFragment extends MyFragment implements DrawerLayout.Dr
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        super.onCreateView(inflater, container, savedInstanceState); //just for logging
+
         View root = inflater.inflate(R.layout.my_stupid_tests_fragment, container, false);
 
         mWarningCardView = (CardView) root.findViewById(R.id.stupid_warning);

@@ -59,6 +59,8 @@ public final class MyDrawableTestsFragment extends MyFragment implements View.On
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        super.onCreateView(inflater, container, savedInstanceState); //just for logging
+
         View root = inflater.inflate(R.layout.my_dawable_tests_fragment, container, false);
 
         mLevelSeekBar = (SeekBar) root.findViewById(R.id.seek_bar_level);

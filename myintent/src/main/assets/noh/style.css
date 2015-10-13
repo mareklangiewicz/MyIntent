@@ -1,0 +1,98 @@
+/* [ vim: set tabstop=2 shiftwidth=2 expandtab : ] */
+
+
+.smooth *           { transition: all 0.6s; }
+.smooth.fast *      { transition: all 0.3s; }
+.smooth.slow *      { transition: all   1s; }
+.smooth.very_slow * { transition: all   2s; }
+.smooth.very_lazy * { transition: all   6s ease-in-out; }
+.smooth.immediate * { transition: all   0s; }
+
+.noh.sleepy.asleep { opacity: 0; }
+.noh.sleepy.awake  { opacity: 1; }
+
+
+.noh.visible   { opacity: 1; }
+.noh.hidden    { opacity: 0; }
+
+.noh.element.selected  { z-index:  2; }
+.noh.element.visible   { z-index:  1; }
+.noh.element.hidden    { z-index: -1; }
+
+.noh.blind         { position: relative }
+.noh.blind.content { position: absolute }
+
+.noh.oneof         { position: relative }
+
+.noh.details.button { font-size: x-small; }
+
+.noh.reel         { position: relative; }
+.noh.reel.element { position: absolute; }
+
+.fancy .noh.reel.element:not(.selected) { opacity: 0.5; }
+.fancy .noh.reel.element.hidden         { opacity: 0.1; left: -10px; }
+.fancy .noh.reel.element.visible        {               left:   0px; }
+
+.noh.link { color: blue; text-decoration: underline; cursor: pointer; }
+
+
+.noh.log {font-size: small; white-space: nowrap; }
+
+.noh.log .info     { color: black; }
+.noh.log .warning  { color: maroon; }
+.noh.log .error    { color: red;   }
+
+.noh.log.pretty { text-shadow: rgba(64, 64, 64, 0.5) 3px 2px 2px; }
+
+
+.noh.overlay { 
+  position: fixed;
+  z-index: 10;
+}
+
+.noh.overlay > * {
+  position: relative;
+  padding: 10px;
+  margin: 10px;
+  display: block;
+}
+
+.noh.overlay > .pretty {
+  background-color: white;
+  border: outset 2px rgb(100,100,240);
+  border-radius: 4px;
+  opacity: 0.9;
+  box-shadow: rgba(64, 64, 64, 0.5) 6px 4px 20px;
+}
+
+.noh.overlay.left   { left:   10px; }
+.noh.overlay.right  { right:  10px; }
+.noh.overlay.top    { top:    10px; }
+.noh.overlay.bottom { bottom: 10px; }
+
+
+input.noh.cmdline       { border: none; border-bottom: 1px solid gray; font-family: monospace; font-size: small; color: blue; padding: 2px; outline: none; }
+input.noh.cmdline:hover { border: none; border-bottom: 1px solid #33B5E5; }
+
+div.noh.cmdline { padding: 4px; }
+
+
+.noh.stest { margin: 30px; padding: 30px; border: double; }
+
+
+body {
+  font-family: "Verdana";
+  font-size: 12pt;
+}
+
+h1.fancy, h2.fancy, h3.fancy, h4.fancy {
+  text-shadow: rgba(64, 64, 64, 0.5) 4px 3px 2px;
+  transition: all 0.4s;
+}
+
+h1.fancy:hover, h2.fancy:hover, h3.fancy:hover, h4.fancy:hover {
+  text-shadow: rgba(64, 64, 64, 0.5) 8px 6px 4px;
+}
+
+
+

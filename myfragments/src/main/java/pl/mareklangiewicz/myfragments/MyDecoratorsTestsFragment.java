@@ -19,6 +19,9 @@ public final class MyDecoratorsTestsFragment extends MyFragment {
     }
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        super.onCreateView(inflater, container, savedInstanceState); //just for logging
+
         inflateHeader(R.layout.my_basic_header);
         setHasOptionsMenu(true);
         return inflater.inflate(R.layout.my_decorators_tests_fragment, container, false);

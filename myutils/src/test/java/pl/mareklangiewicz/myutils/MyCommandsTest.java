@@ -14,7 +14,6 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.IllegalFormatCodePointException;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -218,19 +217,23 @@ public class MyCommandsTest {
 
     @Test
     public void testRE_RULES() throws Exception {
-        log.i(str(MyCommands.RE_RULES.get(0).first));
-        log.i(str(MyCommands.RE_RULES.get(0).second));
+        log.i(str(MyCommands.RE_RULES.get(0)));
+        log.i(str(MyCommands.RE_RULES.get(1)));
+        log.i(str(MyCommands.RE_RULES.get(2)));
+        log.i(str(MyCommands.RE_RULES.get(3)));
+        log.i(str(MyCommands.RE_RULES.get(4)));
+        log.i(str(MyCommands.RE_RULES.get(5)));
     }
 
 
-    public void testApplyRERulesLists(String input, String expected) {
-        String command = MyCommands.applyRERulesLists(input, MyCommands.RE_RULES, log);
+    public void testREGroupApplyAll(String input, String expected) {
+        String command = MyCommands.REGroup.applyAll(MyCommands.RE_RULES, input, log);
         EXPECT.that(command).isEqualTo(expected);
     }
 
-    public void testApplyRERulesLists(List<String> inputs, String expected) {
+    public void multiTestREGroupApplyAll(List<String> inputs, String expected) {
         for(String input: inputs)
-            testApplyRERulesLists(input, expected);
+            testREGroupApplyAll(input, expected);
     }
 
 
@@ -246,7 +249,7 @@ public class MyCommandsTest {
                 "set;an;alarm;to;1;0"
         );
 
-        testApplyRERulesLists(commands, expected);
+        multiTestREGroupApplyAll(commands, expected);
 
 
         expected = "action android.intent.action.SET_ALARM extra integer android.intent.extra.alarm.HOUR 2 extra integer android.intent.extra.alarm.MINUTES 59 extra boolean android.intent.extra.alarm.SKIP_UI true";
@@ -256,7 +259,7 @@ public class MyCommandsTest {
                 "set;an;alarm;to;2;59;quickly"
         );
 
-        testApplyRERulesLists(commands, expected);
+        multiTestREGroupApplyAll(commands, expected);
 
         expected = "action android.intent.action.SET_ALARM extra integer android.intent.extra.alarm.HOUR 2 extra integer android.intent.extra.alarm.MINUTES 59 extra string android.intent.extra.alarm.MESSAGE bla blee";
         commands = Arrays.asList(
@@ -265,7 +268,7 @@ public class MyCommandsTest {
                 "set;an;alarm;to;2;59; with;message;bla;blee"
         );
 
-        testApplyRERulesLists(commands, expected);
+        multiTestREGroupApplyAll(commands, expected);
 
     }
 
@@ -279,19 +282,19 @@ public class MyCommandsTest {
                 "set timer to 30 seconds"
         );
 
-        testApplyRERulesLists(commands, expected);
+        multiTestREGroupApplyAll(commands, expected);
 
     }
 
     @Test
     public void testActivityRules() throws Exception {
 
-        testApplyRERulesLists("start activity component MyActivity", "start activity component MyActivity");
-        testApplyRERulesLists("start activity MyActivity", "start activity MyActivity"); //WARNING: we do NOT recognize this kind of shortcut!
-        testApplyRERulesLists("activity component MyActivity", "start activity component MyActivity");
-        testApplyRERulesLists("activity MyActivity", "start activity component MyActivity");
-        testApplyRERulesLists("activity bla action view", "start activity component bla action android.intent.action.VIEW");
-        testApplyRERulesLists("activity action view", "start activity action android.intent.action.VIEW");
+        testREGroupApplyAll("start activity component MyActivity", "start activity component MyActivity");
+        testREGroupApplyAll("start activity MyActivity", "start activity MyActivity"); //WARNING: we do NOT recognize this kind of shortcut!
+        testREGroupApplyAll("activity component MyActivity", "start activity component MyActivity");
+        testREGroupApplyAll("activity MyActivity", "start activity component MyActivity");
+        testREGroupApplyAll("activity bla action view", "start activity component bla action android.intent.action.VIEW");
+        testREGroupApplyAll("activity action view", "start activity action android.intent.action.VIEW");
 
     }
 
@@ -299,11 +302,11 @@ public class MyCommandsTest {
     @Test
     public void testFragmentRules() throws Exception {
 
-        testApplyRERulesLists("start fragment component a.b.c.MyXFragment", "start fragment component a.b.c.MyXFragment");
-        testApplyRERulesLists("fragment component a.b.c.MyXFragment", "start fragment component a.b.c.MyXFragment");
-        testApplyRERulesLists("fragment a.b.c.MyXFragment", "start fragment component a.b.c.MyXFragment");
-        testApplyRERulesLists("fragment bla action view", "start fragment component bla action android.intent.action.VIEW");
-        testApplyRERulesLists("fragment action view", "start fragment action android.intent.action.VIEW");
+        testREGroupApplyAll("start fragment component a.b.c.MyXFragment", "start fragment component a.b.c.MyXFragment");
+        testREGroupApplyAll("fragment component a.b.c.MyXFragment", "start fragment component a.b.c.MyXFragment");
+        testREGroupApplyAll("fragment a.b.c.MyXFragment", "start fragment component a.b.c.MyXFragment");
+        testREGroupApplyAll("fragment bla action view", "start fragment component bla action android.intent.action.VIEW");
+        testREGroupApplyAll("fragment action view", "start fragment action android.intent.action.VIEW");
 
     }
 

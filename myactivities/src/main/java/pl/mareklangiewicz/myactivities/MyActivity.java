@@ -322,7 +322,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
             return false;
         }
 
-        command = MyCommands.applyRERulesLists(command, MyCommands.RE_RULES, log);
+        command = MyCommands.REGroup.applyAll(MyCommands.RE_RULES, command, log);
 
         Map<String, String> map = new HashMap<>(20);
 

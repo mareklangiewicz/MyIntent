@@ -211,7 +211,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, M
         if(VV)
             log.v("%s.%s inflater=%s container=%s state=%s", this.getClass().getSimpleName(), "onCreateView", str(inflater), str(container), str
                     (savedInstanceState));
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return null;
     }
 
     @CallSuper

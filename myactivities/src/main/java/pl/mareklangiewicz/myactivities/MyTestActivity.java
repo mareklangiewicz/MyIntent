@@ -41,7 +41,7 @@ public final class MyTestActivity extends pl.mareklangiewicz.myactivities.MyActi
         mMyMagicLinesDrawable.setColor(0x30ffffff).setStrokeWidth(dp2px(4));
         underline.setBackground(mMyMagicLinesDrawable);
 
-        View homepage = getGlobalNavigation().getHeader().findViewById(R.id.my_home_page_text_view);
+        View homepage = getGlobalNavigation().getHeader().findViewById(R.id.text_home_page);
 
         PropertyValuesHolder pvha = PropertyValuesHolder.ofFloat(View.ALPHA, 0f, 0f, 1f);
         PropertyValuesHolder pvhy = PropertyValuesHolder.ofFloat(View.TRANSLATION_Y, -50f, -50f, 0f);

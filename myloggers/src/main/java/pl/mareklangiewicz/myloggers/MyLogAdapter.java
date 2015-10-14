@@ -72,10 +72,11 @@ public final class MyLogAdapter extends RecyclerView.Adapter<MyLogAdapter.ViewHo
         }
 */
 
-        message = String.format("%tT: %s", time, message);
+//        message = String.format("%tT: %s", time, message);
+        message = String.format("%s", message);
 
         holder.mCardView.setCardElevation(elevation);
-        holder.mHeadView.setText(String.format("%03d %c", nr, MyLogger.getLevelChar(level)));
+        holder.mHeadView.setText(String.format("%02d%c", nr, MyLogger.getLevelChar(level)));
 
         holder.mMessageView.setTextColor(color);
         holder.mMessageView.setText(message);

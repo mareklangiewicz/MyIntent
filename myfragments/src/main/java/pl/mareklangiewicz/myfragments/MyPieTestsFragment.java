@@ -31,6 +31,9 @@ public final class MyPieTestsFragment extends MyFragment implements View.OnClick
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        super.onCreateView(inflater, container, savedInstanceState); //just for logging
+
         View root = inflater.inflate(R.layout.my_pie_tests_fragment, container, false);
 
         inflateHeader(R.layout.my_pie_tests_header);

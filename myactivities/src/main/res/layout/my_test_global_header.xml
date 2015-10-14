@@ -8,7 +8,7 @@
     >
 
     <TextView
-        android:id="@+id/my_home_page_text_view"
+        android:id="@+id/text_home_page"
         style="@style/TextAppearance.AppCompat.Subhead"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

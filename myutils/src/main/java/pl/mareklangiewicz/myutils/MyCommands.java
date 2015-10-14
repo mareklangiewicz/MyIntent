@@ -6,10 +6,11 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.AlarmClock;
-import android.support.v4.util.Pair;
+import android.support.annotation.NonNull;
 
 import com.noveogroup.android.log.MyLogger;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -24,8 +25,7 @@ import java.util.regex.Pattern;
  * <p>
  * TODO LATER: generate and use compiled versions of regular expressions..
  */
-public class MyCommands {
-
+public final class MyCommands {
 
     public static final String CMD_ACTIVITY = "activity";
     public static final String CMD_SERVICE = "service";
@@ -51,14 +51,13 @@ public class MyCommands {
      */
     public static final String RE_KEYWORD = "((?:start)|(?:action)|(?:category)|(?:type)|(?:data)|(?:flags)|(?:package)|(?:component)|(?:scheme)|(?:bounds)|" +
             "(?:extra))";
-
-//    public static @NonNull <T> T valOrDef(@Nullable T val,@NonNull T def){ return MoreObjects.firstNonNull(val, def); }
-//    public static @NonNull <T> T mapOrNot(@NonNull T val, @NonNull Map<T, T> map) { return valOrDef(map.get(val), val); }
-
     /**
      * $1: value
      */
     public static final String RE_VALUE = "(.*?)";
+
+    //    public static @NonNull <T> T valOrDef(@Nullable T val,@NonNull T def){ return MoreObjects.firstNonNull(val, def); }
+//    public static @NonNull <T> T mapOrNot(@NonNull T val, @NonNull Map<T, T> map) { return valOrDef(map.get(val), val); }
     public static final String RE_END = "(?: |\\Z)";
     /**
      * $1: segment
@@ -93,6 +92,18 @@ public class MyCommands {
      * $6: extra key - last part - not important
      */
     public static final String RE_EXTRA_ELEM_TYPE_AND_KEY = "(" + RE_EXTRA_TYPE + " " + RE_EXTRA_KEY + ")";
+    static public final List<String> DEFAULT_EXAMPLE_COMMANDS = Arrays.asList(
+            "action view data http://mareklangiewicz.pl",
+            "action view data mareklangiewicz.pl",
+            "wake me up at 7",
+            "set alarm to 7:30",
+            "set an alarm at 8 30",
+            "set a timer for 300",
+            "set timer for 200 seconds",
+            "set timer for 200 seconds quickly",
+            "fragment .MIHelpFragment",
+            "listen"
+    );
 
     private static final String EX_HOUR = AlarmClock.EXTRA_HOUR;
     private static final String EX_MINUTES = AlarmClock.EXTRA_MINUTES;
@@ -101,53 +112,48 @@ public class MyCommands {
     private static final String EX_SKIP_UI = AlarmClock.EXTRA_SKIP_UI;
     private static final String ACT_SET_ALARM = AlarmClock.ACTION_SET_ALARM;
     private static final String ACT_SET_TIMER = "android.intent.action.SET_TIMER";
+    static public final List<REGroup> RE_RULES = Arrays.asList(
 
-    @SuppressWarnings("ArraysAsListWithZeroOrOneArgument")
-    static public final List<Pair<String, List<Pair<String, String>>>> RE_RULES = Arrays.asList(
-
-            Pair.create(".+", Arrays.asList( // first rules for all nonempty commands
-                            Pair.create("(?:\\s|;)+", " ") // change semicolons to spaces (set it to only one in a row)
-                    )
+            new REGroup("initial", "^.+",
+                    new RERule("(?:\\s|;|=)+", " ") // change ; and = to spaces (set it to only one in a row)
             ),
 
-            Pair.create("((wake me)|(set alarm)|(set an alarm)).*", Arrays.asList(
-                            Pair.create("^wake me up", "set alarm"),
-                            Pair.create("^set an alarm", "set alarm"),
-                            Pair.create("^set alarm ((for)|(to)|(at))", "set alarm"),
-                            Pair.create("^set alarm (\\d+)(?::| )(\\d+)", "set alarm extra hour $1 extra minutes $2"),
-                            Pair.create("^set alarm (\\d+)", "set alarm extra hour $1"),
-                            Pair.create("^set alarm", "action set alarm"),
-                            Pair.create("\\bextra hour (\\d+)\\b", "extra integer " + EX_HOUR + " $1"),
-                            Pair.create("\\bextra minutes (\\d+)\\b", "extra integer " + EX_MINUTES + " $1"),
-                            Pair.create("^action set alarm (.*) with message (.*?)$", "action set alarm $1 extra string " + EX_MESSAGE + " $2"),
-                            Pair.create("(.*) quickly$", "$1 extra boolean " + EX_SKIP_UI + " true")
-                    )
+            new REGroup("user", "^.+"),
+
+            new REGroup("alarm", "^((wake me)|(set( an | the | )alarm))",
+                    new RERule("^wake me( up)?", "set alarm"),
+                    new RERule("^set (an|the) alarm", "set alarm"),
+                    new RERule("^set alarm ((for)|(to)|(at))", "set alarm"),
+                    new RERule("^set alarm (\\d+)(?::| )(\\d+)", "set alarm extra hour $1 extra minutes $2"),
+                    new RERule("^set alarm (\\d+)", "set alarm extra hour $1"),
+                    new RERule("^set alarm", "action set alarm"),
+                    new RERule("\\bextra hour (\\d+)\\b", "extra integer " + EX_HOUR + " $1"),
+                    new RERule("\\bextra minutes (\\d+)\\b", "extra integer " + EX_MINUTES + " $1"),
+                    new RERule("^action set alarm (.*) with message (.*?)$", "action set alarm $1 extra string " + EX_MESSAGE + " $2"),
+                    new RERule("(.*) quickly$", "$1 extra boolean " + EX_SKIP_UI + " true")
             ),
 
-            Pair.create("((set timer)|(set a timer)).*", Arrays.asList(
-                            Pair.create("^set a timer", "set timer"),
-                            Pair.create("^set timer ((for)|(to)|(at))", "set timer"),
-                            Pair.create("^set timer (\\d+)( seconds)?", "set timer extra length $1"),
-                            Pair.create("^set timer", "action set timer"),
-                            Pair.create("\\bextra length (\\d+)\\b", "extra integer " + EX_LENGTH + " $1"),
-                            Pair.create("^action set timer (.*) with message (.*?)$", "action set timer $1 extra string " + EX_MESSAGE + " $2"),
-                            Pair.create("(.*) quickly$", "$1 extra boolean " + EX_SKIP_UI + " true")
-                    )
+            new REGroup("timer", "^((set timer)|(set a timer))",
+                    new RERule("^set a timer", "set timer"),
+                    new RERule("^set timer ((for)|(to)|(at))", "set timer"),
+                    new RERule("^set timer (\\d+)( seconds)?", "set timer extra length $1"),
+                    new RERule("^set timer", "action set timer"),
+                    new RERule("\\bextra length (\\d+)\\b", "extra integer " + EX_LENGTH + " $1"),
+                    new RERule("^action set timer (.*) with message (.*?)$", "action set timer $1 extra string " + EX_MESSAGE + " $2"),
+                    new RERule("(.*) quickly$", "$1 extra boolean " + EX_SKIP_UI + " true")
             ),
 
-            Pair.create("((activity)|(fragment)).*", Arrays.asList(
-                            Pair.create("^((?:activity)|(?:fragment)) " + RE_KEYWORD, "start $1 $2"), //no keyword can be activity or fragment class name..
-                            Pair.create("^((?:activity)|(?:fragment)) " + RE_MULTI_ID, "start $1 component $2"),
-                            Pair.create("^((?:activity)|(?:fragment)) ", "start $1 ")
-                    )
+            new REGroup("activity/fragment", "^((activity)|(fragment))",
+                    new RERule("^((?:activity)|(?:fragment)) " + RE_KEYWORD, "start $1 $2"), //no keyword can be activity or fragment class name..
+                    new RERule("^((?:activity)|(?:fragment)) " + RE_MULTI_ID, "start $1 component $2"),
+                    new RERule("^((?:activity)|(?:fragment)) ", "start $1 ")
             ),
 
-            Pair.create(".+", Arrays.asList( // last rules for all nonempty commands:
-                            Pair.create("\\baction view\\b", "action " + Intent.ACTION_VIEW),
-                            Pair.create("\\baction send\\b", "action " + Intent.ACTION_SEND),
-                            Pair.create("\\baction set alarm\\b", "action " + ACT_SET_ALARM),
-                            Pair.create("\\baction set timer\\b", "action " + ACT_SET_TIMER)
-                    )
+            new REGroup("ending", "^.+", // last rules for all nonempty commands:
+                    new RERule("\\baction view\\b", "action " + Intent.ACTION_VIEW),
+                    new RERule("\\baction send\\b", "action " + Intent.ACTION_SEND),
+                    new RERule("\\baction set alarm\\b", "action " + ACT_SET_ALARM),
+                    new RERule("\\baction set timer\\b", "action " + ACT_SET_TIMER)
             )
 
     );
@@ -161,68 +167,11 @@ public class MyCommands {
         http://stackoverflow.com/questions/20176284/buildconfig-debug-always-false-when-building-library-projects-with-gradle
         http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Library-Publication
     */
-    private static final boolean V = /*true;*/ false;
+    private static final boolean V = true;
     private static final boolean VV = false;
     static boolean sUT = false; // FIXME LATER: this is temporary hack to detect unit tests.. remove it.
-
-    /**
-     * WARNING: It's NOT optimized for memory usage AT ALL, so DON't USE IT TOO OFTEN..
-     */
-    public static String applyRERulesList(String command, List<Pair<String, String>> rules, MyLogger log) {
-        String oldcommand;
-        for(Pair<String, String> rule : rules) {
-            //noinspection UnusedAssignment
-            oldcommand = command;
-            String key = rule.first;
-            String val = rule.second;
-            command = command.replaceAll(key, val);
-            if(V) {
-                if(!command.equals(oldcommand)) {
-                    log.v("    rule matched:");
-                    log.d("            rule: \"%s\" -> \"%s\"", key, val);
-                    log.i("         command: \"%s\"", command);
-                }
-                else if(VV) {
-                    log.v("rule NOT matched:");
-                    log.v("            rule: \"%s\" -> \"%s\"", key, val);
-                    log.v("         command: \"%s\"", command);
-                }
-            }
-        }
-        return command;
-    }
-
-    /**
-     * WARNING: It's NOT optimized for memory usage AT ALL, so DON'T USE IT TOO OFTEN..
-     */
-    public static String applyRERulesLists(String command, List<Pair<String, List<Pair<String, String>>>> rules, MyLogger log) {
-        if(V) {
-            log.v("Applying all matching RE rules to:");
-            log.w("    >>>  command: \"%s\"", command);
-        }
-        else
-            log.v("> cmd: \"%s\"", command);
-        for(Pair<String, List<Pair<String, String>>> category : rules) {
-            String catkey = category.first;
-            if(command.matches(catkey)) {
-                if(V) {
-                    log.v("category matched:");
-                    log.d("        category: \"%s\"", catkey);
-                }
-                command = applyRERulesList(command, category.second, log);
-            }
-            else if(VV) {
-                log.v("category NOT matched:");
-                log.v("            category: \"%s\"", catkey);
-            }
-        }
-        if(V) {
-            log.v("All matching RE rules applied. Result:");
-            log.w("    <<<  command: \"%s\"", command);
-        }
-        else
-            log.v("< cmd: \"%s\"", command);
-        return command;
+    private MyCommands() {
+        throw new AssertionError("MyCommands class is noninstantiable.");
     }
 
     static public void parseCommand(String in, Map<String, String> out) {
@@ -441,6 +390,157 @@ public class MyCommands {
                 break;
             default:
                 throw new IllegalArgumentException("Illegal extra segment type: " + type);
+        }
+    }
+
+    static public final class RERule {
+
+        private String mMatch;
+        private Pattern mPattern;
+        private String mReplace;
+
+        public RERule(@NonNull String match, @NonNull String replace) {
+            setMatch(match);
+            setReplace(replace);
+        }
+
+        static public @NonNull String applyAll(@NonNull Iterable<RERule> rules, @NonNull String cmd, @NonNull MyLogger log) {
+            for(RERule rule : rules) {
+                cmd = rule.apply(cmd, log);
+            }
+            return cmd;
+        }
+
+        public @NonNull String getMatch() { return mMatch; }
+
+        public void setMatch(@NonNull String match) {
+            mMatch = match;
+            mPattern = Pattern.compile(match);
+        }
+
+        public @NonNull String getReplace() { return mReplace; }
+
+        public void setReplace(@NonNull String replace) { mReplace = replace; }
+
+        @Override public String toString() {
+            return mMatch + " -> " + mReplace;
+        }
+
+        /**
+         * Checks if the rule matches ANYWHERE in given command
+         */
+        public boolean matches(@NonNull String cmd) {
+            return mPattern.matcher(cmd).find(0);
+        }
+
+        /**
+         * Applying a rule means matching and replacing ALL occurrences of re mMatch with mReplace
+         */
+        public @NonNull String apply(@NonNull String cmd, @NonNull MyLogger log) {
+
+            Matcher matcher = mPattern.matcher(cmd);
+
+            if(matcher.find(0)) {
+                cmd = matcher.replaceAll(mReplace);
+                if(V) {
+                    log.v("rule matched:");
+                    log.d("rule: %s", toString());
+                    log.i("= cmd: %s", cmd);
+                }
+                return cmd;
+            }
+            else {
+                if(VV) {
+                    log.v("rule NOT matched:");
+                    log.v("rule: %s", toString());
+                    log.v("= cmd: %s", cmd);
+                }
+                return cmd;
+            }
+        }
+    }
+
+    static public final class REGroup {
+
+        private String mName;
+        private String mMatch;
+        private Pattern mPattern;
+        private List<RERule> mRules;
+
+        public REGroup(@NonNull String name, @NonNull String match, RERule... rules) {
+            setName(name);
+            setMatch(match);
+            mRules = new ArrayList<>(rules.length);
+            mRules.addAll(Arrays.asList(rules));
+        }
+
+        static public @NonNull String applyAll(@NonNull Iterable<REGroup> groups, @NonNull String cmd, @NonNull MyLogger log) {
+
+            if(V) {
+                log.v("Applying all matching RE rules to:");
+                log.w("> cmd: %s", cmd);
+            }
+            else
+                log.v("> cmd: %s", cmd);
+
+            for(REGroup group : groups) {
+                cmd = group.apply(cmd, log);
+            }
+
+            if(V) {
+                log.v("All matching RE rules applied. Result:");
+                log.i("< cmd: %s", cmd);
+            }
+            else
+                log.v("< cmd: %s", cmd);
+
+            return cmd;
+        }
+
+        public @NonNull String getName() { return mName; }
+
+        public void setName(@NonNull String name) { mName = name; }
+
+        public @NonNull String getMatch() { return mMatch; }
+
+        public void setMatch(@NonNull String match) {
+            mMatch = match;
+            mPattern = Pattern.compile(match);
+        }
+
+        public @NonNull List<RERule> getRules() { return mRules; }
+
+        @Override public String toString() {
+            return mName + ": " + mMatch;
+        }
+
+        /**
+         * Checks if the group match field matches ANYWHERE in given command
+         */
+        public boolean matches(@NonNull String cmd) {
+            return mPattern.matcher(cmd).find(0);
+        }
+
+        /**
+         * It first check if the group match field matches ANYWHERE in given command, and if it does:
+         * It applies all rules in this group one by one in order to given command.
+         * Otherwise it just returns given command.
+         */
+        public @NonNull String apply(@NonNull String cmd, MyLogger log) {
+
+            if(!matches(cmd)) {
+                if(VV) {
+                    log.v("group NOT matched:");
+                    log.v("group: %s", toString());
+                }
+                return cmd;
+            }
+
+            if(V) {
+                log.v("group matched:");
+                log.d("group: %s", toString());
+            }
+            return RERule.applyAll(getRules(), cmd, log);
         }
     }
 }

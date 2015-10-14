@@ -218,6 +218,22 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         // ensure that drawers and menu icons are updated:
         onNavigationContentChanged(getGlobalNavigation());
         onNavigationContentChanged(getLocalNavigation());
+        onIntent(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent); // update saved intent in case we need to call getIntent() later..
+        onIntent(intent);
+    }
+
+
+    @CallSuper
+    public void onIntent(@Nullable Intent intent) {
+        if(VV) {
+            log.v("%s.%s: %s", this.getClass().getSimpleName(), "onIntent", str(intent));
+        }
     }
 
 
@@ -297,14 +313,26 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
      * Override it if you want to manage commands by yourself
      *
      * @param command A command to perform
+     * @return If command was executed successfully
      */
-    public void onCommand(@NonNull String command) {
+    public boolean onCommand(@Nullable String command) {
 
-        command = MyCommands.applyRERulesLists(command, MyCommands.RE_RULES, log);
+        if(command == null) {
+            log.d("null command received - ignoring");
+            return false;
+        }
+
+        command = MyCommands.REGroup.applyAll(MyCommands.RE_RULES, command, log);
 
         Map<String, String> map = new HashMap<>(20);
 
-        MyCommands.parseCommand(command, map);
+        try {
+            MyCommands.parseCommand(command, map);
+        }
+        catch(RuntimeException e) {
+            log.e(e, "Illegal command: %s", command);
+            return false;
+        }
 
         String start = map.get("start");
         String component = map.get("component");
@@ -330,7 +358,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         else if(map.get("start").equals(MyCommands.CMD_FRAGMENT)) {
             if(component == null) {
                 log.e("Fragment component is null.");
-                return;
+                return false;
             }
             if(component.startsWith(".")) {
                 component = pkg + component;
@@ -339,35 +367,33 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
 
         }
 
-        onCommand(map);
+        return onCommand(map);
     }
 
     /**
      * Override it if you want to manage all (parsed) commands by yourself
      *
      * @param command A parsed command
+     * @return If command was executed successfully
      */
-    public void onCommand(@NonNull Map<String, String> command) {
+    public boolean onCommand(@NonNull Map<String, String> command) {
 
         switch(command.get("start")) {
             case MyCommands.CMD_ACTIVITY:
-                onCommandStartActivity(command);
-                break;
+                return onCommandStartActivity(command);
             case MyCommands.CMD_SERVICE:
-                onCommandStartService(command);
-                break;
+                return onCommandStartService(command);
             case MyCommands.CMD_BROADCAST:
-                onCommandStartBroadcast(command);
-                break;
+                return onCommandStartBroadcast(command);
             case MyCommands.CMD_FRAGMENT:
-                onCommandStartFragment(command);
-                break;
+                return onCommandStartFragment(command);
             default:
                 log.e("Unsupported command: %s", str(command));
+                return false;
         }
     }
 
-    public void onCommandStartActivity(@NonNull Map<String, String> command) {
+    public boolean onCommandStartActivity(@NonNull Map<String, String> command) {
 
         Intent intent = new Intent();
 
@@ -379,36 +405,45 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
             }
             catch(ActivityNotFoundException e) {
                 log.e("Activity not found.", e);
+                return false;
             }
             catch(SecurityException e) {
                 log.e("Security exception.", e);
+                return false;
             }
         }
-        else
+        else {
             log.e("No activity found for this intent: %s", str(intent));
+            return false;
+        }
+        return true;
     }
 
-    public void onCommandStartService(@NonNull Map<String, String> command) {
+    public boolean onCommandStartService(@NonNull Map<String, String> command) {
 
         Intent intent = new Intent();
 
         MyCommands.setIntentFromCommand(intent, command, log);
 
-        if(startService(intent) == null)
+        if(startService(intent) == null) {
             log.e("Service not found for this intent: %s", str(intent));
+            return false;
+        }
+        return true;
     }
 
-    public void onCommandStartBroadcast(@NonNull Map<String, String> command) {
+    public boolean onCommandStartBroadcast(@NonNull Map<String, String> command) {
 
         Intent intent = new Intent();
         MyCommands.setIntentFromCommand(intent, command, log);
         sendBroadcast(intent);
+        return true;
     }
 
     /**
      * Extras in fragment command are delivered as fragment arguments bundle.
      */
-    public void onCommandStartFragment(@NonNull Map<String, String> command) {
+    public boolean onCommandStartFragment(@NonNull Map<String, String> command) {
 
         FragmentManager fm = getFragmentManager();
         Fragment f;
@@ -429,6 +464,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         addAllSharedElementsToFragmentTransaction(findViewById(R.id.ma_local_frame_layout), ft);
         ft.commit();
 
+        return true;
     }
 
     /**

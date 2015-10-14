@@ -16,9 +16,11 @@ import java.util.Random;
  */
 public final class MyMathUtils {
 
-    static public final Random RANDOM = new Random();
+    private MyMathUtils() {
+        throw new AssertionError("MyMathUtils class is noninstantiable.");
+    }
 
-    private MyMathUtils() {}
+    static public final Random RANDOM = new Random();
 
 
     static public int scale0d(int old, int oldMax, int newMax) {

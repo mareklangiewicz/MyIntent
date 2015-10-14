@@ -24,6 +24,8 @@ public final class MyBasicTestsFragment extends MyFragment {
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        super.onCreateView(inflater, container, savedInstanceState); //just for logging
+
         inflateHeader(R.layout.my_basic_header);
 
         View root = inflater.inflate(R.layout.my_basic_tests_fragment, container, false);

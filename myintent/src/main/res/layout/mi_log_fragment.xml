@@ -16,22 +16,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:focusable="false"
             android:iconifiedByDefault="false"
             android:padding="8dp"
             />
 
-        <!-- FIXME: This text view will be changed to our play button -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="P"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            >
-
-            <requestFocus/>
-        </TextView>
+        <!-- TODO: animated play button -->
 
     </LinearLayout>
 

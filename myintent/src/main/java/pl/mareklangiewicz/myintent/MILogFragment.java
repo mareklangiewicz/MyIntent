@@ -26,6 +26,8 @@ public final class MILogFragment extends MyFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        super.onCreateView(inflater, container, savedInstanceState); //just for logging
+
         View rootView = inflater.inflate(R.layout.mi_log_fragment, container, false);
 
         mSearchView = (SearchView) rootView.findViewById(R.id.search_view);

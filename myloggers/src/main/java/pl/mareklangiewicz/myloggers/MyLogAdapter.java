@@ -93,7 +93,7 @@ public final class MyLogAdapter extends RecyclerView.Adapter<MyLogAdapter.ViewHo
         if(history != null) {
             return history.getFilteredId(position);
         }
-        return super.getItemId(position);
+        return RecyclerView.NO_ID;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

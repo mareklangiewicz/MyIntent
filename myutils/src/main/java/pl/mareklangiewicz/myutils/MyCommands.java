@@ -423,7 +423,7 @@ public final class MyCommands {
         public void setReplace(@NonNull String replace) { mReplace = replace; }
 
         @Override public String toString() {
-            return mMatch + " -> " + mReplace;
+            return "\"" + mMatch + "\" -> \"" + mReplace + "\"";
         }
 
         /**
@@ -511,7 +511,7 @@ public final class MyCommands {
         public @NonNull List<RERule> getRules() { return mRules; }
 
         @Override public String toString() {
-            return mName + ": " + mMatch;
+            return mName + ": \"" + mMatch + "\"";
         }
 
         /**

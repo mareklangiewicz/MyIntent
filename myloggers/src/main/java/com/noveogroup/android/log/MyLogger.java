@@ -81,12 +81,20 @@ public final class MyLogger extends AbstractLogger {
         mHandler.setSnackView(snackView);
     }
 
+    public @Nullable View getSnackView() {
+        return mHandler.getSnackView();
+    }
+
     /**
      * WARNING: remember to set it back to null if the view is not used anymore - to avoid memory leaks
      * WARNING: use MyLogger from UI thread only - if you want to use this feature.
      */
     public void setInvalidateView(@Nullable View invalidateView) {
         mHandler.setInvalidateView(invalidateView);
+    }
+
+    public @Nullable View getInvalidateView() {
+        return mHandler.getInvalidateView();
     }
 
     /**

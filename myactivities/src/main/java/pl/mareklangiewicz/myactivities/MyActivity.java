@@ -238,11 +238,17 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
 
 
     @Override protected void onResume() {
+        if(VV) {
+            log.v("%s.%s", this.getClass().getSimpleName(), "onResume");
+        }
         super.onResume();
         log.setSnackView(mCoordinatorLayout);
     }
 
     @Override protected void onPause() {
+        if(VV) {
+            log.v("%s.%s", this.getClass().getSimpleName(), "onPause");
+        }
         log.setSnackView(null);
         super.onPause();
     }
@@ -296,14 +302,10 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
             mMyLocalFragment = (MyFragment) fragment;
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if(fragment.getSharedElementEnterTransition() == null)
-                fragment.setSharedElementEnterTransition(new AutoTransition());
-            if(fragment.getEnterTransition() == null)
-                fragment.setEnterTransition(new Fade());
-            if(fragment.getSharedElementReturnTransition() == null)
-                fragment.setSharedElementReturnTransition(new AutoTransition());
-            if(fragment.getExitTransition() == null)
-                fragment.setExitTransition(new Fade());
+            fragment.setEnterTransition(new Fade());
+            fragment.setExitTransition(new Fade());
+            fragment.setSharedElementEnterTransition(new AutoTransition());
+            fragment.setSharedElementReturnTransition(new AutoTransition());
         }
 
     }

@@ -53,6 +53,10 @@ public final class MyHandler extends PatternHandler {
         mSnackView = snackView;
     }
 
+    public @Nullable View getSnackView() {
+        return mSnackView;
+    }
+
     /**
      * WARNING: remember to set it back to null if the view is not used anymore - to avoid memory leaks
      * WARNING: use MyHandler from UI thread only - if you want to use this feature.
@@ -61,6 +65,9 @@ public final class MyHandler extends PatternHandler {
         mInvalidateView = invalidateView;
     }
 
+    public @Nullable View getInvalidateView() {
+        return mInvalidateView;
+    }
     /**
      * WARNING: remember to set it back to null if the adapter is not used anymore - to avoid memory leaks
      * WARNING: use MyHandler from UI thread only - if you want to use this feature.

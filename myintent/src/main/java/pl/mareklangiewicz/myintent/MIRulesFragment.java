@@ -29,8 +29,11 @@ public class MIRulesFragment extends MyFragment {
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.mi_rules_recycler_view);
 
+        mRecyclerView.setHasFixedSize(true);
+
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
 
+        //noinspection ConstantConditions
         mRecyclerView.setLayoutManager(manager);
 
         mRecyclerView.setAdapter(mAdapter);
@@ -42,6 +45,8 @@ public class MIRulesFragment extends MyFragment {
 
     @Override
     public void onDestroyView() {
+        //noinspection ConstantConditions
+        mRecyclerView.setAdapter(null);
         mRecyclerView = null;
         super.onDestroyView();
     }

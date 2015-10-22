@@ -2,8 +2,8 @@ package pl.mareklangiewicz.myintent;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,8 +49,8 @@ public class RERulesAdapter extends RecyclerView.Adapter<RERulesAdapter.ViewHold
         if(mRules == null)
             throw new IllegalStateException();
         MyCommands.RERule rule = mRules.get(position);
-        holder.mRuleMatchView.setText(rule.getMatch());
-        holder.mRuleReplaceView.setText(rule.getReplace());
+        holder.mRuleNameView.setText(Html.fromHtml("<b>rule:</b> " + rule.getName()));
+        holder.mRuleContentView.setText("match: \"" + rule.getMatch() + "\"\nreplace: \"" + rule.getReplace() + "\"");
     }
 
     @Override
@@ -58,14 +58,30 @@ public class RERulesAdapter extends RecyclerView.Adapter<RERulesAdapter.ViewHold
         return mRules == null ? 0 : mRules.size();
     }
 
+    public void move(int pos1, int pos2) {
+        if(mRules == null)
+            throw new IllegalStateException("Rules not set");
+        MyCommands.RERule rule = mRules.remove(pos1);
+        mRules.add(pos2, rule);
+        notifyItemMoved(pos1, pos2);
+    }
+
+    public void remove(int pos) {
+        if(mRules == null)
+            throw new IllegalStateException("Rules not set");
+        mRules.remove(pos);
+        notifyItemRemoved(pos);
+
+    }
+
     static class ViewHolder extends RecyclerView.ViewHolder {
-        public @NonNull TextView mRuleMatchView;
-        public @NonNull TextView mRuleReplaceView;
+        public @NonNull TextView mRuleNameView;
+        public @NonNull TextView mRuleContentView;
 
         public ViewHolder(View v) {
             super(v);
-            mRuleMatchView = (TextView) v.findViewById(R.id.rule_match_view);
-            mRuleReplaceView = (TextView) v.findViewById(R.id.rule_replace_view);
+            mRuleNameView = (TextView) v.findViewById(R.id.rule_name_view);
+            mRuleContentView = (TextView) v.findViewById(R.id.rule_content_view);
         }
 
     }

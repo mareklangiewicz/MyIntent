@@ -114,46 +114,60 @@ public final class MyCommands {
     private static final String ACT_SET_TIMER = "android.intent.action.SET_TIMER";
     static public final List<REGroup> RE_RULES = Arrays.asList(
 
-            new REGroup("initial", "^.+",
-                    new RERule("(?:\\s|;|=)+", " ") // change ; and = to spaces (set it to only one in a row)
+            new REGroup(
+                    "initial",
+                    "First group that unifies separators.\n" +
+                            "All semicolons, equal signs, whitespaces are changed to single spaces.\n" +
+                            "This is useful if command comes from URL. So you can use semicolons as spaces.",
+                    "^.+",
+                    new RERule("unify separators", "", "(?:\\s|;|=)+", " ")
             ),
 
-            new REGroup("user", "^.+"),
-
-            new REGroup("alarm", "^((wake me)|(set( an | the | )alarm))",
-                    new RERule("^wake me( up)?", "set alarm"),
-                    new RERule("^set (an|the) alarm", "set alarm"),
-                    new RERule("^set alarm ((for)|(to)|(at))", "set alarm"),
-                    new RERule("^set alarm (\\d+)(?::| )(\\d+)", "set alarm extra hour $1 extra minutes $2"),
-                    new RERule("^set alarm (\\d+)", "set alarm extra hour $1"),
-                    new RERule("^set alarm", "action set alarm"),
-                    new RERule("\\bextra hour (\\d+)\\b", "extra integer " + EX_HOUR + " $1"),
-                    new RERule("\\bextra minutes (\\d+)\\b", "extra integer " + EX_MINUTES + " $1"),
-                    new RERule("^action set alarm (.*) with message (.*?)$", "action set alarm $1 extra string " + EX_MESSAGE + " $2"),
-                    new RERule("(.*) quickly$", "$1 extra boolean " + EX_SKIP_UI + " true")
+            new REGroup("user", "User rules. This group can be modified by user.", "^.+",
+                    new RERule("user rule 1", "", "bla", "ble"), //FIXME: create some smart example nonintrusive user rules
+                    new RERule("user rule 2", "", "xxx", "yyy"),
+                    new RERule("user rule 3", "", "dog", "cat")
             ),
 
-            new REGroup("timer", "^((set timer)|(set a timer))",
-                    new RERule("^set a timer", "set timer"),
-                    new RERule("^set timer ((for)|(to)|(at))", "set timer"),
-                    new RERule("^set timer (\\d+)( seconds)?", "set timer extra length $1"),
-                    new RERule("^set timer", "action set timer"),
-                    new RERule("\\bextra length (\\d+)\\b", "extra integer " + EX_LENGTH + " $1"),
-                    new RERule("^action set timer (.*) with message (.*?)$", "action set timer $1 extra string " + EX_MESSAGE + " $2"),
-                    new RERule("(.*) quickly$", "$1 extra boolean " + EX_SKIP_UI + " true")
+            new REGroup("alarm", "Alarm related shortcut rules.", "^((wake me)|(set( an | the | )alarm))",
+                    new RERule("", "", "^wake me( up)?", "set alarm"),
+                    new RERule("", "", "^set (an|the) alarm", "set alarm"),
+                    new RERule("", "", "^set alarm ((for)|(to)|(at))", "set alarm"),
+                    new RERule("", "", "^set alarm (\\d+)(?::| )(\\d+)", "set alarm extra hour $1 extra minutes $2"),
+                    new RERule("", "", "^set alarm (\\d+)", "set alarm extra hour $1"),
+                    new RERule("", "", "^set alarm", "action set alarm"),
+                    new RERule("", "", "\\bextra hour (\\d+)\\b", "extra integer hour $1"),
+                    new RERule("", "", "\\bextra minutes (\\d+)\\b", "extra integer minutes $1"),
+                    new RERule("", "", "^action set alarm (.*) with message (.*?)$", "action set alarm $1 extra string message $2"),
+                    new RERule("", "", "(.*) quickly$", "$1 extra boolean quickly true")
             ),
 
-            new REGroup("activity/fragment", "^((activity)|(fragment))",
-                    new RERule("^((?:activity)|(?:fragment)) " + RE_KEYWORD, "start $1 $2"), //no keyword can be activity or fragment class name..
-                    new RERule("^((?:activity)|(?:fragment)) " + RE_MULTI_ID, "start $1 component $2"),
-                    new RERule("^((?:activity)|(?:fragment)) ", "start $1 ")
+            new REGroup("timer", "Timer related shortcut rules.", "^((set timer)|(set a timer))",
+                    new RERule("", "", "^set a timer", "set timer"),
+                    new RERule("", "", "^set timer ((for)|(to)|(at))", "set timer"),
+                    new RERule("", "", "^set timer (\\d+)( seconds)?", "set timer extra length $1"),
+                    new RERule("", "", "^set timer", "action set timer"),
+                    new RERule("", "", "\\bextra length (\\d+)\\b", "extra integer length $1"),
+                    new RERule("", "", "^action set timer (.*) with message (.*?)$", "action set timer $1 extra string message $2"),
+                    new RERule("", "", "(.*) quickly$", "$1 extra boolean quickly true")
             ),
 
-            new REGroup("ending", "^.+", // last rules for all nonempty commands:
-                    new RERule("\\baction view\\b", "action " + Intent.ACTION_VIEW),
-                    new RERule("\\baction send\\b", "action " + Intent.ACTION_SEND),
-                    new RERule("\\baction set alarm\\b", "action " + ACT_SET_ALARM),
-                    new RERule("\\baction set timer\\b", "action " + ACT_SET_TIMER)
+            new REGroup("activity/fragment", "Activity and fragment related shortcut rules.", "^((activity)|(fragment))",
+                    new RERule("", "", "^((?:activity)|(?:fragment)) " + RE_KEYWORD, "start $1 $2"), //no keyword can be activity or fragment class name..
+                    new RERule("", "", "^((?:activity)|(?:fragment)) " + RE_MULTI_ID, "start $1 component $2"),
+                    new RERule("", "", "^((?:activity)|(?:fragment)) ", "start $1 ")
+            ),
+
+            new REGroup("final", "Final rules for all nonempty commands. These replace short action names to full ones, etc..", "^.+",
+                    new RERule("", "", "\\baction view\\b", "action " + Intent.ACTION_VIEW),
+                    new RERule("", "", "\\baction send\\b", "action " + Intent.ACTION_SEND),
+                    new RERule("", "", "\\baction set alarm\\b", "action " + ACT_SET_ALARM),
+                    new RERule("", "", "\\baction set timer\\b", "action " + ACT_SET_TIMER),
+                    new RERule("", "", "\\bextra integer hour\\b", "extra integer " + EX_HOUR),
+                    new RERule("", "", "\\bextra integer minutes\\b", "extra integer " + EX_MINUTES),
+                    new RERule("", "", "\\bextra string message\\b", "extra string " + EX_MESSAGE),
+                    new RERule("", "", "\\bextra integer length\\b", "extra integer " + EX_LENGTH),
+                    new RERule("", "", "\\bextra boolean quickly\\b", "extra boolean " + EX_SKIP_UI)
             )
 
     );
@@ -395,11 +409,15 @@ public final class MyCommands {
 
     static public final class RERule {
 
+        private String mName;
+        private String mDescription;
         private String mMatch;
         private Pattern mPattern;
         private String mReplace;
 
-        public RERule(@NonNull String match, @NonNull String replace) {
+        public RERule(@NonNull String name, @NonNull String description, @NonNull String match, @NonNull String replace) {
+            setName(name);
+            setDescription(description);
             setMatch(match);
             setReplace(replace);
         }
@@ -410,6 +428,14 @@ public final class MyCommands {
             }
             return cmd;
         }
+
+        public @NonNull String getName() { return mName; }
+
+        public void setName(@NonNull String name) { mName = name; }
+
+        public @NonNull String getDescription() { return mDescription; }
+
+        public void setDescription(@NonNull String description) { mDescription = description; }
 
         public @NonNull String getMatch() { return mMatch; }
 
@@ -423,7 +449,7 @@ public final class MyCommands {
         public void setReplace(@NonNull String replace) { mReplace = replace; }
 
         @Override public String toString() {
-            return "\"" + mMatch + "\" -> \"" + mReplace + "\"";
+            return mName + ": \"" + mMatch + "\" -> \"" + mReplace + "\"";
         }
 
         /**
@@ -444,7 +470,7 @@ public final class MyCommands {
                 cmd = matcher.replaceAll(mReplace);
                 if(V) {
                     log.v("rule matched:");
-                    log.d("rule: %s", toString());
+                    log.d("rule %s", toString());
                     log.i("= cmd: %s", cmd);
                 }
                 return cmd;
@@ -452,7 +478,7 @@ public final class MyCommands {
             else {
                 if(VV) {
                     log.v("rule NOT matched:");
-                    log.v("rule: %s", toString());
+                    log.v("rule %s", toString());
                     log.v("= cmd: %s", cmd);
                 }
                 return cmd;
@@ -463,12 +489,14 @@ public final class MyCommands {
     static public final class REGroup {
 
         private String mName;
+        private String mDescription;
         private String mMatch;
         private Pattern mPattern;
         private List<RERule> mRules;
 
-        public REGroup(@NonNull String name, @NonNull String match, RERule... rules) {
+        public REGroup(@NonNull String name, @NonNull String description, @NonNull String match, RERule... rules) {
             setName(name);
+            setDescription(description);
             setMatch(match);
             mRules = new ArrayList<>(rules.length);
             mRules.addAll(Arrays.asList(rules));
@@ -501,6 +529,10 @@ public final class MyCommands {
 
         public void setName(@NonNull String name) { mName = name; }
 
+        public @NonNull String getDescription() { return mDescription; }
+
+        public void setDescription(@NonNull String description) { mDescription = description; }
+
         public @NonNull String getMatch() { return mMatch; }
 
         public void setMatch(@NonNull String match) {
@@ -531,14 +563,14 @@ public final class MyCommands {
             if(!matches(cmd)) {
                 if(VV) {
                     log.v("group NOT matched:");
-                    log.v("group: %s", toString());
+                    log.v("group %s", toString());
                 }
                 return cmd;
             }
 
             if(V) {
                 log.v("group matched:");
-                log.d("group: %s", toString());
+                log.d("group %s", toString());
             }
             return RERule.applyAll(getRules(), cmd, log);
         }

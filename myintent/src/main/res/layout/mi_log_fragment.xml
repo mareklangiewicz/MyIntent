@@ -25,11 +25,12 @@
 
     </LinearLayout>
 
-    <pl.mareklangiewicz.myloggers.MyLogRecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+    <pl.mareklangiewicz.myloggers.MyLogRecyclerView
         android:id="@+id/my_log_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         />
+
 
 </LinearLayout>

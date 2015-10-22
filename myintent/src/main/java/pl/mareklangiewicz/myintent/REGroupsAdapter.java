@@ -5,6 +5,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,15 +47,23 @@ public class REGroupsAdapter extends RecyclerView.Adapter<REGroupsAdapter.ViewHo
         return new ViewHolder(v);
     }
 
+    @Override public void onViewRecycled(ViewHolder holder) {
+        holder.resetRulesRecyclerView();
+    }
+
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         if(mGroups == null)
             throw new IllegalStateException();
+
         MyCommands.REGroup group = mGroups.get(position);
-        String name = group.getName();
-//        holder.mGroupCardView.setCardElevation(name.equals("user") ? 4 : 2); //TODO: test and change or delete this line
-        holder.mGroupHeaderView.setText(group.toString());
-        ((RERulesAdapter)holder.mRulesRecyclerView.getAdapter()).setRules(group.getRules());
+
+        holder.mGroupHeaderView.setText(Html.fromHtml("<b>group:</b> " + group.toString()));
+
+        holder.resetRulesRecyclerView();
+
+        holder.setupRulesRecyclerView(group.getRules());
+
     }
 
     @Override
@@ -61,20 +71,52 @@ public class REGroupsAdapter extends RecyclerView.Adapter<REGroupsAdapter.ViewHo
         return mGroups == null ? 0 : mGroups.size();
     }
 
+
+
+
+
     static class ViewHolder extends RecyclerView.ViewHolder {
+
+
         public @NonNull CardView mGroupCardView;
         public @NonNull TextView mGroupHeaderView;
         public @NonNull RecyclerView mRulesRecyclerView;
+
+        @Nullable ItemTouchHelper mItemTouchHelper;
 
         public ViewHolder(View v) {
             super(v);
             mGroupCardView = (CardView) v.findViewById(R.id.group_card_view);
             mGroupHeaderView = (TextView) v.findViewById(R.id.group_header_view);
             mRulesRecyclerView = (RecyclerView) v.findViewById(R.id.group_rules_view);
-            LinearLayoutManager manager = new LinearLayoutManager(v.getContext());
+        }
+
+
+        void resetRulesRecyclerView() {
+            if(mItemTouchHelper != null) {
+                mItemTouchHelper.attachToRecyclerView(null);
+                mItemTouchHelper = null;
+            }
+            mRulesRecyclerView.setAdapter(null);
+            mRulesRecyclerView.setLayoutManager(null);
+        }
+
+
+        void setupRulesRecyclerView(List<MyCommands.RERule> rules) {
+
+            resetRulesRecyclerView();
+
+//            LinearLayoutManager manager = new LinearLayoutManager(mRulesRecyclerView.getContext());
+            LinearLayoutManager manager = new WCLinearLayoutManager(mRulesRecyclerView.getContext());
             mRulesRecyclerView.setLayoutManager(manager);
-            RERulesAdapter adapter = new RERulesAdapter();
+
+            final RERulesAdapter adapter = new RERulesAdapter();
+            adapter.setRules(rules);
+
             mRulesRecyclerView.setAdapter(adapter);
+
+            mItemTouchHelper = new ItemTouchHelper(new RERulesTouchHelperCallback(adapter));
+            mItemTouchHelper.attachToRecyclerView(mRulesRecyclerView);
         }
 
     }

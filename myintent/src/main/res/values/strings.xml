@@ -9,4 +9,24 @@
     <string name="user_agent_suffix">MyIntent/0.2</string>
     <string name="mi_rules">Rules</string>
     <string name="mi_help">Help</string>
+    <string name="name">name</string>
+    <string name="description">description</string>
+    <string name="match">match</string>
+    <string name="replace">replace</string>
+    <string name="level">level</string>
+    <string name="time">time</string>
+    <string name="message">message</string>
+    <string name="is_editable">is editable?</string>
+    <string name="editable">editable</string>
+    <string name="re_rules_intro">Here you can analyze and edit RE rules that controls how commands are processed. Only rules from \"user\" group are
+        editable. You can remove any rule from \"user\" group by swiping it left or right. You can reorder any rule in \"user\" group by holding it and
+        moving up or down. Our RE rules are using Java Regular Expressions.</string>
+    <string name="java_re_reference">https://docs.oracle.com/javase/tutorial/essential/regex/</string>
+    <string name="reset_all_re_rules">Reset all RE rules</string>
+    <string name="add_new_user_rule">Add new user rule</string>
+    <string name="are_you_sure_reset">Are you sure? All user changes will be revoked.</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="reset">Reset</string>
+    <string name="cancel">Cancel</string>
 </resources>

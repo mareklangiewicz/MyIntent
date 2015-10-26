@@ -5,6 +5,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,13 +16,13 @@ import android.widget.SearchView;
 import com.noveogroup.android.log.Logger;
 
 import pl.mareklangiewicz.myfragments.MyFragment;
-import pl.mareklangiewicz.myloggers.MyLogRecyclerView;
 import pl.mareklangiewicz.myviews.IMyNavigation;
 
 public final class MILogFragment extends MyFragment {
 
     private @Nullable SearchView mSearchView;
-    private @Nullable MyLogRecyclerView mMLRView;
+    private @Nullable MyMDLogAdapter mAdapter;
+    private @Nullable RecyclerView mRecyclerView;
 
     @Nullable
     @Override
@@ -38,8 +40,17 @@ public final class MILogFragment extends MyFragment {
         mSearchView.setSubmitButtonEnabled(true); // FIXME: probably not needed - remove when I implement my animated play button
         mSearchView.setQueryRefinementEnabled(true); // TODO: test it
 
-        mMLRView = (MyLogRecyclerView) rootView.findViewById(R.id.my_log_recycler_view);
-        mMLRView.setLog(log);
+        mAdapter = new MyMDLogAdapter();
+        mAdapter.setLog(log);
+
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.mi_log_recycler_view);
+        mRecyclerView.setAdapter(mAdapter);
+
+        LinearLayoutManager llmanager = new LinearLayoutManager(getActivity());
+
+        llmanager.setReverseLayout(true);
+        //noinspection ConstantConditions
+        mRecyclerView.setLayoutManager(llmanager);
 
         //TODO SOMEDAY: some nice simple header with fragment title
         inflateMenu(R.menu.mi_log_lmenu);
@@ -51,10 +62,15 @@ public final class MILogFragment extends MyFragment {
 
     @Override
     public void onDestroyView() {
+
         mSearchView = null;
+
         //noinspection ConstantConditions
-        mMLRView.setLog(null);
-        mMLRView = null;
+        mAdapter.setLog(null);
+        mAdapter = null;
+        //noinspection ConstantConditions
+        mRecyclerView.setAdapter(null);
+        mRecyclerView = null;
         super.onDestroyView();
     }
 

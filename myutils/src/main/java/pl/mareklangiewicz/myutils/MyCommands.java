@@ -12,6 +12,7 @@ import com.noveogroup.android.log.MyLogger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -115,59 +116,82 @@ public final class MyCommands {
     static public final List<REGroup> RE_RULES = Arrays.asList(
 
             new REGroup(
+                    false,
                     "initial",
-                    "First group that unifies separators.\n" +
-                            "All semicolons, equal signs, whitespaces are changed to single spaces.\n" +
-                            "This is useful if command comes from URL. So you can use semicolons as spaces.",
+                    "First group that unifies separators. All semicolons, equal signs, whitespaces are changed to single spaces. " +
+                            "This is useful if command comes from URL, so you can use semicolons as spaces.",
                     "^.+",
-                    new RERule("unify separators", "", "(?:\\s|;|=)+", " ")
+                    new RERule(false, "unify separators", "Replace semicolons etc. with single spaces.", "(?:\\s|;|=)+", " ")
             ),
 
-            new REGroup("user", "User rules. This group can be modified by user.", "^.+",
-                    new RERule("user rule 1", "", "bla", "ble"), //FIXME: create some smart example nonintrusive user rules
-                    new RERule("user rule 2", "", "xxx", "yyy"),
-                    new RERule("user rule 3", "", "dog", "cat")
+            new REGroup(
+                    true,
+                    "user",
+                    "User rules. This group can be modified by user.",
+                    "^.+",
+                    new RERule(true, "user rule 1", "", "bla fjdkaljfdkalfjadkl", "ble"), //FIXME: create some smart example nonintrusive user rules
+                    new RERule(true, "user rule 2", "", "xxx aewiomfivmzxlh", "yyy"),
+                    new RERule(true, "user rule 3", "", "dog fjalmxkclzi", "cat")
             ),
 
-            new REGroup("alarm", "Alarm related shortcut rules.", "^((wake me)|(set( an | the | )alarm))",
-                    new RERule("", "", "^wake me( up)?", "set alarm"),
-                    new RERule("", "", "^set (an|the) alarm", "set alarm"),
-                    new RERule("", "", "^set alarm ((for)|(to)|(at))", "set alarm"),
-                    new RERule("", "", "^set alarm (\\d+)(?::| )(\\d+)", "set alarm extra hour $1 extra minutes $2"),
-                    new RERule("", "", "^set alarm (\\d+)", "set alarm extra hour $1"),
-                    new RERule("", "", "^set alarm", "action set alarm"),
-                    new RERule("", "", "\\bextra hour (\\d+)\\b", "extra integer hour $1"),
-                    new RERule("", "", "\\bextra minutes (\\d+)\\b", "extra integer minutes $1"),
-                    new RERule("", "", "^action set alarm (.*) with message (.*?)$", "action set alarm $1 extra string message $2"),
-                    new RERule("", "", "(.*) quickly$", "$1 extra boolean quickly true")
+            new REGroup(
+                    false,
+                    "alarm",
+                    "Alarm related shortcut rules.",
+                    "^(wake me)|(set( an | the | )alarm)",
+                    new RERule(false, "wake me", "Recognizes \"wake me\" as \"set alarm\" command.", "^wake me( up)?", "set alarm"),
+                    new RERule(false, "", "Removes optional articles.", "^set (an|the) alarm", "set alarm"),
+                    new RERule(false, "", "Removes optional prepositions.", "^set alarm ((for)|(to)|(at))", "set alarm"),
+                    new RERule(false, "", "Detects hours and minutes.", "^set alarm (\\d+)(?::| )(\\d+)", "set alarm extra hour $1 extra minutes $2"),
+                    new RERule(false, "", "Detects hours.", "^set alarm (\\d+)", "set alarm extra hour $1"),
+                    new RERule(false, "", "Adds \"action\" keyword.", "^set alarm", "action set alarm"),
+                    new RERule(false, "", "", "\\bextra hour (\\d+)\\b", "extra integer hour $1"),
+                    new RERule(false, "", "", "\\bextra minutes (\\d+)\\b", "extra integer minutes $1"),
+                    new RERule(false, "", "", "^action set alarm (.*) with message (.*?)$", "action set alarm $1 extra string message $2"),
+                    new RERule(false, "", "", "(.*) quickly$", "$1 extra boolean quickly true")
             ),
 
-            new REGroup("timer", "Timer related shortcut rules.", "^((set timer)|(set a timer))",
-                    new RERule("", "", "^set a timer", "set timer"),
-                    new RERule("", "", "^set timer ((for)|(to)|(at))", "set timer"),
-                    new RERule("", "", "^set timer (\\d+)( seconds)?", "set timer extra length $1"),
-                    new RERule("", "", "^set timer", "action set timer"),
-                    new RERule("", "", "\\bextra length (\\d+)\\b", "extra integer length $1"),
-                    new RERule("", "", "^action set timer (.*) with message (.*?)$", "action set timer $1 extra string message $2"),
-                    new RERule("", "", "(.*) quickly$", "$1 extra boolean quickly true")
+            new REGroup(
+                    false,
+                    "timer",
+                    "Timer related shortcut rules.",
+                    "^set( a | the | )timer",
+                    new RERule(false, "", "Removes optional articles.", "^set (a|the) timer", "set timer"),
+                    new RERule(false, "", "Removes optional prepositions.", "^set timer ((for)|(to)|(at))", "set timer"),
+                    new RERule(false, "", "Detects number of seconds.", "^set timer (\\d+)( seconds)?", "set timer extra length $1"),
+                    new RERule(false, "", "Adds \"action\" keyword.", "^set timer", "action set timer"),
+                    new RERule(false, "", "", "\\bextra length (\\d+)\\b", "extra integer length $1"),
+                    new RERule(false, "", "", "^action set timer (.*) with message (.*?)$", "action set timer $1 extra string message $2"),
+                    new RERule(false, "", "", "(.*) quickly$", "$1 extra boolean quickly true")
             ),
 
-            new REGroup("activity/fragment", "Activity and fragment related shortcut rules.", "^((activity)|(fragment))",
-                    new RERule("", "", "^((?:activity)|(?:fragment)) " + RE_KEYWORD, "start $1 $2"), //no keyword can be activity or fragment class name..
-                    new RERule("", "", "^((?:activity)|(?:fragment)) " + RE_MULTI_ID, "start $1 component $2"),
-                    new RERule("", "", "^((?:activity)|(?:fragment)) ", "start $1 ")
+            new REGroup(
+                    false,
+                    "activity/fragment",
+                    "Activity and fragment related shortcut rules.", "^((activity)|(fragment))",
+                    new RERule(false, "",
+                            "Allows shortcut commands like \"activity action view google.pl\" instead of \"start activity action view google.pl\".",
+                            "^((?:activity)|(?:fragment)) " + RE_KEYWORD, "start $1 $2"),
+                        //no keyword can be activity or fragment class name..
+                    new RERule(false, "",
+                            "Allows shortcut commands like \"fragment .MyGreatFragment\" instead of \"start fragment component .MyGreatFragment\".",
+                            "^((?:activity)|(?:fragment)) " + RE_MULTI_ID, "start $1 component $2"),
+                    new RERule(false, "", "This also adds \"start\" prefix in other cases.", "^((?:activity)|(?:fragment)) ", "start $1 ")
             ),
 
-            new REGroup("final", "Final rules for all nonempty commands. These replace short action names to full ones, etc..", "^.+",
-                    new RERule("", "", "\\baction view\\b", "action " + Intent.ACTION_VIEW),
-                    new RERule("", "", "\\baction send\\b", "action " + Intent.ACTION_SEND),
-                    new RERule("", "", "\\baction set alarm\\b", "action " + ACT_SET_ALARM),
-                    new RERule("", "", "\\baction set timer\\b", "action " + ACT_SET_TIMER),
-                    new RERule("", "", "\\bextra integer hour\\b", "extra integer " + EX_HOUR),
-                    new RERule("", "", "\\bextra integer minutes\\b", "extra integer " + EX_MINUTES),
-                    new RERule("", "", "\\bextra string message\\b", "extra string " + EX_MESSAGE),
-                    new RERule("", "", "\\bextra integer length\\b", "extra integer " + EX_LENGTH),
-                    new RERule("", "", "\\bextra boolean quickly\\b", "extra boolean " + EX_SKIP_UI)
+            new REGroup(
+                    false,
+                    "final",
+                    "Final rules for all nonempty commands. These replace short action names to full ones, etc..", "^.+",
+                    new RERule(false, "", "Replaces \"action view\" with full action name.", "\\baction view\\b", "action " + Intent.ACTION_VIEW),
+                    new RERule(false, "", "Replaces \"action send\" with full action name.", "\\baction send\\b", "action " + Intent.ACTION_SEND),
+                    new RERule(false, "", "Replaces \"action set alarm\" with full action name.", "\\baction set alarm\\b", "action " + ACT_SET_ALARM),
+                    new RERule(false, "", "Replaces \"action set timer\" with full action name.", "\\baction set timer\\b", "action " + ACT_SET_TIMER),
+                    new RERule(false, "", "", "\\bextra integer hour\\b", "extra integer " + EX_HOUR),
+                    new RERule(false, "", "", "\\bextra integer minutes\\b", "extra integer " + EX_MINUTES),
+                    new RERule(false, "", "", "\\bextra string message\\b", "extra string " + EX_MESSAGE),
+                    new RERule(false, "", "", "\\bextra integer length\\b", "extra integer " + EX_LENGTH),
+                    new RERule(false, "", "", "\\bextra boolean quickly\\b", "extra boolean " + EX_SKIP_UI)
             )
 
     );
@@ -409,17 +433,20 @@ public final class MyCommands {
 
     static public final class RERule {
 
+        private boolean mEditable;
         private String mName;
         private String mDescription;
         private String mMatch;
         private Pattern mPattern;
         private String mReplace;
 
-        public RERule(@NonNull String name, @NonNull String description, @NonNull String match, @NonNull String replace) {
+        public RERule(boolean editable, @NonNull String name, @NonNull String description, @NonNull String match, @NonNull String replace) {
+            setEditable(true);
             setName(name);
             setDescription(description);
             setMatch(match);
             setReplace(replace);
+            setEditable(editable);
         }
 
         static public @NonNull String applyAll(@NonNull Iterable<RERule> rules, @NonNull String cmd, @NonNull MyLogger log) {
@@ -429,24 +456,38 @@ public final class MyCommands {
             return cmd;
         }
 
+        public boolean getEditable() { return mEditable; }
+
+        void setEditable(boolean editable) { mEditable = editable; }
+
         public @NonNull String getName() { return mName; }
 
-        public void setName(@NonNull String name) { mName = name; }
+        public void setName(@NonNull String name) {
+            if(!getEditable()) throw new UnsupportedOperationException("RERule is not editable.");
+            mName = name;
+        }
 
         public @NonNull String getDescription() { return mDescription; }
 
-        public void setDescription(@NonNull String description) { mDescription = description; }
+        public void setDescription(@NonNull String description) {
+            if(!getEditable()) throw new UnsupportedOperationException("RERule is not editable.");
+            mDescription = description;
+        }
 
         public @NonNull String getMatch() { return mMatch; }
 
         public void setMatch(@NonNull String match) {
+            if(!getEditable()) throw new UnsupportedOperationException("RERule is not editable.");
             mMatch = match;
             mPattern = Pattern.compile(match);
         }
 
         public @NonNull String getReplace() { return mReplace; }
 
-        public void setReplace(@NonNull String replace) { mReplace = replace; }
+        public void setReplace(@NonNull String replace) {
+            if(!getEditable()) throw new UnsupportedOperationException("RERule is not editable.");
+            mReplace = replace;
+        }
 
         @Override public String toString() {
             return mName + ": \"" + mMatch + "\" -> \"" + mReplace + "\"";
@@ -488,19 +529,26 @@ public final class MyCommands {
 
     static public final class REGroup {
 
+        private boolean mEditable;
         private String mName;
         private String mDescription;
         private String mMatch;
         private Pattern mPattern;
         private List<RERule> mRules;
 
-        public REGroup(@NonNull String name, @NonNull String description, @NonNull String match, RERule... rules) {
+        public REGroup(boolean editable, @NonNull String name, @NonNull String description, @NonNull String match, RERule... rules) {
+            setEditable(true);
             setName(name);
             setDescription(description);
             setMatch(match);
             mRules = new ArrayList<>(rules.length);
             mRules.addAll(Arrays.asList(rules));
+            setEditable(editable);
         }
+
+        public boolean getEditable() { return mEditable; }
+
+        void setEditable(boolean editable) { mEditable = editable; }
 
         static public @NonNull String applyAll(@NonNull Iterable<REGroup> groups, @NonNull String cmd, @NonNull MyLogger log) {
 
@@ -527,20 +575,29 @@ public final class MyCommands {
 
         public @NonNull String getName() { return mName; }
 
-        public void setName(@NonNull String name) { mName = name; }
+        public void setName(@NonNull String name) {
+            if(!getEditable()) throw new UnsupportedOperationException("REGroup is not editable.");
+            mName = name;
+        }
 
         public @NonNull String getDescription() { return mDescription; }
 
-        public void setDescription(@NonNull String description) { mDescription = description; }
+        public void setDescription(@NonNull String description) {
+            if(!getEditable()) throw new UnsupportedOperationException("REGroup is not editable.");
+            mDescription = description;
+        }
 
         public @NonNull String getMatch() { return mMatch; }
 
         public void setMatch(@NonNull String match) {
+            if(!getEditable()) throw new UnsupportedOperationException("REGroup is not editable.");
             mMatch = match;
             mPattern = Pattern.compile(match);
         }
 
-        public @NonNull List<RERule> getRules() { return mRules; }
+        public @NonNull List<RERule> getRules() {
+            return getEditable() ? mRules : Collections.unmodifiableList(mRules);
+        }
 
         @Override public String toString() {
             return mName + ": \"" + mMatch + "\"";

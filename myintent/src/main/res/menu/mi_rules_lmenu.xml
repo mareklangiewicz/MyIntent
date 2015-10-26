@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:title="@string/mi_actions"
+        >
+        <menu>
+            <item
+                android:id="@+id/new_user_rule"
+                android:title="@string/add_new_user_rule"
+                android:icon="@drawable/ic_playlist_add_black_24dp"
+                />
+            <item
+                android:id="@+id/reset_all_rules"
+                android:title="@string/reset_all_re_rules"
+                android:titleCondensed='cmd:reset'
+                android:icon="@drawable/ic_whatshot_black_24dp"
+                />
+        </menu>
+    </item>
+
+    <item
+        android:title="@string/mi_help"
+        >
+        <menu>
+            <item
+                android:title='Jave RE Tutorial'
+                android:titleCondensed="cmd:data https://docs.oracle.com/javase/tutorial/essential/regex/"
+                android:icon="@drawable/ic_open_in_browser_black_24dp"
+                />
+            <item
+                android:title='Summary of Java RE constructs'
+                android:titleCondensed="cmd:data https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html"
+                android:icon="@drawable/ic_open_in_browser_black_24dp"
+                />
+        </menu>
+    </item>
+</menu>

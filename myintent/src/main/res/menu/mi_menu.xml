@@ -30,6 +30,12 @@
         android:title="@string/mi_actions"
         >
         <menu>
+            <item
+                android:id="@+id/reset_all_rules"
+                android:title='@string/reset_all_re_rules'
+                android:titleCondensed='cmd:reset'
+                android:icon="@drawable/ic_whatshot_black_24dp"
+                />
             <!-- TODO: microphone icon -->
             <item
                 android:id="@+id/action_listen"

@@ -1,15 +1,18 @@
 package pl.mareklangiewicz.myintent;
 
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import pl.mareklangiewicz.myfragments.MyFragment;
 import pl.mareklangiewicz.myutils.MyCommands;
+import pl.mareklangiewicz.myviews.IMyNavigation;
 
 /**
  * Created by Marek Langiewicz on 14.10.15.
@@ -38,6 +41,8 @@ public class MIRulesFragment extends MyFragment {
 
         mRecyclerView.setAdapter(mAdapter);
 
+        inflateHeader(R.layout.mi_rules_header);
+        inflateMenu(R.menu.mi_rules_lmenu);
 
         return rootView;
 
@@ -50,4 +55,17 @@ public class MIRulesFragment extends MyFragment {
         mRecyclerView = null;
         super.onDestroyView();
     }
+
+    public boolean onItemSelected(IMyNavigation nav, MenuItem item) {
+        @IdRes int id = item.getItemId();
+        if(id == R.id.new_user_rule) {
+            MyCommands.RE_RULES.get(1).getRules().add(new MyCommands.RERule(true, "", "", "", ""));
+            if(mRecyclerView != null) {
+                mRecyclerView.getAdapter().notifyItemChanged(1);
+            }
+            return true;
+        }
+        return false;
+    }
+
 }

@@ -18,8 +18,7 @@ public class RERulesTouchHelperCallback extends ItemTouchHelper.SimpleCallback {
     @Override public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
         int pos1 = viewHolder.getAdapterPosition();
         int pos2 = target.getAdapterPosition();
-        mAdapter.move(pos1, pos2);
-        return true;
+        return mAdapter.move(pos1, pos2);
     }
 
     @Override public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {

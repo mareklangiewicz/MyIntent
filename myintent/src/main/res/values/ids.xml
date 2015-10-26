@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="re_rule_view_tag_holder"
+        type="id"/>
+    <item name="re_group_view_tag_holder"
+        type="id"/>
+</resources>

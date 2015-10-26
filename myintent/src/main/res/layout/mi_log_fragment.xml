@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:baselineAligned="false"
         >
 
         <SearchView
@@ -25,8 +26,8 @@
 
     </LinearLayout>
 
-    <pl.mareklangiewicz.myloggers.MyLogRecyclerView
-        android:id="@+id/my_log_recycler_view"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/mi_log_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"

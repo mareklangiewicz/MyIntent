@@ -1,5 +1,6 @@
 package pl.mareklangiewicz.myintent;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -14,10 +15,11 @@ import pl.mareklangiewicz.myfragments.MyWebFragment;
  */
 public class MIHelpFragment extends MyWebFragment {
 
-    @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @SuppressLint("SetJavaScriptEnabled") @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
 
+        //noinspection ConstantConditions
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setUserAgentString(webSettings.getUserAgentString() + " " + getString(R.string.user_agent_suffix));
         webSettings.setJavaScriptEnabled(true);

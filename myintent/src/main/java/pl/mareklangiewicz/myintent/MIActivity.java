@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.GravityCompat;
 import android.view.MenuItem;
@@ -17,6 +18,9 @@ import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.List;
 
@@ -174,7 +178,9 @@ public class MIActivity extends MyActivity {
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.ask_for_intent));
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en_US"); //TODO SOMEDAY: remove this line so default user language is chosen.
-        intent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true); //TODO SOMEDAY: check if works online if language data is not downloaded
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            intent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true); //TODO SOMEDAY: check if works online if language data is not downloaded
+        }
         // Start the activity, the intent will be populated with the speech text
         if(intent.resolveActivity(getPackageManager()) != null) {
             try {
@@ -251,7 +257,26 @@ public class MIActivity extends MyActivity {
             startSpeechRecognizer();
             return true;
         }
+        if(command.equals("reset")) {
+            reset();
+            return true;
+        }
         return super.onCommand(command);
+    }
+
+    private void reset() {
+        new MaterialDialog.Builder(this)
+                .title(R.string.reset_all_re_rules)
+                .content(R.string.are_you_sure_reset)
+                .positiveText(R.string.reset)
+                .negativeText(R.string.cancel)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
+                        log.e("FIXME: Not implemented!");
+                        //TODO: first we have to implement saving and restoring user rules to/from database..
+                    }
+                })
+                .show();
     }
 
     @Override protected void onDestroy() {

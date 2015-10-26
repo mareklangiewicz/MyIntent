@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="pl.mareklangiewicz.myintent"
     >
 
@@ -83,6 +84,7 @@
             <intent-filter
                 android:autoVerify="true"
                 android:priority="999"
+                tools:ignore="UnusedAttribute"
                 >
                 <action android:name="android.intent.action.VIEW"/>
 

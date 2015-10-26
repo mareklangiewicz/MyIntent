@@ -12,14 +12,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import java.util.List;
 
 import pl.mareklangiewicz.myutils.MyCommands;
 
+import static pl.mareklangiewicz.myutils.MyTextUtils.str;
+
 /**
  * Created by Marek Langiewicz on 14.10.15.
  */
-public class REGroupsAdapter extends RecyclerView.Adapter<REGroupsAdapter.ViewHolder> {
+public class REGroupsAdapter extends RecyclerView.Adapter<REGroupsAdapter.ViewHolder> implements View.OnClickListener {
+
+    static public final int RE_GROUP_VIEW_TAG_HOLDER = R.id.re_group_view_tag_holder;
 
     @Nullable List<MyCommands.REGroup> mGroups;
 
@@ -44,7 +50,10 @@ public class REGroupsAdapter extends RecyclerView.Adapter<REGroupsAdapter.ViewHo
 
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.re_group_layout, parent, false);
-        return new ViewHolder(v);
+        v.setOnClickListener(this);
+        ViewHolder holder = new ViewHolder(v);
+        v.setTag(RE_GROUP_VIEW_TAG_HOLDER, holder);
+        return holder;
     }
 
     @Override public void onViewRecycled(ViewHolder holder) {
@@ -58,7 +67,7 @@ public class REGroupsAdapter extends RecyclerView.Adapter<REGroupsAdapter.ViewHo
 
         MyCommands.REGroup group = mGroups.get(position);
 
-        holder.mGroupHeaderView.setText(Html.fromHtml("<b>group:</b> " + group.toString()));
+        holder.mGroupHeaderView.setText(Html.fromHtml("<b>group</b> " + group.getName() + ":<br/>\"" + group.getMatch() + "\""));
 
         holder.resetRulesRecyclerView();
 
@@ -71,8 +80,34 @@ public class REGroupsAdapter extends RecyclerView.Adapter<REGroupsAdapter.ViewHo
         return mGroups == null ? 0 : mGroups.size();
     }
 
+    @Override public void onClick(View v) {
 
+        Object tag = v.getTag(RE_GROUP_VIEW_TAG_HOLDER);
 
+        if(tag == null)
+            return;
+
+        if(mGroups == null)
+            return;
+
+        final int pos = ((ViewHolder) tag).getAdapterPosition();
+        final MyCommands.REGroup group = mGroups.get(pos);
+
+        MaterialDialog dialog = new MaterialDialog.Builder(v.getContext())
+                .title("RE Group " + str(pos + 1))
+                .customView(R.layout.re_group_details, true)
+                .iconRes(R.mipmap.ic_launcher)
+                .limitIconToDefaultSize() // limits the displayed icon size to 48dp
+                .build();
+
+        //noinspection ConstantConditions
+        ((TextView) dialog.getCustomView().findViewById(R.id.re_group_name)).setText(group.getName());
+        ((TextView) dialog.getCustomView().findViewById(R.id.re_group_description)).setText(group.getDescription());
+        ((TextView) dialog.getCustomView().findViewById(R.id.re_group_match)).setText(group.getMatch());
+
+        dialog.show();
+
+    }
 
 
     static class ViewHolder extends RecyclerView.ViewHolder {

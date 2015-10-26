@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <TextView
+        android:id="@+id/re_rule_editable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_gravity="right"
+        android:text="editable: NO"
+        android:textColor="?colorPrimaryDark"
+        android:textSize="@dimen/customTitle"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:text="@string/name"
+        android:textColor="?colorPrimaryDark"
+        android:textSize="@dimen/customTitle"
+        />
+
+    <TextView
+        android:id="@+id/re_rule_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/customEntry"
+        tools:text="some rule name"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:text="@string/description"
+        android:textColor="?colorPrimaryDark"
+        android:textSize="@dimen/customTitle"
+        />
+
+    <TextView
+        android:id="@+id/re_rule_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/customEntry"
+        tools:text="some rule description"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:text="@string/match"
+        android:textColor="?colorPrimaryDark"
+        android:textSize="@dimen/customTitle"
+        />
+
+    <TextView
+        android:id="@+id/re_rule_match"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/customEntry"
+        tools:text="^rule(match) blabla$"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:text="@string/replace"
+        android:textColor="?colorPrimaryDark"
+        android:textSize="@dimen/customTitle"
+        />
+
+    <TextView
+        android:id="@+id/re_rule_replace"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/customEntry"
+        tools:text="$1 blabla $2 bleble $3"
+        />
+
+</LinearLayout>

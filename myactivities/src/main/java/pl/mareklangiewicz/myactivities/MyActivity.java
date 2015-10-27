@@ -71,7 +71,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
     /**
      * Default logger for use in UI thread
      */
-    protected @NonNull MyLogger log = MyLogger.sMyDefaultUILogger;
+    protected @NonNull MyLogger log = MyLogger.UIL;
     protected @Nullable DisplayMetrics mDisplayMetrics;
     protected @Nullable DrawerLayout mGlobalDrawerLayout;
     protected @Nullable LinearLayout mGlobalLinearLayout; // either this or mGlobalDrawerLayout will remain null

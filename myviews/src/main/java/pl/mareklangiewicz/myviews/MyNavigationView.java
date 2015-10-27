@@ -14,7 +14,7 @@ import com.noveogroup.android.log.MyLogger;
 
 public final class MyNavigationView extends NavigationView implements IMyNavigation, NavigationView.OnNavigationItemSelectedListener {
 
-    protected final MyLogger log = MyLogger.sMyDefaultUILogger;
+    protected final MyLogger log = MyLogger.UIL;
 
     private @Nullable View mHeader;
 

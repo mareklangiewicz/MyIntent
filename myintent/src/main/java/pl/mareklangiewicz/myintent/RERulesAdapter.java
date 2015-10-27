@@ -24,7 +24,7 @@ import static pl.mareklangiewicz.myutils.MyTextUtils.str;
  */
 public class RERulesAdapter extends RecyclerView.Adapter<RERulesAdapter.ViewHolder> implements View.OnClickListener {
 
-    protected @NonNull MyLogger log = MyLogger.sMyDefaultUILogger;
+    protected @NonNull MyLogger log = MyLogger.UIL;
 
     private @Nullable MyCommands.RERule explained; // if some rule can not be removed or moved it displays snackbar only once in a row.
         // we remember this rule here so we do not display an error for it more than once in a row.

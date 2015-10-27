@@ -54,7 +54,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, M
     private static final boolean VV = false;
 
 
-    protected @NonNull MyLogger log = MyLogger.sMyDefaultUILogger;
+    protected @NonNull MyLogger log = MyLogger.UIL;
 
     public MyFragment() { }
 

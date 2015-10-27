@@ -145,6 +145,8 @@ public class REGroupsAdapter extends RecyclerView.Adapter<REGroupsAdapter.ViewHo
             LinearLayoutManager manager = new WCLinearLayoutManager(mRulesRecyclerView.getContext());
             mRulesRecyclerView.setLayoutManager(manager);
 
+            mRulesRecyclerView.setItemAnimator(null); // FIXME SOMEDAY: remove this line when we get rid of WCLinearLayoutManager..
+
             final RERulesAdapter adapter = new RERulesAdapter();
             adapter.setRules(rules);
 

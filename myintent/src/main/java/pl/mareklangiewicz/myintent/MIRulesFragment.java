@@ -59,7 +59,7 @@ public class MIRulesFragment extends MyFragment {
     public boolean onItemSelected(IMyNavigation nav, MenuItem item) {
         @IdRes int id = item.getItemId();
         if(id == R.id.new_user_rule) {
-            MyCommands.RE_RULES.get(1).getRules().add(new MyCommands.RERule(true, "", "", "", ""));
+            MyCommands.RE_USER_GROUP.getRules().add(new MyCommands.RERule(true, "", "", "", ""));
             if(mRecyclerView != null) {
                 mRecyclerView.getAdapter().notifyItemChanged(1);
             }

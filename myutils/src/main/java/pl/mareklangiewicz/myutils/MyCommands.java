@@ -23,76 +23,243 @@ import java.util.regex.Pattern;
 
 /**
  * Created by Marek Langiewicz on 29.09.15.
- * <p>
+ * <p/>
  * TODO LATER: generate and use compiled versions of regular expressions..
  */
 public final class MyCommands {
+
+    /*
+        private static final boolean V = BuildConfig.VERBOSE;
+        private static final boolean VV = BuildConfig.VERY_VERBOSE;
+
+        FIXME SOMEDAY: enable version with BuildConfig when Google fix issue with propagating build types to libraries.
+        Now it is always 'release' in libraries.. see:
+        https://code.google.com/p/android/issues/detail?id=52962
+        http://stackoverflow.com/questions/20176284/buildconfig-debug-always-false-when-building-library-projects-with-gradle
+        http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Library-Publication
+    */
+    private static final boolean V = true;
+    private static final boolean VV = false;
+
+
+    static boolean sUT = false; // FIXME LATER: this is temporary hack to detect unit tests.. remove it.
+
 
     public static final String CMD_ACTIVITY = "activity";
     public static final String CMD_SERVICE = "service";
     public static final String CMD_BROADCAST = "broadcast";
     public static final String CMD_FRAGMENT = "fragment";
-    /**
-     * $1: id
-     */
-    public static final String RE_ID = "([_a-zA-Z][_a-zA-Z0-9]*)";
-    /**
-     * $1: whole multi id (a multipart ident. divided by dots and/or slashes; can start with dot)
-     * $2: id (first part - until first divider)
-     * $3: rest (all after id - starting with divider - if not empty)
-     * $4: subid (last part of multi id - after last divider)
-     */
-    public static final String RE_MULTI_ID = "(\\.?" + RE_ID + "((?:(?:\\.|/)" + RE_ID + ")*))";
-    /**
-     * $1: datatype
-     */
-    public static final String RE_EXTRA_TYPE = "((?:string)|(?:boolean)|(?:byte)|(?:char)|(?:double)|(?:float)|(?:integer)|(?:long)|(?:short))";
-    /**
-     * $1: keyword
-     */
-    public static final String RE_KEYWORD = "((?:start)|(?:action)|(?:category)|(?:type)|(?:data)|(?:flags)|(?:package)|(?:component)|(?:scheme)|(?:bounds)|" +
-            "(?:extra))";
-    /**
-     * $1: value
-     */
-    public static final String RE_VALUE = "(.*?)";
 
-    //    public static @NonNull <T> T valOrDef(@Nullable T val,@NonNull T def){ return MoreObjects.firstNonNull(val, def); }
-//    public static @NonNull <T> T mapOrNot(@NonNull T val, @NonNull Map<T, T> map) { return valOrDef(map.get(val), val); }
-    public static final String RE_END = "(?: |\\Z)";
-    /**
-     * $1: segment
-     * $2: keyword
-     * $3: value
-     * $4: next keyword or the end (empty string) - probably not important for us.
-     */
-    public static final String RE_SEGMENT = "(" + RE_KEYWORD + " " + RE_VALUE + RE_END + "(?=\\Z|" + RE_KEYWORD + "))";
-    /**
-     * $1: whole key
-     * $2: first part - until first dot
-     * $3: rest
-     * $4: last part - not important here..
-     */
-    public static final String RE_EXTRA_KEY = RE_MULTI_ID;
-    /**
-     * $1: whole extra elem
-     * $2: datatype
-     * $3: extra key
-     * $4: extra key - first part - not important
-     * $5: extra key - the rest - not important
-     * $6: extra key - last part - not important
-     * $7: value
-     */
-    public static final String RE_EXTRA_ELEM = "(" + RE_EXTRA_TYPE + " " + RE_EXTRA_KEY + " " + RE_VALUE + ")";
-    /**
-     * $1: whole thing
-     * $2: datatype
-     * $3: extra key
-     * $4: extra key - first part - not important
-     * $5: extra key - the rest - not important
-     * $6: extra key - last part - not important
-     */
-    public static final String RE_EXTRA_ELEM_TYPE_AND_KEY = "(" + RE_EXTRA_TYPE + " " + RE_EXTRA_KEY + ")";
+
+    static public final class RERule {
+
+        private boolean mEditable;
+        private String mName;
+        private String mDescription;
+        private String mMatch;
+        private Pattern mPattern;
+        private String mReplace;
+
+        public RERule(boolean editable, @NonNull String name, @NonNull String description, @NonNull String match, @NonNull String replace) {
+            setEditable(true);
+            setName(name);
+            setDescription(description);
+            setMatch(match);
+            setReplace(replace);
+            setEditable(editable);
+        }
+
+        static public @NonNull String applyAll(@NonNull Iterable<RERule> rules, @NonNull String cmd, @NonNull MyLogger log) {
+            for(RERule rule : rules) {
+                cmd = rule.apply(cmd, log);
+            }
+            return cmd;
+        }
+
+        public boolean getEditable() { return mEditable; }
+
+        void setEditable(boolean editable) { mEditable = editable; }
+
+        public @NonNull String getName() { return mName; }
+
+        public void setName(@NonNull String name) {
+            if(!getEditable())
+                throw new UnsupportedOperationException("RERule is not editable.");
+            mName = name;
+        }
+
+        public @NonNull String getDescription() { return mDescription; }
+
+        public void setDescription(@NonNull String description) {
+            if(!getEditable())
+                throw new UnsupportedOperationException("RERule is not editable.");
+            mDescription = description;
+        }
+
+        public @NonNull String getMatch() { return mMatch; }
+
+        public void setMatch(@NonNull String match) {
+            if(!getEditable())
+                throw new UnsupportedOperationException("RERule is not editable.");
+            mMatch = match;
+            mPattern = Pattern.compile(match);
+        }
+
+        public @NonNull String getReplace() { return mReplace; }
+
+        public void setReplace(@NonNull String replace) {
+            if(!getEditable())
+                throw new UnsupportedOperationException("RERule is not editable.");
+            mReplace = replace;
+        }
+
+        @Override public String toString() {
+            return mName + ": \"" + mMatch + "\" -> \"" + mReplace + "\"";
+        }
+
+        /**
+         * Checks if the rule matches ANYWHERE in given command
+         */
+        public boolean matches(@NonNull String cmd) {
+            return mPattern.matcher(cmd).find(0);
+        }
+
+        /**
+         * Applying a rule means matching and replacing ALL occurrences of re mMatch with mReplace
+         */
+        public @NonNull String apply(@NonNull String cmd, @NonNull MyLogger log) {
+
+            Matcher matcher = mPattern.matcher(cmd);
+
+            if(matcher.find(0)) {
+                cmd = matcher.replaceAll(mReplace);
+                if(V) {
+                    log.v("rule matched:");
+                    log.d("rule %s", toString());
+                    log.i("= cmd: %s", cmd);
+                }
+                return cmd;
+            }
+            else {
+                if(VV) {
+                    log.v("rule NOT matched:");
+                    log.v("rule %s", toString());
+                    log.v("= cmd: %s", cmd);
+                }
+                return cmd;
+            }
+        }
+    }
+
+    static public final class REGroup {
+
+        private boolean mEditable;
+        private String mName;
+        private String mDescription;
+        private String mMatch;
+        private Pattern mPattern;
+        private List<RERule> mRules;
+
+        public REGroup(boolean editable, @NonNull String name, @NonNull String description, @NonNull String match, RERule... rules) {
+            setEditable(true);
+            setName(name);
+            setDescription(description);
+            setMatch(match);
+            mRules = new ArrayList<>(rules.length);
+            mRules.addAll(Arrays.asList(rules));
+            setEditable(editable);
+        }
+
+        static public @NonNull String applyAll(@NonNull Iterable<REGroup> groups, @NonNull String cmd, @NonNull MyLogger log) {
+
+            if(V) {
+                log.v("Applying all matching RE rules to:");
+                log.w("> cmd: %s", cmd);
+            }
+            else
+                log.v("> cmd: %s", cmd);
+
+            for(REGroup group : groups) {
+                cmd = group.apply(cmd, log);
+            }
+
+            if(V) {
+                log.v("All matching RE rules applied. Result:");
+                log.i("< cmd: %s", cmd);
+            }
+            else
+                log.v("< cmd: %s", cmd);
+
+            return cmd;
+        }
+
+        public boolean getEditable() { return mEditable; }
+
+        void setEditable(boolean editable) { mEditable = editable; }
+
+        public @NonNull String getName() { return mName; }
+
+        public void setName(@NonNull String name) {
+            if(!getEditable())
+                throw new UnsupportedOperationException("REGroup is not editable.");
+            mName = name;
+        }
+
+        public @NonNull String getDescription() { return mDescription; }
+
+        public void setDescription(@NonNull String description) {
+            if(!getEditable())
+                throw new UnsupportedOperationException("REGroup is not editable.");
+            mDescription = description;
+        }
+
+        public @NonNull String getMatch() { return mMatch; }
+
+        public void setMatch(@NonNull String match) {
+            if(!getEditable())
+                throw new UnsupportedOperationException("REGroup is not editable.");
+            mMatch = match;
+            mPattern = Pattern.compile(match);
+        }
+
+        public @NonNull List<RERule> getRules() {
+            return getEditable() ? mRules : Collections.unmodifiableList(mRules);
+        }
+
+        @Override public String toString() {
+            return mName + ": \"" + mMatch + "\"";
+        }
+
+        /**
+         * Checks if the group match field matches ANYWHERE in given command
+         */
+        public boolean matches(@NonNull String cmd) {
+            return mPattern.matcher(cmd).find(0);
+        }
+
+        /**
+         * It first check if the group match field matches ANYWHERE in given command, and if it does:
+         * It applies all rules in this group one by one in order to given command.
+         * Otherwise it just returns given command.
+         */
+        public @NonNull String apply(@NonNull String cmd, MyLogger log) {
+
+            if(!matches(cmd)) {
+                if(VV) {
+                    log.v("group NOT matched:");
+                    log.v("group %s", toString());
+                }
+                return cmd;
+            }
+
+            if(V) {
+                log.v("group matched:");
+                log.d("group %s", toString());
+            }
+            return RERule.applyAll(getRules(), cmd, log);
+        }
+    }
+
     static public final List<String> DEFAULT_EXAMPLE_COMMANDS = Arrays.asList(
             "action view data http://mareklangiewicz.pl",
             "action view data mareklangiewicz.pl",
@@ -106,6 +273,77 @@ public final class MyCommands {
             "listen"
     );
 
+
+    /**
+     * $1: id
+     */
+    public static final String RE_ID = "([_a-zA-Z][_a-zA-Z0-9]*)";
+
+    /**
+     * $1: whole multi id (a multipart ident. divided by dots and/or slashes; can start with dot)
+     * $2: id (first part - until first divider)
+     * $3: rest (all after id - starting with divider - if not empty)
+     * $4: subid (last part of multi id - after last divider)
+     */
+    public static final String RE_MULTI_ID = "(\\.?" + RE_ID + "((?:(?:\\.|/)" + RE_ID + ")*))";
+
+    /**
+     * $1: datatype
+     */
+    public static final String RE_EXTRA_TYPE = "((?:string)|(?:boolean)|(?:byte)|(?:char)|(?:double)|(?:float)|(?:integer)|(?:long)|(?:short))";
+
+    /**
+     * $1: keyword
+     */
+    public static final String RE_KEYWORD =
+            "((?:start)|(?:action)|(?:category)|(?:type)|(?:data)|(?:flags)|(?:package)|(?:component)|(?:scheme)|(?:bounds)|(?:extra))";
+
+    /**
+     * $1: value
+     */
+    public static final String RE_VALUE = "(.*?)";
+
+
+    public static final String RE_END = "(?: |\\Z)";
+
+    /**
+     * $1: segment
+     * $2: keyword
+     * $3: value
+     * $4: next keyword or the end (empty string) - probably not important for us.
+     */
+    public static final String RE_SEGMENT = "(" + RE_KEYWORD + " " + RE_VALUE + RE_END + "(?=\\Z|" + RE_KEYWORD + "))";
+
+    /**
+     * $1: whole key
+     * $2: first part - until first dot
+     * $3: rest
+     * $4: last part - not important here..
+     */
+    public static final String RE_EXTRA_KEY = RE_MULTI_ID;
+
+    /**
+     * $1: whole extra elem
+     * $2: datatype
+     * $3: extra key
+     * $4: extra key - first part - not important
+     * $5: extra key - the rest - not important
+     * $6: extra key - last part - not important
+     * $7: value
+     */
+    public static final String RE_EXTRA_ELEM = "(" + RE_EXTRA_TYPE + " " + RE_EXTRA_KEY + " " + RE_VALUE + ")";
+
+    /**
+     * $1: whole thing
+     * $2: datatype
+     * $3: extra key
+     * $4: extra key - first part - not important
+     * $5: extra key - the rest - not important
+     * $6: extra key - last part - not important
+     */
+    public static final String RE_EXTRA_ELEM_TYPE_AND_KEY = "(" + RE_EXTRA_TYPE + " " + RE_EXTRA_KEY + ")";
+
+
     private static final String EX_HOUR = AlarmClock.EXTRA_HOUR;
     private static final String EX_MINUTES = AlarmClock.EXTRA_MINUTES;
     private static final String EX_MESSAGE = AlarmClock.EXTRA_MESSAGE;
@@ -113,8 +351,9 @@ public final class MyCommands {
     private static final String EX_SKIP_UI = AlarmClock.EXTRA_SKIP_UI;
     private static final String ACT_SET_ALARM = AlarmClock.ACTION_SET_ALARM;
     private static final String ACT_SET_TIMER = "android.intent.action.SET_TIMER";
-    static public final List<REGroup> RE_RULES = Arrays.asList(
 
+
+    static public final REGroup RE_INITIAL_GROUP =
             new REGroup(
                     false,
                     "initial",
@@ -122,8 +361,10 @@ public final class MyCommands {
                             "This is useful if command comes from URL, so you can use semicolons as spaces.",
                     "^.+",
                     new RERule(false, "unify separators", "Replace semicolons etc. with single spaces.", "(?:\\s|;|=)+", " ")
-            ),
+            );
 
+
+    static public final REGroup RE_USER_GROUP =
             new REGroup(
                     true,
                     "user",
@@ -132,8 +373,10 @@ public final class MyCommands {
                     new RERule(true, "user rule 1", "", "bla fjdkaljfdkalfjadkl", "ble"), //FIXME: create some smart example nonintrusive user rules
                     new RERule(true, "user rule 2", "", "xxx aewiomfivmzxlh", "yyy"),
                     new RERule(true, "user rule 3", "", "dog fjalmxkclzi", "cat")
-            ),
+            );
 
+
+    static public final REGroup RE_ALARM_GROUP =
             new REGroup(
                     false,
                     "alarm",
@@ -149,8 +392,10 @@ public final class MyCommands {
                     new RERule(false, "", "", "\\bextra minutes (\\d+)\\b", "extra integer minutes $1"),
                     new RERule(false, "", "", "^action set alarm (.*) with message (.*?)$", "action set alarm $1 extra string message $2"),
                     new RERule(false, "", "", "(.*) quickly$", "$1 extra boolean quickly true")
-            ),
+            );
 
+
+    static public final REGroup RE_TIMER_GROUP =
             new REGroup(
                     false,
                     "timer",
@@ -163,8 +408,10 @@ public final class MyCommands {
                     new RERule(false, "", "", "\\bextra length (\\d+)\\b", "extra integer length $1"),
                     new RERule(false, "", "", "^action set timer (.*) with message (.*?)$", "action set timer $1 extra string message $2"),
                     new RERule(false, "", "", "(.*) quickly$", "$1 extra boolean quickly true")
-            ),
+            );
 
+
+    static public final REGroup RE_ACTIVITY_FRAGMENT_GROUP =
             new REGroup(
                     false,
                     "activity/fragment",
@@ -172,13 +419,14 @@ public final class MyCommands {
                     new RERule(false, "",
                             "Allows shortcut commands like \"activity action view google.pl\" instead of \"start activity action view google.pl\".",
                             "^((?:activity)|(?:fragment)) " + RE_KEYWORD, "start $1 $2"),
-                        //no keyword can be activity or fragment class name..
+                    //no keyword can be activity or fragment class name..
                     new RERule(false, "",
                             "Allows shortcut commands like \"fragment .MyGreatFragment\" instead of \"start fragment component .MyGreatFragment\".",
                             "^((?:activity)|(?:fragment)) " + RE_MULTI_ID, "start $1 component $2"),
                     new RERule(false, "", "This also adds \"start\" prefix in other cases.", "^((?:activity)|(?:fragment)) ", "start $1 ")
-            ),
+            );
 
+    static public final REGroup RE_FINAL_GROUP =
             new REGroup(
                     false,
                     "final",
@@ -192,22 +440,19 @@ public final class MyCommands {
                     new RERule(false, "", "", "\\bextra string message\\b", "extra string " + EX_MESSAGE),
                     new RERule(false, "", "", "\\bextra integer length\\b", "extra integer " + EX_LENGTH),
                     new RERule(false, "", "", "\\bextra boolean quickly\\b", "extra boolean " + EX_SKIP_UI)
-            )
+            );
 
+
+    static public final List<REGroup> RE_RULES = Arrays.asList(
+            RE_INITIAL_GROUP,
+            RE_USER_GROUP,
+            RE_ALARM_GROUP,
+            RE_TIMER_GROUP,
+            RE_ACTIVITY_FRAGMENT_GROUP,
+            RE_FINAL_GROUP
     );
-    /*
-        private static final boolean V = BuildConfig.VERBOSE;
-        private static final boolean VV = BuildConfig.VERY_VERBOSE;
 
-        FIXME SOMEDAY: enable version with BuildConfig when Google fix issue with propagating build types to libraries.
-        Now it is always 'release' in libraries.. see:
-        https://code.google.com/p/android/issues/detail?id=52962
-        http://stackoverflow.com/questions/20176284/buildconfig-debug-always-false-when-building-library-projects-with-gradle
-        http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Library-Publication
-    */
-    private static final boolean V = true;
-    private static final boolean VV = false;
-    static boolean sUT = false; // FIXME LATER: this is temporary hack to detect unit tests.. remove it.
+
     private MyCommands() {
         throw new AssertionError("MyCommands class is noninstantiable.");
     }
@@ -428,208 +673,6 @@ public final class MyCommands {
                 break;
             default:
                 throw new IllegalArgumentException("Illegal extra segment type: " + type);
-        }
-    }
-
-    static public final class RERule {
-
-        private boolean mEditable;
-        private String mName;
-        private String mDescription;
-        private String mMatch;
-        private Pattern mPattern;
-        private String mReplace;
-
-        public RERule(boolean editable, @NonNull String name, @NonNull String description, @NonNull String match, @NonNull String replace) {
-            setEditable(true);
-            setName(name);
-            setDescription(description);
-            setMatch(match);
-            setReplace(replace);
-            setEditable(editable);
-        }
-
-        static public @NonNull String applyAll(@NonNull Iterable<RERule> rules, @NonNull String cmd, @NonNull MyLogger log) {
-            for(RERule rule : rules) {
-                cmd = rule.apply(cmd, log);
-            }
-            return cmd;
-        }
-
-        public boolean getEditable() { return mEditable; }
-
-        void setEditable(boolean editable) { mEditable = editable; }
-
-        public @NonNull String getName() { return mName; }
-
-        public void setName(@NonNull String name) {
-            if(!getEditable()) throw new UnsupportedOperationException("RERule is not editable.");
-            mName = name;
-        }
-
-        public @NonNull String getDescription() { return mDescription; }
-
-        public void setDescription(@NonNull String description) {
-            if(!getEditable()) throw new UnsupportedOperationException("RERule is not editable.");
-            mDescription = description;
-        }
-
-        public @NonNull String getMatch() { return mMatch; }
-
-        public void setMatch(@NonNull String match) {
-            if(!getEditable()) throw new UnsupportedOperationException("RERule is not editable.");
-            mMatch = match;
-            mPattern = Pattern.compile(match);
-        }
-
-        public @NonNull String getReplace() { return mReplace; }
-
-        public void setReplace(@NonNull String replace) {
-            if(!getEditable()) throw new UnsupportedOperationException("RERule is not editable.");
-            mReplace = replace;
-        }
-
-        @Override public String toString() {
-            return mName + ": \"" + mMatch + "\" -> \"" + mReplace + "\"";
-        }
-
-        /**
-         * Checks if the rule matches ANYWHERE in given command
-         */
-        public boolean matches(@NonNull String cmd) {
-            return mPattern.matcher(cmd).find(0);
-        }
-
-        /**
-         * Applying a rule means matching and replacing ALL occurrences of re mMatch with mReplace
-         */
-        public @NonNull String apply(@NonNull String cmd, @NonNull MyLogger log) {
-
-            Matcher matcher = mPattern.matcher(cmd);
-
-            if(matcher.find(0)) {
-                cmd = matcher.replaceAll(mReplace);
-                if(V) {
-                    log.v("rule matched:");
-                    log.d("rule %s", toString());
-                    log.i("= cmd: %s", cmd);
-                }
-                return cmd;
-            }
-            else {
-                if(VV) {
-                    log.v("rule NOT matched:");
-                    log.v("rule %s", toString());
-                    log.v("= cmd: %s", cmd);
-                }
-                return cmd;
-            }
-        }
-    }
-
-    static public final class REGroup {
-
-        private boolean mEditable;
-        private String mName;
-        private String mDescription;
-        private String mMatch;
-        private Pattern mPattern;
-        private List<RERule> mRules;
-
-        public REGroup(boolean editable, @NonNull String name, @NonNull String description, @NonNull String match, RERule... rules) {
-            setEditable(true);
-            setName(name);
-            setDescription(description);
-            setMatch(match);
-            mRules = new ArrayList<>(rules.length);
-            mRules.addAll(Arrays.asList(rules));
-            setEditable(editable);
-        }
-
-        public boolean getEditable() { return mEditable; }
-
-        void setEditable(boolean editable) { mEditable = editable; }
-
-        static public @NonNull String applyAll(@NonNull Iterable<REGroup> groups, @NonNull String cmd, @NonNull MyLogger log) {
-
-            if(V) {
-                log.v("Applying all matching RE rules to:");
-                log.w("> cmd: %s", cmd);
-            }
-            else
-                log.v("> cmd: %s", cmd);
-
-            for(REGroup group : groups) {
-                cmd = group.apply(cmd, log);
-            }
-
-            if(V) {
-                log.v("All matching RE rules applied. Result:");
-                log.i("< cmd: %s", cmd);
-            }
-            else
-                log.v("< cmd: %s", cmd);
-
-            return cmd;
-        }
-
-        public @NonNull String getName() { return mName; }
-
-        public void setName(@NonNull String name) {
-            if(!getEditable()) throw new UnsupportedOperationException("REGroup is not editable.");
-            mName = name;
-        }
-
-        public @NonNull String getDescription() { return mDescription; }
-
-        public void setDescription(@NonNull String description) {
-            if(!getEditable()) throw new UnsupportedOperationException("REGroup is not editable.");
-            mDescription = description;
-        }
-
-        public @NonNull String getMatch() { return mMatch; }
-
-        public void setMatch(@NonNull String match) {
-            if(!getEditable()) throw new UnsupportedOperationException("REGroup is not editable.");
-            mMatch = match;
-            mPattern = Pattern.compile(match);
-        }
-
-        public @NonNull List<RERule> getRules() {
-            return getEditable() ? mRules : Collections.unmodifiableList(mRules);
-        }
-
-        @Override public String toString() {
-            return mName + ": \"" + mMatch + "\"";
-        }
-
-        /**
-         * Checks if the group match field matches ANYWHERE in given command
-         */
-        public boolean matches(@NonNull String cmd) {
-            return mPattern.matcher(cmd).find(0);
-        }
-
-        /**
-         * It first check if the group match field matches ANYWHERE in given command, and if it does:
-         * It applies all rules in this group one by one in order to given command.
-         * Otherwise it just returns given command.
-         */
-        public @NonNull String apply(@NonNull String cmd, MyLogger log) {
-
-            if(!matches(cmd)) {
-                if(VV) {
-                    log.v("group NOT matched:");
-                    log.v("group %s", toString());
-                }
-                return cmd;
-            }
-
-            if(V) {
-                log.v("group matched:");
-                log.d("group %s", toString());
-            }
-            return RERule.applyAll(getRules(), cmd, log);
         }
     }
 }

@@ -29,6 +29,19 @@ public class MIDBHelperTest extends AndroidTestCase {
         getContext().deleteDatabase(MIDBHelper.DATABASE_NAME);
     }
 
+    public void testGetReadableDatabase() throws Exception {
+        SQLiteDatabase db = mMIDBHelper.getReadableDatabase();
+        assertNotNull(db);
+        assertTrue(db.isOpen());
+    }
+
+    public void testGetWritableDatabase() throws Exception {
+        SQLiteDatabase db = mMIDBHelper.getWritableDatabase();
+        assertNotNull(db);
+        assertTrue(db.isOpen());
+    }
+
+
     public void logCursor(Cursor c) {
         String[] columns = c.getColumnNames();
         log.i("column names:");
@@ -68,6 +81,29 @@ public class MIDBHelperTest extends AndroidTestCase {
         logTable(db, "CmdSuggest");
     }
 
+    public void testRuleUser() throws Exception {
+        SQLiteDatabase db = mMIDBHelper.getWritableDatabase();
+        assertNotNull(db);
+        ContentValues values = new ContentValues();
+        values.put(MIContract.RuleUser.COL_POSITION, 666);
+        values.put(MIContract.RuleUser.COL_EDITABLE, true);
+        values.put(MIContract.RuleUser.COL_NAME, "Test rule naaaame");
+        values.put(MIContract.RuleUser.COL_DESCRIPTION, "Test rule description");
+        values.put(MIContract.RuleUser.COL_MATCH, "Matchfdjsklafj");
+        values.put(MIContract.RuleUser.COL_REPLACE, "REplace");
+        long rowid = db.insert(MIContract.RuleUser.TABLE_NAME, null, values);
+        assertTrue(rowid >= 0);
+        values.put(MIContract.RuleUser.COL_POSITION, 667);
+        values.put(MIContract.RuleUser.COL_EDITABLE, false);
+        values.put(MIContract.RuleUser.COL_NAME, "second name");
+        values.put(MIContract.RuleUser.COL_DESCRIPTION, "second description");
+        values.put(MIContract.RuleUser.COL_MATCH, "Match second rule..");
+        values.put(MIContract.RuleUser.COL_REPLACE, "Replace second rule");
+        rowid = db.insert(MIContract.RuleUser.TABLE_NAME, null, values);
+        assertTrue(rowid >= 0);
+        logTable(db, "RuleUser");
+    }
+
     public void testLogTables() throws Exception {
         SQLiteDatabase db = mMIDBHelper.getReadableDatabase();
         assertNotNull(db);
@@ -75,19 +111,8 @@ public class MIDBHelperTest extends AndroidTestCase {
         logTable(db, "CmdRecent");
         logTable(db, "CmdExample");
         logTable(db, "CmdSuggest");
+        logTable(db, "RuleUser");
         logTable(db, "android_metadata");
-    }
-
-    public void testGetReadableDatabase() throws Exception {
-        SQLiteDatabase db = mMIDBHelper.getReadableDatabase();
-        assertNotNull(db);
-        assertTrue(db.isOpen());
-    }
-
-    public void testGetWritableDatabase() throws Exception {
-        SQLiteDatabase db = mMIDBHelper.getWritableDatabase();
-        assertNotNull(db);
-        assertTrue(db.isOpen());
     }
 
     public void testOnCreate() throws Exception {

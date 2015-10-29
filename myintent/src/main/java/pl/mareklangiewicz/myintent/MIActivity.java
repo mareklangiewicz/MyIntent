@@ -2,8 +2,11 @@ package pl.mareklangiewicz.myintent;
 
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -22,11 +25,13 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import pl.mareklangiewicz.myactivities.MyActivity;
 import pl.mareklangiewicz.mydrawables.MyLivingDrawable;
 import pl.mareklangiewicz.mydrawables.MyMagicLinesDrawable;
+import pl.mareklangiewicz.myutils.MyCommands;
 import pl.mareklangiewicz.myviews.IMyNavigation;
 
 import static pl.mareklangiewicz.myutils.MyTextUtils.str;
@@ -47,6 +52,7 @@ public class MIActivity extends MyActivity {
     private @Nullable ObjectAnimator mLogoTextViewAnimator;
     private @Nullable ObjectAnimator mHomePageTextViewAnimator;
     private @Nullable ObjectAnimator mMagicLinesDrawableAnimator;
+
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,6 +105,14 @@ public class MIActivity extends MyActivity {
         mMagicLinesDrawableAnimator.setDuration(1000).setInterpolator(new LinearInterpolator());
 
         if(savedInstanceState == null) {
+
+            List<MyCommands.RERule> rules = MyCommands.RE_USER_GROUP.getRules();
+            List<MyCommands.RERule> loaded = new ArrayList<>();
+            boolean ok = MIContract.RuleUser.load(this, loaded);
+            if(ok && loaded.size() > 0) {
+                rules.clear();
+                rules.addAll(loaded);
+            }
             selectGlobalItem(R.id.mi_start);
         }
     }
@@ -164,12 +178,6 @@ public class MIActivity extends MyActivity {
         if(!ok)
             return;
         MIContract.CmdRecent.insert(this, command);
-    }
-
-    // TODO LATER: make option in local menu? for this.
-    // TODO LATER: move it to start fragment?
-    private void clearRecentCommands() {
-        MIContract.CmdRecent.clear(this);
     }
 
     void startSpeechRecognizer() {
@@ -247,6 +255,13 @@ public class MIActivity extends MyActivity {
             super.onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override protected void onStop() {
+        MIContract.RuleUser.clear(this);
+        MIContract.RuleUser.save(this, MyCommands.RE_USER_GROUP.getRules());
+        super.onStop();
+    }
+
+
     @Override public boolean onCommand(@Nullable String command) {
 
         if(command == null) {
@@ -255,6 +270,10 @@ public class MIActivity extends MyActivity {
         }
         if(command.equals("listen")) {
             startSpeechRecognizer();
+            return true;
+        }
+        if(command.equals("clear recent")) {
+            MIContract.CmdRecent.clear(this);
             return true;
         }
         if(command.equals("reset")) {
@@ -272,8 +291,15 @@ public class MIActivity extends MyActivity {
                 .negativeText(R.string.cancel)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-                        log.e("FIXME: Not implemented!");
-                        //TODO: first we have to implement saving and restoring user rules to/from database..
+                        MIContract.RuleUser.clear(MIActivity.this);
+                        MyCommands.RE_USER_GROUP.getRules().clear();
+
+                        Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
+                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        PendingIntent pi = PendingIntent.getActivity(MIActivity.this, 0, i, 0);
+                        AlarmManager manager = (AlarmManager) MIActivity.this.getSystemService(Context.ALARM_SERVICE);
+                        manager.set(AlarmManager.RTC, System.currentTimeMillis() + 1000, pi);
+                        System.exit(0);
                     }
                 })
                 .show();

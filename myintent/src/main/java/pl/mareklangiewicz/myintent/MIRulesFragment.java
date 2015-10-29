@@ -44,6 +44,11 @@ public class MIRulesFragment extends MyFragment {
         inflateHeader(R.layout.mi_rules_header);
         inflateMenu(R.menu.mi_rules_lmenu);
 
+        if(MyCommands.RE_USER_GROUP.getRules().size() > 20)
+            log.w("You have more than 20 user rules!");
+        // I had some strange native exceptions when displaying a lot of rules in user group.
+        // I guess the card view becomes too tall in that case... TODO SOMEDAY: google this issue
+
         return rootView;
 
     }

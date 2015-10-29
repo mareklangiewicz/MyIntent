@@ -79,12 +79,23 @@ class MIDBHelper extends SQLiteOpenHelper {
                 " FROM " + MIContract.CmdExample.TABLE_NAME;
 
         db.execSQL(sql);
+
+        createTable(db, MIContract.RuleUser.TABLE_NAME,
+                MIContract.RuleUser._ID + " INTEGER PRIMARY KEY",
+                MIContract.RuleUser.COL_POSITION + " INTEGER",
+                MIContract.RuleUser.COL_EDITABLE + " INTEGER",
+                MIContract.RuleUser.COL_NAME + " TEXT",
+                MIContract.RuleUser.COL_DESCRIPTION + " TEXT",
+                MIContract.RuleUser.COL_MATCH + " TEXT",
+                MIContract.RuleUser.COL_REPLACE + " TEXT"
+        );
     }
 
     @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP VIEW " + MIContract.CmdSuggest.TABLE_NAME);
         dropTable(db, MIContract.CmdExample.TABLE_NAME);
         dropTable(db, MIContract.CmdRecent.TABLE_NAME);
+        dropTable(db, MIContract.RuleUser.TABLE_NAME);
         onCreate(db);
     }
 }

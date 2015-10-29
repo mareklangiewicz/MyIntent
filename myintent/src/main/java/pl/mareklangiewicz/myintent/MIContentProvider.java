@@ -23,6 +23,8 @@ public class MIContentProvider extends ContentProvider {
     static final int MATCH_CMD_EXAMPLE_ITEM = 202;
     static final int MATCH_CMD_SUGGEST_DIR_ALL = 305;
     static final int MATCH_CMD_SUGGEST_DIR_LIKE = 306;
+    static final int MATCH_RULE_USER_DIR = 401;
+    static final int MATCH_RULE_USER_ITEM = 402;
 
     static UriMatcher buildUriMatcher() {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -32,6 +34,8 @@ public class MIContentProvider extends ContentProvider {
         matcher.addURI(MIContract.AUTH, MIContract.CmdExample.PATH + "/#", MATCH_CMD_EXAMPLE_ITEM);
         matcher.addURI(MIContract.AUTH, MIContract.CmdSuggest.PATH, MATCH_CMD_SUGGEST_DIR_ALL);
         matcher.addURI(MIContract.AUTH, MIContract.CmdSuggest.PATH + "/*", MATCH_CMD_SUGGEST_DIR_LIKE);
+        matcher.addURI(MIContract.AUTH, MIContract.RuleUser.PATH, MATCH_RULE_USER_DIR);
+        matcher.addURI(MIContract.AUTH, MIContract.RuleUser.PATH + "/#", MATCH_RULE_USER_ITEM);
         return matcher;
     }
 
@@ -68,6 +72,10 @@ public class MIContentProvider extends ContentProvider {
             case MATCH_CMD_SUGGEST_DIR_ALL:
             case MATCH_CMD_SUGGEST_DIR_LIKE:
                 return MIContract.CmdSuggest.TYPE_DIR;
+            case MATCH_RULE_USER_DIR:
+                return MIContract.RuleUser.TYPE_DIR;
+            case MATCH_RULE_USER_ITEM:
+                return MIContract.RuleUser.TYPE_ITEM;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -98,6 +106,11 @@ public class MIContentProvider extends ContentProvider {
                 sortOrder = " " + MIContract.CmdSuggest.COL_PRIORITY + " DESC , " + MIContract.CmdSuggest.COL_TIME + " DESC ";
             case MATCH_CMD_SUGGEST_DIR_ALL:
                 return db.query(MIContract.CmdSuggest.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder, limit);
+            case MATCH_RULE_USER_ITEM:// WARNING: selection and selectionArgs are ignored in this case!
+                selection = " " + MIContract.RuleUser._ID + " = ? ";
+                selectionArgs = new String[] {uri.getLastPathSegment()};
+            case MATCH_RULE_USER_DIR:
+                return db.query(MIContract.RuleUser.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder, limit);
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -115,6 +128,9 @@ public class MIContentProvider extends ContentProvider {
                 break;
             case MATCH_CMD_EXAMPLE_DIR:
                 table = MIContract.CmdExample.TABLE_NAME;
+                break;
+            case MATCH_RULE_USER_DIR:
+                table = MIContract.RuleUser.TABLE_NAME;
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -143,6 +159,11 @@ public class MIContentProvider extends ContentProvider {
                 selectionArgs = new String[] {uri.getLastPathSegment()};
             case MATCH_CMD_EXAMPLE_DIR:
                 return db.delete(MIContract.CmdExample.TABLE_NAME, selection, selectionArgs);
+            case MATCH_RULE_USER_ITEM:
+                selection = " " + MIContract.RuleUser._ID + " = ? ";
+                selectionArgs = new String[] {uri.getLastPathSegment()};
+            case MATCH_RULE_USER_DIR:
+                return db.delete(MIContract.RuleUser.TABLE_NAME, selection, selectionArgs);
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -165,8 +186,14 @@ public class MIContentProvider extends ContentProvider {
                 selectionArgs = new String[] {uri.getLastPathSegment()};
             case MATCH_CMD_EXAMPLE_DIR:
                 return db.update(MIContract.CmdExample.TABLE_NAME, values, selection, selectionArgs);
+            case MATCH_RULE_USER_ITEM:
+                selection = " " + MIContract.RuleUser._ID + " = ? ";
+                selectionArgs = new String[] {uri.getLastPathSegment()};
+            case MATCH_RULE_USER_DIR:
+                return db.update(MIContract.RuleUser.TABLE_NAME, values, selection, selectionArgs);
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
     }
 }
+

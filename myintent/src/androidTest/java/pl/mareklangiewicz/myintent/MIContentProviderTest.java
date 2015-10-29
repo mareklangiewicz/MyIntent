@@ -9,6 +9,13 @@ import android.test.AndroidTestCase;
 
 import com.noveogroup.android.log.MyLogger;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import pl.mareklangiewicz.myutils.MyCommands;
+
+import static pl.mareklangiewicz.myutils.MyTextUtils.str;
+
 /**
  * Created by Marek Langiewicz on 10.10.15.
  * These tests are not automated unit/instrumentation tests.
@@ -70,6 +77,14 @@ public class MIContentProviderTest extends AndroidTestCase {
                 MIContentProvider.MATCH_CMD_SUGGEST_DIR_LIKE,
                 matcher.match(Uri.parse("content://pl.mareklangiewicz.myintent.provider/cmd/search_suggest_query/blabla?blu=bli&x=y"))
         );
+        assertEquals(
+                MIContentProvider.MATCH_RULE_USER_DIR,
+                matcher.match(Uri.parse("content://pl.mareklangiewicz.myintent.provider/rule/user?limit=33"))
+        );
+        assertEquals(
+                MIContentProvider.MATCH_RULE_USER_ITEM,
+                matcher.match(Uri.parse("content://pl.mareklangiewicz.myintent.provider/rule/user/22"))
+        );
 
     }
 
@@ -87,6 +102,8 @@ public class MIContentProviderTest extends AndroidTestCase {
         log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/cmd/search_suggest_query")));
         log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/cmd/search_suggest_query/121")));
         log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/cmd/search_suggest_query/blabla")));
+        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/rule/user")));
+        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/rule/user/123")));
 
     }
 
@@ -133,6 +150,11 @@ public class MIContentProviderTest extends AndroidTestCase {
         testQueryUri("content://pl.mareklangiewicz.myintent.provider/cmd/search_suggest_query?limit=3");
     }
 
+    public void testQueryAllRuleUser() throws Exception {
+        testQueryUri(MIContract.RuleUser.URI);
+    }
+
+
     public void testQuery() throws Exception {
 
         String uris[] = new String[] {
@@ -142,6 +164,9 @@ public class MIContentProviderTest extends AndroidTestCase {
                 "content://pl.mareklangiewicz.myintent.provider/cmd/search_suggest_query",
                 "content://pl.mareklangiewicz.myintent.provider/cmd/search_suggest_query/set",
                 "content://pl.mareklangiewicz.myintent.provider/cmd/search_suggest_query/alarm",
+                "content://pl.mareklangiewicz.myintent.provider/rule/user",
+                "content://pl.mareklangiewicz.myintent.provider/rule/user/0",
+                "content://pl.mareklangiewicz.myintent.provider/rule/user/868",
         };
 
         for(String uri : uris)
@@ -214,6 +239,55 @@ public class MIContentProviderTest extends AndroidTestCase {
 
     }
 
+    public void testInsert6RowsToRuleUser() throws Exception {
+
+        ContentValues values = new ContentValues();
+        String uri = "content://pl.mareklangiewicz.myintent.provider/rule/user";
+
+        values.put(MIContract.RuleUser.COL_POSITION, 666);
+        values.put(MIContract.RuleUser.COL_EDITABLE, true);
+        values.put(MIContract.RuleUser.COL_NAME, "bla");
+        values.put(MIContract.RuleUser.COL_DESCRIPTION, "desc bla");
+        values.put(MIContract.RuleUser.COL_MATCH, "Maaatch %@$#");
+        values.put(MIContract.RuleUser.COL_REPLACE, "Replace $1 $2 $667");
+        insertRowTo(values, uri);
+
+        values.put(MIContract.RuleUser.COL_POSITION, 667);
+        values.put(MIContract.RuleUser.COL_EDITABLE, true);
+        values.put(MIContract.RuleUser.COL_NAME, "ble");
+        values.put(MIContract.RuleUser.COL_DESCRIPTION, "desc ble");
+        values.put(MIContract.RuleUser.COL_MATCH, "Maaatch %ble@$#");
+        values.put(MIContract.RuleUser.COL_REPLACE, "fjdskalfjeplace $1 $2");
+        insertRowTo(values, uri);
+
+        values.put(MIContract.RuleUser.COL_POSITION, 668);
+        values.put(MIContract.RuleUser.COL_EDITABLE, false);
+        values.put(MIContract.RuleUser.COL_NAME, "blaaaa xxxxx");
+        values.put(MIContract.RuleUser.COL_DESCRIPTION, "desc xxxxxx");
+        values.put(MIContract.RuleUser.COL_MATCH, "xxxxxmatchxxxx");
+        values.put(MIContract.RuleUser.COL_REPLACE, "xxxxx replace xxxxx");
+        insertRowTo(values, uri);
+
+        values.put(MIContract.RuleUser.COL_POSITION, 13);
+        values.put(MIContract.RuleUser.COL_EDITABLE, false);
+        values.put(MIContract.RuleUser.COL_NAME, "y");
+        values.put(MIContract.RuleUser.COL_DESCRIPTION, "desc y");
+        values.put(MIContract.RuleUser.COL_MATCH, "Maaatch y");
+        values.put(MIContract.RuleUser.COL_REPLACE, "Replace y");
+        insertRowTo(values, uri);
+
+        MyCommands.RERule rule = MyCommands.RE_USER_GROUP.getRules().get(1);
+        log.i("RuleUser.insert: %s", str(rule));
+        MIContract.RuleUser.insert(getContext(), 77, rule);
+        log.i("done.");
+
+        rule = MyCommands.RE_USER_GROUP.getRules().get(2);
+        log.i("RuleUser.insert: %s", str(rule));
+        MIContract.RuleUser.insert(getContext(), 76, rule);
+        log.i("done.");
+
+    }
+
     public void testUpdateCmdRecentLikeLa() throws Exception { //it will "merge" all updated commands into one (UNIQUE ON CONFLICT REPLACE)
         ContentResolver cr = getContext().getContentResolver();
         assertNotNull(cr);
@@ -224,7 +298,6 @@ public class MIContentProviderTest extends AndroidTestCase {
         int updated = cr.update(uri, values, " Command LIKE '%la%' ", null);
         log.i("%s rows updated.", updated);
     }
-
 
     public void testUpdateCmdRecentTime() throws Exception { //it change all recent commands time column to current.
         ContentResolver cr = getContext().getContentResolver();
@@ -237,6 +310,18 @@ public class MIContentProviderTest extends AndroidTestCase {
         log.i("%s rows updated.", updated);
     }
 
+
+    public void testUpdateRuleUserLikeLa() throws Exception {
+        ContentResolver cr = getContext().getContentResolver();
+        assertNotNull(cr);
+        ContentValues values = new ContentValues();
+        values.put(MIContract.RuleUser.COL_NAME, "UPDATED BLEEEEE!!!!");
+        Uri uri = Uri.parse("content://pl.mareklangiewicz.myintent.provider/rule/user");
+        log.i("update rows from rule/user where: Name LIKE '%%la%%'");
+        int updated = cr.update(uri, values, " Name LIKE '%la%' ", null);
+        log.i("%s rows updated.", updated);
+    }
+
     public void testDeleteRecentLikeLa() throws Exception {
         ContentResolver cr = getContext().getContentResolver();
         assertNotNull(cr);
@@ -246,12 +331,30 @@ public class MIContentProviderTest extends AndroidTestCase {
         log.i("%s rows deleted.", deleted);
     }
 
+    public void testDeleteRuleUserLikeLa() throws Exception {
+        ContentResolver cr = getContext().getContentResolver();
+        assertNotNull(cr);
+        Uri uri = Uri.parse("content://pl.mareklangiewicz.myintent.provider/rule/user");
+        log.i("delete rows from rule/user where: Name LIKE '%%la%%'");
+        int deleted = cr.delete(uri, " Name LIKE '%la%' ", null);
+        log.i("%s rows deleted.", deleted);
+    }
+
 
     public void testDeleteAllRecentManually() throws Exception {
         ContentResolver cr = getContext().getContentResolver();
         assertNotNull(cr);
         Uri uri = Uri.parse("content://pl.mareklangiewicz.myintent.provider/cmd/recent");
         log.i("delete all rows from cmd/recent:");
+        int deleted = cr.delete(uri, null, null);
+        log.i("%s rows deleted.", deleted);
+    }
+
+    public void testDeleteAllRuleUserManually() throws Exception {
+        ContentResolver cr = getContext().getContentResolver();
+        assertNotNull(cr);
+        Uri uri = Uri.parse("content://pl.mareklangiewicz.myintent.provider/rule/user");
+        log.i("delete all rows from rule/user:");
         int deleted = cr.delete(uri, null, null);
         log.i("%s rows deleted.", deleted);
     }
@@ -267,4 +370,32 @@ public class MIContentProviderTest extends AndroidTestCase {
         MIContract.CmdExample.clear(getContext());
         log.i("done.");
     }
+
+    public void testClearRuleUser() throws Exception {
+        log.i("RuleUser.clear:");
+        MIContract.RuleUser.clear(getContext());
+        log.i("done.");
+    }
+
+    public void testSaveRuleUserAllUserRules3Times() throws Exception {
+        List<MyCommands.RERule> rules = MyCommands.RE_USER_GROUP.getRules();
+        log.i("RuleUser.save 1:");
+        MIContract.RuleUser.save(getContext(), rules);
+        log.i("RuleUser.save 2:");
+        MIContract.RuleUser.save(getContext(), rules);
+        log.i("RuleUser.save 3:");
+        MIContract.RuleUser.save(getContext(), rules);
+        log.i("done.");
+    }
+
+    public void testLoadRuleUser() throws Exception {
+        log.i("RuleUser.load");
+        List<MyCommands.RERule> rules = new ArrayList<>();
+        boolean ok = MIContract.RuleUser.load(getContext(), rules);
+        assertTrue(ok);
+        log.i("RuleUser.load results:");
+        for(int i = 0; i < rules.size(); ++i)
+            log.i(str(rules.get(i)));
+    }
+
 }

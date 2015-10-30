@@ -144,9 +144,11 @@ public final class MIContract {
             Cursor c = cr.query(URI, null, null, null, " " + COL_POSITION + " ASC ");
             if(c == null)
                 return false;
-            boolean ok = c.moveToFirst();
-            if(!ok)
-                return false;
+            boolean empty = !c.moveToFirst();
+            if(empty) {
+                c.close();
+                return true;
+            }
             do {
                 rules.add(
                         new MyCommands.RERule(

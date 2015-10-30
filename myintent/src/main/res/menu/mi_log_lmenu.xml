@@ -36,9 +36,14 @@
         >
         <menu>
             <item
+                android:id="@+id/clear_recent"
+                android:icon="@drawable/ic_youtube_searched_for_black_24dp"
                 android:title='Clear recent commands'
-                android:icon="@drawable/ic_close_black_24dp"
-                android:titleCondensed="cmd:clear recent"
+                />
+            <item
+                android:id="@+id/clear_example"
+                android:icon="@drawable/ic_find_replace_black_24dp"
+                android:title='Clear example commands'
                 />
             <item
                 android:id="@+id/log_some_assert"

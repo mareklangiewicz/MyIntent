@@ -35,7 +35,8 @@ public class MyCommandsTest {
     @Before
     public void setUp() throws Exception {
         MyCommands.sUT = true;
-        MyHandler.sPrintLnLevel = Logger.Level.DEBUG;
+        MyHandler.sPrintLnLevel = Logger.Level.VERBOSE;
+//        MyHandler.sPrintLnLevel = Logger.Level.DEBUG;
 //        MyHandler.sPrintLnLevel = Logger.Level.INFO;
     }
 
@@ -77,6 +78,22 @@ public class MyCommandsTest {
         }
     }
 
+    @Test
+    public void testSimpleRE() throws Exception {
+        String re = "^activity (?=\\S*\\.)([_\\./a-zA-Z0-9]*)";
+        testRE(re, 1, true, true,
+                "activity .MyActivity",
+                "activity .My/Activity"
+        );
+        testRE(re, 1, true, false,
+                "activity MyActivity"
+        );
+
+        MyCommands.RERule arule = MyCommands.RE_ACTIVITY_GROUP.getRules().get(0);
+        String result = arule.apply("activity .MyActivity", log);
+        log.w("Result: %s", result);
+
+    }
     @Test
     public void testRE_ID() throws Exception {
         testRE(MyCommands.RE_ID, 1, true, true,
@@ -223,6 +240,7 @@ public class MyCommandsTest {
         log.i(str(MyCommands.RE_RULES.get(3)));
         log.i(str(MyCommands.RE_RULES.get(4)));
         log.i(str(MyCommands.RE_RULES.get(5)));
+        log.i(str(MyCommands.RE_RULES.get(6)));
     }
 
 
@@ -290,10 +308,13 @@ public class MyCommandsTest {
     public void testActivityRules() throws Exception {
 
         testREGroupApplyAll("start activity component MyActivity", "start activity component MyActivity");
+        testREGroupApplyAll("start activity component bla.MyActivity", "start activity component bla.MyActivity");
+        testREGroupApplyAll("start activity component .MyActivity", "start activity component .MyActivity");
         testREGroupApplyAll("start activity MyActivity", "start activity MyActivity"); //WARNING: we do NOT recognize this kind of shortcut!
         testREGroupApplyAll("activity component MyActivity", "start activity component MyActivity");
-        testREGroupApplyAll("activity MyActivity", "start activity component MyActivity");
-        testREGroupApplyAll("activity bla action view", "start activity component bla action android.intent.action.VIEW");
+        testREGroupApplyAll("activity data http://blabla", "start activity data http://blabla");
+        testREGroupApplyAll("activity .MyActivity", "start activity component .MyActivity");
+        testREGroupApplyAll("activity b.la action view", "start activity component b.la action android.intent.action.VIEW");
         testREGroupApplyAll("activity action view", "start activity action android.intent.action.VIEW");
 
     }
@@ -303,10 +324,8 @@ public class MyCommandsTest {
     public void testFragmentRules() throws Exception {
 
         testREGroupApplyAll("start fragment component a.b.c.MyXFragment", "start fragment component a.b.c.MyXFragment");
-        testREGroupApplyAll("fragment component a.b.c.MyXFragment", "start fragment component a.b.c.MyXFragment");
         testREGroupApplyAll("fragment a.b.c.MyXFragment", "start fragment component a.b.c.MyXFragment");
-        testREGroupApplyAll("fragment bla action view", "start fragment component bla action android.intent.action.VIEW");
-        testREGroupApplyAll("fragment action view", "start fragment action android.intent.action.VIEW");
+        testREGroupApplyAll("fragment .bla action view", "start fragment component .bla action android.intent.action.VIEW");
 
     }
 

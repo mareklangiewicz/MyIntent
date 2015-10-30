@@ -11,9 +11,13 @@
                 android:icon="@drawable/ic_playlist_add_black_24dp"
                 />
             <item
-                android:id="@+id/reset_all_rules"
-                android:title="@string/reset_all_re_rules"
-                android:titleCondensed='cmd:reset'
+                android:id="@+id/clear_user_rules"
+                android:title="@string/clear_user_rules"
+                android:icon="@drawable/ic_close_black_24dp"
+                />
+            <item
+                android:id="@+id/reset_all"
+                android:title="@string/reset_all"
                 android:icon="@drawable/ic_whatshot_black_24dp"
                 />
         </menu>

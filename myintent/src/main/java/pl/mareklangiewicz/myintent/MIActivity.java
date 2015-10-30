@@ -25,8 +25,8 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import pl.mareklangiewicz.myactivities.MyActivity;
 import pl.mareklangiewicz.mydrawables.MyLivingDrawable;
@@ -44,6 +44,7 @@ public class MIActivity extends MyActivity {
 
     private static final int SPEECH_REQUEST_CODE = 0;
     private static boolean sGreeted = false;
+    private boolean mSkipSavingToDb = false;
     private @Nullable MyLivingDrawable mMyMagicLinesDrawable;
     private @Nullable View mMagicLinesView;
     private @Nullable ImageView mLogoImageView;
@@ -74,7 +75,7 @@ public class MIActivity extends MyActivity {
         //noinspection ConstantConditions
         mLogoImageView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                mMyPendingCommand = "listen";
+                mMyPendingCommand = "start custom action listen";
                 if((mGlobalDrawerLayout != null && mGlobalDrawerLayout.isDrawerVisible(GravityCompat.START))) {
                     mGlobalDrawerLayout.closeDrawers();
                     // we will start pending command after drawer is closed.
@@ -107,12 +108,10 @@ public class MIActivity extends MyActivity {
         if(savedInstanceState == null) {
 
             List<MyCommands.RERule> rules = MyCommands.RE_USER_GROUP.getRules();
-            List<MyCommands.RERule> loaded = new ArrayList<>();
-            boolean ok = MIContract.RuleUser.load(this, loaded);
-            if(ok && loaded.size() > 0) {
-                rules.clear();
-                rules.addAll(loaded);
-            }
+            rules.clear();
+            boolean ok = MIContract.RuleUser.load(this, rules);
+            if(!ok)
+                log.e("Can not load user rules from data base.");
             selectGlobalItem(R.id.mi_start);
         }
     }
@@ -256,44 +255,34 @@ public class MIActivity extends MyActivity {
     }
 
     @Override protected void onStop() {
-        MIContract.RuleUser.clear(this);
-        MIContract.RuleUser.save(this, MyCommands.RE_USER_GROUP.getRules());
+        if(!mSkipSavingToDb) {
+            MIContract.RuleUser.clear(this);
+            MIContract.RuleUser.save(this, MyCommands.RE_USER_GROUP.getRules());
+        }
         super.onStop();
     }
 
 
-    @Override public boolean onCommand(@Nullable String command) {
-
-        if(command == null) {
-            log.d("null command received - ignoring");
-            return false;
-        }
-        if(command.equals("listen")) {
+    @Override public boolean onCommandCustom(@NonNull Map<String, String> command) {
+        if(command.get("action").equals("listen")) {
             startSpeechRecognizer();
             return true;
         }
-        if(command.equals("clear recent")) {
-            MIContract.CmdRecent.clear(this);
-            return true;
-        }
-        if(command.equals("reset")) {
-            reset();
-            return true;
-        }
-        return super.onCommand(command);
+
+        return super.onCommandCustom(command);
     }
 
-    private void reset() {
+
+    private void resetAll() {
         new MaterialDialog.Builder(this)
-                .title(R.string.reset_all_re_rules)
+                .title(R.string.reset_all)
                 .content(R.string.are_you_sure_reset)
                 .positiveText(R.string.reset)
                 .negativeText(R.string.cancel)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-                        MIContract.RuleUser.clear(MIActivity.this);
-                        MyCommands.RE_USER_GROUP.getRules().clear();
-
+                        deleteDatabase(MIDBHelper.DATABASE_NAME);
+                        mSkipSavingToDb = true;
                         Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
                         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         PendingIntent pi = PendingIntent.getActivity(MIActivity.this, 0, i, 0);
@@ -360,6 +349,18 @@ public class MIActivity extends MyActivity {
 
         @IdRes int id = item.getItemId();
 
+        if(id == R.id.clear_recent) {
+            MIContract.CmdRecent.clear(this);
+            return true;
+        }
+        if(id == R.id.clear_example) {
+            MIContract.CmdExample.clear(this);
+            return true;
+        }
+        if(id == R.id.reset_all) {
+            resetAll();
+            return true;
+        }
         if(id == R.id.action_whats_up) {
             log.i("[SNACK][SHORT]What's up mate?");
             return true;
@@ -367,5 +368,5 @@ public class MIActivity extends MyActivity {
 
         return false;
     }
-
 }
+

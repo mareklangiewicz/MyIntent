@@ -22,11 +22,12 @@
         editable. You can remove any rule from \"user\" group by swiping it left or right. You can reorder any rule in \"user\" group by holding it and
         moving up or down. Our RE rules are using Java Regular Expressions.</string>
     <string name="java_re_reference">https://docs.oracle.com/javase/tutorial/essential/regex/</string>
-    <string name="reset_all_re_rules">Reset all RE rules</string>
+    <string name="reset_all">Reset all app settings.</string>
     <string name="add_new_user_rule">Add new user rule</string>
     <string name="are_you_sure_reset">Are you sure? All user changes will be revoked.</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="reset">Reset</string>
     <string name="cancel">Cancel</string>
+    <string name="clear_user_rules">Clear user RE rules</string>
 </resources>

@@ -23,8 +23,6 @@ import java.util.regex.Pattern;
 
 /**
  * Created by Marek Langiewicz on 29.09.15.
- * <p/>
- * TODO LATER: generate and use compiled versions of regular expressions..
  */
 public final class MyCommands {
 
@@ -49,6 +47,7 @@ public final class MyCommands {
     public static final String CMD_SERVICE = "service";
     public static final String CMD_BROADCAST = "broadcast";
     public static final String CMD_FRAGMENT = "fragment";
+    public static final String CMD_CUSTOM = "custom";
 
 
     static public final class RERule {
@@ -260,7 +259,7 @@ public final class MyCommands {
         }
     }
 
-    static public final List<String> DEFAULT_EXAMPLE_COMMANDS = Arrays.asList(
+    static public final List<String> DEFAULT_EXAMPLE_COMMANDS = Arrays.asList( //TODO: good small example commands collection (without MyIntent specific)
             "action view data http://mareklangiewicz.pl",
             "action view data mareklangiewicz.pl",
             "wake me up at 7",
@@ -268,9 +267,13 @@ public final class MyCommands {
             "set an alarm at 8 30",
             "set a timer for 300",
             "set timer for 200 seconds",
-            "set timer for 200 seconds quickly",
-            "fragment .MIHelpFragment",
-            "listen"
+            "set timer for 200 seconds quickly"
+    );
+
+    static public final List<RERule> DEFAULT_EXAMPLE_RULES = Arrays.asList(
+            new RERule(true, "user rule 1", "", "bla fjdkaljfdkalfjadkl", "ble"), //FIXME: create some smart example nonintrusive user rules
+            new RERule(true, "user rule 2", "", "xxx aewiomfivmzxlh", "yyy"),
+            new RERule(true, "user rule 3", "", "dog fjalmxkclzi", "cat")
     );
 
 
@@ -369,10 +372,7 @@ public final class MyCommands {
                     true,
                     "user",
                     "User rules. This group can be modified by user.",
-                    "^.+",
-                    new RERule(true, "user rule 1", "", "bla fjdkaljfdkalfjadkl", "ble"), //FIXME: create some smart example nonintrusive user rules
-                    new RERule(true, "user rule 2", "", "xxx aewiomfivmzxlh", "yyy"),
-                    new RERule(true, "user rule 3", "", "dog fjalmxkclzi", "cat")
+                    "^.+"
             );
 
 
@@ -411,19 +411,27 @@ public final class MyCommands {
             );
 
 
-    static public final REGroup RE_ACTIVITY_FRAGMENT_GROUP =
+    static public final REGroup RE_ACTIVITY_GROUP =
             new REGroup(
                     false,
-                    "activity/fragment",
-                    "Activity and fragment related shortcut rules.", "^((activity)|(fragment))",
+                    "activity",
+                    "Activity related shortcut rules.",
+                    "^activity",
                     new RERule(false, "",
-                            "Allows shortcut commands like \"activity action view google.pl\" instead of \"start activity action view google.pl\".",
-                            "^((?:activity)|(?:fragment)) " + RE_KEYWORD, "start $1 $2"),
-                    //no keyword can be activity or fragment class name..
+                            "Allows shortcut commands like \"activity .MyGreatActivity\" instead of \"start activity component .MyGreatActivity\".",
+                            "^activity (?=\\S*\\.)([_\\./a-zA-Z0-9]*)", "start activity component $1"),
+                    new RERule(false, "", "Adds \"start\" prefix in other cases (for implicit intents).", "^activity", "start activity")
+            );
+
+    static public final REGroup RE_FRAGMENT_GROUP =
+            new REGroup(
+                    false,
+                    "fragment",
+                    "Fragment related shortcut rules.",
+                    "^fragment",
                     new RERule(false, "",
                             "Allows shortcut commands like \"fragment .MyGreatFragment\" instead of \"start fragment component .MyGreatFragment\".",
-                            "^((?:activity)|(?:fragment)) " + RE_MULTI_ID, "start $1 component $2"),
-                    new RERule(false, "", "This also adds \"start\" prefix in other cases.", "^((?:activity)|(?:fragment)) ", "start $1 ")
+                            "^fragment (?=\\S*\\.)([_\\./a-zA-Z0-9]*)", "start fragment component $1")
             );
 
     static public final REGroup RE_FINAL_GROUP =
@@ -448,7 +456,8 @@ public final class MyCommands {
             RE_USER_GROUP,
             RE_ALARM_GROUP,
             RE_TIMER_GROUP,
-            RE_ACTIVITY_FRAGMENT_GROUP,
+            RE_ACTIVITY_GROUP,
+            RE_FRAGMENT_GROUP,
             RE_FINAL_GROUP
     );
 

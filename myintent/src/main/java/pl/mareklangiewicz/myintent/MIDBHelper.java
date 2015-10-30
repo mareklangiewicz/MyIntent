@@ -89,6 +89,18 @@ class MIDBHelper extends SQLiteOpenHelper {
                 MIContract.RuleUser.COL_MATCH + " TEXT",
                 MIContract.RuleUser.COL_REPLACE + " TEXT"
         );
+        List<MyCommands.RERule> rules = MyCommands.DEFAULT_EXAMPLE_RULES;
+        for(int i = 0; i < rules.size(); ++i) {
+            MyCommands.RERule rule = rules.get(i);
+            ContentValues values = new ContentValues();
+            values.put(MIContract.RuleUser.COL_POSITION, i);
+            values.put(MIContract.RuleUser.COL_EDITABLE, rule.getEditable());
+            values.put(MIContract.RuleUser.COL_NAME, rule.getName());
+            values.put(MIContract.RuleUser.COL_DESCRIPTION, rule.getDescription());
+            values.put(MIContract.RuleUser.COL_MATCH, rule.getMatch());
+            values.put(MIContract.RuleUser.COL_REPLACE, rule.getReplace());
+            db.insert(MIContract.RuleUser.TABLE_NAME, null, values);
+        }
     }
 
     @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

@@ -31,9 +31,13 @@
         >
         <menu>
             <item
-                android:id="@+id/reset_all_rules"
-                android:title='@string/reset_all_re_rules'
-                android:titleCondensed='cmd:reset'
+                android:id="@+id/action_whats_up"
+                android:icon="@drawable/ic_chat_black_24dp"
+                android:title="@string/action_whats_up"
+                />
+            <item
+                android:id="@+id/reset_all"
+                android:title="@string/reset_all"
                 android:icon="@drawable/ic_whatshot_black_24dp"
                 />
             <!-- TODO: microphone icon -->
@@ -41,12 +45,7 @@
                 android:id="@+id/action_listen"
                 android:icon="@drawable/ic_chat_black_24dp"
                 android:title="@string/action_listen"
-                android:titleCondensed="cmd:listen"
-                />
-            <item
-                android:id="@+id/action_whats_up"
-                android:icon="@drawable/ic_chat_black_24dp"
-                android:title="@string/action_whats_up"
+                android:titleCondensed="cmd:start custom action listen"
                 />
             <item
                 android:id="@+id/action_start_dialer"

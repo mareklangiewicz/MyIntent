@@ -70,6 +70,13 @@ public class MIRulesFragment extends MyFragment {
             }
             return true;
         }
+        if(id == R.id.clear_user_rules) {
+            MyCommands.RE_USER_GROUP.getRules().clear();
+            if(mRecyclerView != null) {
+                mRecyclerView.getAdapter().notifyItemChanged(1);
+            }
+            return true;
+        }
         return false;
     }
 

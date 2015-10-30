@@ -366,7 +366,6 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
                 component = pkg + component;
                 map.put("component", component);
             }
-
         }
 
         return onCommand(map);
@@ -389,6 +388,8 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
                 return onCommandStartBroadcast(command);
             case MyCommands.CMD_FRAGMENT:
                 return onCommandStartFragment(command);
+            case MyCommands.CMD_CUSTOM:
+                return onCommandCustom(command);
             default:
                 log.e("Unsupported command: %s", str(command));
                 return false;
@@ -467,6 +468,12 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         ft.commit();
 
         return true;
+    }
+
+    @CallSuper
+    public boolean onCommandCustom(@NonNull Map<String, String> command) {
+        log.e("Unsupported custom command: %s", str(command));
+        return false;
     }
 
     /**

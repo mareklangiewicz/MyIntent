@@ -40,7 +40,7 @@ public final class MyCommands {
     private static final boolean VV = false;
 
 
-    static boolean sUT = false; // FIXME LATER: this is temporary hack to detect unit tests.. remove it.
+    static boolean sUT = false; // FIXME SOMEDAY: this is temporary hack to detect unit tests.. remove it.
 
 
     public static final String CMD_ACTIVITY = "activity";
@@ -488,9 +488,9 @@ public final class MyCommands {
             String keyword = matcher.group(2);
             String value = matcher.group(3);
 
-            if(!sUT) { // FIXME LATER: this 'if' is temporary hack
-                keyword = Uri.decode(keyword); // TODO LATER: analyse if this is the best place do Uri.decode (propably yes)
-                value = Uri.decode(value); // TODO LATER: analyse if this is the best place to Uri.decode (probably yes)
+            if(!sUT) { // FIXME SOMEDAY: this 'if' is temporary hack
+                keyword = Uri.decode(keyword);
+                value = Uri.decode(value);
             }
 
             switch(keyword) {
@@ -499,7 +499,7 @@ public final class MyCommands {
                     break;
                 case "flags":
                     out.put(keyword, value);
-                    //TODO LATER: what about multiple flags? add some symbolic multiple flags implementation
+                    //TODO SOMEDAY: what about multiple flags? add some symbolic multiple flags implementation
                     break;
                 default:
                     out.put(keyword, value);

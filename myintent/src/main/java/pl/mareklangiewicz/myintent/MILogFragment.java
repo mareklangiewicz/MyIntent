@@ -38,7 +38,7 @@ public final class MILogFragment extends MyFragment {
         //noinspection ConstantConditions
         mSearchView.setSearchableInfo(manager.getSearchableInfo(getActivity().getComponentName()));
         mSearchView.setSubmitButtonEnabled(true); // FIXME: probably not needed - remove when I implement my animated play button
-        mSearchView.setQueryRefinementEnabled(true); // TODO: test it
+        mSearchView.setQueryRefinementEnabled(true);
 
         mAdapter = new MyMDLogAdapter();
         mAdapter.setLog(log);

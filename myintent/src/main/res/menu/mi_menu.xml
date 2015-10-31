@@ -40,10 +40,9 @@
                 android:title="@string/reset_all"
                 android:icon="@drawable/ic_whatshot_black_24dp"
                 />
-            <!-- TODO: microphone icon -->
             <item
                 android:id="@+id/action_listen"
-                android:icon="@drawable/ic_chat_black_24dp"
+                android:icon="@drawable/ic_keyboard_voice_black_24dp"
                 android:title="@string/action_listen"
                 android:titleCondensed="cmd:start custom action listen"
                 />

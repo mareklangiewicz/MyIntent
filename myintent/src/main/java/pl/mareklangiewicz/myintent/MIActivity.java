@@ -213,13 +213,13 @@ public class MIActivity extends MyActivity {
         if(requestCode == SPEECH_REQUEST_CODE) {
             if(resultCode == RESULT_OK) {
                 List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                float[] scores = data.getFloatArrayExtra(RecognizerIntent.EXTRA_CONFIDENCE_SCORES);
-                log.v("Voice recognition results:"); //TODO LATER: remove this whole results logging
-                for(int i = 0; i < results.size(); ++i) {
-                    String result = results.get(i);
-                    float score = scores == null ? -1 : scores[i];
-                    log.v("   %f:%s", score, result);
-                }
+//                float[] scores = data.getFloatArrayExtra(RecognizerIntent.EXTRA_CONFIDENCE_SCORES);
+//                log.v("Voice recognition results:");
+//                for(int i = 0; i < results.size(); ++i) {
+//                    String result = results.get(i);
+//                    float score = scores == null ? -1 : scores[i];
+//                    log.v("   %f:%s", score, result);
+//                }
                 String command = results.get(0).toLowerCase();
 
                 //TODO real code: set fragment with command and enable super button there
@@ -268,10 +268,30 @@ public class MIActivity extends MyActivity {
             startSpeechRecognizer();
             return true;
         }
+        if(command.get("action").equals("suicide")) {
+            suicide();
+            return true;
+        }
+        if(command.get("action").equals("resurrection")) {
+            resurrection();
+            return true;
+        }
 
         return super.onCommandCustom(command);
     }
 
+    protected void suicide() {
+        System.exit(0);
+    }
+
+    protected void resurrection() {
+        Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pi = PendingIntent.getActivity(MIActivity.this, 0, i, 0);
+        AlarmManager manager = (AlarmManager) MIActivity.this.getSystemService(Context.ALARM_SERVICE);
+        manager.set(AlarmManager.RTC, System.currentTimeMillis() + 1000, pi);
+        suicide();
+    }
 
     private void resetAll() {
         new MaterialDialog.Builder(this)
@@ -283,12 +303,7 @@ public class MIActivity extends MyActivity {
                     @Override public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
                         deleteDatabase(MIDBHelper.DATABASE_NAME);
                         mSkipSavingToDb = true;
-                        Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
-                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        PendingIntent pi = PendingIntent.getActivity(MIActivity.this, 0, i, 0);
-                        AlarmManager manager = (AlarmManager) MIActivity.this.getSystemService(Context.ALARM_SERVICE);
-                        manager.set(AlarmManager.RTC, System.currentTimeMillis() + 1000, pi);
-                        System.exit(0);
+                        resurrection();
                     }
                 })
                 .show();

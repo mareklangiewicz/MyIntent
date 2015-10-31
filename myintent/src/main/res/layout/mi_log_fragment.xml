@@ -22,6 +22,7 @@
             android:padding="8dp"
             />
 
+        <!-- TODO: button for voice recognition -->
         <!-- TODO: animated play button -->
 
     </LinearLayout>

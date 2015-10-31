@@ -8,6 +8,4 @@
     android:searchSuggestAuthority="pl.mareklangiewicz.myintent.provider"
     android:searchSuggestPath="cmd"
     android:searchSuggestThreshold="1"
-    android:voicePromptText="@string/ask_for_intent"
-    android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"
     />

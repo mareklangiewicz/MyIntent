@@ -48,6 +48,7 @@ public final class MyCommands {
     public static final String CMD_BROADCAST = "broadcast";
     public static final String CMD_FRAGMENT = "fragment";
     public static final String CMD_CUSTOM = "custom";
+    public static final String CMD_NOTHING = "nothing"; // just for dry testing purposes
 
 
     static public final class RERule {
@@ -267,10 +268,12 @@ public final class MyCommands {
             "set an alarm at 8 30",
             "set a timer for 300",
             "set timer for 200 seconds",
-            "set timer for 200 seconds quickly"
+            "set timer for 200 seconds quickly",
+            "start nothing"
     );
 
     static public final List<RERule> DEFAULT_EXAMPLE_RULES = Arrays.asList(
+            new RERule(true, "nothing", "Things you can say if you don't want anything to happen", "^((no(thing)?)|(cancel)|(nope))", "start nothing"),
             new RERule(true, "user rule 1", "", "bla fjdkaljfdkalfjadkl", "ble"), //FIXME: create some smart example nonintrusive user rules
             new RERule(true, "user rule 2", "", "xxx aewiomfivmzxlh", "yyy"),
             new RERule(true, "user rule 3", "", "dog fjalmxkclzi", "cat")

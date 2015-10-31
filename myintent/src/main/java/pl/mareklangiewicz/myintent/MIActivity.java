@@ -220,7 +220,7 @@ public class MIActivity extends MyActivity {
                     float score = scores == null ? -1 : scores[i];
                     log.v("   %f:%s", score, result);
                 }
-                String command = results.get(0);
+                String command = results.get(0).toLowerCase();
 
                 //TODO real code: set fragment with command and enable super button there
                 boolean ok = onCommand(command);

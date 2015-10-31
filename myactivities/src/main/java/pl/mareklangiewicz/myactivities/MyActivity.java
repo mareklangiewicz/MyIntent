@@ -390,6 +390,8 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
                 return onCommandStartFragment(command);
             case MyCommands.CMD_CUSTOM:
                 return onCommandCustom(command);
+            case MyCommands.CMD_NOTHING:
+                return true; // just for dry testing purposes
             default:
                 log.e("Unsupported command: %s", str(command));
                 return false;

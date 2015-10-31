@@ -97,6 +97,11 @@ public final class MILogFragment extends MyFragment {
             log.setHistoryFilterLevel(Logger.Level.VERBOSE);
             return true;
         }
+        else if(id == R.id.clear_log_history) {
+            log.getLogHistory().clear();
+            mAdapter.notifyDataSetChanged();
+            return true;
+        }
         else if(id == R.id.log_some_assert) {
             log.a("some assert");
             return true;

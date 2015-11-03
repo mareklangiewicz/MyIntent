@@ -52,7 +52,7 @@ class MIDBHelper extends SQLiteOpenHelper {
                 MIContract.CmdExample.COL_COMMAND + " TEXT UNIQUE ON CONFLICT REPLACE",
                 MIContract.CmdExample.COL_PRIORITY + " LONG"
         );
-        List<String> commands = MyCommands.DEFAULT_EXAMPLE_COMMANDS;
+        List<String> commands = MIExamples.EXAMPLE_COMMANDS;
         for(int i = 0; i < commands.size(); ++i) {
             ContentValues values = new ContentValues();
             values.put(MIContract.CmdExample.COL_COMMAND, commands.get(i));
@@ -89,7 +89,7 @@ class MIDBHelper extends SQLiteOpenHelper {
                 MIContract.RuleUser.COL_MATCH + " TEXT",
                 MIContract.RuleUser.COL_REPLACE + " TEXT"
         );
-        List<MyCommands.RERule> rules = MyCommands.DEFAULT_EXAMPLE_RULES;
+        List<MyCommands.RERule> rules = MIExamples.EXAMPLE_RULES;
         for(int i = 0; i < rules.size(); ++i) {
             MyCommands.RERule rule = rules.get(i);
             ContentValues values = new ContentValues();

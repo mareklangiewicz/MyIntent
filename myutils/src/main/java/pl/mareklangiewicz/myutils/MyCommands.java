@@ -260,12 +260,10 @@ public final class MyCommands {
         }
     }
 
-    static public final List<String> DEFAULT_EXAMPLE_COMMANDS = Arrays.asList( //TODO: good small example commands collection (without MyIntent specific)
+    static public final List<String> DEFAULT_EXAMPLE_COMMANDS = Arrays.asList(
             "action view data http://mareklangiewicz.pl",
-            "action view data mareklangiewicz.pl",
             "wake me up at 7",
-            "set alarm to 7:30",
-            "set an alarm at 8 30",
+            "set alarm to 7 30",
             "set a timer for 300",
             "set timer for 200 seconds",
             "set timer for 200 seconds quickly",
@@ -273,10 +271,7 @@ public final class MyCommands {
     );
 
     static public final List<RERule> DEFAULT_EXAMPLE_RULES = Arrays.asList(
-            new RERule(true, "nothing", "Things you can say if you don't want anything to happen", "^((no(thing)?)|(cancel)|(nope))", "start nothing"),
-            new RERule(true, "user rule 1", "", "bla fjdkaljfdkalfjadkl", "ble"), //FIXME: create some smart example nonintrusive user rules
-            new RERule(true, "user rule 2", "", "xxx aewiomfivmzxlh", "yyy"),
-            new RERule(true, "user rule 3", "", "dog fjalmxkclzi", "cat")
+            new RERule(true, "nothing", "Things you can say if you don't want anything to happen", "^((cancel)|(no(thing)?))\\b", "start nothing")
     );
 
 

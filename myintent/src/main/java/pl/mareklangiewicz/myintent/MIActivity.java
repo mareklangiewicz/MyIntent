@@ -268,6 +268,10 @@ public class MIActivity extends MyActivity {
             startSpeechRecognizer();
             return true;
         }
+        if(command.get("action").equals("say")) {
+            say(command.get("data"));
+            return true;
+        }
         if(command.get("action").equals("suicide")) {
             suicide();
             return true;
@@ -279,6 +283,13 @@ public class MIActivity extends MyActivity {
 
         return super.onCommandCustom(command);
     }
+
+    protected void say(String text) {
+        log.w(text);
+        //TODO NOW: say it! (TTS)
+    }
+
+
 
     protected void suicide() {
         System.exit(0);

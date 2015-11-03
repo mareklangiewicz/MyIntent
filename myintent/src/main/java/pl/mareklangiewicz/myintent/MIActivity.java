@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -26,6 +27,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import pl.mareklangiewicz.myactivities.MyActivity;
@@ -53,6 +55,8 @@ public class MIActivity extends MyActivity {
     private @Nullable ObjectAnimator mLogoTextViewAnimator;
     private @Nullable ObjectAnimator mHomePageTextViewAnimator;
     private @Nullable ObjectAnimator mMagicLinesDrawableAnimator;
+    private @Nullable TextToSpeech mTextToSpeech;
+    private boolean mTTSReady = false;
 
 
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +118,18 @@ public class MIActivity extends MyActivity {
                 log.e("Can not load user rules from data base.");
             selectGlobalItem(R.id.mi_start);
         }
+
+        mTextToSpeech = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override public void onInit(int status) {
+                if(status == TextToSpeech.SUCCESS && mTextToSpeech != null) {
+                    mTextToSpeech.setLanguage(Locale.US);
+                    mTTSReady = true;
+                    log.i("Text to speech ready.");
+                }
+                else
+                    log.i("Text to speech disabled.");
+            }
+        });
     }
 
     @Override public void onIntent(@Nullable Intent intent) {
@@ -194,7 +210,7 @@ public class MIActivity extends MyActivity {
                 startActivityForResult(intent, SPEECH_REQUEST_CODE);
             }
             catch(ActivityNotFoundException e) {
-                log.e("Activity not found.", e);
+                log.e("Speech recognizer not found.", e);
             }
             catch(SecurityException e) {
                 log.e("Security exception.", e);
@@ -286,7 +302,11 @@ public class MIActivity extends MyActivity {
 
     protected void say(String text) {
         log.w(text);
-        //TODO NOW: say it! (TTS)
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if(mTextToSpeech != null && mTTSReady) {
+                mTextToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
+            }
+        }
     }
 
 
@@ -322,6 +342,10 @@ public class MIActivity extends MyActivity {
 
     @Override protected void onDestroy() {
 
+        if(mTextToSpeech != null) {
+            mTextToSpeech.shutdown();
+            mTextToSpeech = null;
+        }
         mMagicLinesDrawableAnimator = null;
         mHomePageTextViewAnimator = null;
         mLogoTextViewAnimator = null;

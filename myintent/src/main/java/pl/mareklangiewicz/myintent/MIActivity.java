@@ -36,6 +36,7 @@ import pl.mareklangiewicz.mydrawables.MyMagicLinesDrawable;
 import pl.mareklangiewicz.myutils.MyCommands;
 import pl.mareklangiewicz.myviews.IMyNavigation;
 
+import static pl.mareklangiewicz.myutils.MyMathUtils.getRandomInt;
 import static pl.mareklangiewicz.myutils.MyTextUtils.str;
 
 /**
@@ -124,10 +125,10 @@ public class MIActivity extends MyActivity {
                 if(status == TextToSpeech.SUCCESS && mTextToSpeech != null) {
                     mTextToSpeech.setLanguage(Locale.US);
                     mTTSReady = true;
-                    log.i("Text to speech ready.");
+                    log.d("Text to speech ready.");
                 }
                 else
-                    log.i("Text to speech disabled.");
+                    log.d("Text to speech disabled.");
             }
         });
     }
@@ -300,7 +301,49 @@ public class MIActivity extends MyActivity {
         return super.onCommandCustom(command);
     }
 
+    private String remAuthor(String quote) {
+        int idx = quote.indexOf("[");
+        return idx == -1 ? quote : quote.substring(0, idx);
+    }
+
+    private String getRandomQuote(String[] quotes) {
+        return remAuthor(quotes[getRandomInt(0, quotes.length-1)]);
+    }
+
     protected void say(String text) {
+        long time = System.currentTimeMillis();
+        if("weekday".equals(text)) {
+            say(String.format("%tA", time));
+            return;
+        }
+        if("date".equals(text)) {
+            say(String.format("%tF", time));
+            return;
+        }
+        if("time".equals(text)) {
+            say(String.format("%tl:%tM %tp", time, time, time));
+            return;
+        }
+        if("something funny".equals(text)) {
+            String[] quotes = ((MIApplication)getApplication()).FUNNY_QUOTES;
+            say(getRandomQuote(quotes));
+            return;
+        }
+        if("something smart".equals(text)) {
+            String[] quotes = ((MIApplication)getApplication()).SMART_QUOTES;
+            say(getRandomQuote(quotes));
+            return;
+        }
+        if("something positive".equals(text)) {
+            //TODO SOMEDAY http://www.brainyquote.com/quotes/topics/topic_positive.html
+            log.i("Not implemented.");
+            return;
+        }
+        if("something motivational".equals(text)) {
+            //TODO SOMEDAY http://www.brainyquote.com/quotes/topics/topic_motivational.html
+            log.i("Not implemented.");
+            return;
+        }
         log.w(text);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if(mTextToSpeech != null && mTTSReady) {

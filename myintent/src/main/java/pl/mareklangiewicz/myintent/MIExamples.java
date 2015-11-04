@@ -18,6 +18,8 @@ public class MIExamples {
         EXAMPLE_COMMANDS.add("start custom action listen");
         EXAMPLE_COMMANDS.add("start custom action say data hello world!");
         EXAMPLE_COMMANDS.add("say have a nice day!");
+        EXAMPLE_COMMANDS.add("say something funny");
+        EXAMPLE_COMMANDS.add("say something smart");
         //TODO LATER: add some good examples
 
         EXAMPLE_RULES.addAll(MyCommands.DEFAULT_EXAMPLE_RULES);

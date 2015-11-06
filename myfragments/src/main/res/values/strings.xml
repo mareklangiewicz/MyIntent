@@ -4,4 +4,5 @@
     <string name="action_decorate_views">Decorate some views</string>
     <string name="enter_name">Enter your name. (not Marek)</string>
     <string name="blabla">blabla</string>
+    <string name="clear_log_history">Clear log history</string>
 </resources>

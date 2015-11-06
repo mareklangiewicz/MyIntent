@@ -19,7 +19,7 @@ public final class MyLogger extends AbstractLogger {
     /**
      * Default logger for use in UI thread
      */
-    static public final MyLogger sMyDefaultUILogger = new MyLogger("ML");
+    static public final MyLogger UIL = new MyLogger("ML");
     public static final int COLOR_VERBOSE = 0xFFB0B0B0;
     public static final int COLOR_DEBUG = 0xFF606060;
     public static final int COLOR_INFO = 0xFF000000;

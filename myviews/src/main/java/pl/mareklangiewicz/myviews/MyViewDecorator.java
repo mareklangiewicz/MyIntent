@@ -18,6 +18,10 @@ import java.util.Map;
  */
 public final class MyViewDecorator {
 
+    private MyViewDecorator() {
+        throw new AssertionError("MyViewDecorator class is noninstantiable.");
+    }
+
     static public void decorateOne(@NonNull View view, @LayoutRes int decoration, @Nullable LayoutInflater inflater) {
 
         if(inflater == null)

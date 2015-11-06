@@ -28,6 +28,8 @@ public interface IMyNavigation {
 
     void setCheckedItem(@IdRes int id);
 
+    boolean overlaps(@Nullable View view);
+
     /**
      * returns first checked item
      * WARNING: see MyNavigationView.getFirstCheckedItem warning!

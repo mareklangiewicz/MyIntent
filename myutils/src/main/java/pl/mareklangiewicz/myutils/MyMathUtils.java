@@ -24,7 +24,7 @@ public final class MyMathUtils {
 
 
     static public int scale0d(int old, int oldMax, int newMax) {
-        return old * newMax / oldMax;
+        return (int)(((long)old) * ((long)newMax) / ((long)oldMax));
     }
 
     static public int scale1d(int old, int oldMin, int oldMax, int newMin, int newMax) {
@@ -48,7 +48,7 @@ public final class MyMathUtils {
 
 
     static public int getRandomInt(int min, int max) {
-        return scale1d(RANDOM.nextInt(), 0, 1, min, max);
+        return scale1d(RANDOM.nextInt(Integer.MAX_VALUE >> 4), 0, Integer.MAX_VALUE >> 4, min, max);
     }
 
     static public @NonNull Point getRandomPoint(@NonNull Point min, @NonNull Point max) {

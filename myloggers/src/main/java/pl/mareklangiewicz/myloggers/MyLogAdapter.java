@@ -16,10 +16,12 @@ import com.noveogroup.android.log.MyLogger;
 /**
  * Created by Marek Langiewicz on 25.06.15.
  */
-public final class MyLogAdapter extends RecyclerView.Adapter<MyLogAdapter.ViewHolder> {
+public class MyLogAdapter extends RecyclerView.Adapter<MyLogAdapter.ViewHolder> implements View.OnClickListener {
 
-    private @Nullable MyLogger log;
-    private @Nullable LogHistory history;
+    static public final int LOG_ITEM_VIEW_TAG_HOLDER = R.id.log_item_view_tag_holder;
+
+    protected  @Nullable MyLogger log;
+    protected  @Nullable LogHistory history;
 
     public MyLogAdapter() {
         setLog(null);
@@ -45,22 +47,25 @@ public final class MyLogAdapter extends RecyclerView.Adapter<MyLogAdapter.ViewHo
 
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.log_item, parent, false);
-        return new ViewHolder(v);
+        v.setOnClickListener(this);
+        ViewHolder holder = new ViewHolder(v);
+        v.setTag(LOG_ITEM_VIEW_TAG_HOLDER, holder);
+        return holder;
 
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         long nr = 0;
-        long time = 0;
+//        long time = 0;
         //String logger = "";
         Logger.Level level = Logger.Level.VERBOSE;
         String message = "";
         float elevation = 2;
         if(history != null) {
             nr = history.getFilteredId(position) + 1;
-            time = history.getFilteredTime(position);
-            //logger = history.getFilteredLogger(position);
+//            time = history.getFilteredTime(position);
+//            logger = history.getFilteredLogger(position);
             message = history.getFilteredMessage(position);
             level = history.getFilteredLevel(position);
         }
@@ -76,7 +81,7 @@ public final class MyLogAdapter extends RecyclerView.Adapter<MyLogAdapter.ViewHo
         message = String.format("%s", message);
 
         holder.mCardView.setCardElevation(elevation);
-        holder.mHeadView.setText(String.format("%02d%c", nr, MyLogger.getLevelChar(level)));
+        holder.mHeadView.setText(String.format("%03d%c", nr, MyLogger.getLevelChar(level)));
 
         holder.mMessageView.setTextColor(color);
         holder.mMessageView.setText(message);
@@ -93,7 +98,11 @@ public final class MyLogAdapter extends RecyclerView.Adapter<MyLogAdapter.ViewHo
         if(history != null) {
             return history.getFilteredId(position);
         }
-        return super.getItemId(position);
+        return RecyclerView.NO_ID;
+    }
+
+    @Override public void onClick(View v) {
+
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

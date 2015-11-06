@@ -122,5 +122,16 @@ public final class MyHandler extends PatternHandler {
                 System.out.println(message);
             }
     }
+
+    @Override
+    public void print(@NonNull String loggerName, @NonNull Logger.Level level, @Nullable Throwable throwable, @Nullable String messageFormat,
+                      @Nullable Object... args) throws IllegalArgumentException {
+
+        if(args == null || args.length == 0 || messageFormat == null)
+            print(loggerName, level, throwable, messageFormat);
+        else
+            print(loggerName, level, throwable, String.format(messageFormat, args));
+
+    }
 }
 

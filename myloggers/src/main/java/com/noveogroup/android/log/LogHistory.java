@@ -69,6 +69,7 @@ public final class LogHistory {
             filter_size++;
     }
 
+
     private boolean filter_matches(@NonNull Logger.Level level) {
         return filter_level.includes(level);
     }
@@ -141,4 +142,8 @@ public final class LogHistory {
 
     public @NonNull String getFilteredMessage(int idx) { return arrmessage[getFilteredIdx(idx)]; }
 
+    public void clear() {
+        size = 0;
+        filter_refresh();
+    }
 }

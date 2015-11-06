@@ -14,7 +14,7 @@ import com.noveogroup.android.log.MyLogger;
 
 public final class MyNavigationView extends NavigationView implements IMyNavigation, NavigationView.OnNavigationItemSelectedListener {
 
-    protected final MyLogger log = MyLogger.sMyDefaultUILogger;
+    protected final MyLogger log = MyLogger.UIL;
 
     private @Nullable View mHeader;
 
@@ -65,6 +65,10 @@ public final class MyNavigationView extends NavigationView implements IMyNavigat
         mHeader = inflateHeaderView(id);
         if(mListener != null)
             mListener.onInflateHeader(this);
+    }
+
+    @Override public boolean overlaps(@Nullable View view) {
+        return MyViews.overlaps(this, view);
     }
 
     @Override

@@ -44,7 +44,6 @@ import pl.mareklangiewicz.myviews.MyNavigationView;
 
 import static pl.mareklangiewicz.myutils.MyMathUtils.scale0d;
 import static pl.mareklangiewicz.myutils.MyTextUtils.str;
-// TODO LATER: use Leak Canary: https://github.com/square/leakcanary (check U+2020 example...)
 
 @SuppressLint("Registered")
 public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavigation.Listener, DrawerLayout.DrawerListener {
@@ -166,6 +165,26 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         }
     }
 
+    private boolean checkFirstCheckableItemWithCommand(Menu menu, String command) {
+        int size = menu.size();
+        for(int i = 0; i < size; ++i) {
+            MenuItem item = menu.getItem(i);
+            if(item.isCheckable() && item.getTitleCondensed().equals("cmd:" + command)) {
+                item.setChecked(true);
+                return true;
+            }
+            if(item.hasSubMenu()) {
+                Menu submenu = item.getSubMenu();
+                if(submenu != null) {
+                    boolean done = checkFirstCheckableItemWithCommand(submenu, command);
+                    if(done)
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private void toggleGlobalNavigation() {
         if(mGlobalDrawerLayout != null)
             toggleDrawer(mGlobalDrawerLayout, GravityCompat.START);
@@ -218,7 +237,8 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         // ensure that drawers and menu icons are updated:
         onNavigationContentChanged(getGlobalNavigation());
         onNavigationContentChanged(getLocalNavigation());
-        onIntent(getIntent());
+        if(savedInstanceState == null)
+            onIntent(getIntent());
     }
 
     @Override
@@ -236,21 +256,36 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         }
     }
 
+    @Override protected void onStart() {
+        if(VV) {
+            log.v("%s.%s", this.getClass().getSimpleName(), "onStart");
+        }
+        log.setSnackView(mCoordinatorLayout);
+        super.onStart();
+    }
 
     @Override protected void onResume() {
         if(VV) {
             log.v("%s.%s", this.getClass().getSimpleName(), "onResume");
         }
-        super.onResume();
         log.setSnackView(mCoordinatorLayout);
+        super.onResume();
     }
 
     @Override protected void onPause() {
         if(VV) {
             log.v("%s.%s", this.getClass().getSimpleName(), "onPause");
         }
-        log.setSnackView(null);
         super.onPause();
+    }
+
+    @Override protected void onStop() {
+        if(VV) {
+            log.v("%s.%s", this.getClass().getSimpleName(), "onStop");
+        }
+        if(log.getSnackView() == mCoordinatorLayout)
+            log.setSnackView(null);
+        super.onStop();
     }
 
     @CallSuper @Override protected void onDestroy() {
@@ -322,6 +357,13 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         if(command == null) {
             log.d("null command received - ignoring");
             return false;
+        }
+
+        IMyNavigation gnav = getGlobalNavigation();
+        if(gnav != null) {
+            Menu menu = getGlobalNavigation().getMenu();
+            if(menu != null)
+                checkFirstCheckableItemWithCommand(menu, command);
         }
 
         command = MyCommands.REGroup.applyAll(MyCommands.RE_RULES, command, log);

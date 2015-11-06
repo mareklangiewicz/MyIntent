@@ -81,7 +81,7 @@ public class MyLogAdapter extends RecyclerView.Adapter<MyLogAdapter.ViewHolder> 
         message = String.format("%s", message);
 
         holder.mCardView.setCardElevation(elevation);
-        holder.mHeadView.setText(String.format("%02d%c", nr, MyLogger.getLevelChar(level)));
+        holder.mHeadView.setText(String.format("%03d%c", nr, MyLogger.getLevelChar(level)));
 
         holder.mMessageView.setTextColor(color);
         holder.mMessageView.setText(message);

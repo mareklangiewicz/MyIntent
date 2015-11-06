@@ -31,53 +31,58 @@
         >
         <menu>
             <item
-                android:id="@+id/action_whats_up"
+                android:title="@string/say_something_funny"
                 android:icon="@drawable/ic_chat_black_24dp"
-                android:title="@string/action_whats_up"
+                android:titleCondensed="cmd:say something funny"
+                />
+            <item
+                android:title="@string/say_something_smart"
+                android:icon="@drawable/ic_chat_black_24dp"
+                android:titleCondensed="cmd:say something smart"
                 />
             <item
                 android:id="@+id/reset_all"
-                android:title="@string/reset_all"
                 android:icon="@drawable/ic_whatshot_black_24dp"
+                android:title="@string/reset_all"
                 />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/item_global_tests"
+        android:title="Tests TODO LATER: DELETE IT ALL"
+        >
+        <menu>
             <item
-                android:id="@+id/action_listen"
                 android:icon="@drawable/ic_keyboard_voice_black_24dp"
                 android:title="@string/action_listen"
                 android:titleCondensed="cmd:start custom action listen"
                 />
             <item
-                android:id="@+id/action_start_dialer"
                 android:icon="@drawable/ic_whatshot_black_24dp"
                 android:title="@string/start_dialer"
                 android:titleCondensed="cmd:action android.intent.action.DIAL"
                 />
             <item
-                android:id="@+id/action_set_timer_5"
                 android:icon="@drawable/ic_whatshot_black_24dp"
                 android:title="@string/set_timer_5"
                 android:titleCondensed="cmd:set timer 5"
                 />
             <item
-                android:id="@+id/action_set_alarm_8_30"
                 android:icon="@drawable/ic_whatshot_black_24dp"
                 android:title="@string/set_alarm_8_30"
                 android:titleCondensed="cmd:set alarm 8 30"
                 />
             <item
-                android:id="@+id/action_set_alarm_9_30_quickly"
                 android:icon="@drawable/ic_whatshot_black_24dp"
                 android:title="@string/set_alarm_9_30_quickly"
                 android:titleCondensed="cmd:set alarm 9 30 quickly"
                 />
             <item
-                android:id="@+id/action_start_dialer_explicitly"
                 android:icon="@drawable/ic_whatshot_black_24dp"
                 android:title="@string/start_dialer_explicitly"
                 android:titleCondensed="cmd:activity com.google.android.dialer/com.android.dialer.DialtactsActivity"
                 />
             <item
-                android:id="@+id/action_start_mytest_activity"
                 android:icon="@drawable/ic_whatshot_black_24dp"
                 android:title="TMP:MyTestActivity"
                 android:titleCondensed="cmd:activity pl.mareklangiewicz.myactivities.MyTestActivity"

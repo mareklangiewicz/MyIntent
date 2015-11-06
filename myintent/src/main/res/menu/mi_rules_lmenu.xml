@@ -24,7 +24,7 @@
     </item>
 
     <item
-        android:title="@string/mi_help"
+        android:title="@string/mi_re_help"
         >
         <menu>
             <item

@@ -67,6 +67,10 @@ public final class MyNavigationView extends NavigationView implements IMyNavigat
             mListener.onInflateHeader(this);
     }
 
+    @Override public boolean overlaps(@Nullable View view) {
+        return MyViews.overlaps(this, view);
+    }
+
     @Override
     public void inflateMenu(int resId) {
         super.inflateMenu(resId);

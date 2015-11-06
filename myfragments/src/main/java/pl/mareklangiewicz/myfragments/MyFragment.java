@@ -24,7 +24,6 @@ import com.noveogroup.android.log.MyLogger;
 
 import pl.mareklangiewicz.myviews.IMyManager;
 import pl.mareklangiewicz.myviews.IMyNavigation;
-import pl.mareklangiewicz.myviews.MyNavigationView;
 
 import static pl.mareklangiewicz.myutils.MyTextUtils.str;
 
@@ -38,7 +37,7 @@ import static pl.mareklangiewicz.myutils.MyTextUtils.str;
  * - don't add this fragment transactions to back stack
  * or invoke setRetainInstance(false) after MyFragment.onCreate.
  */
-public class MyFragment extends Fragment implements IMyManager, IMyNavigation, MyNavigationView.Listener, DrawerLayout.DrawerListener {
+public class MyFragment extends Fragment implements IMyManager, IMyNavigation, IMyNavigation.Listener, DrawerLayout.DrawerListener {
 
     /*
         private static final boolean V = BuildConfig.VERBOSE;
@@ -135,6 +134,8 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, M
     @Override public void inflateHeader(@LayoutRes int id) { gln().inflateHeader(id); }
 
     @Override public void setCheckedItem(@IdRes int id) { gln().setCheckedItem(id); }
+
+    @Override public boolean overlaps(@Nullable View view) { return gln().overlaps(view); }
 
     /**
      * WARNING: see MyNavigationView.getFirstCheckedItem warning!

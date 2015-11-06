@@ -174,8 +174,9 @@ public class MIActivity extends MyActivity {
         String command = uri.getFragment();
 
         if(command == null) {
-            log.d("uri with empty fragment received - ignoring");
+            log.d("URI with empty fragment received. Entering help..");
             log.v("uri: %s", str(uri));
+            onCommand("fragment .MIHelpFragment");
             return;
 
         }
@@ -289,6 +290,10 @@ public class MIActivity extends MyActivity {
             say(command.get("data"));
             return true;
         }
+        if(command.get("action").equals("exit")) {
+            finish();
+            return true;
+        }
         if(command.get("action").equals("suicide")) {
             suicide();
             return true;
@@ -344,7 +349,7 @@ public class MIActivity extends MyActivity {
             log.i("Not implemented.");
             return;
         }
-        log.w(text);
+        log.w("[SNACK]" + text);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if(mTextToSpeech != null && mTTSReady) {
                 mTextToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
@@ -452,10 +457,6 @@ public class MIActivity extends MyActivity {
         }
         if(id == R.id.reset_all) {
             resetAll();
-            return true;
-        }
-        if(id == R.id.action_whats_up) {
-            log.i("[SNACK][SHORT]What's up mate?");
             return true;
         }
 

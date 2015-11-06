@@ -21,6 +21,7 @@ import pl.mareklangiewicz.mydrawables.MyCheckDrawable;
 import pl.mareklangiewicz.mydrawables.MyLessDrawable;
 import pl.mareklangiewicz.mydrawables.MyLivingDrawable;
 import pl.mareklangiewicz.mydrawables.MyMagicLinesDrawable;
+import pl.mareklangiewicz.mydrawables.MyPlayStopDrawable;
 import pl.mareklangiewicz.mydrawables.MyPlusDrawable;
 
 public final class MyDrawableTestsFragment extends MyFragment implements View.OnClickListener, SeekBar
@@ -33,6 +34,8 @@ public final class MyDrawableTestsFragment extends MyFragment implements View.On
             new MyArrowDrawable().setColor(0xff008080).setRotateFrom(-180f),
             new MyArrowDrawable().setColor(0xff008000).setRotateFrom(180f),
             new MyArrowDrawable().setColor(0xff808000).setRotateFrom(360f),
+            new MyPlayStopDrawable().setColorFrom(0xff0000c0).setColorTo(0xffc00000).setRotateTo(180f),
+            new MyPlayStopDrawable().setColorFrom(0xff0000c0).setColorTo(0xffc00000).setRotateTo(90f),
             new MyCheckDrawable().setColorFrom(0xff00f000).setColorTo(0xfff00000).setRotateTo(90f),
             new MyCheckDrawable().setColorFrom(0xff00a000).setColorTo(0xffa00000).setRotateTo(180f),
             new MyCheckDrawable().setColorFrom(0xff00c000).setColorTo(0xffc00000).setRotateTo(-180f),
@@ -49,7 +52,6 @@ public final class MyDrawableTestsFragment extends MyFragment implements View.On
             new MyMagicLinesDrawable().setColor(0x400000a0),
             new MyMagicLinesDrawable().setColor(0x400000a0)
     };
-    private final MyAdapter mMyAdapter = new MyAdapter();
     private @Nullable SeekBar mLevelSeekBar;
     private @Nullable SeekBar mStrokeWidthSeekBar;
     private @Nullable RecyclerView mRecyclerView;
@@ -73,7 +75,7 @@ public final class MyDrawableTestsFragment extends MyFragment implements View.On
         mRecyclerView = (RecyclerView) root.findViewById(R.id.grid_view);
         //noinspection ConstantConditions
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 4));
-        mRecyclerView.setAdapter(mMyAdapter);
+        mRecyclerView.setAdapter(new MyAdapter());
 
         mStrokeWidthSeekBar.setProgress(12);
 

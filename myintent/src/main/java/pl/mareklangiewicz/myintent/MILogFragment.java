@@ -166,6 +166,7 @@ public final class MILogFragment extends MyFragment {
 
         mGlobalFAB.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
+                cancelCountdown();
                 ((MIActivity) getActivity()).onCommand("start custom action listen");
             }
         });
@@ -401,6 +402,8 @@ public final class MILogFragment extends MyFragment {
 
     public void startCountdown() {
 
+        cancelCountdown();
+
         if(mSearchView == null || mSearchView.getQuery().length() == 0) {
             log.e("No command provided.");
             return;
@@ -425,7 +428,7 @@ public final class MILogFragment extends MyFragment {
             log.w("< cmd: cancelled");
         mCountdownEnabled = false;
         if(mCountdownAnimator != null) {
-            mCountdownAnimator.cancel(); //mCountdownEnabled have to be false before this line.
+            mCountdownAnimator.cancel(); //mCountdownEnabled have to be false before this line. (it calls onCountdownEnd)
         }
         if(mProgressBar != null) {
             mProgressBar.setProgress(0);

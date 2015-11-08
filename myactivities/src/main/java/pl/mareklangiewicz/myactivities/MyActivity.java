@@ -89,8 +89,6 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
     protected @Nullable MyFragment mMyLocalFragment; // the same as mLocalFragment - if mLocalFragment instanceof MyFragment - or null
     // otherwise..
 
-    protected @Nullable String mMyPendingCommand;
-
     @CallSuper @Override protected void onCreate(Bundle savedInstanceState) {
         mDisplayMetrics = getResources().getDisplayMetrics();
         if(V) {
@@ -311,18 +309,6 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         super.onDestroy();
     }
 
-    protected void startPendingCommand() {
-
-        if(mMyPendingCommand == null)
-            return;
-
-        onCommand(mMyPendingCommand);
-
-        mMyPendingCommand = null;
-
-    }
-
-
     protected void updateLocalFragment(@Nullable Fragment fragment) {
         if(VV)
             log.v("%s.%s fragment=%s", this.getClass().getSimpleName(), "updateLocalFragment", str(fragment));
@@ -519,26 +505,67 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         return false;
     }
 
-    /**
-     * You can override it, but you should call super version first and do your custom logic only if it returns false.
-     */
-    @CallSuper @Override public boolean onItemSelected(IMyNavigation nav, MenuItem item) {
-        boolean done;
+    public void postRunnable(Runnable runnable, long delay) {
+        if(mCoordinatorLayout == null) {
+            log.e("User interface is not ready.");
+            return;
+        }
+        mCoordinatorLayout.postDelayed(runnable, delay);
+    }
+
+    public void postCommand(final String cmd, long delay) {
+        postRunnable(new Runnable() {
+            @Override public void run() {
+                onCommand(cmd);
+            }
+        }, delay);
+    }
+
+    public void closeDrawers() {
         if(mGlobalDrawerLayout != null)
             mGlobalDrawerLayout.closeDrawers();
         if(mLocalDrawerLayout != null)
             mLocalDrawerLayout.closeDrawers();
-        String ctitle = item.getTitleCondensed().toString();
+    }
+
+    public boolean areDrawersVisible() {
+        return (mGlobalDrawerLayout != null && mGlobalDrawerLayout.isDrawerVisible(GravityCompat.START)) ||
+                (mLocalDrawerLayout != null && mLocalDrawerLayout.isDrawerVisible(GravityCompat.END));
+
+    }
+
+    public void closeDrawersAndPostRunnable(Runnable runnable) {
+        int delay = 0;
+        if(areDrawersVisible()) {
+            closeDrawers();
+            delay = 400;
+        }
+        postRunnable(runnable, delay);
+    }
+
+    public void closeDrawersAndPostCommand(final String cmd) {
+        closeDrawersAndPostRunnable(new Runnable() {
+            @Override public void run() {
+                onCommand(cmd);
+            }
+        });
+    }
+
+
+    /**
+     * You can override it, but you should call super version first and do your custom logic only if it returns false.
+     */
+    @CallSuper @Override public boolean onItemSelected(IMyNavigation nav, MenuItem item) {
+        final String ctitle = item.getTitleCondensed().toString();
         if(ctitle.startsWith(COMMAND_PREFIX)) {
-            mMyPendingCommand = ctitle.substring(COMMAND_PREFIX.length());
-            if((mGlobalDrawerLayout != null && mGlobalDrawerLayout.isDrawerVisible(GravityCompat.START)) ||
-                    (mLocalDrawerLayout != null && mLocalDrawerLayout.isDrawerVisible(GravityCompat.END)))
-                return true; // we will start pending command after drawers are closed.
-            startPendingCommand();
+            final String cmd = ctitle.substring(COMMAND_PREFIX.length());
+            closeDrawersAndPostCommand(cmd);
             return true;
         }
 
+        closeDrawers();
         // maybe our local fragment will handle this item:
+        boolean done;
         if(mMyLocalFragment != null) {
             done = mMyLocalFragment.onItemSelected(nav, item);
             if(done)
@@ -659,7 +686,6 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
     }
 
     @CallSuper @Override public void onDrawerClosed(View drawerView) {
-        startPendingCommand();
         if(mMyLocalFragment != null)
             mMyLocalFragment.onDrawerClosed(drawerView);
     }

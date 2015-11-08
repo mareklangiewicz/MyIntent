@@ -16,7 +16,6 @@ import android.speech.tts.TextToSpeech;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.view.GravityCompat;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
@@ -80,13 +79,7 @@ public class MIActivity extends MyActivity {
         //noinspection ConstantConditions
         mLogoImageView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                mMyPendingCommand = "start custom action listen";
-                if((mGlobalDrawerLayout != null && mGlobalDrawerLayout.isDrawerVisible(GravityCompat.START))) {
-                    mGlobalDrawerLayout.closeDrawers();
-                    // we will start pending command after drawer is closed.
-                }
-                else
-                    startPendingCommand();
+                closeDrawersAndPostCommand("start custom action listen");
             }
         });
 
@@ -135,7 +128,7 @@ public class MIActivity extends MyActivity {
 
     @Override public void onIntent(@Nullable Intent intent) {
 
-        super.onIntent(intent);
+        super.onIntent(intent); // just for logging
 
         try {
             if(intent == null)
@@ -176,7 +169,7 @@ public class MIActivity extends MyActivity {
         if(command == null) {
             log.d("URI with empty fragment received. Entering help..");
             log.v("uri: %s", str(uri));
-            onCommand("fragment .MIHelpFragment");
+            closeDrawersAndPostCommand("fragment .MIHelpFragment");
             return;
 
         }
@@ -189,29 +182,32 @@ public class MIActivity extends MyActivity {
      * Inserts command to edit text and presses play.
      * (Shows start fragment if it is not selected first)
      * It will start the command if user doesn't press stop fast enough.
+     * (it runs the command itself asynchronously)
      */
-    public void playCommand(@Nullable String command) {
-
-        if(mGlobalDrawerLayout != null)
-            mGlobalDrawerLayout.closeDrawers();
-        if(mLocalDrawerLayout != null)
-            mLocalDrawerLayout.closeDrawers();
+    public void playCommand(@Nullable final String command) {
 
         if(command == null) {
             log.d("null command received - ignoring");
             return;
         }
 
-        if(!(mLocalFragment instanceof MILogFragment)) {
-            boolean ok = onCommand("fragment .MILogFragment");
-            if(!ok || mLocalFragment == null || !(mLocalFragment instanceof MILogFragment)) {
-                log.e("Can not select the \"Start\" section");
-                return;
-            }
-        }
-
-        ((MILogFragment) mLocalFragment).playCommand(command);
-
+        if(mLocalFragment instanceof MILogFragment)
+            closeDrawersAndPostRunnable(new Runnable() {
+                @Override public void run() {
+                    ((MILogFragment) mLocalFragment).playCommand(command);
+                }
+            });
+        else
+            closeDrawersAndPostRunnable(new Runnable() {
+                @Override public void run() {
+                    boolean ok = onCommand("fragment .MILogFragment");
+                    if(!ok || mLocalFragment == null || !(mLocalFragment instanceof MILogFragment)) {
+                        log.e("Can not select the \"Start\" section");
+                        return;
+                    }
+                    playCommand(command);
+                }
+            });
     }
 
 
@@ -332,7 +328,7 @@ public class MIActivity extends MyActivity {
     }
 
     private String getRandomQuote(String[] quotes) {
-        return remAuthor(quotes[getRandomInt(0, quotes.length-1)]);
+        return remAuthor(quotes[getRandomInt(0, quotes.length - 1)]);
     }
 
     protected void say(String text) {
@@ -350,12 +346,12 @@ public class MIActivity extends MyActivity {
             return;
         }
         if("something funny".equals(text)) {
-            String[] quotes = ((MIApplication)getApplication()).FUNNY_QUOTES;
+            String[] quotes = ((MIApplication) getApplication()).FUNNY_QUOTES;
             say(getRandomQuote(quotes));
             return;
         }
         if("something smart".equals(text)) {
-            String[] quotes = ((MIApplication)getApplication()).SMART_QUOTES;
+            String[] quotes = ((MIApplication) getApplication()).SMART_QUOTES;
             say(getRandomQuote(quotes));
             return;
         }
@@ -376,7 +372,6 @@ public class MIActivity extends MyActivity {
             }
         }
     }
-
 
 
     protected void suicide() {

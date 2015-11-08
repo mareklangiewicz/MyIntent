@@ -93,7 +93,7 @@ public class MIActivity extends MyActivity {
         //noinspection ConstantConditions
         mHomePageTextView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                onCommand("data " + getResources().getString(R.string.user_id));
+                playCommand("data " + getResources().getString(R.string.user_id));
             }
         });
 
@@ -181,20 +181,44 @@ public class MIActivity extends MyActivity {
 
         }
 
-        boolean ok = onCommand(command);
-        if(!ok)
+        playCommand(command);
+    }
+
+
+    /**
+     * Inserts command to edit text and presses play.
+     * (Shows start fragment if it is not selected first)
+     * It will start the command if user doesn't press stop fast enough.
+     */
+    public void playCommand(@Nullable String command) {
+
+        if(mGlobalDrawerLayout != null)
+            mGlobalDrawerLayout.closeDrawers();
+        if(mLocalDrawerLayout != null)
+            mLocalDrawerLayout.closeDrawers();
+
+        if(command == null) {
+            log.d("null command received - ignoring");
             return;
-        MIContract.CmdRecent.insert(this, command);
+        }
+
+        if(!(mLocalFragment instanceof MILogFragment)) {
+            boolean ok = onCommand("fragment .MILogFragment");
+            if(!ok || mLocalFragment == null || !(mLocalFragment instanceof MILogFragment)) {
+                log.e("Can not select the \"Start\" section");
+                return;
+            }
+        }
+
+        ((MILogFragment) mLocalFragment).playCommand(command);
+
     }
 
 
     private void onSearchIntent(Intent intent) {
 
         String command = intent.getStringExtra(SearchManager.QUERY);
-        boolean ok = onCommand(command);
-        if(!ok)
-            return;
-        MIContract.CmdRecent.insert(this, command);
+        playCommand(command);
     }
 
     void startSpeechRecognizer() {
@@ -240,11 +264,7 @@ public class MIActivity extends MyActivity {
 //                }
                 String command = results.get(0).toLowerCase();
 
-                //TODO real code: set fragment with command and enable super button there
-                boolean ok = onCommand(command);
-                if(ok) {
-                    MIContract.CmdRecent.insert(this, command);
-                }
+                playCommand(command);
             }
             else if(resultCode == RESULT_CANCELED) {
                 log.d("Voice recognition cancelled.");

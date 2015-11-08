@@ -174,7 +174,7 @@ public final class MyCommands {
 
             if(V) {
                 log.v("Applying all matching RE rules to:");
-                log.w("> cmd: %s", cmd);
+                log.i("> cmd: %s", cmd);
             }
             else
                 log.v("> cmd: %s", cmd);

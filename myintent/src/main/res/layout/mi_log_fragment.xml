@@ -6,15 +6,6 @@
     android:orientation="vertical"
     >
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:max="10000"
-        />
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,23 +20,31 @@
             android:layout_weight="1"
             android:focusable="false"
             android:iconifiedByDefault="false"
-            android:padding="8dp"
+            android:layout_gravity="bottom"
+            android:layout_marginTop="16dp"
             />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/local_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="4dp"
+            android:layout_margin="8dp"
+            android:layout_gravity="bottom"
             android:visibility="invisible"
-            app:elevation="2dp"
+            app:fabSize="mini"
+            app:elevation="4dp"
             app:backgroundTint="@color/cardview_light_background"
             />
 
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="10000"
+        />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/mi_log_recycler_view"
@@ -53,6 +52,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         />
+
 
 
 </LinearLayout>

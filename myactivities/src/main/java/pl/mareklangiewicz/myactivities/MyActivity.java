@@ -514,7 +514,6 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         return true;
     }
 
-    @CallSuper
     public boolean onCommandCustom(@NonNull Map<String, String> command) {
         log.e("Unsupported custom command: %s", str(command));
         return false;

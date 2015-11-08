@@ -13,14 +13,17 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
+import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
 
 import com.noveogroup.android.log.Logger;
 
@@ -31,23 +34,25 @@ import pl.mareklangiewicz.mydrawables.MyPlayStopDrawable;
 import pl.mareklangiewicz.myfragments.MyFragment;
 import pl.mareklangiewicz.myviews.IMyNavigation;
 
-import static pl.mareklangiewicz.myutils.MyMathUtils.scale0d;
-
 public final class MILogFragment extends MyFragment {
 
     @Retention(RetentionPolicy.SOURCE)
-    @IntDef({LFAB_HIDDEN, LFAB_PLAY, LFAB_STOP})
-    public @interface LocalFabState {}
+    @IntDef({
+            LFAB_HIDDEN,
+            LFAB_PLAY,
+            LFAB_STOP
+    })
+    public @interface LocalFabState {
+    }
+
     public static final int LFAB_HIDDEN = 0;
     public static final int LFAB_PLAY = 1;
     public static final int LFAB_STOP = 2;
 
 
-
-
     private @Nullable View mRootView;
     private @Nullable ProgressBar mProgressBar;
-    private @Nullable SearchView mSearchView;
+    private @Nullable EditText mEditText;
     private @Nullable MyMDLogAdapter mAdapter;
     private @Nullable RecyclerView mRecyclerView;
     private @Nullable FloatingActionButton mGlobalFAB;
@@ -56,7 +61,7 @@ public final class MILogFragment extends MyFragment {
 
     private @Nullable ObjectAnimator mCountdownAnimator;
 
-    private boolean mCountdownEnabled = false;
+    private @Nullable String mCountdownCommand = null; // we use this to track if the red line is running at the moment (null = it doesn't)
 
     private @LocalFabState int mLocalFABState = LFAB_HIDDEN;
 
@@ -97,7 +102,10 @@ public final class MILogFragment extends MyFragment {
     }
 
     private final Runnable mRunUpdateFABs = new Runnable() {
-        @Override public void run() { updateGlobalFAB(); updateLocalFAB();}
+        @Override public void run() {
+            updateGlobalFAB();
+            updateLocalFAB();
+        }
     };
 
     @Nullable
@@ -106,18 +114,21 @@ public final class MILogFragment extends MyFragment {
 
         super.onCreateView(inflater, container, savedInstanceState); //just for logging
 
+        setHasOptionsMenu(true);
+
         mRootView = inflater.inflate(R.layout.mi_log_fragment, container, false);
 
         mProgressBar = (ProgressBar) mRootView.findViewById(R.id.progress_bar);
         //noinspection ConstantConditions
         mProgressBar.setOnTouchListener(new View.OnTouchListener() {
             @Override public boolean onTouch(View v, MotionEvent event) {
-                if(mCountdownEnabled && mCountdownAnimator != null && mProgressBar != null) {
+                if(mCountdownCommand != null && mCountdownAnimator != null && mProgressBar != null) {
                     // int moveto = (int)scale0d(event.getX(), mProgressBar.getWidth(), mCountdownAnimator.getDuration());
                     // the above is nice and correct, but more practical is to just move progress to almost the end immediately
                     // so it will speed up command execution wherever we click.
                     int moveto = (int) mCountdownAnimator.getDuration() - 50;
-                    if(moveto < 0) moveto = 0; // in case we have set really short duration ( < 50ms..)
+                    if(moveto < 0)
+                        moveto = 0; // in case we have set really short duration ( < 50ms..)
 
                     mCountdownAnimator.setCurrentPlayTime(moveto);
                 }
@@ -125,17 +136,13 @@ public final class MILogFragment extends MyFragment {
             }
         });
 
-
         mCountdownAnimator = ObjectAnimator.ofInt(mProgressBar, "progress", 0, 10000).setDuration(3000);
         mCountdownAnimator.setInterpolator(new LinearInterpolator());
-        mCountdownAnimator.addListener(new AnimatorListenerAdapter() { @Override public void onAnimationEnd(Animator animation) { onCountdownEnd(); } });
+        mCountdownAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override public void onAnimationEnd(Animator animation) { onCountdownEnd(); }
+        });
 
-
-        mSearchView = (SearchView) mRootView.findViewById(R.id.search_view);
-
-        SearchManager manager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-        //noinspection ConstantConditions
-        mSearchView.setSearchableInfo(manager.getSearchableInfo(getActivity().getComponentName()));
+        mEditText = (EditText) mRootView.findViewById(R.id.edit_text);
 
         mGlobalFAB = getFAB();
         mLocalFAB = (FloatingActionButton) mRootView.findViewById(R.id.local_fab);
@@ -167,6 +174,8 @@ public final class MILogFragment extends MyFragment {
         mGlobalFAB.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 cancelCountdown();
+                if(mEditText != null)
+                    mEditText.setText("");
                 ((MIActivity) getActivity()).onCommand("start custom action listen");
             }
         });
@@ -234,8 +243,8 @@ public final class MILogFragment extends MyFragment {
             mProgressBar = null;
         }
 
-        mCountdownEnabled = false;
-        mSearchView = null;
+        mCountdownCommand = null;
+        mEditText = null;
 
         if(mCountdownAnimator != null) {
             mCountdownAnimator.cancel();
@@ -249,6 +258,14 @@ public final class MILogFragment extends MyFragment {
         mRecyclerView.setAdapter(null);
         mRecyclerView = null;
         super.onDestroyView();
+    }
+
+    @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.mi_log_omenu, menu);
+        SearchView sw = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        SearchManager manager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        sw.setSearchableInfo(manager.getSearchableInfo(getActivity().getComponentName()));
+        sw.setIconifiedByDefault(true);
     }
 
     @Override
@@ -333,7 +350,8 @@ public final class MILogFragment extends MyFragment {
             lazyUpdateFABs();
         }
         else {
-            if(mGlobalFAB != null) mGlobalFAB.hide();
+            if(mGlobalFAB != null)
+                mGlobalFAB.hide();
             setLocalFABState(LFAB_HIDDEN);
         }
     }
@@ -371,10 +389,10 @@ public final class MILogFragment extends MyFragment {
         if(isSomethingOnOurFragment())
             setLocalFABState(LFAB_HIDDEN);
         else {
-            if(mCountdownEnabled)
-                setLocalFABState(LFAB_STOP);
-            else
+            if(mCountdownCommand == null)
                 setLocalFABState(LFAB_PLAY);
+            else
+                setLocalFABState(LFAB_STOP);
         }
     }
 
@@ -389,12 +407,12 @@ public final class MILogFragment extends MyFragment {
             return;
         }
 
-        if(mSearchView == null) {
-            log.d("mSearchView is null");
+        if(mEditText == null) {
+            log.d("mEditText is null");
             return;
         }
 
-        mSearchView.setQuery(command, false);
+        mEditText.setText(command);
 
         startCountdown();
 
@@ -404,29 +422,29 @@ public final class MILogFragment extends MyFragment {
 
         cancelCountdown();
 
-        if(mSearchView == null || mSearchView.getQuery().length() == 0) {
+        if(mEditText == null || mEditText.getText().length() == 0) {
             log.e("No command provided.");
             return;
         }
 
         if(mCountdownAnimator == null) {
             log.e("Countdown animator not initialized.");
-            mCountdownEnabled = false;
+            mCountdownCommand = null;
             return;
         }
 
-        log.w("> cmd: %s", mSearchView.getQuery().toString());
+        mCountdownCommand = mEditText.getText().toString();
+        log.w("> cmd: %s", mCountdownCommand);
 
-        mCountdownEnabled = true;
         mCountdownAnimator.start();
         updateLocalFAB();
 
     }
 
     public void cancelCountdown() {
-        if(mCountdownEnabled)
+        if(mCountdownCommand != null)
             log.w("< cmd: cancelled");
-        mCountdownEnabled = false;
+        mCountdownCommand = null;
         if(mCountdownAnimator != null) {
             mCountdownAnimator.cancel(); //mCountdownEnabled have to be false before this line. (it calls onCountdownEnd)
         }
@@ -438,22 +456,23 @@ public final class MILogFragment extends MyFragment {
 
     public void onCountdownEnd() {
 
-        if(!mCountdownEnabled)
+        if(mCountdownCommand == null)
             return;
 
-        mCountdownEnabled = false;
 
-        if(mSearchView == null) {
-            log.e("The mSearchView is not initialized.");
+        if(mEditText == null) {
+            log.e("The mEditText is not initialized.");
+            mCountdownCommand = null;
             return;
         }
 
-        String cmd = mSearchView.getQuery().toString();
-        mSearchView.setQuery("", false);
+        mEditText.setText("");
 
-        boolean ok = ((MIActivity) getActivity()).onCommand(cmd);
+        boolean ok = ((MIActivity) getActivity()).onCommand(mCountdownCommand);
         if(ok)
-            MIContract.CmdRecent.insert(getActivity(), cmd);
+            MIContract.CmdRecent.insert(getActivity(), mCountdownCommand);
+
+        mCountdownCommand = null;
 
         updateLocalFAB();
 

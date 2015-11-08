@@ -13,15 +13,15 @@
         android:orientation="horizontal"
         >
 
-        <SearchView
-            android:id="@+id/search_view"
+        <EditText
+            android:id="@+id/edit_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:focusable="false"
-            android:iconifiedByDefault="false"
             android:layout_gravity="bottom"
             android:layout_marginTop="16dp"
+            android:layout_marginLeft="8dp"
+            android:inputType="textFilter|textMultiLine"
             />
 
         <android.support.design.widget.FloatingActionButton

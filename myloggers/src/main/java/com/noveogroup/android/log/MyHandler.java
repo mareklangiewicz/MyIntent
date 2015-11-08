@@ -21,7 +21,7 @@ public final class MyHandler extends PatternHandler {
 
     static public final String SNACK_TAG = "[SNACK]";
     static public final String SHORT_TAG = "[SHORT]";
-    static private final int HISTORY_LEN = 80;
+    static private final int HISTORY_LEN = 160;
     /**
      * User can swith it on for all MyHandlers to additionally print all messages
      * using System.out.println(...). It's a hack, but it can be useful in unit tests.

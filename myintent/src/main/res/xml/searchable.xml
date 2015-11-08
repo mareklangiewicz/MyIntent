@@ -7,5 +7,4 @@
     android:searchSettingsDescription="@string/search_settings_description"
     android:searchSuggestAuthority="pl.mareklangiewicz.myintent.provider"
     android:searchSuggestPath="cmd"
-    android:searchSuggestThreshold="1"
     />

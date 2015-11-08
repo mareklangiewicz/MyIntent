@@ -33,4 +33,5 @@
     <string name="mi_re_help">RE Help</string>
     <string name="say_something_funny">Say something funny</string>
     <string name="say_something_smart">Say something smart</string>
+    <string name="action_search">Search</string>
 </resources>

@@ -103,8 +103,8 @@ public class MIContentProvider extends ContentProvider {
             case MATCH_CMD_SUGGEST_DIR_LIKE:// WARNING: selection and selectionArgs and sortOrder are ignored in this case!
                 selection = SearchManager.SUGGEST_COLUMN_TEXT_1 + " LIKE ? ";
                 selectionArgs = new String[] {"%" + Uri.decode(uri.getLastPathSegment()) + "%"};
+            case MATCH_CMD_SUGGEST_DIR_ALL:// WARNING: sortOrder is ignored in this case!
                 sortOrder = " " + MIContract.CmdSuggest.COL_PRIORITY + " DESC , " + MIContract.CmdSuggest.COL_TIME + " DESC ";
-            case MATCH_CMD_SUGGEST_DIR_ALL:
                 return db.query(MIContract.CmdSuggest.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder, limit);
             case MATCH_RULE_USER_ITEM:// WARNING: selection and selectionArgs are ignored in this case!
                 selection = " " + MIContract.RuleUser._ID + " = ? ";

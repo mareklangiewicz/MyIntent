@@ -21,7 +21,9 @@
             android:layout_gravity="bottom"
             android:layout_marginTop="16dp"
             android:layout_marginLeft="8dp"
-            android:inputType="textFilter|textMultiLine"
+            android:hint="@string/ask_for_intent"
+            android:inputType="textNoSuggestions|textMultiLine"
+            android:imeOptions="actionDone"
             />
 
         <ImageView

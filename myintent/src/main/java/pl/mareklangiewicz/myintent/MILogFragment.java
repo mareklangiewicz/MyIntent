@@ -53,6 +53,8 @@ public final class MILogFragment extends MyFragment {
 
     private @Nullable View mRootView;
     private @Nullable ProgressBar mProgressBar;
+    private @Nullable MenuItem mSearchItem;
+    private @Nullable SearchView mSearchView;
     private @Nullable EditText mEditText;
     private @Nullable MyMDLogAdapter mAdapter;
     private @Nullable RecyclerView mRecyclerView;
@@ -245,6 +247,9 @@ public final class MILogFragment extends MyFragment {
             mProgressBar = null;
         }
 
+        mSearchItem = null;
+        mSearchView = null;
+
         mCountdownCommand = null;
         mEditText = null;
 
@@ -264,10 +269,12 @@ public final class MILogFragment extends MyFragment {
 
     @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.mi_log_omenu, menu);
-        SearchView sw = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        mSearchItem = menu.findItem(R.id.action_search);
+        mSearchView = (SearchView) mSearchItem.getActionView();
         SearchManager manager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-        sw.setSearchableInfo(manager.getSearchableInfo(getActivity().getComponentName()));
-        sw.setIconifiedByDefault(true);
+        //noinspection ConstantConditions
+        mSearchView.setSearchableInfo(manager.getSearchableInfo(getActivity().getComponentName()));
+        mSearchView.setIconifiedByDefault(true);
     }
 
     @Override
@@ -403,6 +410,10 @@ public final class MILogFragment extends MyFragment {
      * It will start the command if user doesn't press stop fast enough.
      */
     public void playCommand(@Nullable String command) {
+
+        if(mSearchItem != null) {
+            mSearchItem.collapseActionView();
+        }
 
         if(command == null) {
             log.d("null command received - ignoring");

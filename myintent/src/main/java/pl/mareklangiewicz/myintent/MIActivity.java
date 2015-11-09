@@ -109,7 +109,7 @@ public class MIActivity extends MyActivity {
             rules.clear();
             boolean ok = MIContract.RuleUser.load(this, rules);
             if(!ok)
-                log.e("Can not load user rules from data base.");
+                log.a("Can not load user rules from data base.");
             selectGlobalItem(R.id.mi_start);
         }
 
@@ -147,7 +147,7 @@ public class MIActivity extends MyActivity {
                 log.e("Unknown intent received: %s", str(intent));
         }
         catch(RuntimeException e) {
-            log.e("Intent exception.", e);
+            log.a("Intent exception.", e);
         }
 
     }
@@ -202,7 +202,7 @@ public class MIActivity extends MyActivity {
                 @Override public void run() {
                     boolean ok = onCommand("fragment .MILogFragment");
                     if(!ok || mLocalFragment == null || !(mLocalFragment instanceof MILogFragment)) {
-                        log.e("Can not select the \"Start\" section");
+                        log.a("Can not select the \"Start\" section");
                         return;
                     }
                     playCommand(command);
@@ -235,11 +235,11 @@ public class MIActivity extends MyActivity {
                 log.e("Speech recognizer not found.", e);
             }
             catch(SecurityException e) {
-                log.e("Security exception.", e);
+                log.a("Security exception.", e);
             }
         }
         else {
-            log.e("No activity found for this intent: %s", str(intent));
+            log.a("No activity found for this intent: %s", str(intent));
         }
     }
 

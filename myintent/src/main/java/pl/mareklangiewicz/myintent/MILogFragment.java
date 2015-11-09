@@ -95,7 +95,7 @@ public final class MILogFragment extends MyFragment {
                 else if(mLocalFABState == LFAB_PLAY && state == LFAB_STOP)
                     mLocalFABAnimator.start();
                 else
-                    log.e("Incorrect Local FAB state.");
+                    log.a("Incorrect Local FAB state.");
             }
         }
         mLocalFABState = state;
@@ -428,7 +428,7 @@ public final class MILogFragment extends MyFragment {
         }
 
         if(mCountdownAnimator == null) {
-            log.e("Countdown animator not initialized.");
+            log.a("Countdown animator not initialized.");
             mCountdownCommand = null;
             return;
         }
@@ -461,7 +461,7 @@ public final class MILogFragment extends MyFragment {
 
 
         if(mEditText == null) {
-            log.e("The mEditText is not initialized.");
+            log.a("The mEditText is not initialized.");
             mCountdownCommand = null;
             return;
         }

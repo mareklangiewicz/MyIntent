@@ -189,7 +189,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         else if(mGlobalLinearLayout != null)
             toggleMNVAndArrow(mGlobalNavigationView, mGlobalArrowDrawable);
         else
-            log.e("No global drawer or linear layout with global navigation.");
+            log.a("No global drawer or linear layout with global navigation.");
     }
 
     private void toggleLocalNavigation() {
@@ -198,7 +198,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         else if(mLocalLinearLayout != null)
             toggleMNVAndArrow(mLocalNavigationView, mLocalArrowDrawable);
         else
-            log.e("No local drawer or linear layout with local navigation.");
+            log.a("No local drawer or linear layout with local navigation.");
     }
 
     private void toggleDrawer(@NonNull DrawerLayout drawerLayout, int gravity) {
@@ -441,7 +441,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
                 return false;
             }
             catch(SecurityException e) {
-                log.e("Security exception.", e);
+                log.a("Security exception.", e);
                 return false;
             }
         }
@@ -507,7 +507,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
 
     public void postRunnable(Runnable runnable, long delay) {
         if(mCoordinatorLayout == null) {
-            log.e("User interface is not ready.");
+            log.a("User interface is not ready.");
             return;
         }
         mCoordinatorLayout.postDelayed(runnable, delay);
@@ -583,7 +583,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
             else if(mGlobalLinearLayout != null)
                 setMNVAndArrow(!empty, mGlobalNavigationView, mGlobalArrowDrawable);
             else
-                log.e("No global drawer or linear layout with global navigation.");
+                log.a("No global drawer or linear layout with global navigation.");
         }
         else if(nav == getLocalNavigation()) {
             mLocalArrowDrawable.setAlpha(empty ? 0 : 0xa0);
@@ -592,10 +592,10 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
             else if(mLocalLinearLayout != null)
                 setMNVAndArrow(!empty, mLocalNavigationView, mLocalArrowDrawable);
             else
-                log.e("No local drawer or linear layout with local navigation.");
+                log.a("No local drawer or linear layout with local navigation.");
         }
         else
-            log.e("Unknown IMyNavigation object.");
+            log.a("Unknown IMyNavigation object.");
     }
 
     @Override public void onClearHeader(IMyNavigation nav) {
@@ -653,7 +653,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
     private void selectItem(IMyNavigation nav, @IdRes int id) {
         Menu menu = nav.getMenu();
         if(menu == null) {
-            log.e("menu is null!");
+            log.a("Menu not initialized.");
             return;
         }
         nav.setCheckedItem(id);

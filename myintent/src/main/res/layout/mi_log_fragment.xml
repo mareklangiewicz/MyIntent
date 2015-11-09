@@ -24,16 +24,17 @@
             android:inputType="textFilter|textMultiLine"
             />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/local_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+        <ImageView
+            android:id="@+id/play_stop_image_view"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:layout_gravity="bottom"
-            android:visibility="invisible"
-            app:fabSize="mini"
-            app:elevation="4dp"
-            app:backgroundTint="@color/cardview_light_background"
+            android:padding="4dp"
+            android:alpha="0"
             />
 
     </LinearLayout>

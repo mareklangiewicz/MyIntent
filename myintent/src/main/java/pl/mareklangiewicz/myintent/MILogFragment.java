@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.noveogroup.android.log.Logger;
@@ -38,16 +39,16 @@ public final class MILogFragment extends MyFragment {
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({
-            LFAB_HIDDEN,
-            LFAB_PLAY,
-            LFAB_STOP
+            PS_HIDDEN,
+            PS_PLAY,
+            PS_STOP
     })
-    public @interface LocalFabState {
+    public @interface PSState {
     }
 
-    public static final int LFAB_HIDDEN = 0;
-    public static final int LFAB_PLAY = 1;
-    public static final int LFAB_STOP = 2;
+    public static final int PS_HIDDEN = 0;
+    public static final int PS_PLAY = 1;
+    public static final int PS_STOP = 2;
 
 
     private @Nullable View mRootView;
@@ -55,56 +56,56 @@ public final class MILogFragment extends MyFragment {
     private @Nullable EditText mEditText;
     private @Nullable MyMDLogAdapter mAdapter;
     private @Nullable RecyclerView mRecyclerView;
-    private @Nullable FloatingActionButton mGlobalFAB;
-    private @Nullable FloatingActionButton mLocalFAB;
-    private @Nullable ObjectAnimator mLocalFABAnimator;
+    private @Nullable FloatingActionButton mFAB;
+    private @Nullable ImageView mPSImageView;
+    private @Nullable ObjectAnimator mPSAnimator;
 
     private @Nullable ObjectAnimator mCountdownAnimator;
 
     private @Nullable String mCountdownCommand = null; // we use this to track if the red line is running at the moment (null = it doesn't)
 
-    private @LocalFabState int mLocalFABState = LFAB_HIDDEN;
+    private @PSState int mPSState = PS_HIDDEN;
 
-    private @LocalFabState int getLocalFABState() { return mLocalFABState; }
+    private @PSState int getPSState() { return mPSState; }
 
-    private void setLocalFABState(@LocalFabState int state) {
-        if(mLocalFAB == null || mLocalFABAnimator == null) {
-            log.e("Local FAB not initialized.");
-            mLocalFABState = state;
+    private void setPSState(@PSState int state) {
+        if(mPSImageView == null || mPSAnimator == null) {
+            log.e("Animated button not initialized.");
+            mPSState = state;
             return;
         }
-        if(state == mLocalFABState)
+        if(state == mPSState)
             return;
-        if(state == LFAB_HIDDEN)
-            mLocalFAB.hide();
-        else if(mLocalFABState == LFAB_HIDDEN) {
-            mLocalFABAnimator.cancel(); //to be sure
-            if(state == LFAB_PLAY)
-                mLocalFABAnimator.reverse();
+        if(state == PS_HIDDEN)
+            mPSImageView.animate().alpha(0);
+        else if(mPSState == PS_HIDDEN) {
+            mPSAnimator.cancel(); //to be sure
+            if(state == PS_PLAY)
+                mPSAnimator.reverse();
             else
-                mLocalFABAnimator.start();
-            mLocalFAB.show();
+                mPSAnimator.start();
+            mPSImageView.animate().alpha(1);
         }
         else {
-            if(mLocalFABAnimator.isRunning()) {
-                mLocalFABAnimator.reverse();
+            if(mPSAnimator.isRunning()) {
+                mPSAnimator.reverse();
             }
             else { // we are stopped at some end
-                if(mLocalFABState == LFAB_STOP && state == LFAB_PLAY)
-                    mLocalFABAnimator.reverse();
-                else if(mLocalFABState == LFAB_PLAY && state == LFAB_STOP)
-                    mLocalFABAnimator.start();
+                if(mPSState == PS_STOP && state == PS_PLAY)
+                    mPSAnimator.reverse();
+                else if(mPSState == PS_PLAY && state == PS_STOP)
+                    mPSAnimator.start();
                 else
-                    log.a("Incorrect Local FAB state.");
+                    log.a("Incorrect animated button state.");
             }
         }
-        mLocalFABState = state;
+        mPSState = state;
     }
 
-    private final Runnable mRunUpdateFABs = new Runnable() {
+    private final Runnable mRunUpdateButtons = new Runnable() {
         @Override public void run() {
-            updateGlobalFAB();
-            updateLocalFAB();
+            updateFAB();
+            updatePS();
         }
     };
 
@@ -144,8 +145,8 @@ public final class MILogFragment extends MyFragment {
 
         mEditText = (EditText) mRootView.findViewById(R.id.edit_text);
 
-        mGlobalFAB = getFAB();
-        mLocalFAB = (FloatingActionButton) mRootView.findViewById(R.id.local_fab);
+        mFAB = getFAB();
+        mPSImageView = (ImageView) mRootView.findViewById(R.id.play_stop_image_view);
 
         mAdapter = new MyMDLogAdapter();
         mAdapter.setLog(log);
@@ -164,14 +165,14 @@ public final class MILogFragment extends MyFragment {
         updateCheckedItem();
 
         //noinspection ConstantConditions
-        mGlobalFAB.setImageResource(R.drawable.ic_keyboard_voice_white_24dp);
-//        CoordinatorLayout.LayoutParams lparams = ((CoordinatorLayout.LayoutParams) mGlobalFAB.getLayoutParams());
+        mFAB.setImageResource(R.drawable.ic_keyboard_voice_white_24dp);
+//        CoordinatorLayout.LayoutParams lparams = ((CoordinatorLayout.LayoutParams) mFAB.getLayoutParams());
 //        lparams.setAnchorId(R.id.mi_log_recycler_view);
 //        int margin = (int)((MyActivity)getActivity()).dp2px(8);
 //        lparams.setMargins(margin, margin, margin, margin);
 //        lparams.anchorGravity = Gravity.END;
 
-        mGlobalFAB.setOnClickListener(new View.OnClickListener() {
+        mFAB.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 cancelCountdown();
                 if(mEditText != null)
@@ -182,14 +183,15 @@ public final class MILogFragment extends MyFragment {
 
         final Drawable d = new MyPlayStopDrawable().setColorFrom(0xff0000c0).setColorTo(0xffc00000).setRotateTo(90f).setStrokeWidth(6);
         //noinspection ConstantConditions
-        mLocalFAB.setImageDrawable(d);
-        mLocalFABAnimator = ObjectAnimator.ofInt(d, "level", 0, 10000).setDuration(300);
-        mLocalFAB.setOnClickListener(new View.OnClickListener() {
+        mPSImageView.setImageDrawable(d);
+        mPSAnimator = ObjectAnimator.ofInt(d, "level", 0, 10000).setDuration(300);
+        mPSImageView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                if(getLocalFABState() == LFAB_PLAY)
+                if(getPSState() == PS_PLAY)
                     startCountdown();
-                else if(getLocalFABState() == LFAB_STOP)
+                else if(getPSState() == PS_STOP)
                     cancelCountdown();
+                // we ignore click if the state is hidden.
             }
         });
 
@@ -199,7 +201,7 @@ public final class MILogFragment extends MyFragment {
 
     @Override public void onResume() {
         super.onResume();
-        lazyUpdateFABs();
+        lazyUpdateButtons();
     }
 
     @Override public void onStart() {
@@ -217,24 +219,24 @@ public final class MILogFragment extends MyFragment {
     public void onDestroyView() {
 
         //noinspection ConstantConditions
-        mRootView.removeCallbacks(mRunUpdateFABs);
+        mRootView.removeCallbacks(mRunUpdateButtons);
         mRootView = null;
 
-        mLocalFABState = LFAB_HIDDEN;
-        if(mLocalFABAnimator != null) {
-            mLocalFABAnimator.cancel();
-            mLocalFABAnimator = null;
+        mPSState = PS_HIDDEN;
+        if(mPSAnimator != null) {
+            mPSAnimator.cancel();
+            mPSAnimator = null;
         }
 
-        if(mGlobalFAB != null) {
-            mGlobalFAB.setOnClickListener(null);
-            mGlobalFAB.hide();
-            mGlobalFAB = null;
+        if(mFAB != null) {
+            mFAB.setOnClickListener(null);
+            mFAB.hide();
+            mFAB = null;
         }
-        if(mLocalFAB != null) {
-            mLocalFAB.setOnClickListener(null);
-            mLocalFAB.hide();
-            mLocalFAB = null;
+        if(mPSImageView != null) {
+            mPSImageView.setOnClickListener(null);
+            mPSImageView.animate().alpha(0);
+            mPSImageView = null;
         }
 
         if(mProgressBar != null) {
@@ -347,17 +349,17 @@ public final class MILogFragment extends MyFragment {
     @Override public void onDrawerSlide(View drawerView, float slideOffset) {
 
         if(slideOffset == 0) {
-            lazyUpdateFABs();
+            lazyUpdateButtons();
         }
         else {
-            if(mGlobalFAB != null)
-                mGlobalFAB.hide();
-            setLocalFABState(LFAB_HIDDEN);
+            if(mFAB != null)
+                mFAB.hide();
+            setPSState(PS_HIDDEN);
         }
     }
 
     @Override public void onDrawerClosed(View drawerView) {
-        lazyUpdateFABs();
+        lazyUpdateButtons();
     }
 
     private boolean isSomethingOnOurFragment() {
@@ -366,33 +368,33 @@ public final class MILogFragment extends MyFragment {
         return (lnav != null && lnav.overlaps(mRootView)) || (gnav != null && gnav.overlaps(mRootView));
     }
 
-    private void updateGlobalFAB() {
-        if(mGlobalFAB == null)
+    private void updateFAB() {
+        if(mFAB == null)
             return;
         if(isSomethingOnOurFragment())
-            mGlobalFAB.hide();
+            mFAB.hide();
         else
-            mGlobalFAB.show();
+            mFAB.show();
     }
 
 
-    private void lazyUpdateFABs() {
+    private void lazyUpdateButtons() {
         if(mRootView == null) {
-            log.d("lazyUpdateFABs: mRootView == null");
+            log.d("lazyUpdateButtons: mRootView == null");
             return;
         }
-        mRootView.removeCallbacks(mRunUpdateFABs);
-        mRootView.postDelayed(mRunUpdateFABs, 300);
+        mRootView.removeCallbacks(mRunUpdateButtons);
+        mRootView.postDelayed(mRunUpdateButtons, 300);
     }
 
-    private void updateLocalFAB() {
+    private void updatePS() {
         if(isSomethingOnOurFragment())
-            setLocalFABState(LFAB_HIDDEN);
+            setPSState(PS_HIDDEN);
         else {
             if(mCountdownCommand == null)
-                setLocalFABState(LFAB_PLAY);
+                setPSState(PS_PLAY);
             else
-                setLocalFABState(LFAB_STOP);
+                setPSState(PS_STOP);
         }
     }
 
@@ -437,7 +439,7 @@ public final class MILogFragment extends MyFragment {
         log.w("> cmd: %s", mCountdownCommand);
 
         mCountdownAnimator.start();
-        updateLocalFAB();
+        updatePS();
 
     }
 
@@ -451,7 +453,7 @@ public final class MILogFragment extends MyFragment {
         if(mProgressBar != null) {
             mProgressBar.setProgress(0);
         }
-        updateLocalFAB();
+        updatePS();
     }
 
     public void onCountdownEnd() {
@@ -474,7 +476,7 @@ public final class MILogFragment extends MyFragment {
 
         mCountdownCommand = null;
 
-        updateLocalFAB();
+        updatePS();
 
         if(mProgressBar != null) {
             mProgressBar.setProgress(0);

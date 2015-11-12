@@ -18,6 +18,18 @@
             android:titleCondensed="cmd:fragment .MIRulesFragment"
             />
         <item
+            android:id="@+id/mi_recent_commands"
+            android:icon="@drawable/ic_youtube_searched_for_black_24dp"
+            android:title="@string/mi_recent_commands"
+            android:titleCondensed="cmd:fragment .MIRecentCmdListFragment"
+            />
+        <item
+            android:id="@+id/mi_example_commands"
+            android:icon="@drawable/ic_find_replace_black_24dp"
+            android:title="@string/mi_example_commands"
+            android:titleCondensed="cmd:fragment .MIExampleCmdListFragment"
+            />
+        <item
             android:id="@+id/mi_help"
             android:icon="@drawable/ic_whatshot_black_24dp"
             android:title="@string/mi_help"
@@ -39,6 +51,16 @@
                 android:title="@string/say_something_smart"
                 android:icon="@drawable/ic_chat_black_24dp"
                 android:titleCondensed="cmd:say something smart"
+                />
+            <item
+                android:icon="@drawable/ic_whatshot_black_24dp"
+                android:title="@string/sniezka"
+                android:titleCondensed="cmd:data geo:50.736479,15.739731"
+                />
+            <item
+                android:icon="@drawable/ic_whatshot_black_24dp"
+                android:title="Hell"
+                android:titleCondensed="cmd:data geo:0,0?q=54.593216,18.811631(Hell)"
                 />
             <item
                 android:id="@+id/reset_all"

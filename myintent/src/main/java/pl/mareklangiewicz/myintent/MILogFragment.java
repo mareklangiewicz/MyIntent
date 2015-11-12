@@ -481,9 +481,14 @@ public final class MILogFragment extends MyFragment {
 
         mEditText.setText("");
 
-        boolean ok = ((MIActivity) getActivity()).onCommand(mCountdownCommand);
-        if(ok)
-            MIContract.CmdRecent.insert(getActivity(), mCountdownCommand);
+        try {
+            boolean ok = ((MIActivity) getActivity()).onCommand(mCountdownCommand);
+            if(ok)
+                MIContract.CmdRecent.insert(getActivity(), mCountdownCommand);
+        }
+        catch(RuntimeException e) {
+            log.e(e.getMessage(), e);
+        }
 
         mCountdownCommand = null;
 

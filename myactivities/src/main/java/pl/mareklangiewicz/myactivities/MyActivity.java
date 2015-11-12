@@ -481,7 +481,13 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         FragmentManager fm = getFragmentManager();
         Fragment f;
 
-        f = Fragment.instantiate(MyActivity.this, command.get("component"));
+        try {
+            f = Fragment.instantiate(MyActivity.this, command.get("component"));
+        }
+        catch(Fragment.InstantiationException e) {
+            log.e(e, "Fragment class: %s not found.", command.get("component"));
+            return false;
+        }
 
         Bundle args = new Bundle();
 

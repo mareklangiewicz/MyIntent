@@ -4,4 +4,6 @@
         type="id"/>
     <item name="re_group_view_tag_holder"
         type="id"/>
+    <item name="re_command_view_tag_holder"
+        type="id"/>
 </resources>

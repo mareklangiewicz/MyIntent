@@ -50,6 +50,23 @@ public final class MIContract {
             values.put(COL_TIME, System.currentTimeMillis());
             return cr.insert(URI, values);
         }
+
+        public static boolean load(Context context, List<String> commands) {
+            ContentResolver cr = context.getContentResolver();
+            Cursor c = cr.query(URI, null, null, null, " " + COL_TIME + " DESC ");
+            if(c == null)
+                return false;
+            boolean empty = !c.moveToFirst();
+            if(empty) {
+                c.close();
+                return true;
+            }
+            do commands.add(c.getString(c.getColumnIndex(COL_COMMAND)));
+            while(c.moveToNext());
+            c.close();
+            return true;
+        }
+
     }
 
 
@@ -78,6 +95,22 @@ public final class MIContract {
             values.put(COL_COMMAND, command);
             values.put(COL_PRIORITY, priority);
             return cr.insert(URI, values);
+        }
+
+        public static boolean load(Context context, List<String> commands) {
+            ContentResolver cr = context.getContentResolver();
+            Cursor c = cr.query(URI, null, null, null, " " + COL_PRIORITY + " DESC ");
+            if(c == null)
+                return false;
+            boolean empty = !c.moveToFirst();
+            if(empty) {
+                c.close();
+                return true;
+            }
+            do commands.add(c.getString(c.getColumnIndex(COL_COMMAND)));
+            while(c.moveToNext());
+            c.close();
+            return true;
         }
     }
 
@@ -152,11 +185,11 @@ public final class MIContract {
             do {
                 rules.add(
                         new MyCommands.RERule(
-                                0 < c.getInt(c.getColumnIndex(MIContract.RuleUser.COL_EDITABLE)),
-                                c.getString(c.getColumnIndex(MIContract.RuleUser.COL_NAME)),
-                                c.getString(c.getColumnIndex(MIContract.RuleUser.COL_DESCRIPTION)),
-                                c.getString(c.getColumnIndex(MIContract.RuleUser.COL_MATCH)),
-                                c.getString(c.getColumnIndex(MIContract.RuleUser.COL_REPLACE))
+                                0 < c.getInt(c.getColumnIndex(COL_EDITABLE)),
+                                c.getString(c.getColumnIndex(COL_NAME)),
+                                c.getString(c.getColumnIndex(COL_DESCRIPTION)),
+                                c.getString(c.getColumnIndex(COL_MATCH)),
+                                c.getString(c.getColumnIndex(COL_REPLACE))
                         )
                 );
             }

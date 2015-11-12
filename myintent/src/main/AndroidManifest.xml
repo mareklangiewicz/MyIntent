@@ -6,6 +6,7 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
 
     <permission
         android:name="pl.mareklangiewicz.myintent.permission.READ"
@@ -18,12 +19,12 @@
         />
     <!-- TODO SOMEDAY: automatic backup for user defined RE rules. (to synchronize between marshmallow devices) -->
     <application
+        android:name="pl.mareklangiewicz.myintent.MIApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="false"
         android:theme="@style/AppTheme"
-        android:name="pl.mareklangiewicz.myintent.MIApplication"
         >
 
         <meta-data
@@ -34,7 +35,8 @@
         <activity
             android:name=".MIActivity"
             android:label="@string/title_mi_activity"
-            android:launchMode="singleInstance"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="stateAlwaysHidden"
             >
 
             <meta-data

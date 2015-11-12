@@ -131,9 +131,16 @@ public class MIActivity extends MyActivity {
         super.onIntent(intent); // just for logging
 
         try {
-            if(intent == null)
+
+            if(intent == null) {
                 log.d("null intent received - ignoring");
-            else if(Intent.ACTION_SEARCH.equals(intent.getAction()) || "com.google.android.gms.actions.SEARCH_ACTION".equals(intent.getAction()))
+                return;
+            }
+
+            if((intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) != 0)
+                return;
+
+            if(Intent.ACTION_SEARCH.equals(intent.getAction()) || "com.google.android.gms.actions.SEARCH_ACTION".equals(intent.getAction()))
                 onSearchIntent(intent);
             else if(intent.getAction().equals(Intent.ACTION_VIEW))
                 onUri(intent.getData());

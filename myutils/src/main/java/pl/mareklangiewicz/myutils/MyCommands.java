@@ -351,7 +351,6 @@ public final class MyCommands {
     public static final String RE_EXTRA_ELEM_TYPE_AND_KEY = "(" + RE_EXTRA_TYPE + " " + RE_EXTRA_KEY + ")";
 
 
-
     // Not all android constants are available in our unit tests, so we create our own.
     private static final String EX_TEXT = "android.intent.extra.TEXT";
     private static final String EX_HOUR = AlarmClock.EXTRA_HOUR;
@@ -449,11 +448,11 @@ public final class MyCommands {
                             "^fragment (?=\\S*\\.)([_\\./a-zA-Z0-9]*)", "start fragment component $1")
             );
 
-    static public final REGroup RE_FINAL_GROUP =
+    static public final REGroup RE_ACTIONS_GROUP =
             new REGroup(
                     false,
-                    "final",
-                    "Final rules for all nonempty commands. These replace short action names to full ones, etc..", "^.+",
+                    "action",
+                    "These rules replace short action names to full ones", "\\baction ",
                     new RERule(false, "", "Replaces \"action main\" with full action name.", "\\baction main\\b", "action " + Intent.ACTION_MAIN),
                     new RERule(false, "", "Replaces \"action view\" with full action name.", "\\baction view\\b", "action " + Intent.ACTION_VIEW),
                     new RERule(false, "", "Replaces \"action send to\" with full action name.", "\\baction send to\\b", "action " + Intent.ACTION_SENDTO),
@@ -469,12 +468,30 @@ public final class MyCommands {
                     new RERule(false, "", "", "\\baction play from search\\b", "action " + ACT_PLAY_FROM_SEARCH),
                     new RERule(false, "", "", "\\baction create note\\b", "action " + ACT_CREATE_NOTE),
                     new RERule(false, "", "", "\\baction dial\\b", "action " + ACT_DIAL),
-                    new RERule(false, "", "", "\\baction call\\b", "action " + ACT_CALL),
+                    new RERule(false, "", "", "\\baction call\\b", "action " + ACT_CALL)
+            );
 
-                    new RERule(false, "", "Replaces \"data calendar events\" with full URL.", "\\bdata calendar events\\b", "data " + DAT_CAL_EVENTS),
+    static public final REGroup RE_DATA_GROUP =
+            new REGroup(
+                    false,
+                    "data",
+                    "These rules replace data shortcuts to full ones", "\\bdata ",
+                    new RERule(false, "", "Replaces \"data calendar events\" with full URL.", "\\bdata calendar events\\b", "data " + DAT_CAL_EVENTS)
+            );
 
-                    new RERule(false, "", "Replaces \"type contacts\" with full datatype for contacts.", "\\btype contacts\\b", "type " + TYPE_CONTACTS),
+    static public final REGroup RE_TYPE_GROUP =
+            new REGroup(
+                    false,
+                    "type",
+                    "These rules replace type shortcuts to full ones", "\\btype ",
+                    new RERule(false, "", "Replaces \"type contacts\" with full datatype for contacts.", "\\btype contacts\\b", "type " + TYPE_CONTACTS)
+            );
 
+    static public final REGroup RE_CATEGORY_GROUP =
+            new REGroup(
+                    false,
+                    "category",
+                    "These rules replace category shortcuts to full ones", "\\bcategory ",
                     new RERule(false, "", "", "\\bcategory browser\\b", "category " + Intent.CATEGORY_APP_BROWSER),
                     new RERule(false, "", "", "\\bcategory calculator\\b", "category " + Intent.CATEGORY_APP_CALCULATOR),
                     new RERule(false, "", "", "\\bcategory calendar\\b", "category " + Intent.CATEGORY_APP_CALENDAR),
@@ -485,11 +502,15 @@ public final class MyCommands {
                     new RERule(false, "", "", "\\bcategory market\\b", "category " + Intent.CATEGORY_APP_MARKET),
                     new RERule(false, "", "", "\\bcategory messaging\\b", "category " + Intent.CATEGORY_APP_MESSAGING),
                     new RERule(false, "", "", "\\bcategory music\\b", "category " + Intent.CATEGORY_APP_MUSIC),
-                    new RERule(false, "", "", "\\bcategory default\\b", "category " + Intent.CATEGORY_DEFAULT),
-
+                    new RERule(false, "", "", "\\bcategory default\\b", "category " + Intent.CATEGORY_DEFAULT)
+            );
+    static public final REGroup RE_EXTRA_GROUP =
+            new REGroup(
+                    false,
+                    "extra",
+                    "These rules replace extra shortcuts to full ones", "\\bextra ",
                     new RERule(false, "", "", "\\bextra email\\b", "extra string " + Intent.EXTRA_EMAIL),
                     new RERule(false, "", "", "\\bextra text\\b", "extra string " + EX_TEXT),
-
                     new RERule(false, "", "", "\\bextra hour\\b", "extra integer " + EX_HOUR),
                     new RERule(false, "", "", "\\bextra minutes\\b", "extra integer " + EX_MINUTES),
                     new RERule(false, "", "", "\\bextra message\\b", "extra string " + EX_MESSAGE),
@@ -505,7 +526,11 @@ public final class MyCommands {
             RE_TIMER_GROUP,
             RE_ACTIVITY_GROUP,
             RE_FRAGMENT_GROUP,
-            RE_FINAL_GROUP
+            RE_ACTIONS_GROUP,
+            RE_DATA_GROUP,
+            RE_TYPE_GROUP,
+            RE_CATEGORY_GROUP,
+            RE_EXTRA_GROUP
     );
 
 

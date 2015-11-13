@@ -447,7 +447,7 @@ public final class MILogFragment extends MyFragment {
         }
 
         mCountdownCommand = mEditText.getText().toString();
-        log.w("> cmd: %s", mCountdownCommand);
+        log.w(mCountdownCommand);
 
         mCountdownAnimator.start();
         updatePS();
@@ -456,7 +456,7 @@ public final class MILogFragment extends MyFragment {
 
     public void cancelCountdown() {
         if(mCountdownCommand != null)
-            log.w("< cmd: cancelled");
+            log.w("cancelled");
         mCountdownCommand = null;
         if(mCountdownAnimator != null) {
             mCountdownAnimator.cancel(); //mCountdownEnabled have to be false before this line. (it calls onCountdownEnd)

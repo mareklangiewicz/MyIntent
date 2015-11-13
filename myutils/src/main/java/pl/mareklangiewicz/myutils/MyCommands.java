@@ -263,21 +263,22 @@ public final class MyCommands {
     }
 
     static public final List<String> DEFAULT_EXAMPLE_COMMANDS = Arrays.asList(
-            "action view data http://mareklangiewicz.pl",
-            "action android.settings.WIFI_SETTINGS",
-            "action android.settings.BLUETOOTH_SETTINGS",
-            "action android.settings.WIFI_SETTINGS",
-            "action android.settings.WIFI_SETTINGS",
-            "wake me up at 7",
-            "set alarm to 7 30",
-            "set a timer for 300",
-            "set timer for 200 seconds",
-            "set timer for 200 seconds quickly",
+            "data http://mareklangiewicz.pl",
+            "settings wi-fi",
+            "dial 123456789",
+            "call 123456789",
+            "search king",
+            "web search rxkotlin",
+            "wake me up at 7 30",
+            "set alarm to 9 15",
+            "set timer for 40",
+            "take a picture",
+            "record a movie",
+            "note buy a cat food",
             "start nothing"
     );
 
     static public final List<RERule> DEFAULT_EXAMPLE_RULES = Arrays.asList(
-            new RERule(true, "nothing", "Things you can say if you don't want anything to happen", "^((cancel)|(no(thing)?))\\b", "start nothing")
     );
 
 
@@ -392,7 +393,25 @@ public final class MyCommands {
                     "^.+"
             );
 
+    static public final REGroup RE_PHONE_GROUP =
+            new REGroup(
+                    false,
+                    "phone",
+                    "Phone related shortcut rules.",
+                    "^(dial|call)",
+                    new RERule(false, "", "", "^dial (.*)$", "action dial data tel:$1"),
+                    new RERule(false, "", "", "^call (.*)$", "action call data tel:$1")
+            );
 
+    static public final REGroup RE_SEARCH_GROUP =
+            new REGroup(
+                    false,
+                    "search",
+                    "Search related shortcut rules.",
+                    "^((web )?search)",
+                    new RERule(false, "", "", "^search (.*)$", "action search extra string query $1"),
+                    new RERule(false, "", "", "^web search (.*)$", "action web search extra string query $1")
+            );
     static public final REGroup RE_ALARM_GROUP =
             new REGroup(
                     false,
@@ -425,6 +444,40 @@ public final class MyCommands {
             );
 
 
+    static public final REGroup RE_MULTIMEDIA_GROUP =
+            new REGroup(
+                    false,
+                    "multimedia",
+                    "Multimedia related shortcut rules.",
+                    "^(take|record|play)",
+                    new RERule(false, "", "", "^take( a | an | the )?(photo|picture|selfie|image)", "action android.media.action.STILL_IMAGE_CAMERA"),
+                    new RERule(false, "", "", "^record( a | an | the )?(movie|video|film)", "action android.media.action.VIDEO_CAMERA")
+            );
+
+    static public final REGroup RE_SETTINGS_GROUP =
+            new REGroup(
+                    false,
+                    "settings",
+                    "Settings related shortcut rules.",
+                    "^settings?",
+                    new RERule(false, "", "", "^settings? bluetooth$", "action android.settings.BLUETOOTH_SETTINGS"),
+                    new RERule(false, "", "", "^settings? roaming$", "action android.settings.DATA_ROAMING_SETTINGS"),
+                    new RERule(false, "", "", "^settings? display$", "action android.settings.DISPLAY_SETTINGS"),
+                    new RERule(false, "", "", "^settings? internal storage$", "action android.settings.INTERNAL_STORAGE_SETTINGS"),
+                    new RERule(false, "", "", "^settings? location$", "action android.settings.LOCATION_SOURCE_SETTINGS"),
+                    new RERule(false, "", "", "^settings? apps?$", "action android.settings.MANAGE_APPLICATIONS_SETTINGS"),
+                    new RERule(false, "", "", "^settings? memory cards?$", "action android.settings.MEMORY_CARD_SETTINGS"),
+                    new RERule(false, "", "", "^settings? network$", "action android.settings.NETWORK_OPERATOR_SETTINGS"),
+                    new RERule(false, "", "", "^settings? nfc$", "action android.settings.NFC_SETTINGS"),
+                    new RERule(false, "", "", "^settings? privacy$", "action android.settings.PRIVACY_SETTINGS"),
+                    new RERule(false, "", "", "^settings? search$", "action android.search.action.SEARCH_SETTINGS"),
+                    new RERule(false, "", "", "^settings? security$", "action android.settings.SECURITY_SETTINGS"),
+                    new RERule(false, "", "", "^settings? sounds?$", "action android.settings.SOUND_SETTINGS"),
+                    new RERule(false, "", "", "^settings? sync$", "action android.settings.SYNC_SETTINGS"),
+                    new RERule(false, "", "", "^settings? wi-?fi$", "action android.settings.WIFI_SETTINGS"),
+                    new RERule(false, "", "", "^settings? wireless$", "action android.settings.WIRELESS_SETTINGS"),
+                    new RERule(false, "", "", "^settings?$", "action android.settings.SETTINGS")
+            );
     static public final REGroup RE_ACTIVITY_GROUP =
             new REGroup(
                     false,
@@ -448,7 +501,16 @@ public final class MyCommands {
                             "^fragment (?=\\S*\\.)([_\\./a-zA-Z0-9]*)", "start fragment component $1")
             );
 
-    static public final REGroup RE_ACTIONS_GROUP =
+    static public final REGroup RE_OTHER_GROUP =
+            new REGroup(
+                    false,
+                    "other",
+                    "Other rules.",
+                    "^.+",
+                    new RERule(false, "nothing", "Things you can say if you don't want anything to happen", "^((cancel)|(no(thing)?))\\b", "start nothing"),
+                    new RERule(false, "note", "Adds any given note to your note app", "^note (.*)$", "action create note type text/plain extra text $1")
+            );
+    static public final REGroup RE_ACTION_GROUP =
             new REGroup(
                     false,
                     "action",
@@ -522,11 +584,16 @@ public final class MyCommands {
     static public final List<REGroup> RE_RULES = Arrays.asList(
             RE_INITIAL_GROUP,
             RE_USER_GROUP,
+            RE_PHONE_GROUP,
+            RE_SEARCH_GROUP,
             RE_ALARM_GROUP,
             RE_TIMER_GROUP,
+            RE_MULTIMEDIA_GROUP,
+            RE_SETTINGS_GROUP,
             RE_ACTIVITY_GROUP,
             RE_FRAGMENT_GROUP,
-            RE_ACTIONS_GROUP,
+            RE_OTHER_GROUP,
+            RE_ACTION_GROUP,
             RE_DATA_GROUP,
             RE_TYPE_GROUP,
             RE_CATEGORY_GROUP,

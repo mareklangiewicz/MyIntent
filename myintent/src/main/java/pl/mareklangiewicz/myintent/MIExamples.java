@@ -29,7 +29,7 @@ public class MIExamples {
         EXAMPLE_COMMANDS.add("settings security");
         EXAMPLE_COMMANDS.add("settings sound");
         EXAMPLE_COMMANDS.add("settings sync");
-        EXAMPLE_COMMANDS.add("settings wi-?fi");
+        EXAMPLE_COMMANDS.add("settings wi-fi");
         EXAMPLE_COMMANDS.add("settings wireless");
         EXAMPLE_COMMANDS.add("settings");
         EXAMPLE_COMMANDS.add("start custom action listen");
@@ -52,6 +52,7 @@ public class MIExamples {
         EXAMPLE_COMMANDS.add("what's your name");
         EXAMPLE_COMMANDS.add("hey you");
         EXAMPLE_COMMANDS.add("silence");
+        EXAMPLE_COMMANDS.add("translate duck");
         EXAMPLE_COMMANDS.add("exit");
         EXAMPLE_COMMANDS.add("action edit data content://contacts/people/1");
         EXAMPLE_COMMANDS.add("action show alarms");
@@ -93,12 +94,16 @@ public class MIExamples {
                 "data google.streetview:cbll=48.1848573,16.3122329"
         ));
         EXAMPLE_RULES.add(new MyCommands.RERule(true, "", "",
+                "^translate (.*)$",
+                "action send component com.google.android.apps.translate/.TranslateActivity extra text $1"
+        ));
+        EXAMPLE_RULES.add(new MyCommands.RERule(true, "", "",
                 "^my name is (\\w+)\\b.*",
                 "say Hi $1."
         ));
         EXAMPLE_RULES.add(new MyCommands.RERule(true, "", "",
                 "^what's your name\\b.*",
-                "say Bond. James Bond."
+                "say My name is 4. Nexus 4."
         ));
         EXAMPLE_RULES.add(new MyCommands.RERule(true, "", "",
                 "^hey you\\b.*",

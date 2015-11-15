@@ -473,10 +473,6 @@ public class MIActivity extends MyActivity {
             MIContract.CmdRecent.clear(this);
             return true;
         }
-        if(id == R.id.clear_example) {
-            MIContract.CmdExample.clear(this);
-            return true;
-        }
         if(id == R.id.reset_all) {
             resetAll();
             return true;

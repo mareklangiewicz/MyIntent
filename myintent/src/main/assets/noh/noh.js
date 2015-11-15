@@ -12,7 +12,7 @@
  * We have a function for every html element like: {@linkcode table, tr, td, div, span} etc..;
  * but also we have functions that constructs many specialized and more complex elements that have some dynamic behaviour
  * implemented (like {@linkcode menu, oneof, bar, logger}, and more).
- * TODO: implement some srccode, some logger and some tester.
+ * TODO SOMEDAY: implement some srccode, some logger and some tester.
  * </p>
  * <p>
  * Please check the files: {@link noh_example.js} (and {@link noh_example.html}) for full (but simple) working example.
@@ -20,7 +20,7 @@
  * Additional API documentation generated with {@link http://usejsdoc.org/|jsdoc3} is available here: {@link apidoc/index.html|NOH API documentation} TODO
  * </p>
  * <p>
- * NOH library depends on jQuery. TODO: Limit jQuery usage for NOH to be able to work with SVG or other elements (not only html)
+ * NOH library depends on jQuery. TODO SOMEDAY: Limit jQuery usage for NOH to be able to work with SVG or other elements (not only html)
  * {@linkcode http://stackoverflow.com/questions/3642035/jquerys-append-not-working-with-svg-element|stackoverflow}
  * </p>
  *
@@ -98,8 +98,8 @@ noh.NotSupportedError.prototype = new noh.NotImplementedError("Operation not sup
  * @const
  */
 noh.TAGS = [
-  //TODO: this is too big - remove unwanted tags later (we want probably only those inside body)..
-  //TODO: add SVG related tags (maybe MathML related tags too??) (but maybe in another file(s))
+  //TODO SOMEDAY: this is too big - remove unwanted tags later (we want probably only those inside body)..
+  //TODO SOMEDAY: add SVG related tags (maybe MathML related tags too??) (but maybe in another file(s))
   "html", "head", "body", "script", "meta", "title", "link",
   "div", "p", "span", "a", "img", "br", "hr", "em", "i", "strong",
   "table", "tr", "th", "td", "thead", "tbody", "tfoot", "colgroup", "col",
@@ -183,7 +183,7 @@ noh.TAGS = [
  * @param {number=} opt_ignore Number of elements to ignore at the beginning of args list. It is important only if args is an array-like object (default is 0)
  * @param {noh.RecAttrsAndNodes=} opt_result A result object to be extended.
  * @return {!noh.RecAttrsAndNodes} Attributes and children extracted from args.
- * @suppress {checkTypes} FIXME: how can I tell the closure compiler that in some cases an args is array-like?
+ * @suppress {checkTypes} FIXME SOMEDAY: how can I tell the closure compiler that in some cases an args is array-like?
  */
 noh.organize = function(args, opt_ignore, opt_result) {
 
@@ -220,7 +220,7 @@ noh.arr = {};
  * @param {Array} arrIn The source array.
  * @param {Array} arrOut The destination array.
  * @return {number} New length of the destination array.
- * TODO: do we need it now at all?
+ * TODO SOMEDAY: do we need it now at all?
  */
 noh.arr.push = function(arrIn, arrOut) {
   return arrOut.push.apply(arrOut, arrIn);
@@ -247,7 +247,7 @@ noh.arr.indexOf = function(val, arr) {
  * @param {Array} arr array (or null).
  * @return {Object} An object that gets it's property names from records parameter, and values from arr parameter.
  * If arr is null, the returned object will be also null.
- * TODO: do we need it now at all?
+ * TODO SOMEDAY: do we need it now at all?
  */
 noh.arr.arr2obj = function(records, arr) {
   if(arr === null) return null;
@@ -263,7 +263,7 @@ noh.arr.arr2obj = function(records, arr) {
  * @param {!Array.<string>} records Array of object property names that defines the order to put the obj values to returned array.
  * @param {Object} obj An input object that provides values to return in array.
  * @return {Array} An array of obj values in order defined by records parameter.
- * TODO: do we need it now at all?
+ * TODO SOMEDAY: do we need it now at all?
  */
 noh.arr.obj2arr = function(records, obj) {
   if(obj === null) return null;
@@ -341,7 +341,7 @@ noh.Node = function() {
   /**
    * The jQuery object representing this node.
    * the $ property have to be overriden in derivatives!
-   * TODO: better type description?
+   * TODO SOMEDAY: better type description?
    * @type {!Object}
    */
   this.$;
@@ -374,7 +374,7 @@ noh.Node.prototype.rem = function() {
 
 /**
  * This dummy method is only for console to display our Node as an array..
- * TODO: implement real splice with callback for inserting and removing DOM elements;
+ * TODO SOMEDAY: implement real splice with callback for inserting and removing DOM elements;
  * then implement other array-like methods using splice. (like: pop, push, shift, unshift) 
  * @see http://stackoverflow.com/questions/6599071/array-like-objects-in-javascript
  */
@@ -577,8 +577,8 @@ noh.tablebar = function(var_args) {
         cells.push(noh.td(an.nodes[x]));
     return noh.table1r({"class":"noh bar"}, an.attrs, cells);
 };
-// TODO: better bars: bar(horizontal/vertical, ...); hbar = bar(horizontal, ...); vbar = ... And no tables! (but css)
-// FIXME: UPDATE: tablebar is not tested and not sure if needed at all.
+// TODO SOMEDAY: better bars: bar(horizontal/vertical, ...); hbar = bar(horizontal, ...); vbar = ... And no tables! (but css)
+// FIXME SOMEDAY: UPDATE: tablebar is not tested and not sure if needed at all.
 
 
 
@@ -591,7 +591,7 @@ noh.sdiv = function(var_args) {
 };
 
 
-//TODO: documentation for simple elements for tests and docs. (write some nice introduction in noh_doc.js using these elements)
+//TODO SOMEDAY: documentation for simple elements for tests and docs. (write some nice introduction in noh_doc.js using these elements)
 noh.ex = {};
 
 noh.ex.simple = function() {
@@ -622,8 +622,8 @@ noh.ex.color = function(color) {
   return noh.span({style:"padding:8px"}, "C").css("color", color).css("background-color", color)
 };
 
-//TODO: insert this code to introduction as an example of simplest "template".
-//TODO: write in introduction that first examples are written so even javascript beginner should be able to understand it
+//TODO SOMEDAY: insert this code to introduction as an example of simplest "template".
+//TODO SOMEDAY: write in introduction that first examples are written so even javascript beginner should be able to understand it
 /**
  * @param {number} len How many colors we want
  */
@@ -685,7 +685,7 @@ noh.overlay = function(var_args) {
    * @this {noh.Element}
    */
   overlay.show = function(idx) {
-    //TODO: validate idx in debug mode
+    //TODO SOMEDAY: validate idx in debug mode
     var obj = idx === undefined ? this : this[idx];
     if(!obj.hasclass("hidden"))
       return overlay;
@@ -702,7 +702,7 @@ noh.overlay = function(var_args) {
    * @this {noh.Element}
    */
   overlay.hide = function(idx) {
-    //TODO: validate idx in debug mode
+    //TODO SOMEDAY: validate idx in debug mode
 
     var obj = idx === undefined ? this : this[idx];
     if(obj.hasclass("hidden"))
@@ -816,7 +816,7 @@ noh.IBlind.prototype.roll = function(down) {};
  * @constructor
  * @extends {noh.Element}
  * @implements {noh.IBlind}
- * TODO: it can change its size dynamicly so it should be inside some absolutely positioned block, for better performance.
+ * TODO SOMEDAY: it can change its size dynamicly so it should be inside some absolutely positioned block, for better performance.
  * (to avoid forcing browser to relayout the whole page too much)
  */
 noh.Blind = function(var_args) {
@@ -863,7 +863,7 @@ noh.Blind.prototype.roll = function(down) {
 };
 
 /**
- * TODO: description
+ * TODO SOMEDAY: description
  * @param {...noh.AttrsAndNodes} var_args Attributes and children nodes
  * @return {!noh.Blind}
  */
@@ -904,7 +904,7 @@ noh.IOneOf.prototype.select = function(idx) {};
  * @constructor
  * @extends {noh.Element}
  * @implements {noh.IOneOf}
- * TODO: it can change its size dynamicly so it should be inside some absolutely positioned block, for better performance.
+ * TODO SOMEDAY: it can change its size dynamicly so it should be inside some absolutely positioned block, for better performance.
  */
 noh.OneOf = function(var_args) {
   var an = noh.organize(arguments);
@@ -968,7 +968,7 @@ noh.OneOf.prototype.prev = function() { return this.selectModulo_(this.selected(
 
 
 /**
- * TODO: description
+ * TODO SOMEDAY: description
  * @param {...noh.AttrsAndNodes} var_args Attributes and children nodes
  * @return {!noh.OneOf}
  */
@@ -1013,7 +1013,7 @@ noh.details = function(var_args) {
  * @constructor
  * @extends {noh.Element}
  * @implements {noh.IOneOf}
- * TODO: it can change its size dynamicly so it should be inside some absolutely positioned block, for better performance.
+ * TODO SOMEDAY: it can change its size dynamicly so it should be inside some absolutely positioned block, for better performance.
  */
 noh.Reel = function(lines, width, height, var_args) {
   var an = noh.organize(arguments, 3);
@@ -1130,9 +1130,9 @@ noh.Reel.prototype.chksize = function() {
  */
 noh.Reel.prototype.fixLineNr_ = function(nr) {
   while(nr < 0)
-    nr += this.length; //FIXME: better computation, without loop.
+    nr += this.length; //FIXME SOMEDAY: better computation, without loop.
   while(nr >= this.length)
-    nr -= this.length; //FIXME: better computation, without loop.
+    nr -= this.length; //FIXME SOMEDAY: better computation, without loop.
 
   return nr;
 };
@@ -1157,8 +1157,8 @@ noh.Reel.prototype.update = function(opt_lines) {
 
   if(opt_lines !== undefined)
     this.lines = opt_lines;
-  //TODO: check opt_lines value in debug mode
-  //TODO: additional warning in debug mode, when lines is to close to length - so it can look ugly (test it in practice first)
+  //TODO SOMEDAY: check opt_lines value in debug mode
+  //TODO SOMEDAY: additional warning in debug mode, when lines is to close to length - so it can look ugly (test it in practice first)
 
   this.chksize();
 
@@ -1226,7 +1226,7 @@ noh.Reel.prototype.spin = function(count, opt_random, opt_time) {
 };
 
 /**
- * TODO: description
+ * TODO SOMEDAY: description
  * @param {number} lines See {@linkcode noh.Reel} for details.
  * @param {string|number} width See {@linkcode noh.Reel} for details. 
  * @param {string|number} height See {@linkcode noh.Reel} for details. 
@@ -1240,7 +1240,7 @@ noh.reel = function(lines, width, height, var_args) {
 
 
 
-/** @typedef undefined */ //TODO: It will be a record type in future
+/** @typedef undefined */ //TODO SOMEDAY: It will be a record type in future
 noh.FancyOptions;
 
 /**
@@ -1249,7 +1249,7 @@ noh.FancyOptions;
  * but it can also add some more fun javascript stuff to some elements (depending of the element type)
  * you can enable/disable/configure different fancy features using "options" parameter.
  * @param {!noh.Element} element to modify
- * @param {noh.FancyOptions=} opt_options TODO: define some configuration options
+ * @param {noh.FancyOptions=} opt_options TODO SOMEDAY: define some configuration options
  * @return {!noh.Element}
  */
 noh.fancy = function(element, opt_options) {
@@ -1298,7 +1298,7 @@ noh.log = {};
 
 
 /** @typedef {!Object} */
-noh.log.Data; //FIXME: how to express ArrayLike type? (like: ArrayLike.<*>)
+noh.log.Data; //FIXME SOMEDAY: how to express ArrayLike type? (like: ArrayLike.<*>)
 
 
 /**
@@ -1607,7 +1607,7 @@ noh.log.filter = function(logger, filter) {
 
 
 /**
- * TODO: description
+ * TODO SOMEDAY: description
  * @param {!noh.log.ILogger} logger
  * @return {!noh.log.ILogger}
  */
@@ -1630,7 +1630,7 @@ noh.log.addtime = function(logger) {
 
 
 /**
- * TODO: description
+ * TODO SOMEDAY: description
  * @param {!noh.log.ILogger} logger
  * @param {number} len
  * @return {!noh.log.ILogger}
@@ -1654,7 +1654,7 @@ noh.log.limitlen = function(logger, len) {
  * @return {!noh.Element}
  */
 noh.log.reel = function(lines, opt_duration) {
-  //TODO: validation of lines value in debug mode
+  //TODO SOMEDAY: validation of lines value in debug mode
   var length = lines * 2 + 1;
   var duration = opt_duration === undefined ? 10000 : opt_duration;
   var loggers = [];
@@ -1683,7 +1683,7 @@ noh.log.reel = function(lines, opt_duration) {
 
 
 /**
- * TODO: desc
+ * TODO SOMEDAY: desc
  * @param {number} len
  * @param {string=} opt_placeholder
  * @return {!noh.Element}
@@ -1781,9 +1781,9 @@ noh.objtest = function(obj, commands) {
 
 
 /*****************************************************************************
- * FIXME: the rest of this file is an old not tested code!
- * TODO: review it first! (use chaining - it wasn't there when this code was written)
- * TODO: make simple tests for it and try it out
+ * FIXME SOMEDAY: the rest of this file is an old not tested code!
+ * TODO SOMEDAY: review it first! (use chaining - it wasn't there when this code was written)
+ * TODO SOMEDAY: make simple tests for it and try it out
  ****************************************************************************/
 
 
@@ -1852,7 +1852,7 @@ noh.menuitem = function(content) { return new noh.MenuItem(content); };
  * @param {noh.ISelectable} item A main part - this is visible all the time
  * @param {noh.Node|string} payload Second part - this is visible only when item is selected. It shows itself below the main part.
  * @return {noh.ISelectable} A menuitem with payload attached.
- * TODO: change to new class BigMenuItem - for better performance and consistency
+ * TODO SOMEDAY: change to new class BigMenuItem - for better performance and consistency
  */
 noh.bigmenuitem = function(item, payload) {
   var oneof = noh.oneof(payload)
@@ -1872,7 +1872,7 @@ noh.bigmenuitem = function(item, payload) {
   return bigmenuitem;
 };
 
-//TODO: test: wrap some menu item with bigmenuitem a few times and check if all payloads are synced
+//TODO SOMEDAY: test: wrap some menu item with bigmenuitem a few times and check if all payloads are synced
 //like: noh.bigmenuitem(noh.bigmenuitem(noh.menuitem("some item"), payload1), payload2)
 
 
@@ -1916,7 +1916,7 @@ noh.Menu.prototype.select = function(idx) {
   if(this.selected_ != -1)
     this.items_[this.selected_].toggle_orig_(); // deselects old item
 
-  //TODO: check the idx value in DEBUG mode (check the @define in closure compiler) (make sure it is removed completely in release mode)
+  //TODO SOMEDAY: check the idx value in DEBUG mode (check the @define in closure compiler) (make sure it is removed completely in release mode)
 
   this.selected_ = idx;
 
@@ -1930,7 +1930,7 @@ noh.Menu.prototype.select = function(idx) {
 
 
 /**
- * TODO: description
+ * TODO SOMEDAY: description
  * @param {...noh.AttrsAndNodes} var_args Attributes and children. Children should be proper menuitems (implement:ISelectable extend:Element)
  * @return {!noh.Menu}
  */

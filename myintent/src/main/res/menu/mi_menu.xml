@@ -53,16 +53,6 @@
                 android:titleCondensed="cmd:say something smart"
                 />
             <item
-                android:icon="@drawable/ic_whatshot_black_24dp"
-                android:title="@string/sniezka"
-                android:titleCondensed="cmd:data geo:50.736479,15.739731"
-                />
-            <item
-                android:icon="@drawable/ic_whatshot_black_24dp"
-                android:title="Hell"
-                android:titleCondensed="cmd:data geo:0,0?q=54.593216,18.811631(Hell)"
-                />
-            <item
                 android:id="@+id/reset_all"
                 android:icon="@drawable/ic_whatshot_black_24dp"
                 android:title="@string/reset_all"

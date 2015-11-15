@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 public final class MyExampleView extends TextView {
 
-    static private Paint sPaint;
+    static private final Paint sPaint;
 
     static {
         sPaint = new Paint();
@@ -20,7 +20,7 @@ public final class MyExampleView extends TextView {
         sPaint.setAntiAlias(true);
     }
 
-    private @NonNull Rect mArea = new Rect();
+    private @NonNull final Rect mArea = new Rect();
 
     public MyExampleView(Context context) {
         super(context);

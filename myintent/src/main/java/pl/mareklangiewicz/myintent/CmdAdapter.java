@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class CmdAdapter extends RecyclerView.Adapter<CmdAdapter.ViewHolder> implements View.OnClickListener{
 
-    protected @NonNull MyLogger log = MyLogger.UIL;
+    protected @NonNull final MyLogger log = MyLogger.UIL;
 
     protected @DrawableRes int mImageRes = R.drawable.ic_youtube_searched_for_black_24dp;
 
@@ -88,8 +88,8 @@ public class CmdAdapter extends RecyclerView.Adapter<CmdAdapter.ViewHolder> impl
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        public @NonNull ImageView mImageView;
-        public @NonNull TextView mTextView;
+        public @NonNull final ImageView mImageView;
+        public @NonNull final TextView mTextView;
 
         public ViewHolder(View v) {
             super(v);

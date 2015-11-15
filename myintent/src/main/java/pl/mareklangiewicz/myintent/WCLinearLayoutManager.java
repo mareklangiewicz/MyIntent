@@ -100,6 +100,7 @@ public class WCLinearLayoutManager extends android.support.v7.widget.LinearLayou
         if(!canMakeInsetsDirty) {
             return;
         }
+        //noinspection TryWithIdenticalCatches
         try {
             if(insetsDirtyField == null) {
                 insetsDirtyField = RecyclerView.LayoutParams.class.getDeclaredField("mInsetsDirty");

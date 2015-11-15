@@ -24,7 +24,7 @@ import static pl.mareklangiewicz.myutils.MyTextUtils.str;
  */
 public class RERulesAdapter extends RecyclerView.Adapter<RERulesAdapter.ViewHolder> implements View.OnClickListener {
 
-    protected @NonNull MyLogger log = MyLogger.UIL;
+    protected @NonNull final MyLogger log = MyLogger.UIL;
 
     private @Nullable MyCommands.RERule explained; // if some rule can not be removed or moved it displays snackbar only once in a row.
         // we remember this rule here so we do not display an error for it more than once in a row.
@@ -68,7 +68,7 @@ public class RERulesAdapter extends RecyclerView.Adapter<RERulesAdapter.ViewHold
         }
         MyCommands.RERule rule = mRules.get(position);
         holder.mRuleNameView.setText(Html.fromHtml("<b>rule:</b> " + rule.getName()));
-        holder.mRuleContentView.setText("match: \"" + rule.getMatch() + "\"\nreplace: \"" + rule.getReplace() + "\"");
+        holder.mRuleContentView.setText(String.format("match: \"%s\"\nreplace: \"%s\"", rule.getMatch(), rule.getReplace()));
     }
 
     @Override
@@ -167,8 +167,8 @@ public class RERulesAdapter extends RecyclerView.Adapter<RERulesAdapter.ViewHold
 
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        public @NonNull TextView mRuleNameView;
-        public @NonNull TextView mRuleContentView;
+        public @NonNull final TextView mRuleNameView;
+        public @NonNull final TextView mRuleContentView;
 
         public ViewHolder(View v) {
             super(v);

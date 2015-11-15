@@ -160,7 +160,7 @@ public final class MyCommands {
         private String mDescription;
         private String mMatch;
         private Pattern mPattern;
-        private List<RERule> mRules;
+        private final List<RERule> mRules;
 
         public REGroup(boolean editable, @NonNull String name, @NonNull String description, @NonNull String match, RERule... rules) {
             setEditable(true);
@@ -278,7 +278,9 @@ public final class MyCommands {
             "start nothing"
     );
 
+    @SuppressWarnings("ArraysAsListWithZeroOrOneArgument")
     static public final List<RERule> DEFAULT_EXAMPLE_RULES = Arrays.asList(
+            //someday maybe we will add something here.
     );
 
 

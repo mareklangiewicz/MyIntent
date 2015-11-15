@@ -106,9 +106,9 @@ public class MyLogAdapter extends RecyclerView.Adapter<MyLogAdapter.ViewHolder> 
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public @NonNull CardView mCardView;
-        public @NonNull TextView mHeadView;
-        public @NonNull TextView mMessageView;
+        public @NonNull final CardView mCardView;
+        public @NonNull final TextView mHeadView;
+        public @NonNull final TextView mMessageView;
 
         public ViewHolder(View v) {
             super(v);

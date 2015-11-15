@@ -7,9 +7,8 @@ import com.noveogroup.android.log.MyLogger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static com.google.common.truth.Truth.assertThat;
 
-import static org.junit.Assert.*;
+import static com.google.common.truth.Truth.assertThat;
 
 /**
  * Created by Marek Langiewicz on 04.11.15.

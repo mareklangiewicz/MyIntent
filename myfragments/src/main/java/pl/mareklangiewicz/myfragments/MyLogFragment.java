@@ -74,7 +74,9 @@ public final class MyLogFragment extends MyFragment {
         }
         else if(id == R.id.clear_log_history) {
             log.getLogHistory().clear();
-            mMLRView.getAdapter().notifyDataSetChanged();
+            if(mMLRView != null) {
+                mMLRView.getAdapter().notifyDataSetChanged();
+            }
             return true;
         }
         else if(id == R.id.log_some_assert) {

@@ -113,9 +113,9 @@ public class REGroupsAdapter extends RecyclerView.Adapter<REGroupsAdapter.ViewHo
     static class ViewHolder extends RecyclerView.ViewHolder {
 
 
-        public @NonNull CardView mGroupCardView;
-        public @NonNull TextView mGroupHeaderView;
-        public @NonNull RecyclerView mRulesRecyclerView;
+        public @NonNull final CardView mGroupCardView;
+        public @NonNull final TextView mGroupHeaderView;
+        public @NonNull final RecyclerView mRulesRecyclerView;
 
         @Nullable ItemTouchHelper mItemTouchHelper;
 

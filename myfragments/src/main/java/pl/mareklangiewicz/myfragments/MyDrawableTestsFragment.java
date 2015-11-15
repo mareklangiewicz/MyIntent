@@ -139,7 +139,7 @@ public final class MyDrawableTestsFragment extends MyFragment implements View.On
     }
 
     private static class MyViewHolder extends RecyclerView.ViewHolder {
-        private View mContent;
+        private final View mContent;
 
         public MyViewHolder(View v, View content) {
             super(v);

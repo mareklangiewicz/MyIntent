@@ -70,7 +70,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
     /**
      * Default logger for use in UI thread
      */
-    protected @NonNull MyLogger log = MyLogger.UIL;
+    protected @NonNull final MyLogger log = MyLogger.UIL;
     protected @Nullable DisplayMetrics mDisplayMetrics;
     protected @Nullable DrawerLayout mGlobalDrawerLayout;
     protected @Nullable LinearLayout mGlobalLinearLayout; // either this or mGlobalDrawerLayout will remain null
@@ -458,8 +458,14 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
 
         MyCommands.setIntentFromCommand(intent, command, log);
 
-        if(startService(intent) == null) {
-            log.e("Service not found for this intent: %s", str(intent));
+        try {
+            if(startService(intent) == null) {
+                log.e("Service not found for this intent: %s", str(intent));
+                return false;
+            }
+        }
+        catch(SecurityException e) {
+            log.a("Security exception.", e);
             return false;
         }
         return true;

@@ -70,7 +70,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
     /**
      * Default logger for use in UI thread
      */
-    protected @NonNull MyLogger log = MyLogger.UIL;
+    protected @NonNull final MyLogger log = MyLogger.UIL;
     protected @Nullable DisplayMetrics mDisplayMetrics;
     protected @Nullable DrawerLayout mGlobalDrawerLayout;
     protected @Nullable LinearLayout mGlobalLinearLayout; // either this or mGlobalDrawerLayout will remain null
@@ -88,8 +88,6 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
     protected @Nullable Fragment mLocalFragment;
     protected @Nullable MyFragment mMyLocalFragment; // the same as mLocalFragment - if mLocalFragment instanceof MyFragment - or null
     // otherwise..
-
-    protected @Nullable String mMyPendingCommand;
 
     @CallSuper @Override protected void onCreate(Bundle savedInstanceState) {
         mDisplayMetrics = getResources().getDisplayMetrics();
@@ -191,7 +189,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         else if(mGlobalLinearLayout != null)
             toggleMNVAndArrow(mGlobalNavigationView, mGlobalArrowDrawable);
         else
-            log.e("No global drawer or linear layout with global navigation.");
+            log.a("No global drawer or linear layout with global navigation.");
     }
 
     private void toggleLocalNavigation() {
@@ -200,7 +198,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         else if(mLocalLinearLayout != null)
             toggleMNVAndArrow(mLocalNavigationView, mLocalArrowDrawable);
         else
-            log.e("No local drawer or linear layout with local navigation.");
+            log.a("No local drawer or linear layout with local navigation.");
     }
 
     private void toggleDrawer(@NonNull DrawerLayout drawerLayout, int gravity) {
@@ -310,18 +308,6 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
 
         super.onDestroy();
     }
-
-    protected void startPendingCommand() {
-
-        if(mMyPendingCommand == null)
-            return;
-
-        onCommand(mMyPendingCommand);
-
-        mMyPendingCommand = null;
-
-    }
-
 
     protected void updateLocalFragment(@Nullable Fragment fragment) {
         if(VV)
@@ -455,7 +441,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
                 return false;
             }
             catch(SecurityException e) {
-                log.e("Security exception.", e);
+                log.a("Security exception.", e);
                 return false;
             }
         }
@@ -472,8 +458,14 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
 
         MyCommands.setIntentFromCommand(intent, command, log);
 
-        if(startService(intent) == null) {
-            log.e("Service not found for this intent: %s", str(intent));
+        try {
+            if(startService(intent) == null) {
+                log.e("Service not found for this intent: %s", str(intent));
+                return false;
+            }
+        }
+        catch(SecurityException e) {
+            log.a("Security exception.", e);
             return false;
         }
         return true;
@@ -495,7 +487,13 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         FragmentManager fm = getFragmentManager();
         Fragment f;
 
-        f = Fragment.instantiate(MyActivity.this, command.get("component"));
+        try {
+            f = Fragment.instantiate(MyActivity.this, command.get("component"));
+        }
+        catch(Fragment.InstantiationException e) {
+            log.e(e, "Fragment class: %s not found.", command.get("component"));
+            return false;
+        }
 
         Bundle args = new Bundle();
 
@@ -520,26 +518,67 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         return false;
     }
 
-    /**
-     * You can override it, but you should call super version first and do your custom logic only if it returns false.
-     */
-    @CallSuper @Override public boolean onItemSelected(IMyNavigation nav, MenuItem item) {
-        boolean done;
+    public void postRunnable(Runnable runnable, long delay) {
+        if(mCoordinatorLayout == null) {
+            log.a("User interface is not ready.");
+            return;
+        }
+        mCoordinatorLayout.postDelayed(runnable, delay);
+    }
+
+    public void postCommand(final String cmd, long delay) {
+        postRunnable(new Runnable() {
+            @Override public void run() {
+                onCommand(cmd);
+            }
+        }, delay);
+    }
+
+    public void closeDrawers() {
         if(mGlobalDrawerLayout != null)
             mGlobalDrawerLayout.closeDrawers();
         if(mLocalDrawerLayout != null)
             mLocalDrawerLayout.closeDrawers();
-        String ctitle = item.getTitleCondensed().toString();
+    }
+
+    public boolean areDrawersVisible() {
+        return (mGlobalDrawerLayout != null && mGlobalDrawerLayout.isDrawerVisible(GravityCompat.START)) ||
+                (mLocalDrawerLayout != null && mLocalDrawerLayout.isDrawerVisible(GravityCompat.END));
+
+    }
+
+    public void closeDrawersAndPostRunnable(Runnable runnable) {
+        int delay = 0;
+        if(areDrawersVisible()) {
+            closeDrawers();
+            delay = 400;
+        }
+        postRunnable(runnable, delay);
+    }
+
+    public void closeDrawersAndPostCommand(final String cmd) {
+        closeDrawersAndPostRunnable(new Runnable() {
+            @Override public void run() {
+                onCommand(cmd);
+            }
+        });
+    }
+
+
+    /**
+     * You can override it, but you should call super version first and do your custom logic only if it returns false.
+     */
+    @CallSuper @Override public boolean onItemSelected(IMyNavigation nav, MenuItem item) {
+        final String ctitle = item.getTitleCondensed().toString();
         if(ctitle.startsWith(COMMAND_PREFIX)) {
-            mMyPendingCommand = ctitle.substring(COMMAND_PREFIX.length());
-            if((mGlobalDrawerLayout != null && mGlobalDrawerLayout.isDrawerVisible(GravityCompat.START)) ||
-                    (mLocalDrawerLayout != null && mLocalDrawerLayout.isDrawerVisible(GravityCompat.END)))
-                return true; // we will start pending command after drawers are closed.
-            startPendingCommand();
+            final String cmd = ctitle.substring(COMMAND_PREFIX.length());
+            closeDrawersAndPostCommand(cmd);
             return true;
         }
 
+        closeDrawers();
         // maybe our local fragment will handle this item:
+        boolean done;
         if(mMyLocalFragment != null) {
             done = mMyLocalFragment.onItemSelected(nav, item);
             if(done)
@@ -557,7 +596,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
             else if(mGlobalLinearLayout != null)
                 setMNVAndArrow(!empty, mGlobalNavigationView, mGlobalArrowDrawable);
             else
-                log.e("No global drawer or linear layout with global navigation.");
+                log.a("No global drawer or linear layout with global navigation.");
         }
         else if(nav == getLocalNavigation()) {
             mLocalArrowDrawable.setAlpha(empty ? 0 : 0xa0);
@@ -566,10 +605,10 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
             else if(mLocalLinearLayout != null)
                 setMNVAndArrow(!empty, mLocalNavigationView, mLocalArrowDrawable);
             else
-                log.e("No local drawer or linear layout with local navigation.");
+                log.a("No local drawer or linear layout with local navigation.");
         }
         else
-            log.e("Unknown IMyNavigation object.");
+            log.a("Unknown IMyNavigation object.");
     }
 
     @Override public void onClearHeader(IMyNavigation nav) {
@@ -627,7 +666,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
     private void selectItem(IMyNavigation nav, @IdRes int id) {
         Menu menu = nav.getMenu();
         if(menu == null) {
-            log.e("menu is null!");
+            log.a("Menu not initialized.");
             return;
         }
         nav.setCheckedItem(id);
@@ -660,7 +699,6 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
     }
 
     @CallSuper @Override public void onDrawerClosed(View drawerView) {
-        startPendingCommand();
         if(mMyLocalFragment != null)
             mMyLocalFragment.onDrawerClosed(drawerView);
     }

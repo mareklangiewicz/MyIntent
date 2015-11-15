@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
  * We don't allocate any objects after constructor,
  * so it should be fast and it shouldn't launch garbage collection.
  */
+@SuppressWarnings("SpellCheckingInspection")
 public final class LogHistory {
 
     private final int capacity;

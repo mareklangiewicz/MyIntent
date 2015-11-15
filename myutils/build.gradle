@@ -29,7 +29,7 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:support-annotations:23.1.0'
+    compile 'com.android.support:support-annotations:23.1.1'
     //compile 'com.google.guava:guava:18.0'
     //compile 'org.javatuples:javatuples:1.2'
     testCompile 'junit:junit:4.12'

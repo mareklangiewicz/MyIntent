@@ -6,6 +6,8 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.AlarmClock;
+import android.provider.ContactsContract;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 
 import com.noveogroup.android.log.MyLogger;
@@ -158,7 +160,7 @@ public final class MyCommands {
         private String mDescription;
         private String mMatch;
         private Pattern mPattern;
-        private List<RERule> mRules;
+        private final List<RERule> mRules;
 
         public REGroup(boolean editable, @NonNull String name, @NonNull String description, @NonNull String match, RERule... rules) {
             setEditable(true);
@@ -174,7 +176,7 @@ public final class MyCommands {
 
             if(V) {
                 log.v("Applying all matching RE rules to:");
-                log.w("> cmd: %s", cmd);
+                log.i("> cmd: %s", cmd);
             }
             else
                 log.v("> cmd: %s", cmd);
@@ -261,17 +263,24 @@ public final class MyCommands {
     }
 
     static public final List<String> DEFAULT_EXAMPLE_COMMANDS = Arrays.asList(
-            "action view data http://mareklangiewicz.pl",
-            "wake me up at 7",
-            "set alarm to 7 30",
-            "set a timer for 300",
-            "set timer for 200 seconds",
-            "set timer for 200 seconds quickly",
+            "data http://mareklangiewicz.pl",
+            "settings wi-fi",
+            "dial 123456789",
+            "call 123456789",
+            "search king",
+            "web search rxkotlin",
+            "wake me up at 7 30",
+            "set alarm to 9 15",
+            "set timer for 40",
+            "take a picture",
+            "record a movie",
+            "note buy a cat food",
             "start nothing"
     );
 
+    @SuppressWarnings("ArraysAsListWithZeroOrOneArgument")
     static public final List<RERule> DEFAULT_EXAMPLE_RULES = Arrays.asList(
-            new RERule(true, "nothing", "Things you can say if you don't want anything to happen", "^((cancel)|(no(thing)?))\\b", "start nothing")
+            //someday maybe we will add something here.
     );
 
 
@@ -345,6 +354,8 @@ public final class MyCommands {
     public static final String RE_EXTRA_ELEM_TYPE_AND_KEY = "(" + RE_EXTRA_TYPE + " " + RE_EXTRA_KEY + ")";
 
 
+    // Not all android constants are available in our unit tests, so we create our own.
+    private static final String EX_TEXT = "android.intent.extra.TEXT";
     private static final String EX_HOUR = AlarmClock.EXTRA_HOUR;
     private static final String EX_MINUTES = AlarmClock.EXTRA_MINUTES;
     private static final String EX_MESSAGE = AlarmClock.EXTRA_MESSAGE;
@@ -352,16 +363,27 @@ public final class MyCommands {
     private static final String EX_SKIP_UI = AlarmClock.EXTRA_SKIP_UI;
     private static final String ACT_SET_ALARM = AlarmClock.ACTION_SET_ALARM;
     private static final String ACT_SET_TIMER = "android.intent.action.SET_TIMER";
+    private static final String ACT_SHOW_ALARMS = "android.intent.action.SHOW_ALARMS";
+    private static final String ACT_INSERT = Intent.ACTION_INSERT;
+    private static final String ACT_SEARCH = "android.intent.action.SEARCH";
+    private static final String ACT_WEB_SEARCH = "android.intent.action.WEB_SEARCH";
+    private static final String ACT_GMS_SEARCH = "com.google.android.gms.actions.SEARCH_ACTION";
+    private static final String ACT_PLAY_FROM_SEARCH = MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH;
+    private static final String ACT_CREATE_NOTE = "com.google.android.gms.actions.CREATE_NOTE";
+    private static final String ACT_DIAL = "android.intent.action.DIAL";
+    private static final String ACT_CALL = "android.intent.action.CALL";
+    private static final String DAT_CAL_EVENTS = "content://com.android.calendar/events";
+    private static final String TYPE_CONTACTS = ContactsContract.Contacts.CONTENT_TYPE;
 
 
     static public final REGroup RE_INITIAL_GROUP =
             new REGroup(
                     false,
                     "initial",
-                    "First group that unifies separators. All semicolons, equal signs, whitespaces are changed to single spaces. " +
+                    "First group that unifies separators. All semicolons and whitespaces are changed to single spaces. " +
                             "This is useful if command comes from URL, so you can use semicolons as spaces.",
                     "^.+",
-                    new RERule(false, "unify separators", "Replace semicolons etc. with single spaces.", "(?:\\s|;|=)+", " ")
+                    new RERule(false, "unify separators", "Replace semicolons and whitespaces with single spaces.", "(?:\\s|;)+", " ")
             );
 
 
@@ -373,7 +395,25 @@ public final class MyCommands {
                     "^.+"
             );
 
+    static public final REGroup RE_PHONE_GROUP =
+            new REGroup(
+                    false,
+                    "phone",
+                    "Phone related shortcut rules.",
+                    "^(dial|call)",
+                    new RERule(false, "", "", "^dial (.*)$", "action dial data tel:$1"),
+                    new RERule(false, "", "", "^call (.*)$", "action call data tel:$1")
+            );
 
+    static public final REGroup RE_SEARCH_GROUP =
+            new REGroup(
+                    false,
+                    "search",
+                    "Search related shortcut rules.",
+                    "^((web )?search)",
+                    new RERule(false, "", "", "^search (.*)$", "action search extra string query $1"),
+                    new RERule(false, "", "", "^web search (.*)$", "action web search extra string query $1")
+            );
     static public final REGroup RE_ALARM_GROUP =
             new REGroup(
                     false,
@@ -382,14 +422,12 @@ public final class MyCommands {
                     "^(wake me)|(set( an | the | )alarm)",
                     new RERule(false, "wake me", "Recognizes \"wake me\" as \"set alarm\" command.", "^wake me( up)?", "set alarm"),
                     new RERule(false, "", "Removes optional articles.", "^set (an|the) alarm", "set alarm"),
-                    new RERule(false, "", "Removes optional prepositions.", "^set alarm ((for)|(to)|(at))", "set alarm"),
+                    new RERule(false, "", "Removes optional prepositions.", "^set alarm (for|to|at)", "set alarm"),
                     new RERule(false, "", "Detects hours and minutes.", "^set alarm (\\d+)(?::| )(\\d+)", "set alarm extra hour $1 extra minutes $2"),
                     new RERule(false, "", "Detects hours.", "^set alarm (\\d+)", "set alarm extra hour $1"),
                     new RERule(false, "", "Adds \"action\" keyword.", "^set alarm", "action set alarm"),
-                    new RERule(false, "", "", "\\bextra hour (\\d+)\\b", "extra integer hour $1"),
-                    new RERule(false, "", "", "\\bextra minutes (\\d+)\\b", "extra integer minutes $1"),
-                    new RERule(false, "", "", "^action set alarm (.*) with message (.*?)$", "action set alarm $1 extra string message $2"),
-                    new RERule(false, "", "", "(.*) quickly$", "$1 extra boolean quickly true")
+                    new RERule(false, "", "", "^action set alarm (.*) with message (.*?)$", "action set alarm $1 extra message $2"),
+                    new RERule(false, "", "", "(.*) quickly$", "$1 extra quickly true")
             );
 
 
@@ -400,15 +438,48 @@ public final class MyCommands {
                     "Timer related shortcut rules.",
                     "^set( a | the | )timer",
                     new RERule(false, "", "Removes optional articles.", "^set (a|the) timer", "set timer"),
-                    new RERule(false, "", "Removes optional prepositions.", "^set timer ((for)|(to)|(at))", "set timer"),
+                    new RERule(false, "", "Removes optional prepositions.", "^set timer (for|to|at)", "set timer"),
                     new RERule(false, "", "Detects number of seconds.", "^set timer (\\d+)( seconds)?", "set timer extra length $1"),
                     new RERule(false, "", "Adds \"action\" keyword.", "^set timer", "action set timer"),
-                    new RERule(false, "", "", "\\bextra length (\\d+)\\b", "extra integer length $1"),
-                    new RERule(false, "", "", "^action set timer (.*) with message (.*?)$", "action set timer $1 extra string message $2"),
-                    new RERule(false, "", "", "(.*) quickly$", "$1 extra boolean quickly true")
+                    new RERule(false, "", "", "^action set timer (.*) with message (.*?)$", "action set timer $1 extra message $2"),
+                    new RERule(false, "", "", "(.*) quickly$", "$1 extra quickly true")
             );
 
 
+    static public final REGroup RE_MULTIMEDIA_GROUP =
+            new REGroup(
+                    false,
+                    "multimedia",
+                    "Multimedia related shortcut rules.",
+                    "^(take|record|play)",
+                    new RERule(false, "", "", "^take( a | an | the )?(photo|picture|selfie|image)", "action android.media.action.STILL_IMAGE_CAMERA"),
+                    new RERule(false, "", "", "^record( a | an | the )?(movie|video|film)", "action android.media.action.VIDEO_CAMERA")
+            );
+
+    static public final REGroup RE_SETTINGS_GROUP =
+            new REGroup(
+                    false,
+                    "settings",
+                    "Settings related shortcut rules.",
+                    "^settings?",
+                    new RERule(false, "", "", "^settings? bluetooth$", "action android.settings.BLUETOOTH_SETTINGS"),
+                    new RERule(false, "", "", "^settings? roaming$", "action android.settings.DATA_ROAMING_SETTINGS"),
+                    new RERule(false, "", "", "^settings? display$", "action android.settings.DISPLAY_SETTINGS"),
+                    new RERule(false, "", "", "^settings? internal storage$", "action android.settings.INTERNAL_STORAGE_SETTINGS"),
+                    new RERule(false, "", "", "^settings? location$", "action android.settings.LOCATION_SOURCE_SETTINGS"),
+                    new RERule(false, "", "", "^settings? apps?$", "action android.settings.MANAGE_APPLICATIONS_SETTINGS"),
+                    new RERule(false, "", "", "^settings? memory cards?$", "action android.settings.MEMORY_CARD_SETTINGS"),
+                    new RERule(false, "", "", "^settings? network$", "action android.settings.NETWORK_OPERATOR_SETTINGS"),
+                    new RERule(false, "", "", "^settings? nfc$", "action android.settings.NFC_SETTINGS"),
+                    new RERule(false, "", "", "^settings? privacy$", "action android.settings.PRIVACY_SETTINGS"),
+                    new RERule(false, "", "", "^settings? search$", "action android.search.action.SEARCH_SETTINGS"),
+                    new RERule(false, "", "", "^settings? security$", "action android.settings.SECURITY_SETTINGS"),
+                    new RERule(false, "", "", "^settings? sounds?$", "action android.settings.SOUND_SETTINGS"),
+                    new RERule(false, "", "", "^settings? sync$", "action android.settings.SYNC_SETTINGS"),
+                    new RERule(false, "", "", "^settings? wi-?fi$", "action android.settings.WIFI_SETTINGS"),
+                    new RERule(false, "", "", "^settings? wireless$", "action android.settings.WIRELESS_SETTINGS"),
+                    new RERule(false, "", "", "^settings?$", "action android.settings.SETTINGS")
+            );
     static public final REGroup RE_ACTIVITY_GROUP =
             new REGroup(
                     false,
@@ -432,31 +503,103 @@ public final class MyCommands {
                             "^fragment (?=\\S*\\.)([_\\./a-zA-Z0-9]*)", "start fragment component $1")
             );
 
-    static public final REGroup RE_FINAL_GROUP =
+    static public final REGroup RE_OTHER_GROUP =
             new REGroup(
                     false,
-                    "final",
-                    "Final rules for all nonempty commands. These replace short action names to full ones, etc..", "^.+",
+                    "other",
+                    "Other rules.",
+                    "^.+",
+                    new RERule(false, "nothing", "Things you can say if you don't want anything to happen", "^((cancel)|(no(thing)?))\\b", "start nothing"),
+                    new RERule(false, "note", "Adds any given note to your note app", "^note (.*)$", "action create note type text/plain extra text $1")
+            );
+    static public final REGroup RE_ACTION_GROUP =
+            new REGroup(
+                    false,
+                    "action",
+                    "These rules replace short action names to full ones", "\\baction ",
+                    new RERule(false, "", "Replaces \"action main\" with full action name.", "\\baction main\\b", "action " + Intent.ACTION_MAIN),
                     new RERule(false, "", "Replaces \"action view\" with full action name.", "\\baction view\\b", "action " + Intent.ACTION_VIEW),
+                    new RERule(false, "", "Replaces \"action send to\" with full action name.", "\\baction send to\\b", "action " + Intent.ACTION_SENDTO),
                     new RERule(false, "", "Replaces \"action send\" with full action name.", "\\baction send\\b", "action " + Intent.ACTION_SEND),
+                    new RERule(false, "", "Replaces \"action edit\" with full action name.", "\\baction edit\\b", "action " + Intent.ACTION_EDIT),
                     new RERule(false, "", "Replaces \"action set alarm\" with full action name.", "\\baction set alarm\\b", "action " + ACT_SET_ALARM),
                     new RERule(false, "", "Replaces \"action set timer\" with full action name.", "\\baction set timer\\b", "action " + ACT_SET_TIMER),
-                    new RERule(false, "", "", "\\bextra integer hour\\b", "extra integer " + EX_HOUR),
-                    new RERule(false, "", "", "\\bextra integer minutes\\b", "extra integer " + EX_MINUTES),
-                    new RERule(false, "", "", "\\bextra string message\\b", "extra string " + EX_MESSAGE),
-                    new RERule(false, "", "", "\\bextra integer length\\b", "extra integer " + EX_LENGTH),
-                    new RERule(false, "", "", "\\bextra boolean quickly\\b", "extra boolean " + EX_SKIP_UI)
+                    new RERule(false, "", "Replaces \"action show alarms\" with full action name.", "\\baction show alarms\\b", "action " + ACT_SHOW_ALARMS),
+                    new RERule(false, "", "Replaces \"action insert\" with full action name.", "\\baction insert\\b", "action " + ACT_INSERT),
+                    new RERule(false, "", "", "\\baction search\\b", "action " + ACT_SEARCH),
+                    new RERule(false, "", "", "\\baction web search\\b", "action " + ACT_WEB_SEARCH),
+                    new RERule(false, "", "", "\\baction gms search\\b", "action " + ACT_GMS_SEARCH),
+                    new RERule(false, "", "", "\\baction play from search\\b", "action " + ACT_PLAY_FROM_SEARCH),
+                    new RERule(false, "", "", "\\baction create note\\b", "action " + ACT_CREATE_NOTE),
+                    new RERule(false, "", "", "\\baction dial\\b", "action " + ACT_DIAL),
+                    new RERule(false, "", "", "\\baction call\\b", "action " + ACT_CALL)
+            );
+
+    static public final REGroup RE_DATA_GROUP =
+            new REGroup(
+                    false,
+                    "data",
+                    "These rules replace data shortcuts to full ones", "\\bdata ",
+                    new RERule(false, "", "Replaces \"data calendar events\" with full URL.", "\\bdata calendar events\\b", "data " + DAT_CAL_EVENTS)
+            );
+
+    static public final REGroup RE_TYPE_GROUP =
+            new REGroup(
+                    false,
+                    "type",
+                    "These rules replace type shortcuts to full ones", "\\btype ",
+                    new RERule(false, "", "Replaces \"type contacts\" with full datatype for contacts.", "\\btype contacts\\b", "type " + TYPE_CONTACTS)
+            );
+
+    static public final REGroup RE_CATEGORY_GROUP =
+            new REGroup(
+                    false,
+                    "category",
+                    "These rules replace category shortcuts to full ones", "\\bcategory ",
+                    new RERule(false, "", "", "\\bcategory browser\\b", "category " + Intent.CATEGORY_APP_BROWSER),
+                    new RERule(false, "", "", "\\bcategory calculator\\b", "category " + Intent.CATEGORY_APP_CALCULATOR),
+                    new RERule(false, "", "", "\\bcategory calendar\\b", "category " + Intent.CATEGORY_APP_CALENDAR),
+                    new RERule(false, "", "", "\\bcategory contacts\\b", "category " + Intent.CATEGORY_APP_CONTACTS),
+                    new RERule(false, "", "", "\\bcategory email\\b", "category " + Intent.CATEGORY_APP_EMAIL),
+                    new RERule(false, "", "", "\\bcategory gallery\\b", "category " + Intent.CATEGORY_APP_GALLERY),
+                    new RERule(false, "", "", "\\bcategory maps\\b", "category " + Intent.CATEGORY_APP_MAPS),
+                    new RERule(false, "", "", "\\bcategory market\\b", "category " + Intent.CATEGORY_APP_MARKET),
+                    new RERule(false, "", "", "\\bcategory messaging\\b", "category " + Intent.CATEGORY_APP_MESSAGING),
+                    new RERule(false, "", "", "\\bcategory music\\b", "category " + Intent.CATEGORY_APP_MUSIC),
+                    new RERule(false, "", "", "\\bcategory default\\b", "category " + Intent.CATEGORY_DEFAULT)
+            );
+    static public final REGroup RE_EXTRA_GROUP =
+            new REGroup(
+                    false,
+                    "extra",
+                    "These rules replace extra shortcuts to full ones", "\\bextra ",
+                    new RERule(false, "", "", "\\bextra email\\b", "extra string " + Intent.EXTRA_EMAIL),
+                    new RERule(false, "", "", "\\bextra text\\b", "extra string " + EX_TEXT),
+                    new RERule(false, "", "", "\\bextra hour\\b", "extra integer " + EX_HOUR),
+                    new RERule(false, "", "", "\\bextra minutes\\b", "extra integer " + EX_MINUTES),
+                    new RERule(false, "", "", "\\bextra message\\b", "extra string " + EX_MESSAGE),
+                    new RERule(false, "", "", "\\bextra length\\b", "extra integer " + EX_LENGTH),
+                    new RERule(false, "", "", "\\bextra quickly\\b", "extra boolean " + EX_SKIP_UI)
             );
 
 
     static public final List<REGroup> RE_RULES = Arrays.asList(
             RE_INITIAL_GROUP,
             RE_USER_GROUP,
+            RE_PHONE_GROUP,
+            RE_SEARCH_GROUP,
             RE_ALARM_GROUP,
             RE_TIMER_GROUP,
+            RE_MULTIMEDIA_GROUP,
+            RE_SETTINGS_GROUP,
             RE_ACTIVITY_GROUP,
             RE_FRAGMENT_GROUP,
-            RE_FINAL_GROUP
+            RE_OTHER_GROUP,
+            RE_ACTION_GROUP,
+            RE_DATA_GROUP,
+            RE_TYPE_GROUP,
+            RE_CATEGORY_GROUP,
+            RE_EXTRA_GROUP
     );
 
 

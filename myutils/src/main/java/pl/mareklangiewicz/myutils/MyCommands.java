@@ -698,7 +698,7 @@ public final class MyCommands {
                         intent.setDataAndType(Uri.parse(value), type);
                     break;
                 case "flags":
-                    intent.addFlags(Integer.decode(value)); //TODO LATER: symbolic multiple flags implementation
+                    intent.addFlags(Integer.decode(value)); //TODO SOMEDAY: symbolic multiple flags implementation
                     break;
                 case "package":
                     intent.setPackage(value);

@@ -43,12 +43,12 @@ function mi_body() {
       window.location.hash.length < 2
       ?
       noh.p(
-        "You can install it from ", a("https://play.google.com/store/search?q=My%20Intent", "Google Play") // TODO: real link!!!
+        "You can install it from ", a("https://play.google.com/store/search?q=My%20Intent", "Google Play") // TODO LATER: real link!!!
       )
       :
       noh.p(
         noh.b("WARNING:"), " This page should be opened by My Intent app. Please install it from ",
-        a("https://play.google.com/store/search?q=My%20Intent", "Google Play"), // TODO: real link!!!
+        a("https://play.google.com/store/search?q=My%20Intent", "Google Play"), // TODO LATER: real link!!!
         ", and use it to open this page correctly."
       ),
 
@@ -78,7 +78,7 @@ function mi_body() {
           cmd2la('set timer 13')
         )
       ),
-      noh.p('More about rules - how they work and how user can define his own - later.'),
+      noh.p('More about rules (how they work and how user can define his own) later.'),
       noh.p('Commands can be started in many different ways:',
         noh.ul(
           noh.li('by typing the command in app main text field, and pressing "play";'),
@@ -87,7 +87,9 @@ function mi_body() {
           noh.li('by pressing the search button and finding some recent/example command;'),
           noh.li('by using Google Now and saying something like: Ok Google, search for [some command] on my intent;'),
           noh.li('by clicking on special links in internet browser or any other app'),
-          noh.li('more to come.. (like tapping your smartphone with specific patterns; adding special home screen shortcuts)')
+          noh.li('TODO SOMEDAY: by creating small widgets that launch given command'),
+          noh.li('TODO SOMEDAY: by using the lock screen widgets than enables speech recognition'),
+          noh.li('TODO SOMEDAY: by tapping your smartphone with specific patterns :-)')
         ),
         "but first lets see how commands are structured..."
       ),

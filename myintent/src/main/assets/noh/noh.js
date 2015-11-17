@@ -17,7 +17,8 @@
  * <p>
  * Please check the files: {@link noh_example.js} (and {@link noh_example.html}) for full (but simple) working example.
  * Main documentation with introduction and examples is available here: {@link index.html|NOH library documentation}
- * Additional API documentation generated with {@link http://usejsdoc.org/|jsdoc3} is available here: {@link apidoc/index.html|NOH API documentation} TODO
+ * Additional API documentation generated with {@link http://usejsdoc.org/|jsdoc3} is available here:
+ * {@link apidoc/index.html|NOH API documentation} TODO SOMEDAY
  * </p>
  * <p>
  * NOH library depends on jQuery. TODO SOMEDAY: Limit jQuery usage for NOH to be able to work with SVG or other elements (not only html)

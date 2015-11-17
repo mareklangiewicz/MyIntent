@@ -366,7 +366,7 @@ public class MyCommandsTest {
     }
 
     @Test
-    public void testSetIntentFromCommand() throws Exception { //TODO LATER
+    public void testSetIntentFromCommand() throws Exception { //TODO SOMEDAY
     }
 
 }

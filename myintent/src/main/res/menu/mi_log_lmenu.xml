@@ -45,30 +45,6 @@
                 android:icon="@drawable/ic_close_black_24dp"
                 android:title='@string/clear_log_history'
                 />
-            <item
-                android:id="@+id/log_some_assert"
-                android:title='log.a("some assert")'
-                />
-            <item
-                android:id="@+id/log_some_error"
-                android:title='log.e("some error")'
-                />
-            <item
-                android:id="@+id/log_some_warning"
-                android:title='log.w("some warning")'
-                />
-            <item
-                android:id="@+id/log_some_info"
-                android:title='log.i("some info")'
-                />
-            <item
-                android:id="@+id/log_some_debug"
-                android:title='log.d("some debug")'
-                />
-            <item
-                android:id="@+id/log_some_verbose"
-                android:title='log.v("some verbose")'
-                />
         </menu>
     </item>
 </menu>

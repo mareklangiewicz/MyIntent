@@ -160,7 +160,8 @@ public class MIActivity extends MyActivity {
     }
 
     private void intro() {
-        log.i("TODO: hello, and where is help..");
+        //log.i("Hello!");
+        //FIXME SOMEDAY: I think we don't need any intro message. But maybe someday I'll change my mind.
     }
 
 

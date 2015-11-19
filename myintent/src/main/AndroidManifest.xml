@@ -101,12 +101,6 @@
             </intent-filter>
         </activity>
 
-        <!-- TODO SOMEDAY: remove MyTestActivity -->
-        <activity
-            android:name="pl.mareklangiewicz.myactivities.MyTestActivity"
-            android:label="TMP:MyTestActivity"
-            />
-
         <provider
             android:name=".MIContentProvider"
             android:authorities="pl.mareklangiewicz.myintent.provider"

@@ -1,1 +1,1 @@
-include ':myactivities', ':myviews', ':myutils', ':myfragments', ':myloggers', ':myres', ':mydrawables'//, ':mytestapp'
+include ':myactivities', ':myviews', ':myutils', ':myfragments', ':myloggers', ':myres', ':mydrawables'

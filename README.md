@@ -4,8 +4,15 @@ An app that allows the user to start **any** android **intent** easily.
 
 Documentation is available here: http://mareklangiewicz.pl/mi.html
 
-* TODO: link to Google Play
-* TODO: link to record screen video
+
+#### Google Play
+
+* [My Intent (on google play)](https://play.google.com/store/apps/details?id=pl.mareklangiewicz.myintent)
+
+#### Youtube
+
+* [My Intent (on youtube)](https://www.youtube.com/watch?v=-8N_B-Jpk8k)
+
 
 
 #### Screenshots

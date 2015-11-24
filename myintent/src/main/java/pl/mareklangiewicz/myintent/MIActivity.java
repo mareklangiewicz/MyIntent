@@ -38,6 +38,14 @@ import pl.mareklangiewicz.myviews.IMyNavigation;
 import static pl.mareklangiewicz.myutils.MyMathUtils.getRandomInt;
 import static pl.mareklangiewicz.myutils.MyTextUtils.str;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.actions.SearchIntents;
+
 /**
  * Created by Marek Langiewicz on 02.10.15.
  * My Intent main activity.
@@ -57,6 +65,7 @@ public class MIActivity extends MyActivity {
     private @Nullable ObjectAnimator mMagicLinesDrawableAnimator;
     private @Nullable TextToSpeech mTextToSpeech;
     private boolean mTTSReady = false;
+    private @Nullable GoogleApiClient mClient;
 
 
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -124,6 +133,8 @@ public class MIActivity extends MyActivity {
                     log.d("Text to speech disabled.");
             }
         });
+
+        mClient = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     @Override public void onIntent(@Nullable Intent intent) {
@@ -140,7 +151,7 @@ public class MIActivity extends MyActivity {
             if((intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) != 0)
                 return;
 
-            if(Intent.ACTION_SEARCH.equals(intent.getAction()) || "com.google.android.gms.actions.SEARCH_ACTION".equals(intent.getAction()))
+            if(Intent.ACTION_SEARCH.equals(intent.getAction()) || SearchIntents.ACTION_SEARCH.equals(intent.getAction()))
                 onSearchIntent(intent);
             else if(intent.getAction().equals(Intent.ACTION_VIEW))
                 onUri(intent.getData());
@@ -164,6 +175,14 @@ public class MIActivity extends MyActivity {
         //FIXME SOMEDAY: I think we don't need any intro message. But maybe someday I'll change my mind.
     }
 
+
+    @Override protected void onStart() {
+        super.onStart();
+
+        //noinspection ConstantConditions
+        mClient.connect();
+
+    }
 
     public void onUri(@Nullable Uri uri) {
 
@@ -220,6 +239,8 @@ public class MIActivity extends MyActivity {
 
 
     private void onSearchIntent(Intent intent) {
+
+        log.d("onSearchIntent: %s", str(intent)); //TODO NOW DELETE IT
 
         String command = intent.getStringExtra(SearchManager.QUERY);
         playCommand(command);
@@ -297,6 +318,10 @@ public class MIActivity extends MyActivity {
     }
 
     @Override protected void onStop() {
+
+        //noinspection ConstantConditions
+        mClient.disconnect();
+
         if(!mSkipSavingToDb) {
             MIContract.RuleUser.clear(this);
             MIContract.RuleUser.save(this, MyCommands.RE_USER_GROUP.getRules());
@@ -304,6 +329,23 @@ public class MIActivity extends MyActivity {
         super.onStop();
     }
 
+
+    @Override public boolean onCommand(@Nullable String command) {
+        boolean ok = super.onCommand(command);
+
+        if(ok) {
+            Action action = Action.newAction(Action.TYPE_VIEW, command, Uri.parse("http://mareklangiewicz.pl/mi#" + command));
+            PendingResult<Status> result = AppIndex.AppIndexApi.start(mClient, action);
+            result.setResultCallback(new ResultCallback<Status>() {
+                @Override public void onResult(Status status) {
+                    if(!status.isSuccess())
+                        log.d("App Indexing API problem: %s", str(status));
+                }
+            });
+        }
+
+        return ok;
+    }
 
     @Override public boolean onCommandCustom(@NonNull Map<String, String> command) {
         if(command.get("action").equals("listen")) {
@@ -412,6 +454,8 @@ public class MIActivity extends MyActivity {
     }
 
     @Override protected void onDestroy() {
+
+        mClient = null;
 
         if(mTextToSpeech != null) {
             mTextToSpeech.shutdown();

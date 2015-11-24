@@ -5,7 +5,7 @@ function a(addr, opt_name) { return noh.a({href:addr}, opt_name === undefined ? 
 
 function la(addr, opt_name) { return noh.li(a(addr, opt_name)); }
 
-function cmd2url(cmd) { return "http://mareklangiewicz.pl/mi.html#" + cmd.replace(/ /g, ";"); }
+function cmd2url(cmd) { return "http://mareklangiewicz.pl/mi#" + cmd.replace(/ /g, ";"); }
 
 function cmd2a(cmd) { return a(cmd2url(cmd), cmd); }
 
@@ -210,7 +210,7 @@ function mi_body() {
        ),
        noh.h4('Special links'),
        noh.p(
-        'My Intent app is registered as a default app to open all links which start with the: "http://mareklangiewicz.pl/mi.html#" prefix. ',
+        'My Intent app is registered as a default app to open all links which start with the: "http://mareklangiewicz.pl/mi" prefix. ',
         'Anything after that "#" character is treated as a command (you can use semicolons in commands instead of spaces).'
       ),
       noh.p(
@@ -218,7 +218,7 @@ function mi_body() {
         'every time you click on it. '
       ),
       noh.p(
-        'For example you can send a message: "http://mareklangiewicz.pl/mi.html#call;123456789" to someone with MyIntent app, ',
+        'For example you can send a message: "http://mareklangiewicz.pl/mi#call;123456789" to someone with MyIntent app, ',
         'and his smartphone will start calling given number if he click on it. Another use case of special links can be in google docs. ',
         'Lets say you are creating a song book witch chords and lyrics for your favorite songs. You can then add special links to it that will ',
         'play a particular song using your favourite media player. You can send someone a special link that will add your birthday to his calendar :-) ',

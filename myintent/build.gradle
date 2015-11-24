@@ -47,6 +47,8 @@ dependencies {
     compile('com.afollestad.material-dialogs:commons:0.8.4.2@aar') {
         transitive = true
     }
+    compile 'com.google.android.gms:play-services-base:8.3.0'
+    compile 'com.google.android.gms:play-services-appindexing:8.3.0'
     compile project(':myactivities')
     compile project(':myfragments')
     compile project(':myloggers')

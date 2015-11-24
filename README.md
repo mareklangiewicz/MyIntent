@@ -2,7 +2,7 @@
 
 An app that allows the user to start **any** android **intent** easily.
 
-Documentation is available here: http://mareklangiewicz.pl/mi.html
+Documentation is available here: http://mareklangiewicz.pl/mi
 
 
 #### Google Play

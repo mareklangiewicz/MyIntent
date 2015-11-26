@@ -12,6 +12,8 @@ import java.util.List;
 
 import pl.mareklangiewicz.myutils.MyCommands;
 
+import static pl.mareklangiewicz.myutils.MyTextUtils.str;
+
 /**
  * Created by Marek Langiewicz on 07.10.15.
  */
@@ -51,9 +53,15 @@ public final class MIContract {
             return cr.insert(URI, values);
         }
 
-        public static boolean load(Context context, List<String> commands) {
+        /**
+         * limit <= 0 means no limit
+         * returns true if success
+         */
+        public static boolean load(Context context, List<String> commands, int limit) {
+
+            String slimit = limit <= 0 ? "" : " LIMIT " + str(limit) + " ";
             ContentResolver cr = context.getContentResolver();
-            Cursor c = cr.query(URI, null, null, null, " " + COL_TIME + " DESC ");
+            Cursor c = cr.query(URI, null, null, null, " " + COL_TIME + " DESC " + slimit);
             if(c == null)
                 return false;
             boolean empty = !c.moveToFirst();

@@ -8,11 +8,9 @@
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
     <uses-permission android:name="android.permission.CALL_PHONE"/>
 
-    <uses-feature android:name="android.hardware.telephony" android:required="false" />
-
-    <permission
-        android:name="pl.mareklangiewicz.myintent.permission.READ"
-        android:label="Read My Intent rules and commands"
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false"
         />
 
     <permission
@@ -75,7 +73,6 @@
             </intent-filter>
             <intent-filter android:priority="999">
                 <action android:name="android.intent.action.VIEW"/>
-
                 <data
                     android:host="mi"
                     android:path="/"
@@ -85,8 +82,10 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
             </intent-filter>
+
+            <!-- FIXME SOMEDAY: I can not use autoVerify - my homepage is on github, so I can not set assetlinks.json correctly.. -->
             <intent-filter
-                android:autoVerify="true"
+                android:autoVerify="false"
                 android:priority="999"
                 tools:ignore="UnusedAttribute"
                 >
@@ -108,7 +107,6 @@
             android:authorities="pl.mareklangiewicz.myintent.provider"
             android:enabled="true"
             android:exported="true"
-            android:readPermission="pl.mareklangiewicz.myintent.permission.READ"
             android:writePermission="pl.mareklangiewicz.myintent.permission.WRITE"
             >
             <path-permission
@@ -116,6 +114,20 @@
                 android:readPermission="android.permission.GLOBAL_SEARCH"
                 />
         </provider>
+        <receiver android:name="RecentCommandsAppWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/recent_commands_appwidget_info"
+                />
+
+        </receiver>
+        <service
+            android:name=".RecentCommandsRemoteViewsService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"
+            />
     </application>
 
 </manifest>

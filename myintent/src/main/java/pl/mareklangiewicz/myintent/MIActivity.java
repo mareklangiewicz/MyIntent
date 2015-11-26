@@ -5,7 +5,10 @@ import android.animation.PropertyValuesHolder;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.SearchManager;
+import android.appwidget.AppWidgetManager;
+import android.appwidget.AppWidgetProvider;
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -151,11 +154,22 @@ public class MIActivity extends MyActivity {
             if((intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) != 0)
                 return;
 
-            if(Intent.ACTION_SEARCH.equals(intent.getAction()) || SearchIntents.ACTION_SEARCH.equals(intent.getAction()))
+            String cmd = intent.getStringExtra(MyCommands.EX_COMMAND);
+            if(cmd != null) {
+                closeDrawersAndPostCommand(cmd);
+                return;
+            }
+
+            String action = intent.getAction();
+
+            if(action == null)
+                action = Intent.ACTION_MAIN;
+
+            if(action.equals(Intent.ACTION_SEARCH) || action.equals(SearchIntents.ACTION_SEARCH))
                 onSearchIntent(intent);
-            else if(intent.getAction().equals(Intent.ACTION_VIEW))
+            else if(action.equals(Intent.ACTION_VIEW))
                 onUri(intent.getData());
-            else if(intent.getAction().equals(Intent.ACTION_MAIN)) {
+            else if(action.equals(Intent.ACTION_MAIN)) {
                 if(!sGreeted) {
                     intro();
                     sGreeted = true;
@@ -181,7 +195,6 @@ public class MIActivity extends MyActivity {
 
         //noinspection ConstantConditions
         mClient.connect();
-
     }
 
     public void onUri(@Nullable Uri uri) {
@@ -239,10 +252,8 @@ public class MIActivity extends MyActivity {
 
 
     private void onSearchIntent(Intent intent) {
-
-        log.d("onSearchIntent: %s", str(intent)); //TODO NOW DELETE IT
-
         String command = intent.getStringExtra(SearchManager.QUERY);
+        log.v("search: %s", command);
         playCommand(command);
     }
 
@@ -319,6 +330,8 @@ public class MIActivity extends MyActivity {
 
     @Override protected void onStop() {
 
+        updateWidgets();
+
         //noinspection ConstantConditions
         mClient.disconnect();
 
@@ -334,7 +347,9 @@ public class MIActivity extends MyActivity {
         boolean ok = super.onCommand(command);
 
         if(ok) {
-            Action action = Action.newAction(Action.TYPE_VIEW, command, Uri.parse("http://mareklangiewicz.pl/mi#" + command));
+            Action action = Action.newAction(Action.TYPE_VIEW, command,
+                    Uri.parse("android-app://pl.mareklangiewicz.myintent/http/mareklangiewicz.pl/mi#" + command)
+            );
             PendingResult<Status> result = AppIndex.AppIndexApi.start(mClient, action);
             result.setResultCallback(new ResultCallback<Status>() {
                 @Override public void onResult(Status status) {
@@ -524,6 +539,16 @@ public class MIActivity extends MyActivity {
         }
 
         return false;
+    }
+
+    private void updateWidgets() {
+        AppWidgetManager awm = AppWidgetManager.getInstance(this);
+        awm.notifyAppWidgetViewDataChanged(
+                awm.getAppWidgetIds(
+                        new ComponentName(this, RecentCommandsAppWidgetProvider.class)
+                ),
+                R.id.recent_commands_listview
+        );
     }
 }
 

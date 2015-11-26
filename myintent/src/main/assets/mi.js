@@ -85,10 +85,9 @@ function mi_body() {
           noh.li('by pressing the red microphone icon and just saying the command;'),
           noh.li('by selecting any of recent/example commands listed in the app;'),
           noh.li('by pressing the search button and finding some recent/example command;'),
-          noh.li('by using Google Now and saying something like: Ok Google, search for [some command] on my intent;'),
+          noh.li('by using Google Now and saying something like: Ok Google search for [some command] on my intent'),
           noh.li('by clicking on special links in internet browser or any other app'),
-          noh.li('TODO SOMEDAY: by creating small widgets that launch given command'),
-          noh.li('TODO SOMEDAY: by using the lock screen widgets than enables speech recognition'),
+          noh.li('by using my intent widget that can launch any recent command fast'),
           noh.li('TODO SOMEDAY: by tapping your smartphone with specific patterns :-)')
         ),
         "but first lets see how commands are structured..."
@@ -202,9 +201,10 @@ function mi_body() {
           noh.li('by pressing the red microphone icon and just saying the command;'),
           noh.li('by selecting any of recent/example commands listed in the app;'),
           noh.li('by pressing the search button and finding some recent/example command;'),
-          noh.li('by using Google Now and saying something like: Ok Google, search for [some command] on my intent;'),
+          noh.li('by using Google Now and saying something like: Ok Google search for [some command] on my intent'),
           noh.li('by clicking on special links in internet browser or any other app'),
-          noh.li('more to come.. (like tapping your smartphone with specific patterns; adding special home screen shortcuts)')
+          noh.li('by using my intent widget that can launch any recent command fast'),
+          noh.li('TODO SOMEDAY: by tapping your smartphone with specific patterns :-)')
         ),
         'You can just try the app to figure these features by yourself. One functionality that needs explanation is:'
        ),
@@ -288,6 +288,7 @@ function mi_body() {
         ex('teleport to beach', ''),
         ex('teleport to new york', ''),
         ex('teleport to my house', ''),
+        ex('teleport to woodstock', ''),
         ex('data google.navigation:q=wroclaw', ''),
         ex('data geo:0,0?q=mount+everest', ''),
         ex('my name is john', ''),

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <TextView
+        android:id="@+id/cmd_recent_app_widget_item"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:elevation="2dp"
+        android:padding="8dp"
+        android:background="@color/cardview_light_background"
+        android:textColor="@android:color/black"
+        tools:text="start my crazy command"
+        />
+
+</LinearLayout>

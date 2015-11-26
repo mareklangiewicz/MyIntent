@@ -63,6 +63,7 @@ public final class MILogFragment extends MyFragment {
     private @Nullable ObjectAnimator mPSAnimator;
 
     private @Nullable ObjectAnimator mCountdownAnimator;
+    static private long sCountdownBoost = 0;
 
     private @Nullable String mCountdownCommand = null; // we use this to track if the red line is running at the moment (null = it doesn't)
 
@@ -125,15 +126,13 @@ public final class MILogFragment extends MyFragment {
         //noinspection ConstantConditions
         mProgressBar.setOnTouchListener(new View.OnTouchListener() {
             @Override public boolean onTouch(View v, MotionEvent event) {
-                if(mCountdownCommand != null && mCountdownAnimator != null && mProgressBar != null) {
-                    // int moveto = (int)scale0d(event.getX(), mProgressBar.getWidth(), mCountdownAnimator.getDuration());
-                    // the above is nice and correct, but more practical is to just move progress to almost the end immediately
-                    // so it will speed up command execution wherever we click.
-                    int moveto = (int) mCountdownAnimator.getDuration() - 50;
-                    if(moveto < 0)
-                        moveto = 0; // in case we have set really short duration ( < 50ms..)
-
-                    mCountdownAnimator.setCurrentPlayTime(moveto);
+                if(mProgressBar != null) {
+                    if(mCountdownAnimator != null) {
+                        // sCountdownBoost = (int)scale0d(event.getX(), mProgressBar.getWidth(), mCountdownAnimator.getDuration());
+                        // the above is nice and correct, but more practical is to just set boost to the end or to 0
+                        sCountdownBoost = sCountdownBoost == 0 ? mCountdownAnimator.getDuration() : 0;
+                        mCountdownAnimator.setCurrentPlayTime(sCountdownBoost);
+                    }
                 }
                 return false;
             }
@@ -208,8 +207,8 @@ public final class MILogFragment extends MyFragment {
 
     @Override public void onStart() {
         super.onStart();
-        if(mProgressBar != null)
-            mProgressBar.setProgress(0); // some old value could be inflated after screen rotation..
+        if(mCountdownAnimator != null)
+            mCountdownAnimator.setCurrentPlayTime(sCountdownBoost);
     }
 
     @Override public void onStop() {
@@ -243,7 +242,6 @@ public final class MILogFragment extends MyFragment {
 
         if(mProgressBar != null) {
             mProgressBar.setOnTouchListener(null);
-            mProgressBar.setProgress(0);
             mProgressBar = null;
         }
 
@@ -450,6 +448,7 @@ public final class MILogFragment extends MyFragment {
         log.w(mCountdownCommand);
 
         mCountdownAnimator.start();
+        mCountdownAnimator.setCurrentPlayTime(sCountdownBoost);
         updatePS();
 
     }
@@ -460,9 +459,7 @@ public final class MILogFragment extends MyFragment {
         mCountdownCommand = null;
         if(mCountdownAnimator != null) {
             mCountdownAnimator.cancel(); //mCountdownEnabled have to be false before this line. (it calls onCountdownEnd)
-        }
-        if(mProgressBar != null) {
-            mProgressBar.setProgress(0);
+            mCountdownAnimator.setCurrentPlayTime(sCountdownBoost);
         }
         updatePS();
     }
@@ -494,8 +491,8 @@ public final class MILogFragment extends MyFragment {
 
         updatePS();
 
-        if(mProgressBar != null) {
-            mProgressBar.setProgress(0);
+        if(mCountdownAnimator != null) {
+            mCountdownAnimator.setCurrentPlayTime(sCountdownBoost);
         }
     }
 }

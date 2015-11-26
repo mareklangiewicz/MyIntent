@@ -45,7 +45,8 @@ public class MIExamples {
         EXAMPLE_COMMANDS.add("play some more drums");
         EXAMPLE_COMMANDS.add("teleport to beach");
         EXAMPLE_COMMANDS.add("teleport to new york");
-        EXAMPLE_COMMANDS.add("teleport to my house");
+        EXAMPLE_COMMANDS.add("take me to my house");
+        EXAMPLE_COMMANDS.add("take me to woodstock");
         EXAMPLE_COMMANDS.add("data google.navigation:q=wroclaw");
         EXAMPLE_COMMANDS.add("data geo:0,0?q=mount+everest");
         EXAMPLE_COMMANDS.add("my name is john");
@@ -82,6 +83,10 @@ public class MIExamples {
                 "type application/ogg data http://mareklangiewicz.pl/homepage_2007/muzyka/drum.ogg"
         ));
         EXAMPLE_RULES.add(new MyCommands.RERule(true, "", "",
+                "^take me to ",
+                "teleport to "
+        ));
+        EXAMPLE_RULES.add(new MyCommands.RERule(true, "", "",
                 "^teleport to beach$",
                 "data google.streetview:cbll=-23.3036925,151.9150093"
         ));
@@ -92,6 +97,10 @@ public class MIExamples {
         EXAMPLE_RULES.add(new MyCommands.RERule(true, "", "",
                 "^teleport to my house$",
                 "data google.streetview:cbll=48.1848573,16.3122329"
+        ));
+        EXAMPLE_RULES.add(new MyCommands.RERule(true, "", "",
+                "^teleport to woodstock$",
+                "data https://www.youtube.com/watch?v=mscYptbJrkA"
         ));
         EXAMPLE_RULES.add(new MyCommands.RERule(true, "", "",
                 "^translate (.*)$",
@@ -112,6 +121,14 @@ public class MIExamples {
         EXAMPLE_RULES.add(new MyCommands.RERule(true, "", "",
                 "^silence\\b.*",
                 "say I kill you!"
+        ));
+        EXAMPLE_RULES.add(new MyCommands.RERule(true, "", "",
+                "^say the time",
+                "say time"
+        ));
+        EXAMPLE_RULES.add(new MyCommands.RERule(true, "", "",
+                "^what time is it",
+                "say time"
         ));
         EXAMPLE_RULES.add(new MyCommands.RERule(true, "say", "",
                 "^say ",

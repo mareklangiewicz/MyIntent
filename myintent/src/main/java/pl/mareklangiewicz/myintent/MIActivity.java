@@ -6,7 +6,6 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.SearchManager;
 import android.appwidget.AppWidgetManager;
-import android.appwidget.AppWidgetProvider;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
@@ -27,6 +26,13 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.gms.actions.SearchIntents;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 
 import java.util.List;
 import java.util.Locale;
@@ -36,18 +42,15 @@ import pl.mareklangiewicz.myactivities.MyActivity;
 import pl.mareklangiewicz.mydrawables.MyLivingDrawable;
 import pl.mareklangiewicz.mydrawables.MyMagicLinesDrawable;
 import pl.mareklangiewicz.myutils.MyCommands;
+import pl.mareklangiewicz.myutils.MyHttp;
 import pl.mareklangiewicz.myviews.IMyNavigation;
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.Response;
+import retrofit.Retrofit;
 
 import static pl.mareklangiewicz.myutils.MyMathUtils.getRandomInt;
 import static pl.mareklangiewicz.myutils.MyTextUtils.str;
-
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.actions.SearchIntents;
 
 /**
  * Created by Marek Langiewicz on 02.10.15.
@@ -252,7 +255,7 @@ public class MIActivity extends MyActivity {
 
 
     private void onSearchIntent(Intent intent) {
-        String command = intent.getStringExtra(SearchManager.QUERY);
+        String command = intent.getStringExtra(SearchManager.QUERY).toLowerCase();
         log.v("search: %s", command);
         playCommand(command);
     }
@@ -383,8 +386,109 @@ public class MIActivity extends MyActivity {
             resurrection();
             return true;
         }
+        if(command.get("action").equals("weather")) {
+            weather(
+                    command.get("extra string appid"),
+                    command.get("extra string city"),
+                    command.get("extra string units"),
+                    command.get("extra integer day")
+            );
+            return true;
+        }
 
         return super.onCommandCustom(command);
+    }
+
+    /**
+     * Reports a weather via logging and tts (if available)
+     * @param appid openweathermap api key (you should generate your own key on openweathermap website)
+     * @param city name of the city (may contain country code after comma (like: wroclaw,pl)
+     * @param units default (null) are Kelvin, you can change it to "metric" (Celsius), or "imperial" (Fahrenheit)
+     * @param day a day number. Default (null) is "1" (today/now), set it to "2" for tomorrow etc... (up to 16)
+     */
+    public void weather(@NonNull String appid, @NonNull String city, @Nullable final String units, @Nullable String day) {
+        int d = 1;
+        if(day != null) {
+            try {
+                d = Integer.parseInt(day);
+            }
+            catch(NumberFormatException e) {
+                log.e(e, "Bad day..");
+                return;
+            }
+        }
+        if(d < 1 || d > 16) {
+            log.e("Bad day...");
+            return;
+        }
+
+        final String tempunit = units == null ? "kelvins" : (units.equals("imperial") ? "\u00B0F" : "\u00B0C");
+        final String speedunit = units == null ? "meters per second" : (units.equals("imperial") ? "miles per hour" : "meters per second");
+
+        MyHttp.OpenWeatherMap.Service service = MyHttp.OpenWeatherMap.create();
+
+        if(d == 1) { // we want current weather
+
+            Call<MyHttp.OpenWeatherMap.Forecast> call = service.getWeatherByCity(appid, city, units);
+
+            call.enqueue(new Callback<MyHttp.OpenWeatherMap.Forecast>() {
+                @Override public void onResponse(Response<MyHttp.OpenWeatherMap.Forecast> response, Retrofit retrofit) {
+                    MyHttp.OpenWeatherMap.Forecast forecast = response.body();
+                    if(forecast.weather.length < 1) {
+                        log.e("Weather error.");
+                        return;
+                    }
+                    String report = String.format(Locale.US,
+                            "Weather in %s: %s, temperature: %.0f %s, pressure: %.0f hectopascals, humidity: %d%%, wind speed: %.0f %s",
+                            forecast.name,
+                            forecast.weather[0].description,
+                            forecast.main.temp,
+                            tempunit,
+                            forecast.main.pressure,
+                            forecast.main.humidity,
+                            forecast.wind.speed,
+                            speedunit
+                    );
+                    say(report, TextToSpeech.QUEUE_ADD);
+                }
+                @Override public void onFailure(Throwable t) {
+                    log.e(t, "Fetching weather failed.");
+                }
+            });
+
+        }
+        else { // we want forecast
+
+            Call<MyHttp.OpenWeatherMap.DailyForecasts> call = service.getDailyForecastByCity(appid, city, d, units);
+
+            call.enqueue(new Callback<MyHttp.OpenWeatherMap.DailyForecasts>() {
+                @Override public void onResponse(Response<MyHttp.OpenWeatherMap.DailyForecasts> response, Retrofit retrofit) {
+                    MyHttp.OpenWeatherMap.DailyForecasts forecasts = response.body();
+                    say("Weather forcast for " + forecasts.city.name + ":");
+                    for(int i = 1; i < forecasts.list.length; ++i) {
+                        if(forecasts.list[i].weather.length < 1) {
+                            log.e("Weather forecast error.");
+                            return;
+                        }
+                        long time = forecasts.list[i].dt * 1000;
+                        String report = String.format(Locale.US,
+                                "On %tA: %s, %.0f %s.",
+                                time,
+                                forecasts.list[i].weather[0].description,
+                                forecasts.list[i].temp.day,
+                                tempunit
+                        );
+                        say(report, TextToSpeech.QUEUE_ADD);
+                    }
+                }
+
+                @Override public void onFailure(Throwable t) {
+                    log.e(t, "Fetching forecast failed.");
+                }
+            });
+
+        }
+
     }
 
     private String remAuthor(String quote) {
@@ -397,17 +501,21 @@ public class MIActivity extends MyActivity {
     }
 
     protected void say(String text) {
+        say(text, TextToSpeech.QUEUE_FLUSH);
+    }
+
+    protected void say(String text, int queuemode) {
         long time = System.currentTimeMillis();
         if("weekday".equals(text)) {
-            say(String.format("%tA", time));
+            say(String.format(Locale.US, "%tA", time));
             return;
         }
         if("date".equals(text)) {
-            say(String.format("%tF", time));
+            say(String.format(Locale.US, "%tF", time));
             return;
         }
         if("time".equals(text)) {
-            say(String.format("%tl:%tM %tp", time, time, time));
+            say(String.format(Locale.US, "%tl:%tM %tp", time, time, time));
             return;
         }
         if("something funny".equals(text)) {
@@ -433,7 +541,7 @@ public class MIActivity extends MyActivity {
         log.w("[SNACK]" + text);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if(mTextToSpeech != null && mTTSReady) {
-                mTextToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
+                mTextToSpeech.speak(text, queuemode, null, null);
             }
         }
     }

@@ -5,6 +5,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 
+import java.util.List;
+import java.util.Locale;
+
 /**
  * Created by Marek Langiewicz on 07.09.15.
  * Utilities for text manipulation
@@ -38,6 +41,15 @@ public final class MyTextUtils {
     }
     //TODO SOMEDAY: str for other primitive types..
 
+    static public @NonNull <E> String str(@Nullable List<E> x) {
+        if(VV)
+            return toVeryLongStr(x);
+        else if(V)
+            return toLongStr(x);
+        else
+            return toShortStr(x);
+    }
+
     static public @NonNull String str(@Nullable Object x) {
         if(VV)
             return toVeryLongStr(x);
@@ -45,6 +57,35 @@ public final class MyTextUtils {
             return toLongStr(x);
         else
             return toShortStr(x);
+    }
+
+    static private @NonNull <E> String toStr(@Nullable List<E> list, int max) {
+        if(list == null)
+            return "null";
+        StringBuilder result = new StringBuilder();
+        result.append("[");
+        int N = Math.min(list.size(), max);
+        for(int i = 0; i < N; ++i) {
+            result.append(str(list.get(i)));
+            if(i < N - 1)
+                result.append((","));
+        }
+        if(max < list.size())
+            result.append(",...");
+        result.append("]");
+        return result.toString();
+    }
+
+    static public @NonNull <E> String toVeryLongStr(@Nullable List<E> list) {
+        return toStr(list, 1000);
+    }
+
+    static public @NonNull <E> String toLongStr(@Nullable List<E> list) {
+        return toStr(list, 100);
+    }
+
+    static public @NonNull <E> String toShortStr(@Nullable List<E> list) {
+        return toStr(list, 10);
     }
 
     static public @NonNull String toShortStr(int x) {
@@ -68,9 +109,9 @@ public final class MyTextUtils {
 
         //Shorten some very long android object descriptions:
         if(x instanceof Bundle)
-            return String.format("%s{size:%d}", x.getClass().getSimpleName(), ((Bundle) x).size());
+            return String.format(Locale.US, "%s{size:%d}", x.getClass().getSimpleName(), ((Bundle) x).size());
         if(x instanceof View)
-            return String.format("%s{hash:%x}", x.getClass().getSimpleName(), x.hashCode());
+            return String.format(Locale.US, "%s{hash:%x}", x.getClass().getSimpleName(), x.hashCode());
 
         //TODO SOMEDAY: pretty print our android special cases.
 

@@ -1,6 +1,9 @@
 package pl.mareklangiewicz.myviews;
 
 import org.junit.Test;
+
+import java.util.Locale;
+
 import static org.hamcrest.CoreMatchers.*;
 
 import static org.junit.Assert.*;
@@ -18,7 +21,7 @@ public class MyPieTest {
         public int a;
         public int b;
         public void print() {
-            System.out.println(String.format("x = %d; a = %d; b = %d;", x, a, b));
+            System.out.println(String.format(Locale.US, "x = %d; a = %d; b = %d;", x, a, b));
         }
     }
 

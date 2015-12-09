@@ -8,6 +8,8 @@ import android.support.annotation.UiThread;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import java.util.Locale;
+
 /**
  * Created by Marek Langiewicz on 24.06.15.
  */
@@ -136,7 +138,7 @@ public final class MyLogger extends AbstractLogger {
             long time = history.getFilteredTime(i);
             Logger.Level level = history.getFilteredLevel(i);
             String message = history.getFilteredMessage(i);
-            message = String.format("%03d %c: %tT: %s", id, getLevelChar(level), time, message);
+            message = String.format(Locale.US, "%03d %c: %tT: %s", id, getLevelChar(level), time, message);
 
             paint.setColor(getLevelColor(level));
 

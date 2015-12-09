@@ -43,12 +43,12 @@ function mi_body() {
       window.location.hash.length < 2
       ?
       noh.p(
-        "You can install it from ", a("https://play.google.com/store/search?q=My%20Intent", "Google Play") // TODO LATER: real link!!!
+        "You can install it from ", a("https://play.google.com/store/apps/details?id=pl.mareklangiewicz.myintent", "Google Play")
       )
       :
       noh.p(
         noh.b("WARNING:"), " This page should be opened by My Intent app. Please install it from ",
-        a("https://play.google.com/store/search?q=My%20Intent", "Google Play"), // TODO LATER: real link!!!
+        a("https://play.google.com/store/apps/details?id=pl.mareklangiewicz.myintent", "Google Play"),
         ", and use it to open this page correctly."
       ),
 
@@ -210,7 +210,7 @@ function mi_body() {
        ),
        noh.h4('Special links'),
        noh.p(
-        'My Intent app is registered as a default app to open all links which start with the: "http://mareklangiewicz.pl/mi" prefix. ',
+        'My Intent app is registered as a default app to open all links which start with the: "http://mareklangiewicz.pl/mi#" prefix. ',
         'Anything after that "#" character is treated as a command (you can use semicolons in commands instead of spaces).'
       ),
       noh.p(

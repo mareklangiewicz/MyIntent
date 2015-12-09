@@ -54,6 +54,11 @@ public class MIExamples {
         EXAMPLE_COMMANDS.add("hey you");
         EXAMPLE_COMMANDS.add("silence");
         EXAMPLE_COMMANDS.add("translate duck");
+        EXAMPLE_COMMANDS.add("weather warsaw today");
+        EXAMPLE_COMMANDS.add("weather new york tomorrow");
+        EXAMPLE_COMMANDS.add("weather 1 jelcz laskowice");
+        EXAMPLE_COMMANDS.add("weather 5 jelcz laskowice");
+        EXAMPLE_COMMANDS.add("weather 9 san francisco");
         EXAMPLE_COMMANDS.add("exit");
         EXAMPLE_COMMANDS.add("action edit data content://contacts/people/1");
         EXAMPLE_COMMANDS.add("action show alarms");
@@ -83,7 +88,7 @@ public class MIExamples {
                 "type application/ogg data http://mareklangiewicz.pl/homepage_2007/muzyka/drum.ogg"
         ));
         EXAMPLE_RULES.add(new MyCommands.RERule(true, "", "",
-                "^take me to ",
+                "^take me to( the | a | )",
                 "teleport to "
         ));
         EXAMPLE_RULES.add(new MyCommands.RERule(true, "", "",
@@ -105,6 +110,19 @@ public class MIExamples {
         EXAMPLE_RULES.add(new MyCommands.RERule(true, "", "",
                 "^translate (.*)$",
                 "action send component com.google.android.apps.translate/.TranslateActivity extra text $1"
+        ));
+        EXAMPLE_RULES.add(new MyCommands.RERule(true, "", "",
+                "^weather (.*) today$",
+                "weather 1 $1"
+        ));
+        EXAMPLE_RULES.add(new MyCommands.RERule(true, "", "",
+                "^weather (.*) tomorrow$",
+                "weather 2 $1"
+        ));
+        EXAMPLE_RULES.add(new MyCommands.RERule(true, "", "",
+                "^weather (\\d+) (.*)$",
+                "start custom action weather extra string appid 8932d2a1192be84707c381df649a2925 " +
+                        "extra string city $2 extra string units metric extra integer day $1"
         ));
         EXAMPLE_RULES.add(new MyCommands.RERule(true, "", "",
                 "^my name is (\\w+)\\b.*",

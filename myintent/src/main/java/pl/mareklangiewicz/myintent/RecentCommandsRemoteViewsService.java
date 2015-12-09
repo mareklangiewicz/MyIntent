@@ -22,8 +22,8 @@ public class RecentCommandsRemoteViewsService extends RemoteViewsService {
 
         private final int MAX = 64;
 
-        private Context mContext;
-        private int mAppWidgetId;
+        private final Context mContext;
+        private final int mAppWidgetId;
         private final ArrayList<String> mCommands = new ArrayList<>(MAX);
 
         public RecentCommandsRemoteViewsFactory(Context context, Intent intent) {

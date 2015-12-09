@@ -12,6 +12,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import java.util.Locale;
+
 /**
  * This class is not thread-safe. In particular you should use it only from UI thread
  * if you use features: setSnackView; setInvalidateView; getLogHistory;
@@ -118,7 +120,7 @@ public final class MyHandler extends PatternHandler {
 
         if(sPrintLnLevel != null)
             if(sPrintLnLevel.includes(level)) {
-                message = String.format("%s     %s", Utils.getCaller().toString(), message);
+                message = String.format(Locale.US, "%s     %s", Utils.getCaller().toString(), message);
                 System.out.println(message);
             }
     }
@@ -130,7 +132,7 @@ public final class MyHandler extends PatternHandler {
         if(args == null || args.length == 0 || messageFormat == null)
             print(loggerName, level, throwable, messageFormat);
         else
-            print(loggerName, level, throwable, String.format(messageFormat, args));
+            print(loggerName, level, throwable, String.format(Locale.US, messageFormat, args));
 
     }
 }

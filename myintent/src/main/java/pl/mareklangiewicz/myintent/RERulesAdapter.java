@@ -14,6 +14,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.noveogroup.android.log.MyLogger;
 
 import java.util.List;
+import java.util.Locale;
 
 import pl.mareklangiewicz.myutils.MyCommands;
 
@@ -68,7 +69,7 @@ public class RERulesAdapter extends RecyclerView.Adapter<RERulesAdapter.ViewHold
         }
         MyCommands.RERule rule = mRules.get(position);
         holder.mRuleNameView.setText(Html.fromHtml("<b>rule:</b> " + rule.getName()));
-        holder.mRuleContentView.setText(String.format("match: \"%s\"\nreplace: \"%s\"", rule.getMatch(), rule.getReplace()));
+        holder.mRuleContentView.setText(String.format(Locale.US, "match: \"%s\"\nreplace: \"%s\"", rule.getMatch(), rule.getReplace()));
     }
 
     @Override

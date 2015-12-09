@@ -17,6 +17,7 @@
         android:background="@color/cardview_light_background"
         android:textColor="@android:color/black"
         tools:text="start my crazy command"
+        tools:ignore="UnusedAttribute"
         />
 
 </LinearLayout>

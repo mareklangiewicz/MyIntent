@@ -13,6 +13,8 @@ import com.noveogroup.android.log.LogHistory;
 import com.noveogroup.android.log.Logger;
 import com.noveogroup.android.log.MyLogger;
 
+import java.util.Locale;
+
 /**
  * Created by Marek Langiewicz on 25.06.15.
  */
@@ -77,11 +79,11 @@ public class MyLogAdapter extends RecyclerView.Adapter<MyLogAdapter.ViewHolder> 
         }
 */
 
-//        message = String.format("%tT: %s", time, message);
-        message = String.format("%s", message);
+//        message = String.format(Locale.US, "%tT: %s", time, message);
+        message = String.format(Locale.US, "%s", message);
 
         holder.mCardView.setCardElevation(elevation);
-        holder.mHeadView.setText(String.format("%03d%c", nr, MyLogger.getLevelChar(level)));
+        holder.mHeadView.setText(String.format(Locale.US, "%03d%c", nr, MyLogger.getLevelChar(level)));
 
         holder.mMessageView.setTextColor(color);
         holder.mMessageView.setText(message);

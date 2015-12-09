@@ -11,8 +11,6 @@ import android.widget.RemoteViews;
 
 import pl.mareklangiewicz.myutils.MyCommands;
 
-import static pl.mareklangiewicz.myutils.MyTextUtils.str;
-
 public class RecentCommandsAppWidgetProvider extends AppWidgetProvider {
 
     @Override public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] ids) {

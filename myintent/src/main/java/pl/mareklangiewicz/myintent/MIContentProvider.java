@@ -58,7 +58,7 @@ public class MIContentProvider extends ContentProvider {
 
 
     @Override
-    public String getType(@NonNull Uri uri) {
+    public synchronized String getType(@NonNull Uri uri) {
         final int match = sUriMatcher.match(uri);
         switch(match) {
             case MATCH_CMD_RECENT_DIR:
@@ -82,7 +82,7 @@ public class MIContentProvider extends ContentProvider {
     }
 
     @Override
-    public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+    public synchronized Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 
         SQLiteDatabase db = mMIDBHelper.getReadableDatabase();
         final int match = sUriMatcher.match(uri);
@@ -117,7 +117,7 @@ public class MIContentProvider extends ContentProvider {
     }
 
     @Override
-    public Uri insert(@NonNull Uri uri, ContentValues values) {
+    public synchronized Uri insert(@NonNull Uri uri, ContentValues values) {
 
         SQLiteDatabase db = mMIDBHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
@@ -143,7 +143,7 @@ public class MIContentProvider extends ContentProvider {
     }
 
     @Override
-    public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
+    public synchronized int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
 
         SQLiteDatabase db = mMIDBHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
@@ -170,7 +170,7 @@ public class MIContentProvider extends ContentProvider {
     }
 
     @Override
-    public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+    public synchronized int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
 
         SQLiteDatabase db = mMIDBHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);

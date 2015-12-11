@@ -25,7 +25,7 @@ import static pl.mareklangiewicz.myutils.MyTextUtils.str;
  */
 public class REGroupsAdapter extends RecyclerView.Adapter<REGroupsAdapter.ViewHolder> implements View.OnClickListener {
 
-    static public final int RE_GROUP_VIEW_TAG_HOLDER = R.id.re_group_view_tag_holder;
+    static public final int RE_GROUP_VIEW_TAG_HOLDER = R.id.mi_re_group_view_tag_holder;
 
     @Nullable List<MyCommands.REGroup> mGroups;
 
@@ -49,7 +49,7 @@ public class REGroupsAdapter extends RecyclerView.Adapter<REGroupsAdapter.ViewHo
     public @NonNull ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.re_group_layout, parent, false);
+                .inflate(R.layout.mi_re_group_layout, parent, false);
         v.setOnClickListener(this);
         ViewHolder holder = new ViewHolder(v);
         v.setTag(RE_GROUP_VIEW_TAG_HOLDER, holder);
@@ -95,8 +95,8 @@ public class REGroupsAdapter extends RecyclerView.Adapter<REGroupsAdapter.ViewHo
 
         MaterialDialog dialog = new MaterialDialog.Builder(v.getContext())
                 .title("RE Group " + str(pos + 1))
-                .customView(R.layout.re_group_details, true)
-                .iconRes(R.mipmap.ic_launcher)
+                .customView(R.layout.mi_re_group_details, true)
+                .iconRes(R.mipmap.mi_ic_launcher)
                 .limitIconToDefaultSize() // limits the displayed icon size to 48dp
                 .build();
 

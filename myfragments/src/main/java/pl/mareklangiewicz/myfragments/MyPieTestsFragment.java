@@ -34,10 +34,10 @@ public final class MyPieTestsFragment extends MyFragment implements View.OnClick
 
         super.onCreateView(inflater, container, savedInstanceState); //just for logging
 
-        View root = inflater.inflate(R.layout.my_pie_tests_fragment, container, false);
+        View root = inflater.inflate(R.layout.mf_my_pie_tests_fragment, container, false);
 
-        inflateHeader(R.layout.my_pie_tests_header);
-        inflateMenu(R.menu.my_pie_tests_menu);
+        inflateHeader(R.layout.mf_my_pie_tests_header);
+        inflateMenu(R.menu.mf_my_pie_tests);
 
         root.findViewById(R.id.pie1).setOnClickListener(this);
         root.findViewById(R.id.pie2).setOnClickListener(this);

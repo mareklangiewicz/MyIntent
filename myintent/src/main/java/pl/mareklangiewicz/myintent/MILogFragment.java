@@ -162,11 +162,11 @@ public final class MILogFragment extends MyFragment {
         mRecyclerView.setLayoutManager(llmanager);
 
         //TODO SOMEDAY: some nice simple header with fragment title
-        inflateMenu(R.menu.mi_log_lmenu);
+        inflateMenu(R.menu.mi_log_local);
         updateCheckedItem();
 
         //noinspection ConstantConditions
-        mFAB.setImageResource(R.drawable.ic_keyboard_voice_white_24dp);
+        mFAB.setImageResource(R.drawable.mi_ic_mic_white_24dp);
 //        CoordinatorLayout.LayoutParams lparams = ((CoordinatorLayout.LayoutParams) mFAB.getLayoutParams());
 //        lparams.setAnchorId(R.id.mi_log_recycler_view);
 //        int margin = (int)((MyActivity)getActivity()).dp2px(8);
@@ -266,7 +266,7 @@ public final class MILogFragment extends MyFragment {
     }
 
     @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.mi_log_omenu, menu);
+        inflater.inflate(R.menu.mi_log_options, menu);
         mSearchItem = menu.findItem(R.id.action_search);
         mSearchView = (SearchView) mSearchItem.getActionView();
         SearchManager manager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);

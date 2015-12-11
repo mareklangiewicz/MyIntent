@@ -21,7 +21,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/re_rules_intro"
+        android:text="@string/mi_re_rules_intro"
         android:textAppearance="?android:textAppearance"
         />
 

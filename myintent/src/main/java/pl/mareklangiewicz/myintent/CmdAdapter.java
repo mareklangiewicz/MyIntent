@@ -23,9 +23,9 @@ public class CmdAdapter extends RecyclerView.Adapter<CmdAdapter.ViewHolder> impl
 
     protected @NonNull final MyLogger log = MyLogger.UIL;
 
-    protected @DrawableRes int mImageRes = R.drawable.ic_youtube_searched_for_black_24dp;
+    protected @DrawableRes int mImageRes = R.drawable.mi_ic_recent_command_black_24dp;
 
-    static public final int RE_COMMAND_VIEW_TAG_HOLDER = R.id.re_command_view_tag_holder;
+    static public final int RE_COMMAND_VIEW_TAG_HOLDER = R.id.mi_re_command_view_tag_holder;
 
     @Nullable List<String> mCommands;
 
@@ -51,7 +51,7 @@ public class CmdAdapter extends RecyclerView.Adapter<CmdAdapter.ViewHolder> impl
 
     @Override public CmdAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.command_layout, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.mi_command, parent, false);
         v.setOnClickListener(this);
         ViewHolder holder = new ViewHolder(v);
         v.setTag(RE_COMMAND_VIEW_TAG_HOLDER, holder);

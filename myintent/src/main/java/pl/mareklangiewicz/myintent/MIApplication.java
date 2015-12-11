@@ -14,8 +14,8 @@ public class MIApplication extends Application {
     public String[] SMART_QUOTES;
 
     @Override public void onCreate() {
-        FUNNY_QUOTES = getResources().getStringArray(R.array.funny_quotes);
-        SMART_QUOTES = getResources().getStringArray(R.array.smart_quotes);
+        FUNNY_QUOTES = getResources().getStringArray(R.array.mr_funny_quotes);
+        SMART_QUOTES = getResources().getStringArray(R.array.mr_smart_quotes);
         super.onCreate();
         LeakCanary.install(this);
     }

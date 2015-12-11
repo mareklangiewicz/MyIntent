@@ -30,9 +30,9 @@ public class MyMDLogAdapter extends MyLogAdapter {
         Logger.Level level = history.getFilteredLevel(pos);
         MaterialDialog dialog = new MaterialDialog.Builder(v.getContext())
                 .title(logger + " message " + nr)
-                .customView(R.layout.log_details, true)
-                .iconRes(R.mipmap.ic_launcher) //TODO SOMEDAY: change icon depending on level
-//                .iconRes(R.drawable.ic_report_black_24dp)
+                .customView(R.layout.mi_log_details, true)
+                .iconRes(R.mipmap.mi_ic_launcher) //TODO SOMEDAY: change icon depending on level
+//                .iconRes(R.drawable.mi_ic_report_black_24dp)
                 .limitIconToDefaultSize() // limits the displayed icon size to 48dp
                 .build();
 

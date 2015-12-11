@@ -63,7 +63,7 @@ public final class MyDrawableTestsFragment extends MyFragment implements View.On
 
         super.onCreateView(inflater, container, savedInstanceState); //just for logging
 
-        View root = inflater.inflate(R.layout.my_dawable_tests_fragment, container, false);
+        View root = inflater.inflate(R.layout.mf_my_dawable_tests_fragment, container, false);
 
         mLevelSeekBar = (SeekBar) root.findViewById(R.id.seek_bar_level);
         mStrokeWidthSeekBar = (SeekBar) root.findViewById(R.id.seek_bar_stroke_width);
@@ -111,7 +111,7 @@ public final class MyDrawableTestsFragment extends MyFragment implements View.On
     }
 
     @Override public void onClick(View v) {
-        Object tag = v.getTag(R.id.tag_animator);
+        Object tag = v.getTag(R.id.mf_tag_animator);
         if(tag instanceof ObjectAnimator)
             ((ObjectAnimator) tag).start();
     }
@@ -173,7 +173,7 @@ public final class MyDrawableTestsFragment extends MyFragment implements View.On
             animator.setDuration(3000);
             animator.setInterpolator(new LinearInterpolator());
             content.setBackground(drawable);
-            content.setTag(R.id.tag_animator, animator);
+            content.setTag(R.id.mf_tag_animator, animator);
             content.setOnClickListener(MyDrawableTestsFragment.this);
         }
 

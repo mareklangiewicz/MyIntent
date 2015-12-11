@@ -29,7 +29,7 @@ public final class MyExampleFragment extends Fragment {
 
         super.onCreateView(inflater, container, savedInstanceState); //just for logging
 
-        View root = inflater.inflate(R.layout.my_example_fragment, container, false);
+        View root = inflater.inflate(R.layout.mf_my_example_fragment, container, false);
         MyExampleView mev = (MyExampleView) root.findViewById(R.id.my_example_view);
         Bundle args = getArguments();
         if(args != null) {

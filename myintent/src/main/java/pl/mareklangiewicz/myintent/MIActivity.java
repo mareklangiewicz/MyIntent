@@ -18,6 +18,7 @@ import android.speech.tts.TextToSpeech;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
@@ -78,8 +79,17 @@ public class MIActivity extends MyActivity {
         super.onCreate(savedInstanceState);
 
         //noinspection ConstantConditions
-        getGlobalNavigation().inflateMenu(R.menu.mi_menu);
+        getGlobalNavigation().inflateMenu(R.menu.mi_global);
         getGlobalNavigation().inflateHeader(R.layout.mi_header);
+        if(BuildConfig.DEBUG) {
+            Menu menu = getGlobalNavigation().getMenu();
+            //noinspection ConstantConditions
+            menu.findItem(R.id.ds_mode).setTitle("build type: " + BuildConfig.BUILD_TYPE);
+            menu.findItem(R.id.ds_flavor).setTitle("build flavor: " + BuildConfig.FLAVOR);
+            menu.findItem(R.id.ds_version_code).setTitle("version code: " + BuildConfig.VERSION_CODE);
+            menu.findItem(R.id.ds_version_name).setTitle("version name: " + BuildConfig.VERSION_NAME);
+            menu.findItem(R.id.ds_time_stamp).setTitle(String.format("build time: %tF %tT", BuildConfig.TIME_STAMP, BuildConfig.TIME_STAMP));
+        }
 
         //noinspection ConstantConditions
         mMyMagicLinesDrawable = new MyMagicLinesDrawable();
@@ -101,7 +111,7 @@ public class MIActivity extends MyActivity {
         //noinspection ConstantConditions
         mHomePageTextView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                playCommand("data " + getResources().getString(R.string.user_id));
+                playCommand("data " + getResources().getString(R.string.mr_my_homepage));
             }
         });
 
@@ -168,18 +178,24 @@ public class MIActivity extends MyActivity {
             if(action == null)
                 action = Intent.ACTION_MAIN;
 
-            if(action.equals(Intent.ACTION_SEARCH) || action.equals(SearchIntents.ACTION_SEARCH))
-                onSearchIntent(intent);
-            else if(action.equals(Intent.ACTION_VIEW))
-                onUri(intent.getData());
-            else if(action.equals(Intent.ACTION_MAIN)) {
-                if(!sGreeted) {
-                    intro();
-                    sGreeted = true;
-                }
+            switch(action) {
+                case Intent.ACTION_SEARCH:
+                case SearchIntents.ACTION_SEARCH:
+                    onSearchIntent(intent);
+                    break;
+                case Intent.ACTION_VIEW:
+                    onUri(intent.getData());
+                    break;
+                case Intent.ACTION_MAIN:
+                    if(!sGreeted) {
+                        intro();
+                        sGreeted = true;
+                    }
+                    break;
+                default:
+                    log.e("Unknown intent received: %s", str(intent));
+                    break;
             }
-            else
-                log.e("Unknown intent received: %s", str(intent));
         }
         catch(RuntimeException e) {
             log.a("Intent exception.", e);
@@ -264,7 +280,7 @@ public class MIActivity extends MyActivity {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.ask_for_intent));
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.mi_ask_for_intent));
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en_US"); //TODO SOMEDAY: remove this line so default user language is chosen.
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             intent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true); //TODO SOMEDAY: check if works online if language data is not downloaded
@@ -562,10 +578,10 @@ public class MIActivity extends MyActivity {
 
     private void resetAll() {
         new MaterialDialog.Builder(this)
-                .title(R.string.reset_all)
-                .content(R.string.are_you_sure_reset)
-                .positiveText(R.string.reset)
-                .negativeText(R.string.cancel)
+                .title(R.string.mi_reset_all)
+                .content(R.string.mi_are_you_sure_reset)
+                .positiveText(R.string.mi_reset)
+                .negativeText(R.string.mi_cancel)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
                         deleteDatabase(MIDBHelper.DATABASE_NAME);

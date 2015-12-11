@@ -120,9 +120,9 @@ public class MIExamples {
                 "weather 2 $1"
         ));
         EXAMPLE_RULES.add(new MyCommands.RERule(true, "", "",
-                "^weather (\\d+) (.*)$",
+                "^weather (\\d+)( in | at | )(.*)$",
                 "start custom action weather extra string appid 8932d2a1192be84707c381df649a2925 " +
-                        "extra string city $2 extra string units metric extra integer day $1"
+                        "extra string city $3 extra string units metric extra integer day $1"
         ));
         EXAMPLE_RULES.add(new MyCommands.RERule(true, "", "",
                 "^my name is (\\w+)\\b.*",

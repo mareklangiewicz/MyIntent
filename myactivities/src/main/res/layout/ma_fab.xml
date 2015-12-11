@@ -10,7 +10,7 @@
     android:layout_margin="16dp"
     android:visibility="gone"
     app:elevation="4dp"
-    tools:showIn="@layout/my_activity"
+    tools:showIn="@layout/ma_my_activity"
     />
 
 

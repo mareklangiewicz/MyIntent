@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/stupid_item_1"
+            android:icon="@drawable/mr_ic_radio_button_black_24dp"
+            android:title="stupid item 1"
+            />
+        <item
+            android:id="@+id/stupid_item_2"
+            android:icon="@drawable/mr_ic_radio_button_black_24dp"
+            android:title="stupid item 2"
+            />
+        <item
+            android:id="@+id/stupid_item_3"
+            android:icon="@drawable/mr_ic_radio_button_black_24dp"
+            android:title="stupid item 3"
+            />
+        <item
+            android:id="@+id/stupid_item_4"
+            android:icon="@drawable/mr_ic_radio_button_black_24dp"
+            android:title="stupid item 4"
+            />
+    </group>
+    <item
+        android:id="@+id/stupid_check_box_1"
+        android:checkable="true"
+        android:icon="@drawable/mr_ic_check_bock_black_sl_24dp"
+        android:title="stupid check box 1"
+        />
+    <item
+        android:id="@+id/stupid_check_box_2"
+        android:checkable="true"
+        android:icon="@drawable/mr_ic_check_bock_black_sl_24dp"
+        android:title="stupid check box 2"
+        />
+</menu>

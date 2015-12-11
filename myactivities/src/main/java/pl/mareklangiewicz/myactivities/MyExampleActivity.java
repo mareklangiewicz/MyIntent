@@ -17,8 +17,8 @@ public class MyExampleActivity extends MyActivity {
         super.onCreate(savedInstanceState);
         log.i("Hi, I am the example activity..");
         //noinspection ConstantConditions
-        getGlobalNavigation().inflateMenu(R.menu.my_example_global_menu);
-        getGlobalNavigation().inflateHeader(R.layout.my_example_global_header);
+        getGlobalNavigation().inflateMenu(R.menu.ma_my_example_global);
+        getGlobalNavigation().inflateHeader(R.layout.ma_my_example_global_header);
         if(savedInstanceState == null) {
             selectGlobalItem(R.id.my_example_fragment_1);
         }

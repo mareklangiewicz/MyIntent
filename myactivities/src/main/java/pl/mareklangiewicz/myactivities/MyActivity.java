@@ -96,7 +96,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
             log.v(str(mDisplayMetrics));
         }
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.my_activity);
+        setContentView(R.layout.ma_my_activity);
 
         mGlobalDrawerLayout = (DrawerLayout) findViewById(R.id.ma_global_drawer_layout);
         mGlobalLinearLayout = (LinearLayout) findViewById(R.id.ma_global_linear_layout);

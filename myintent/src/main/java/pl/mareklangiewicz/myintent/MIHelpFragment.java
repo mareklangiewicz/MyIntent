@@ -21,7 +21,7 @@ public class MIHelpFragment extends MyWebFragment {
 
         //noinspection ConstantConditions
         WebSettings webSettings = mWebView.getSettings();
-        webSettings.setUserAgentString(webSettings.getUserAgentString() + " " + getString(R.string.user_agent_suffix));
+        webSettings.setUserAgentString(webSettings.getUserAgentString() + " " + getString(R.string.mi_user_agent_suffix));
         webSettings.setJavaScriptEnabled(true);
 
         if(getURL() == null)

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/grp_sections"
+        android:checkableBehavior="single"
+        >
+        <item
+            android:id="@+id/mi_start"
+            android:icon="@drawable/mr_ic_whatshot_black_24dp"
+            android:title="@string/mi_start"
+            android:titleCondensed="cmd:fragment .MILogFragment"
+            />
+        <item
+            android:id="@+id/mi_rules"
+            android:icon="@drawable/mr_ic_whatshot_black_24dp"
+            android:title="@string/mi_rules"
+            android:titleCondensed="cmd:fragment .MIRulesFragment"
+            />
+        <item
+            android:id="@+id/mi_recent_commands"
+            android:icon="@drawable/mi_ic_recent_command_black_24dp"
+            android:title="@string/mi_recent_commands"
+            android:titleCondensed="cmd:fragment .MIRecentCmdListFragment"
+            />
+        <item
+            android:id="@+id/mi_example_commands"
+            android:icon="@drawable/mi_ic_example_command_black_24dp"
+            android:title="@string/mi_example_commands"
+            android:titleCondensed="cmd:fragment .MIExampleCmdListFragment"
+            />
+        <item
+            android:id="@+id/mi_help"
+            android:icon="@drawable/mr_ic_whatshot_black_24dp"
+            android:title="@string/mi_help"
+            android:titleCondensed="cmd:fragment .MIHelpFragment"
+            />
+    </group>
+
+    <item
+        android:id="@+id/item_global_actions"
+        android:title="@string/mi_actions"
+        >
+        <menu>
+            <item
+                android:id="@+id/reset_all"
+                android:icon="@drawable/mr_ic_whatshot_black_24dp"
+                android:title="@string/mi_reset_all"
+                />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/item_debug_stuff"
+        android:title="@string/mi_debug_stuff"
+        android:visible="@bool/mi_debug_mode"
+        >
+        <menu>
+            <item
+                android:id="@+id/start_my_test_activity"
+                android:icon="@drawable/mr_ic_whatshot_black_24dp"
+                android:title="@string/mi_start_my_test_activity"
+                android:titleCondensed="cmd:activity pl.mareklangiewicz.myactivities.MyTestActivity"
+                />
+            <item
+                android:id="@+id/ds_mode"
+                android:title=""
+                />
+            <item
+                android:id="@+id/ds_flavor"
+                android:title=""
+                />
+            <item
+                android:id="@+id/ds_version_code"
+                android:title=""
+                />
+            <item
+                android:id="@+id/ds_version_name"
+                android:title=""
+                />
+            <item
+                android:id="@+id/ds_time_stamp"
+                android:title=""
+                />
+        </menu>
+    </item>
+</menu>

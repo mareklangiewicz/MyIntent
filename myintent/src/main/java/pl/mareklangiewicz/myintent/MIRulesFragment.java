@@ -42,7 +42,7 @@ public class MIRulesFragment extends MyFragment {
         mRecyclerView.setAdapter(mAdapter);
 
         inflateHeader(R.layout.mi_rules_header);
-        inflateMenu(R.menu.mi_rules_lmenu);
+        inflateMenu(R.menu.mi_rules_local);
 
         if(MyCommands.RE_USER_GROUP.getRules().size() > 20)
             log.w("You have more than 20 user rules!");

@@ -47,7 +47,7 @@ public class RecentCommandsRemoteViewsService extends RemoteViewsService {
         @Override public int getCount() { return mCommands.size(); }
 
         @Override public RemoteViews getViewAt(int position) {
-            RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.recent_commands_appwidget_item);
+            RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.mi_recent_commands_appwidget_item);
             rv.setTextViewText(R.id.cmd_recent_app_widget_item, mCommands.get(position));
 
             Intent fillInIntent = new Intent();

@@ -20,7 +20,7 @@ import java.util.Locale;
  */
 public class MyLogAdapter extends RecyclerView.Adapter<MyLogAdapter.ViewHolder> implements View.OnClickListener {
 
-    static public final int LOG_ITEM_VIEW_TAG_HOLDER = R.id.log_item_view_tag_holder;
+    static public final int LOG_ITEM_VIEW_TAG_HOLDER = R.id.ml_log_item_view_tag_holder;
 
     protected  @Nullable MyLogger log;
     protected  @Nullable LogHistory history;
@@ -48,7 +48,7 @@ public class MyLogAdapter extends RecyclerView.Adapter<MyLogAdapter.ViewHolder> 
     public @NonNull ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.log_item, parent, false);
+                .inflate(R.layout.ml_log_item, parent, false);
         v.setOnClickListener(this);
         ViewHolder holder = new ViewHolder(v);
         v.setTag(LOG_ITEM_VIEW_TAG_HOLDER, holder);

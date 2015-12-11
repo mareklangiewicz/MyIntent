@@ -55,15 +55,15 @@ public final class MyPie extends View {
 
         // Load attributes
         final TypedArray a = context.getTheme().obtainStyledAttributes(
-                attrs, R.styleable.MyPie, defStyle, 0);
+                attrs, R.styleable.mv_MyPie, defStyle, 0);
 
         try {
-            mMinimum = a.getFloat(R.styleable.MyPie_min, mMinimum);
-            mMaximum = a.getFloat(R.styleable.MyPie_max, mMaximum);
-            mFrom = a.getFloat(R.styleable.MyPie_from, mFrom);
-            mTo = a.getFloat(R.styleable.MyPie_to, mTo);
-            setPieColor(a.getColor(R.styleable.MyPie_pieColor, Color.BLACK));
-            setOvalColor(a.getColor(R.styleable.MyPie_ovalColor, Color.TRANSPARENT));
+            mMinimum = a.getFloat(R.styleable.mv_MyPie_mv_min, mMinimum);
+            mMaximum = a.getFloat(R.styleable.mv_MyPie_mv_max, mMaximum);
+            mFrom = a.getFloat(R.styleable.mv_MyPie_mv_from, mFrom);
+            mTo = a.getFloat(R.styleable.mv_MyPie_mv_to, mTo);
+            setPieColor(a.getColor(R.styleable.mv_MyPie_mv_pieColor, Color.BLACK));
+            setOvalColor(a.getColor(R.styleable.mv_MyPie_mv_ovalColor, Color.TRANSPARENT));
         }
         finally {
             a.recycle();

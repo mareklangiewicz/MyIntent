@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme"
+    <style name="mi_AppTheme"
         parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowTranslucentStatus">@bool/window_transluctent_status</item>
+        <item name="colorPrimary">@color/mi_primary</item>
+        <item name="colorPrimaryDark">@color/mi_primary_dark</item>
+        <item name="colorAccent">@color/mi_accent</item>
+        <item name="android:windowTranslucentStatus">@bool/mi_window_transluctent_status</item>
     </style>
 
-    <bool name="window_transluctent_status">true</bool>
+    <bool name="mi_window_transluctent_status">true</bool>
 </resources>

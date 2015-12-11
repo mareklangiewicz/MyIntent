@@ -33,8 +33,8 @@ public final class MyTestActivity extends pl.mareklangiewicz.myactivities.MyActi
         log.w("Warning!... just kidding...");
 
         //noinspection ConstantConditions
-        getGlobalNavigation().inflateMenu(R.menu.my_test_global_menu);
-        getGlobalNavigation().inflateHeader(R.layout.my_test_global_header);
+        getGlobalNavigation().inflateMenu(R.menu.ma_my_test_global);
+        getGlobalNavigation().inflateHeader(R.layout.ma_my_test_global_header);
 
         //noinspection ConstantConditions
         View underline = getGlobalNavigation().getHeader().findViewById(R.id.magic_underline_view);

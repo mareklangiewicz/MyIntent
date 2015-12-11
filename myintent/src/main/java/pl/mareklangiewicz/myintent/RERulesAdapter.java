@@ -30,7 +30,7 @@ public class RERulesAdapter extends RecyclerView.Adapter<RERulesAdapter.ViewHold
     private @Nullable MyCommands.RERule explained; // if some rule can not be removed or moved it displays snackbar only once in a row.
         // we remember this rule here so we do not display an error for it more than once in a row.
 
-    static public final int RE_RULE_VIEW_TAG_HOLDER = R.id.re_rule_view_tag_holder;
+    static public final int RE_RULE_VIEW_TAG_HOLDER = R.id.mi_re_rule_view_tag_holder;
 
     @Nullable List<MyCommands.RERule> mRules;
 
@@ -54,7 +54,7 @@ public class RERulesAdapter extends RecyclerView.Adapter<RERulesAdapter.ViewHold
     public @NonNull ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.re_rule_layout, parent, false);
+                .inflate(R.layout.mi_re_rule_layout, parent, false);
         v.setOnClickListener(this);
         ViewHolder holder = new ViewHolder(v);
         v.setTag(RE_RULE_VIEW_TAG_HOLDER, holder);
@@ -142,18 +142,18 @@ public class RERulesAdapter extends RecyclerView.Adapter<RERulesAdapter.ViewHold
                 ?
                 new MaterialDialog.Builder(v.getContext())
                         .title("RE Rule")
-                        .customView(R.layout.re_rule_details, true)
+                        .customView(R.layout.mi_re_rule_details, true)
                         .positiveText("Apply")
                         .negativeText("Cancel")
-                        .iconRes(R.mipmap.ic_launcher)
+                        .iconRes(R.mipmap.mi_ic_launcher)
                         .limitIconToDefaultSize() // limits the displayed icon size to 48dp
                         .onPositive(onApply)
                         .build()
                 :
                 new MaterialDialog.Builder(v.getContext())
                         .title("RE Rule " + str(pos + 1))
-                        .customView(R.layout.re_rule_ro_details, true)
-                        .iconRes(R.mipmap.ic_launcher)
+                        .customView(R.layout.mi_re_rule_ro_details, true)
+                        .iconRes(R.mipmap.mi_ic_launcher)
                         .limitIconToDefaultSize() // limits the displayed icon size to 48dp
                         .build();
 

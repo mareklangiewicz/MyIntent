@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/mr_my_local_header_height"
+    android:orientation="vertical"
+    >
+
+    <pl.mareklangiewicz.myviews.MyPie
+        android:id="@+id/header_pie"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        android:layout_weight="1"
+        android:elevation="4dp"
+        app:mv_from="50"
+        app:mv_to="100"
+        app:mv_pieColor="?colorPrimaryDark"
+        app:mv_ovalColor="@color/cardview_light_background"
+        tools:ignore="UnusedAttribute"
+        />
+
+</LinearLayout>

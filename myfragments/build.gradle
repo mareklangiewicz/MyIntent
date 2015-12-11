@@ -22,6 +22,7 @@ android {
             buildConfigField "boolean", "VERY_VERBOSE", "false"
         }
     }
+    resourcePrefix 'mf_'
 }
 
 dependencies {

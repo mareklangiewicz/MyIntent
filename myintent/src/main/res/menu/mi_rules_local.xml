@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:title="@string/mi_actions"
+        >
+        <menu>
+            <item
+                android:id="@+id/new_user_rule"
+                android:title="@string/mi_add_new_user_rule"
+                android:icon="@drawable/mi_ic_add_item_black_24dp"
+                />
+            <item
+                android:id="@+id/clear_user_rules"
+                android:title="@string/mi_clear_user_rules"
+                android:icon="@drawable/mr_ic_close_black_24dp"
+                />
+            <item
+                android:id="@+id/reset_all"
+                android:title="@string/mi_reset_all"
+                android:icon="@drawable/mr_ic_whatshot_black_24dp"
+                />
+        </menu>
+    </item>
+
+    <item
+        android:title="@string/mi_re_help"
+        >
+        <menu>
+            <item
+                android:title='Jave RE Tutorial'
+                android:titleCondensed="cmd:data https://docs.oracle.com/javase/tutorial/essential/regex/"
+                android:icon="@drawable/mi_ic_open_in_browser_black_24dp"
+                />
+            <item
+                android:title='Summary of Java RE constructs'
+                android:titleCondensed="cmd:data https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html"
+                android:icon="@drawable/mi_ic_open_in_browser_black_24dp"
+                />
+            <item
+                android:title='developer.android.com:Pattern'
+                android:titleCondensed="cmd:data http://developer.android.com/reference/java/util/regex/Pattern.html"
+                android:icon="@drawable/mi_ic_open_in_browser_black_24dp"
+                />
+        </menu>
+    </item>
+</menu>

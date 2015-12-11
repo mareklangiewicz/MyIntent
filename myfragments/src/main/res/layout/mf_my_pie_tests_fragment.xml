@@ -1,0 +1,75 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/top_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="pl.mareklangiewicz.myfragments.MyPieTestsFragment"
+    >
+
+    <LinearLayout
+        android:id="@+id/h_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="horizontal"
+        >
+
+        <pl.mareklangiewicz.myviews.MyPie
+            android:id="@+id/pie1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:layout_weight="2"
+            android:elevation="4dp"
+            android:transitionName="pie1"
+            app:mv_pieColor="@android:color/holo_blue_dark"
+            app:mv_ovalColor="@android:color/white"
+            tools:ignore="NestedWeights,UnusedAttribute"
+            />
+
+        <pl.mareklangiewicz.myviews.MyPie
+            android:id="@+id/pie2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:elevation="4dp"
+            app:mv_pieColor="@android:color/holo_red_dark"
+            app:mv_ovalColor="@android:color/white"
+            tools:ignore="UnusedAttribute"
+            />
+
+        <pl.mareklangiewicz.myviews.MyPie
+            android:id="@+id/pie3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:layout_weight="3"
+            android:elevation="4dp"
+            android:transitionName="pie3"
+            app:mv_from="12"
+            app:mv_to="88"
+            app:mv_pieColor="@android:color/holo_orange_dark"
+            app:mv_ovalColor="@android:color/white"
+            tools:ignore="UnusedAttribute"
+            />
+
+    </LinearLayout>
+
+    <pl.mareklangiewicz.myviews.MyPie
+        android:id="@+id/pie4"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        android:layout_weight="1"
+        android:elevation="4dp"
+        app:mv_pieColor="@android:color/holo_green_dark"
+        app:mv_ovalColor="@android:color/white"
+        app:mv_from="40"
+        app:mv_to="60"
+        tools:ignore="UnusedAttribute"
+        />
+
+</LinearLayout>

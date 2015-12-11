@@ -15,8 +15,8 @@ public class RecentCommandsAppWidgetProvider extends AppWidgetProvider {
 
     @Override public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] ids) {
 
-        for (int i = 0; i < ids.length; i++) {
-            update(context, appWidgetManager, ids[i]);
+        for(int id : ids) {
+            update(context, appWidgetManager, id);
         }
 
     }
@@ -31,7 +31,7 @@ public class RecentCommandsAppWidgetProvider extends AppWidgetProvider {
 
     private RemoteViews generateRemoteViews(Context context, int id) {
 
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recent_commands_appwidget);
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.mi_recent_commands_appwidget);
 
         Intent startIntent = new Intent(context, MIActivity.class);
         startIntent.setData(Uri.parse(startIntent.toUri(Intent.URI_INTENT_SCHEME)));

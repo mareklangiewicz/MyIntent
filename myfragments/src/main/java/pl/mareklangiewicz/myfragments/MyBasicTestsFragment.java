@@ -26,9 +26,9 @@ public final class MyBasicTestsFragment extends MyFragment {
 
         super.onCreateView(inflater, container, savedInstanceState); //just for logging
 
-        inflateHeader(R.layout.my_basic_header);
+        inflateHeader(R.layout.mf_my_basic_header);
 
-        View root = inflater.inflate(R.layout.my_basic_tests_fragment, container, false);
+        View root = inflater.inflate(R.layout.mf_my_basic_tests_fragment, container, false);
         EditText et = (EditText) root.findViewById(R.id.edit_text_name);
         et.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {

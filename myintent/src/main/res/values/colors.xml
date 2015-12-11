@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#70af27</color>
-    <color name="colorPrimaryDark">#195900</color>
-    <color name="colorAccent">#b70900</color>
+    <color name="mi_primary">#70af27</color>
+    <color name="mi_primary_dark">#195900</color>
+    <color name="mi_accent">#b70900</color>
 </resources>

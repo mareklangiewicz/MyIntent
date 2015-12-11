@@ -8,15 +8,20 @@ android {
         applicationId "pl.mareklangiewicz.myintent"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 4
-        versionName "1.0.2-alpha"
+        versionCode 5
+        versionName "1.0.3-alpha"
+        buildConfigField "long", "TIME_STAMP", System.currentTimeMillis() + "L"
     }
 
     signingConfigs {
         release {
+            //noinspection GroovyAssignabilityCheck
             storeFile file(RELEASE_STORE_FILE)
+            //noinspection GroovyAssignabilityCheck
             storePassword RELEASE_STORE_PASSWORD
+            //noinspection GroovyAssignabilityCheck
             keyAlias RELEASE_KEY_ALIAS
+            //noinspection GroovyAssignabilityCheck
             keyPassword RELEASE_KEY_PASSWORD
         }
     }
@@ -25,9 +30,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //noinspection GroovyAssignabilityCheck
             signingConfig signingConfigs.release
         }
     }
+    resourcePrefix 'mi_'
 }
 
 repositories {

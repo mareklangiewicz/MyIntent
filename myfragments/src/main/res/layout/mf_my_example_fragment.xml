@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:padding="16dp"
-        android:text="@string/my_example_fragment"
+        android:text="@string/mf_my_example_fragment"
         />
 
 </FrameLayout>

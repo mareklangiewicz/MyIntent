@@ -4,10 +4,10 @@
     >
     <gradient
         android:angle="90"
-        android:centerColor="@color/my_primary"
+        android:centerColor="?colorPrimary"
         android:centerX="30%"
-        android:endColor="@color/my_primary_dark"
-        android:startColor="@color/my_primary"
+        android:endColor="?colorPrimaryDark"
+        android:startColor="?colorPrimary"
         android:type="linear"
         />
 </shape>

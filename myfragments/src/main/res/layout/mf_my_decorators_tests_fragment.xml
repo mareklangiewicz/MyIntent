@@ -12,7 +12,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="horizontal"
-        app:decoration="@layout/example_decoration"
+        app:mv_decoration="@layout/mv_example_decoration"
         >
 
         <pl.mareklangiewicz.myviews.MyPie
@@ -44,7 +44,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="@string/blabla"
+            android:text="@string/mf_blabla"
             />
     </pl.mareklangiewicz.myviews.MyLLDecorator>
 
@@ -60,9 +60,9 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:tag="decorate"
-            app:pieColor="?attr/colorPrimaryDark"
-            app:from="70"
-            app:to="95"
+            app:mv_pieColor="?attr/colorPrimaryDark"
+            app:mv_from="70"
+            app:mv_to="95"
             tools:ignore="NestedWeights"
             />
 
@@ -78,8 +78,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:tag="decorate"
-                app:pieColor="?attr/colorAccent"
-                app:from="20"
+                app:mv_pieColor="?attr/colorAccent"
+                app:mv_from="20"
                 />
 
             <pl.mareklangiewicz.myviews.MyPie
@@ -87,7 +87,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:tag="decorate"
-                app:to="80"
+                app:mv_to="80"
                 />
 
         </LinearLayout>

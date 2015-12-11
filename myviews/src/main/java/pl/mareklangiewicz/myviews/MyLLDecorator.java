@@ -43,9 +43,9 @@ public final class MyLLDecorator extends LinearLayout {
 
         // Load attributes
         final TypedArray a = context.obtainStyledAttributes(
-                attrs, R.styleable.MyLLDecorator, defStyleAttr, defStyleRes);
+                attrs, R.styleable.mv_MyLLDecorator, defStyleAttr, defStyleRes);
         try {
-            mDecoration = a.getResourceId(R.styleable.MyLLDecorator_decoration, 0);
+            mDecoration = a.getResourceId(R.styleable.mv_MyLLDecorator_mv_decoration, 0);
         }
         finally {
             a.recycle();

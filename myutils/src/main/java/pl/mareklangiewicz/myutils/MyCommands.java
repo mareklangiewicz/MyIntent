@@ -355,25 +355,26 @@ public final class MyCommands {
 
 
     // Not all android constants are available in our unit tests, so we create our own.
-    private static final String EX_TEXT = "android.intent.extra.TEXT";
-    private static final String EX_HOUR = AlarmClock.EXTRA_HOUR;
-    private static final String EX_MINUTES = AlarmClock.EXTRA_MINUTES;
-    private static final String EX_MESSAGE = AlarmClock.EXTRA_MESSAGE;
-    private static final String EX_LENGTH = "android.intent.extra.alarm.LENGTH";
-    private static final String EX_SKIP_UI = AlarmClock.EXTRA_SKIP_UI;
-    private static final String ACT_SET_ALARM = AlarmClock.ACTION_SET_ALARM;
-    private static final String ACT_SET_TIMER = "android.intent.action.SET_TIMER";
-    private static final String ACT_SHOW_ALARMS = "android.intent.action.SHOW_ALARMS";
-    private static final String ACT_INSERT = Intent.ACTION_INSERT;
-    private static final String ACT_SEARCH = "android.intent.action.SEARCH";
-    private static final String ACT_WEB_SEARCH = "android.intent.action.WEB_SEARCH";
-    private static final String ACT_GMS_SEARCH = "com.google.android.gms.actions.SEARCH_ACTION";
-    private static final String ACT_PLAY_FROM_SEARCH = MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH;
-    private static final String ACT_CREATE_NOTE = "com.google.android.gms.actions.CREATE_NOTE";
-    private static final String ACT_DIAL = "android.intent.action.DIAL";
-    private static final String ACT_CALL = "android.intent.action.CALL";
-    private static final String DAT_CAL_EVENTS = "content://com.android.calendar/events";
-    private static final String TYPE_CONTACTS = ContactsContract.Contacts.CONTENT_TYPE;
+    public static final String EX_TEXT = "android.intent.extra.TEXT";
+    public static final String EX_HOUR = AlarmClock.EXTRA_HOUR;
+    public static final String EX_MINUTES = AlarmClock.EXTRA_MINUTES;
+    public static final String EX_MESSAGE = AlarmClock.EXTRA_MESSAGE;
+    public static final String EX_LENGTH = "android.intent.extra.alarm.LENGTH";
+    public static final String EX_SKIP_UI = AlarmClock.EXTRA_SKIP_UI;
+    public static final String EX_COMMAND = "android.intent.extra.pl.mareklangiewicz.COMMAND";
+    public static final String ACT_SET_ALARM = AlarmClock.ACTION_SET_ALARM;
+    public static final String ACT_SET_TIMER = "android.intent.action.SET_TIMER";
+    public static final String ACT_SHOW_ALARMS = "android.intent.action.SHOW_ALARMS";
+    public static final String ACT_INSERT = Intent.ACTION_INSERT;
+    public static final String ACT_SEARCH = "android.intent.action.SEARCH";
+    public static final String ACT_WEB_SEARCH = "android.intent.action.WEB_SEARCH";
+    public static final String ACT_GMS_SEARCH = "com.google.android.gms.actions.SEARCH_ACTION";
+    public static final String ACT_PLAY_FROM_SEARCH = MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH;
+    public static final String ACT_CREATE_NOTE = "com.google.android.gms.actions.CREATE_NOTE";
+    public static final String ACT_DIAL = "android.intent.action.DIAL";
+    public static final String ACT_CALL = "android.intent.action.CALL";
+    public static final String DAT_CAL_EVENTS = "content://com.android.calendar/events";
+    public static final String TYPE_CONTACTS = ContactsContract.Contacts.CONTENT_TYPE;
 
 
     static public final REGroup RE_INITIAL_GROUP =
@@ -579,7 +580,8 @@ public final class MyCommands {
                     new RERule(false, "", "", "\\bextra minutes\\b", "extra integer " + EX_MINUTES),
                     new RERule(false, "", "", "\\bextra message\\b", "extra string " + EX_MESSAGE),
                     new RERule(false, "", "", "\\bextra length\\b", "extra integer " + EX_LENGTH),
-                    new RERule(false, "", "", "\\bextra quickly\\b", "extra boolean " + EX_SKIP_UI)
+                    new RERule(false, "", "", "\\bextra quickly\\b", "extra boolean " + EX_SKIP_UI),
+                    new RERule(false, "", "", "\\bextra command\\b", "extra string " + EX_COMMAND)
             );
 
 
@@ -698,7 +700,7 @@ public final class MyCommands {
                         intent.setDataAndType(Uri.parse(value), type);
                     break;
                 case "flags":
-                    intent.addFlags(Integer.decode(value)); //TODO LATER: symbolic multiple flags implementation
+                    intent.addFlags(Integer.decode(value)); //TODO SOMEDAY: symbolic multiple flags implementation
                     break;
                 case "package":
                     intent.setPackage(value);

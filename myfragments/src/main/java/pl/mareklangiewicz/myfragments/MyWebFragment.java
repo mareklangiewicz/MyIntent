@@ -33,7 +33,7 @@ public class MyWebFragment extends MyFragment {
 
         super.onCreateView(inflater, container, savedInstanceState); //just for logging
 
-        View rootView = inflater.inflate(R.layout.my_web_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.mf_my_web_fragment, container, false);
 
         mWebView = (WebView) rootView.findViewById(R.id.my_web_view);
 

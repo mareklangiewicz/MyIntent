@@ -1,20 +1,20 @@
 <resources>
-    <declare-styleable name="MyPie">
-        <attr name="min"
+    <declare-styleable name="mv_MyPie">
+        <attr name="mv_min"
             format="float"/>
-        <attr name="max"
+        <attr name="mv_max"
             format="float"/>
-        <attr name="from"
+        <attr name="mv_from"
             format="float"/>
-        <attr name="to"
+        <attr name="mv_to"
             format="float"/>
-        <attr name="pieColor"
+        <attr name="mv_pieColor"
             format="color"/>
-        <attr name="ovalColor"
+        <attr name="mv_ovalColor"
             format="color"/>
     </declare-styleable>
-    <declare-styleable name="MyLLDecorator">
-        <attr name="decoration"
+    <declare-styleable name="mv_MyLLDecorator">
+        <attr name="mv_decoration"
             format="reference"/>
     </declare-styleable>
 </resources>

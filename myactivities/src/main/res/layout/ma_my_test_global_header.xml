@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/my_global_header_height"
-    android:background="@drawable/header_background"
+    android:layout_height="@dimen/mr_my_global_header_height"
+    android:background="@drawable/ma_header_background"
     android:gravity="bottom|end"
     android:orientation="vertical"
     >
@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:paddingEnd="8dp"
         android:paddingStart="8dp"
-        android:text="@string/user_id"
+        android:text="@string/mr_my_homepage"
         />
 
     <View

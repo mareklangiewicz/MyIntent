@@ -6,33 +6,33 @@
         >
         <item
             android:id="@+id/log_level_error"
-            android:icon="@drawable/ic_radio_button_black_24dp"
+            android:icon="@drawable/mr_ic_radio_button_black_24dp"
             android:title="Log level: ERROR"
             />
         <item
             android:id="@+id/log_level_warning"
-            android:icon="@drawable/ic_radio_button_black_24dp"
+            android:icon="@drawable/mr_ic_radio_button_black_24dp"
             android:title="Log level: WARNING"
             />
         <item
             android:id="@+id/log_level_info"
-            android:icon="@drawable/ic_radio_button_black_24dp"
+            android:icon="@drawable/mr_ic_radio_button_black_24dp"
             android:title="Log level: INFO"
             />
         <item
             android:id="@+id/log_level_debug"
-            android:icon="@drawable/ic_radio_button_black_24dp"
+            android:icon="@drawable/mr_ic_radio_button_black_24dp"
             android:title="Log level: DEBUG"
             />
         <item
             android:id="@+id/log_level_verbose"
-            android:icon="@drawable/ic_radio_button_black_24dp"
+            android:icon="@drawable/mr_ic_radio_button_black_24dp"
             android:title="Log level: VERBOSE"
             />
     </group>
     <item
         android:id="@+id/clear_log_history"
-        android:title="@string/clear_log_history"
+        android:title="@string/mf_clear_log_history"
         />
     <item
         android:id="@+id/log_some_assert"

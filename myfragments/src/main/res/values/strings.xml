@@ -1,8 +1,8 @@
 <resources>
-    <string name="my_example_fragment">My example fragment</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_decorate_views">Decorate some views</string>
-    <string name="enter_name">Enter your name. (not Marek)</string>
-    <string name="blabla">blabla</string>
-    <string name="clear_log_history">Clear log history</string>
+    <string name="mf_my_example_fragment">My example fragment</string>
+    <string name="mf_hello_world">Hello world!</string>
+    <string name="mf_action_decorate_views">Decorate some views</string>
+    <string name="mf_enter_name">Enter your name. (not Marek)</string>
+    <string name="mf_blabla">blabla</string>
+    <string name="mf_clear_log_history">Clear log history</string>
 </resources>

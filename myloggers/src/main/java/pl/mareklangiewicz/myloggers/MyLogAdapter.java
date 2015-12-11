@@ -13,12 +13,14 @@ import com.noveogroup.android.log.LogHistory;
 import com.noveogroup.android.log.Logger;
 import com.noveogroup.android.log.MyLogger;
 
+import java.util.Locale;
+
 /**
  * Created by Marek Langiewicz on 25.06.15.
  */
 public class MyLogAdapter extends RecyclerView.Adapter<MyLogAdapter.ViewHolder> implements View.OnClickListener {
 
-    static public final int LOG_ITEM_VIEW_TAG_HOLDER = R.id.log_item_view_tag_holder;
+    static public final int LOG_ITEM_VIEW_TAG_HOLDER = R.id.ml_log_item_view_tag_holder;
 
     protected  @Nullable MyLogger log;
     protected  @Nullable LogHistory history;
@@ -46,7 +48,7 @@ public class MyLogAdapter extends RecyclerView.Adapter<MyLogAdapter.ViewHolder> 
     public @NonNull ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.log_item, parent, false);
+                .inflate(R.layout.ml_log_item, parent, false);
         v.setOnClickListener(this);
         ViewHolder holder = new ViewHolder(v);
         v.setTag(LOG_ITEM_VIEW_TAG_HOLDER, holder);
@@ -77,11 +79,11 @@ public class MyLogAdapter extends RecyclerView.Adapter<MyLogAdapter.ViewHolder> 
         }
 */
 
-//        message = String.format("%tT: %s", time, message);
-        message = String.format("%s", message);
+//        message = String.format(Locale.US, "%tT: %s", time, message);
+        message = String.format(Locale.US, "%s", message);
 
         holder.mCardView.setCardElevation(elevation);
-        holder.mHeadView.setText(String.format("%03d%c", nr, MyLogger.getLevelChar(level)));
+        holder.mHeadView.setText(String.format(Locale.US, "%03d%c", nr, MyLogger.getLevelChar(level)));
 
         holder.mMessageView.setTextColor(color);
         holder.mMessageView.setText(message);

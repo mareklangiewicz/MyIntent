@@ -23,10 +23,10 @@
 
     <pl.mareklangiewicz.myviews.MyNavigationView
         android:id="@+id/ma_global_navigation_view"
-        android:layout_width="@dimen/my_global_navigation_width"
+        android:layout_width="@dimen/mr_my_global_navigation_width"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        tools:showIn="@layout/my_activity"
+        tools:showIn="@layout/ma_my_activity"
         />
 
 </android.support.v4.widget.DrawerLayout>

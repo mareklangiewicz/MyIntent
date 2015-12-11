@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/my_activity"
+    tools:showIn="@layout/ma_my_activity"
     >
 
     <FrameLayout
@@ -18,7 +18,7 @@
 
     <pl.mareklangiewicz.myviews.MyNavigationView
         android:id="@+id/ma_local_navigation_view"
-        android:layout_width="@dimen/my_local_navigation_width"
+        android:layout_width="@dimen/mr_my_local_navigation_width"
         android:layout_height="match_parent"
         android:layout_gravity="end"
         />

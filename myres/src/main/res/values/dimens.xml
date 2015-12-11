@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="mr_my_global_header_height">128dp</dimen>
+    <dimen name="mr_my_local_header_height">96dp</dimen>
+    <dimen name="mr_my_global_navigation_width">320dp</dimen>
+    <dimen name="mr_my_local_navigation_width">320dp</dimen>
+</resources>

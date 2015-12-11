@@ -19,7 +19,7 @@
             android:layout_gravity="center"
             android:layout_margin="16dp"
             android:transitionName="pie1"
-            app:pieColor="@android:color/holo_blue_dark"
+            app:mv_pieColor="@android:color/holo_blue_dark"
             tools:ignore="UnusedAttribute"
             />
 
@@ -29,7 +29,7 @@
             android:layout_height="100dp"
             android:layout_gravity="start"
             android:transitionName="pie3"
-            app:pieColor="@android:color/holo_green_dark"
+            app:mv_pieColor="@android:color/holo_green_dark"
             tools:ignore="UnusedAttribute"
             />
 
@@ -41,7 +41,7 @@
             android:elevation="2dp"
             android:gravity="center"
             android:padding="8dp"
-            android:text="@string/hello_world"
+            android:text="@string/mf_hello_world"
             android:textSize="20sp"
             android:textStyle="bold"
             tools:ignore="UnusedAttribute"
@@ -56,7 +56,7 @@
                 android:id="@+id/edit_text_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/enter_name"
+                android:hint="@string/mf_enter_name"
                 android:imeOptions="actionSend"
                 android:inputType="textPersonName"
                 />
@@ -70,7 +70,7 @@
             android:elevation="2dp"
             android:gravity="center"
             android:padding="8dp"
-            android:text="@string/hello_world"
+            android:text="@string/mf_hello_world"
             android:textSize="20sp"
             android:textStyle="bold"
             tools:ignore="UnusedAttribute"
@@ -84,7 +84,7 @@
             android:elevation="2dp"
             android:gravity="center"
             android:padding="8dp"
-            android:text="@string/hello_world"
+            android:text="@string/mf_hello_world"
             android:textSize="20sp"
             android:textStyle="bold"
             tools:ignore="UnusedAttribute"
@@ -98,7 +98,7 @@
             android:elevation="2dp"
             android:gravity="center"
             android:padding="8dp"
-            android:text="@string/hello_world"
+            android:text="@string/mf_hello_world"
             android:textSize="20sp"
             android:textStyle="bold"
             tools:ignore="UnusedAttribute"

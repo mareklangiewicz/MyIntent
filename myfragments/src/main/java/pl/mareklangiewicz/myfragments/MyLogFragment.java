@@ -29,11 +29,11 @@ public final class MyLogFragment extends MyFragment {
 
         super.onCreateView(inflater, container, savedInstanceState); //just for logging
 
-        View rootView = inflater.inflate(R.layout.my_log_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.mf_my_log_fragment, container, false);
         mMLRView = (MyLogRecyclerView) rootView.findViewById(R.id.my_log_recycler_view);
         mMLRView.setLog(log);
         //TODO SOMEDAY: some nice simple header with fragment title
-        inflateMenu(R.menu.my_log_menu);
+        inflateMenu(R.menu.mf_my_log);
         updateCheckedItem();
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             setExitTransition(new Slide(Gravity.START));

@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="2dp"
-            android:textColor="@color/li_head_text"
+            android:textColor="@color/ml_li_head_text"
             android:typeface="monospace"
             tools:text="16:21:59"
             />
@@ -34,7 +34,7 @@
             android:layout_height="match_parent"
             android:layout_marginEnd="2dp"
             android:layout_marginStart="2dp"
-            android:background="@color/li_separator"
+            android:background="@android:color/darker_gray"
             />
 
         <TextView

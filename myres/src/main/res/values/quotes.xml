@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="funny_quotes">
+    <string-array name="mr_funny_quotes">
         <item>Always remember that you are absolutely unique. Just like everyone else.[Margaret Mead]</item>
         <item>People who think they know everything are a great annoyance to those of us who do.[Isaac Asimov]</item>
         <item>Get your facts first, then you can distort them as you please.[Mark Twain]</item>
@@ -54,7 +54,7 @@
         <item>I\'ve had bad luck with both my wives. The first one left me and the second one didn\'t.[Patrick Murray]</item>
         <item>I have to exercise early in the morning before my brain figures out what I\'m doing.</item>
     </string-array>
-    <string-array name="smart_quotes">
+    <string-array name="mr_smart_quotes">
         <item>Life is about making an impact, not making an income.[Kevin Kruse]</item>
         <item>Whatever the mind of man can conceive and believe, it can achieve.[Napoleon Hill]</item>
         <item>Strive not to be a success, but rather to be of value.[Albert Einstein]</item>

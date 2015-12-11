@@ -24,8 +24,8 @@
             android:layout_weight="2"
             android:elevation="4dp"
             android:transitionName="pie1"
-            app:pieColor="@android:color/holo_blue_dark"
-            app:ovalColor="@android:color/white"
+            app:mv_pieColor="@android:color/holo_blue_dark"
+            app:mv_ovalColor="@android:color/white"
             tools:ignore="NestedWeights,UnusedAttribute"
             />
 
@@ -36,8 +36,8 @@
             android:layout_margin="8dp"
             android:layout_weight="1"
             android:elevation="4dp"
-            app:pieColor="@android:color/holo_red_dark"
-            app:ovalColor="@android:color/white"
+            app:mv_pieColor="@android:color/holo_red_dark"
+            app:mv_ovalColor="@android:color/white"
             tools:ignore="UnusedAttribute"
             />
 
@@ -49,10 +49,10 @@
             android:layout_weight="3"
             android:elevation="4dp"
             android:transitionName="pie3"
-            app:from="12"
-            app:to="88"
-            app:pieColor="@android:color/holo_orange_dark"
-            app:ovalColor="@android:color/white"
+            app:mv_from="12"
+            app:mv_to="88"
+            app:mv_pieColor="@android:color/holo_orange_dark"
+            app:mv_ovalColor="@android:color/white"
             tools:ignore="UnusedAttribute"
             />
 
@@ -65,10 +65,10 @@
         android:layout_margin="8dp"
         android:layout_weight="1"
         android:elevation="4dp"
-        app:pieColor="@android:color/holo_green_dark"
-        app:ovalColor="@android:color/white"
-        app:from="40"
-        app:to="60"
+        app:mv_pieColor="@android:color/holo_green_dark"
+        app:mv_ovalColor="@android:color/white"
+        app:mv_from="40"
+        app:mv_to="60"
         tools:ignore="UnusedAttribute"
         />
 

@@ -35,7 +35,7 @@ public class MyStupidTestsFragment extends MyFragment implements DrawerLayout.Dr
 
         super.onCreateView(inflater, container, savedInstanceState); //just for logging
 
-        View root = inflater.inflate(R.layout.my_stupid_tests_fragment, container, false);
+        View root = inflater.inflate(R.layout.mf_my_stupid_tests_fragment, container, false);
 
         mWarningCardView = (CardView) root.findViewById(R.id.stupid_warning);
 
@@ -45,7 +45,7 @@ public class MyStupidTestsFragment extends MyFragment implements DrawerLayout.Dr
 
         final NavigationView nv = (NavigationView) root.findViewById(R.id.stupid_navigation_view);
 
-        nv.inflateMenu(R.menu.my_stupid_tests_menu);
+        nv.inflateMenu(R.menu.mf_my_stupid_tests);
 
         nv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override

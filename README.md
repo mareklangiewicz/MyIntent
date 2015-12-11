@@ -41,11 +41,17 @@ Change `myactivities` to module you want. The `myactivities` module depends on a
 
 Check out these applications to find out what you can do with My Blocks library:
 
-* [My Blocks Sample](https://github.com/langara/MyBlocksSample) - the simplest app using My Blocks lib.
-* [My Test App](https://github.com/langara/MyTestApp) 
-* [My Intent](https://github.com/langara/MyIntent)
+* [My Blocks Sample (on github)](https://github.com/langara/MyBlocksSample) - the simplest app using My Blocks lib.
+* [My Blocks Sample (on google play)](https://play.google.com/store/apps/details?id=pl.mareklangiewicz.myblockssample)
+* [My Blocks Sample (on youtube)](https://www.youtube.com/watch?v=R-bpq55UYGI)
+* [My Test App (on github)](https://github.com/langara/MyTestApp) 
+* [My Test App (on google play)](https://play.google.com/store/apps/details?id=pl.mareklangiewicz.mytestapp) 
+* [My Test App (on youtube)](https://www.youtube.com/watch?v=B9FPWpQYMuc) 
+* [My Intent (on github)](https://github.com/langara/MyIntent)
+* [My Intent (on google play)](https://play.google.com/store/apps/details?id=pl.mareklangiewicz.myintent)
+* [My Intent (on youtube)](https://www.youtube.com/watch?v=-8N_B-Jpk8k)
 
-* TODO: links go Google Play
 
-* TODO: real documentation...
+
+TODO: real documentation...
 

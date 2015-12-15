@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="ma_my_primary">@color/ma_my_default_primary</color>
-    <color name="ma_my_primary_dark">@color/ma_my_default_primary_dark</color>
-    <color name="ma_my_accent">@color/ma_my_default_accent</color>
-    <color name="ma_my_default_primary">#ff00a0ff</color>
-    <color name="ma_my_default_primary_dark">#ff0040a0</color>
-    <color name="ma_my_default_accent">#fff02020</color>
-</resources>

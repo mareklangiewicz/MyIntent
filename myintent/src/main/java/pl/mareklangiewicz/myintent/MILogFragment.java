@@ -5,15 +5,15 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.app.SearchManager;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
-import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,28 +28,10 @@ import android.widget.ProgressBar;
 
 import com.noveogroup.android.log.Logger;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-
-import pl.mareklangiewicz.mydrawables.MyPlayStopDrawable;
 import pl.mareklangiewicz.myfragments.MyFragment;
 import pl.mareklangiewicz.myviews.IMyNavigation;
 
-public final class MILogFragment extends MyFragment {
-
-    @Retention(RetentionPolicy.SOURCE)
-    @IntDef({
-            PS_HIDDEN,
-            PS_PLAY,
-            PS_STOP
-    })
-    public @interface PSState {
-    }
-
-    public static final int PS_HIDDEN = 0;
-    public static final int PS_PLAY = 1;
-    public static final int PS_STOP = 2;
-
+public final class MILogFragment extends MyFragment implements PlayStopButton.OnStateChanged {
 
     private @Nullable View mRootView;
     private @Nullable ProgressBar mProgressBar;
@@ -59,51 +41,14 @@ public final class MILogFragment extends MyFragment {
     private @Nullable MyMDLogAdapter mAdapter;
     private @Nullable RecyclerView mRecyclerView;
     private @Nullable FloatingActionButton mFAB;
-    private @Nullable ImageView mPSImageView;
-    private @Nullable ObjectAnimator mPSAnimator;
+
+    private @Nullable PlayStopButton mPSButton;
 
     private @Nullable ObjectAnimator mCountdownAnimator;
     static private long sCountdownBoost = 0;
 
     private @Nullable String mCountdownCommand = null; // we use this to track if the red line is running at the moment (null = it doesn't)
 
-    private @PSState int mPSState = PS_HIDDEN;
-
-    private @PSState int getPSState() { return mPSState; }
-
-    private void setPSState(@PSState int state) {
-        if(mPSImageView == null || mPSAnimator == null) {
-            log.e("Animated button not initialized.");
-            mPSState = state;
-            return;
-        }
-        if(state == mPSState)
-            return;
-        if(state == PS_HIDDEN)
-            mPSImageView.animate().alpha(0);
-        else if(mPSState == PS_HIDDEN) {
-            mPSAnimator.cancel(); //to be sure
-            if(state == PS_PLAY)
-                mPSAnimator.reverse();
-            else
-                mPSAnimator.start();
-            mPSImageView.animate().alpha(1);
-        }
-        else {
-            if(mPSAnimator.isRunning()) {
-                mPSAnimator.reverse();
-            }
-            else { // we are stopped at some end
-                if(mPSState == PS_STOP && state == PS_PLAY)
-                    mPSAnimator.reverse();
-                else if(mPSState == PS_PLAY && state == PS_STOP)
-                    mPSAnimator.start();
-                else
-                    log.a("Incorrect animated button state.");
-            }
-        }
-        mPSState = state;
-    }
 
     private final Runnable mRunUpdateButtons = new Runnable() {
         @Override public void run() {
@@ -145,9 +90,17 @@ public final class MILogFragment extends MyFragment {
         });
 
         mEditText = (EditText) mRootView.findViewById(R.id.edit_text);
+        //noinspection ConstantConditions
+        mEditText.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            @Override public void afterTextChanged(Editable s) { updatePS(); }
+        });
 
         mFAB = getFAB();
-        mPSImageView = (ImageView) mRootView.findViewById(R.id.play_stop_image_view);
+
+        mPSButton = new PlayStopButton((ImageView) mRootView.findViewById(R.id.play_stop_image_view));
+        mPSButton.setListener(this);
 
         mAdapter = new MyMDLogAdapter();
         mAdapter.setLog(log);
@@ -182,20 +135,6 @@ public final class MILogFragment extends MyFragment {
             }
         });
 
-        final Drawable d = new MyPlayStopDrawable().setColorFrom(0xff0000c0).setColorTo(0xffc00000).setRotateTo(90f).setStrokeWidth(6);
-        //noinspection ConstantConditions
-        mPSImageView.setImageDrawable(d);
-        mPSAnimator = ObjectAnimator.ofInt(d, "level", 0, 10000).setDuration(300);
-        mPSImageView.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                if(getPSState() == PS_PLAY)
-                    startCountdown();
-                else if(getPSState() == PS_STOP)
-                    cancelCountdown();
-                // we ignore click if the state is hidden.
-            }
-        });
-
         return mRootView;
 
     }
@@ -223,21 +162,16 @@ public final class MILogFragment extends MyFragment {
         mRootView.removeCallbacks(mRunUpdateButtons);
         mRootView = null;
 
-        mPSState = PS_HIDDEN;
-        if(mPSAnimator != null) {
-            mPSAnimator.cancel();
-            mPSAnimator = null;
+        if(mPSButton != null) {
+            mPSButton.setListener(null);
+            mPSButton.setState(PlayStopButton.HIDDEN);
+            mPSButton = null;
         }
 
         if(mFAB != null) {
             mFAB.setOnClickListener(null);
             mFAB.hide();
             mFAB = null;
-        }
-        if(mPSImageView != null) {
-            mPSImageView.setOnClickListener(null);
-            mPSImageView.animate().alpha(0);
-            mPSImageView = null;
         }
 
         if(mProgressBar != null) {
@@ -359,7 +293,9 @@ public final class MILogFragment extends MyFragment {
         else {
             if(mFAB != null)
                 mFAB.hide();
-            setPSState(PS_HIDDEN);
+            if(mPSButton != null) {
+                mPSButton.setState(PlayStopButton.HIDDEN);
+            }
         }
     }
 
@@ -393,13 +329,17 @@ public final class MILogFragment extends MyFragment {
     }
 
     private void updatePS() {
-        if(isSomethingOnOurFragment())
-            setPSState(PS_HIDDEN);
+        if(mPSButton == null) {
+            log.v("mPSButton is null.");
+            return;
+        }
+        if(isSomethingOnOurFragment() || mEditText == null || mEditText.getText().toString().isEmpty())
+            mPSButton.setState(PlayStopButton.HIDDEN);
         else {
             if(mCountdownCommand == null)
-                setPSState(PS_PLAY);
+                mPSButton.setState(PlayStopButton.PLAY);
             else
-                setPSState(PS_STOP);
+                mPSButton.setState(PlayStopButton.STOP);
         }
     }
 
@@ -469,7 +409,6 @@ public final class MILogFragment extends MyFragment {
         if(mCountdownCommand == null)
             return;
 
-
         if(mEditText == null) {
             log.a("The mEditText is not initialized.");
             mCountdownCommand = null;
@@ -493,6 +432,20 @@ public final class MILogFragment extends MyFragment {
 
         if(mCountdownAnimator != null) {
             mCountdownAnimator.setCurrentPlayTime(sCountdownBoost);
+        }
+    }
+
+    @Override public void onStateChanged(@PlayStopButton.State int oldState, @PlayStopButton.State int newState, boolean byUser) {
+
+        if(!byUser)
+            return;
+        switch(oldState) {
+            case PlayStopButton.PLAY:
+                startCountdown();
+                break;
+            case PlayStopButton.STOP:
+                cancelCountdown();
+                break;
         }
     }
 }

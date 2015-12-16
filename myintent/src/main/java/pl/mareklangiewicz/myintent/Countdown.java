@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.ProgressBar;
 
+import static pl.mareklangiewicz.myutils.MyMathUtils.scale0d;
+
 /**
  * Created by Marek Langiewicz on 16.12.15.
  */
@@ -29,42 +31,51 @@ public class Countdown {
 
         mProgressBar = aProgressBar;
 
-        //noinspection ConstantConditions
-        mProgressBar.setOnTouchListener(new View.OnTouchListener() {
-            @Override public boolean onTouch(View v, MotionEvent event) {
-                // mBoost = (int)scale0d(event.getX(), mProgressBar.getWidth(), mAnimator.getDuration());
-                // the above is nice and correct, but more practical is to just set boost to the end or to 0
+//        mProgressBar.setOnTouchListener(new View.OnTouchListener() {
+//            @Override public boolean onTouch(View v, MotionEvent event) {
+//                mBoost = (int) scale0d(event.getX(), mProgressBar.getWidth(), mAnimator.getDuration());
+//                mAnimator.setCurrentPlayTime(mBoost);
+//                return true;
+//            }
+//        });
+
+        // The feature above (with OnTouchListener) is correct and cool - user can touch how much boost he wants;
+        // but below we save simpler and more practical feature - user can click to switch boost between 0 and max.
+
+        mProgressBar.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
                 mBoost = mBoost == 0 ? mAnimator.getDuration() : 0;
                 mAnimator.setCurrentPlayTime(mBoost);
-                return false;
             }
         });
 
         mAnimator = ObjectAnimator.ofInt(mProgressBar, "progress", 0, 10000).setDuration(3000);
         mAnimator.setInterpolator(new LinearInterpolator());
-        mAnimator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationCancel(Animator animation) {
-                if(mListener != null)
-                    //noinspection ConstantConditions
-                    mListener.onCountdownCancelled(mCommand);
-                mCommand = null;
-            }
+        mAnimator.addListener(
+                new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+                        if(mListener != null)
+                            //noinspection ConstantConditions
+                            mListener.onCountdownCancelled(mCommand);
+                        mCommand = null;
+                    }
 
-            @Override public void onAnimationEnd(Animator animation) {
-                if(mListener != null && mCommand != null)
-                    mListener.onCountdownFinished(mCommand);
-                mCommand = null;
-                mAnimator.setCurrentPlayTime(mBoost);
-            }
+                    @Override public void onAnimationEnd(Animator animation) {
+                        if(mListener != null && mCommand != null)
+                            mListener.onCountdownFinished(mCommand);
+                        mCommand = null;
+                        mAnimator.setCurrentPlayTime(mBoost);
+                    }
 
-            @Override
-            public void onAnimationStart(Animator animation) {
-                if(mListener != null)
-                    //noinspection ConstantConditions
-                    mListener.onCountdownStarted(mCommand);
-            }
-        });
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        if(mListener != null)
+                            //noinspection ConstantConditions
+                            mListener.onCountdownStarted(mCommand);
+                    }
+                }
+        );
 
         cancel();
     }

@@ -48,7 +48,7 @@ public final class PlayStopButton {
     private @NonNull ImageView mView;
     private @NonNull ObjectAnimator mAnimator;
 
-    private @Nullable OnStateChanged mListener;
+    private @Nullable Listener mListener;
 
     private final int ANIM_DURATION = 300;
 
@@ -122,21 +122,21 @@ public final class PlayStopButton {
         }
 
         if(mListener != null)
-            mListener.onStateChanged(oldState, mState, byUser);
+            mListener.onPlayStopChanged(oldState, mState, byUser);
     }
 
     @SuppressWarnings("unused")
-    public @Nullable OnStateChanged getListener() {
+    public @Nullable Listener getListener() {
         return mListener;
     }
 
-    public void setListener(@Nullable OnStateChanged listener) {
+    public void setListener(@Nullable Listener listener) {
         mListener = listener;
     }
 
 
-    public interface OnStateChanged {
-        void onStateChanged(@State int oldState, @State int newState, boolean byUser);
+    public interface Listener {
+        void onPlayStopChanged(@State int oldState, @State int newState, boolean byUser);
     }
 
 }

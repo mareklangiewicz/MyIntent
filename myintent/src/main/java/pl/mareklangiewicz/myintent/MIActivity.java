@@ -253,7 +253,7 @@ public class MIActivity extends MyActivity {
         if(mLocalFragment instanceof MILogFragment)
             closeDrawersAndPostRunnable(new Runnable() {
                 @Override public void run() {
-                    ((MILogFragment) mLocalFragment).playCommand(command);
+                    ((MILogFragment) mLocalFragment).play(command);
                 }
             });
         else

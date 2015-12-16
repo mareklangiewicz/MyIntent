@@ -1,12 +1,10 @@
 package pl.mareklangiewicz.myintent;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,10 +16,8 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.LinearInterpolator;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -31,10 +27,9 @@ import com.noveogroup.android.log.Logger;
 import pl.mareklangiewicz.myfragments.MyFragment;
 import pl.mareklangiewicz.myviews.IMyNavigation;
 
-public final class MILogFragment extends MyFragment implements PlayStopButton.OnStateChanged {
+public final class MILogFragment extends MyFragment implements PlayStopButton.Listener, Countdown.Listener {
 
     private @Nullable View mRootView;
-    private @Nullable ProgressBar mProgressBar;
     private @Nullable MenuItem mSearchItem;
     private @Nullable SearchView mSearchView;
     private @Nullable EditText mEditText;
@@ -43,11 +38,7 @@ public final class MILogFragment extends MyFragment implements PlayStopButton.On
     private @Nullable FloatingActionButton mFAB;
 
     private @Nullable PlayStopButton mPSButton;
-
-    private @Nullable ObjectAnimator mCountdownAnimator;
-    static private long sCountdownBoost = 0;
-
-    private @Nullable String mCountdownCommand = null; // we use this to track if the red line is running at the moment (null = it doesn't)
+    private @Nullable Countdown mCountdown;
 
 
     private final Runnable mRunUpdateButtons = new Runnable() {
@@ -67,27 +58,8 @@ public final class MILogFragment extends MyFragment implements PlayStopButton.On
 
         mRootView = inflater.inflate(R.layout.mi_log_fragment, container, false);
 
-        mProgressBar = (ProgressBar) mRootView.findViewById(R.id.progress_bar);
-        //noinspection ConstantConditions
-        mProgressBar.setOnTouchListener(new View.OnTouchListener() {
-            @Override public boolean onTouch(View v, MotionEvent event) {
-                if(mProgressBar != null) {
-                    if(mCountdownAnimator != null) {
-                        // sCountdownBoost = (int)scale0d(event.getX(), mProgressBar.getWidth(), mCountdownAnimator.getDuration());
-                        // the above is nice and correct, but more practical is to just set boost to the end or to 0
-                        sCountdownBoost = sCountdownBoost == 0 ? mCountdownAnimator.getDuration() : 0;
-                        mCountdownAnimator.setCurrentPlayTime(sCountdownBoost);
-                    }
-                }
-                return false;
-            }
-        });
-
-        mCountdownAnimator = ObjectAnimator.ofInt(mProgressBar, "progress", 0, 10000).setDuration(3000);
-        mCountdownAnimator.setInterpolator(new LinearInterpolator());
-        mCountdownAnimator.addListener(new AnimatorListenerAdapter() {
-            @Override public void onAnimationEnd(Animator animation) { onCountdownEnd(); }
-        });
+        mCountdown = new Countdown((ProgressBar) mRootView.findViewById(R.id.progress_bar));
+        mCountdown.setListener(this);
 
         mEditText = (EditText) mRootView.findViewById(R.id.edit_text);
         //noinspection ConstantConditions
@@ -128,7 +100,8 @@ public final class MILogFragment extends MyFragment implements PlayStopButton.On
 
         mFAB.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                cancelCountdown();
+                if(mCountdown != null)
+                    mCountdown.cancel();
                 if(mEditText != null)
                     mEditText.setText("");
                 ((MIActivity) getActivity()).onCommand("start custom action listen");
@@ -144,14 +117,9 @@ public final class MILogFragment extends MyFragment implements PlayStopButton.On
         lazyUpdateButtons();
     }
 
-    @Override public void onStart() {
-        super.onStart();
-        if(mCountdownAnimator != null)
-            mCountdownAnimator.setCurrentPlayTime(sCountdownBoost);
-    }
-
     @Override public void onStop() {
-        cancelCountdown();
+        if(mCountdown != null)
+            mCountdown.cancel();
         super.onStop();
     }
 
@@ -174,21 +142,16 @@ public final class MILogFragment extends MyFragment implements PlayStopButton.On
             mFAB = null;
         }
 
-        if(mProgressBar != null) {
-            mProgressBar.setOnTouchListener(null);
-            mProgressBar = null;
+        if(mCountdown != null) {
+            mCountdown.cancel();
+            mCountdown.setListener(null);
+            mCountdown = null;
         }
 
         mSearchItem = null;
         mSearchView = null;
 
-        mCountdownCommand = null;
         mEditText = null;
-
-        if(mCountdownAnimator != null) {
-            mCountdownAnimator.cancel();
-            mCountdownAnimator = null;
-        }
 
         //noinspection ConstantConditions
         mAdapter.setLog(null);
@@ -333,119 +296,82 @@ public final class MILogFragment extends MyFragment implements PlayStopButton.On
             log.v("mPSButton is null.");
             return;
         }
-        if(isSomethingOnOurFragment() || mEditText == null || mEditText.getText().toString().isEmpty())
+        if(mEditText == null || mCountdown == null || mEditText.getText().toString().isEmpty() || isSomethingOnOurFragment())
             mPSButton.setState(PlayStopButton.HIDDEN);
-        else {
-            if(mCountdownCommand == null)
-                mPSButton.setState(PlayStopButton.PLAY);
-            else
-                mPSButton.setState(PlayStopButton.STOP);
-        }
+        else
+            mPSButton.setState(mCountdown.isRunning() ? PlayStopButton.STOP : PlayStopButton.PLAY);
     }
 
     /**
-     * Inserts command to edit text and presses play.
+     * Starts counting to start given command.
      * It will start the command if user doesn't press stop fast enough.
+     * If no command is given it will try to get command from EditText
      */
-    public void playCommand(@Nullable String command) {
+    public void play(@Nullable String cmd) {
 
         if(mSearchItem != null) {
             mSearchItem.collapseActionView();
         }
 
-        if(command == null) {
-            log.d("null command received - ignoring");
+        if(mCountdown == null) {
+            log.e("Countdown not initialized.");
             return;
         }
 
-        if(mEditText == null) {
-            log.d("mEditText is null");
+        if(mEditText == null) { // maybe we will just clear it, but we still requre it to be initialized for simplicity
+            log.e("Edit Text not initialized.");
             return;
         }
 
-        mEditText.setText(command);
+        if(cmd == null || cmd.isEmpty())
+            cmd = mEditText.getText().toString();
 
-        startCountdown();
-
-    }
-
-    public void startCountdown() {
-
-        cancelCountdown();
-
-        if(mEditText == null || mEditText.getText().length() == 0) {
-            log.e("No command provided.");
-            return;
-        }
-
-        if(mCountdownAnimator == null) {
-            log.a("Countdown animator not initialized.");
-            mCountdownCommand = null;
-            return;
-        }
-
-        mCountdownCommand = mEditText.getText().toString();
-        log.w(mCountdownCommand);
-
-        mCountdownAnimator.start();
-        mCountdownAnimator.setCurrentPlayTime(sCountdownBoost);
-        updatePS();
-
-    }
-
-    public void cancelCountdown() {
-        if(mCountdownCommand != null)
-            log.w("cancelled");
-        mCountdownCommand = null;
-        if(mCountdownAnimator != null) {
-            mCountdownAnimator.cancel(); //mCountdownEnabled have to be false before this line. (it calls onCountdownEnd)
-            mCountdownAnimator.setCurrentPlayTime(sCountdownBoost);
-        }
-        updatePS();
-    }
-
-    public void onCountdownEnd() {
-
-        if(mCountdownCommand == null)
-            return;
-
-        if(mEditText == null) {
-            log.a("The mEditText is not initialized.");
-            mCountdownCommand = null;
+        if(cmd.isEmpty()) {
+            log.e("No command available - ignoring");
             return;
         }
 
         mEditText.setText("");
 
-        try {
-            boolean ok = ((MIActivity) getActivity()).onCommand(mCountdownCommand);
-            if(ok)
-                MIContract.CmdRecent.insert(getActivity(), mCountdownCommand);
-        }
-        catch(RuntimeException e) {
-            log.e(e.getMessage(), e);
-        }
-
-        mCountdownCommand = null;
-
-        updatePS();
-
-        if(mCountdownAnimator != null) {
-            mCountdownAnimator.setCurrentPlayTime(sCountdownBoost);
-        }
+        mCountdown.start(cmd);
     }
 
-    @Override public void onStateChanged(@PlayStopButton.State int oldState, @PlayStopButton.State int newState, boolean byUser) {
+    @Override public void onPlayStopChanged(@PlayStopButton.State int oldState, @PlayStopButton.State int newState, boolean byUser) {
 
         if(!byUser)
             return;
         switch(oldState) {
             case PlayStopButton.PLAY:
-                startCountdown();
+                play(null);
                 break;
             case PlayStopButton.STOP:
-                cancelCountdown();
+                if(mCountdown != null)
+                    mCountdown.cancel();
                 break;
         }
+    }
+
+    @Override public void onCountdownStarted(@NonNull String cmd) {
+        log.w(cmd);
+        updatePS();
+    }
+
+    @Override public void onCountdownFinished(@NonNull String cmd) {
+
+        try {
+            boolean ok = ((MIActivity) getActivity()).onCommand(cmd);
+            if(ok)
+                MIContract.CmdRecent.insert(getActivity(), cmd);
+        }
+        catch(RuntimeException e) {
+            log.e(e.getMessage(), e);
+        }
+
+        updatePS();
+    }
+
+    @Override public void onCountdownCancelled(@NonNull String cmd) {
+        log.w("cancelled");
+        updatePS();
     }
 }

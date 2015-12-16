@@ -17,7 +17,7 @@ class MIDBHelper extends SQLiteOpenHelper {
     static final String DATABASE_NAME = "MyIntentData.db";
     private static final int DATABASE_VERSION = 2;
     private static final String RES_ICON_RECENT  = "'android.resource://pl.mareklangiewicz.myintent/drawable/mi_ic_recent_command_black_24dp'";
-    private static final String RES_ICON_EXAMPLE = "'android.resource://pl.mareklangiewicz.myintent/drawable/mi_ic_find_replace_black_24dp'";
+    private static final String RES_ICON_EXAMPLE = "'android.resource://pl.mareklangiewicz.myintent/drawable/mi_ic_example_command_black_24dp'";
     //FIXME SOMEDAY: is 24dp version correct size? looks ok on nexus4...
 
     public MIDBHelper(Context context) {

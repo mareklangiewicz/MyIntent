@@ -31,6 +31,7 @@ import android.widget.LinearLayout;
 
 import com.noveogroup.android.log.MyLogger;
 
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -525,12 +526,27 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         mCoordinatorLayout.postDelayed(runnable, delay);
     }
 
+
+    private static class CmdRunnable implements Runnable {
+
+        private String mCommand;
+        private WeakReference<MyActivity> mMyActivityWR;
+
+        public CmdRunnable(@NonNull String command, @NonNull MyActivity activity) {
+            mCommand = command;
+            mMyActivityWR = new WeakReference<>(activity);
+        }
+
+        @Override public void run() {
+            MyActivity activity = mMyActivityWR.get();
+            if(activity != null)
+                activity.onCommand(mCommand);
+        }
+
+    }
+
     public void postCommand(final String cmd, long delay) {
-        postRunnable(new Runnable() {
-            @Override public void run() {
-                onCommand(cmd);
-            }
-        }, delay);
+        postRunnable(new CmdRunnable(cmd, this), delay);
     }
 
     public void closeDrawers() {
@@ -556,11 +572,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
     }
 
     public void closeDrawersAndPostCommand(final String cmd) {
-        closeDrawersAndPostRunnable(new Runnable() {
-            @Override public void run() {
-                onCommand(cmd);
-            }
-        });
+        closeDrawersAndPostRunnable(new CmdRunnable(cmd, this));
     }
 
 

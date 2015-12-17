@@ -9,7 +9,7 @@
             android:id="@+id/mi_start"
             android:icon="@drawable/mr_ic_whatshot_black_24dp"
             android:title="@string/mi_start"
-            android:titleCondensed="cmd:fragment .MILogFragment"
+            android:titleCondensed="cmd:fragment .MIStartFragment"
             />
         <item
             android:id="@+id/mi_rules"
@@ -60,6 +60,18 @@
                 android:icon="@drawable/mr_ic_whatshot_black_24dp"
                 android:title="@string/mi_start_my_test_activity"
                 android:titleCondensed="cmd:activity pl.mareklangiewicz.myactivities.MyTestActivity"
+                />
+            <item
+                android:id="@+id/set_timer_666"
+                android:icon="@drawable/mr_ic_whatshot_black_24dp"
+                android:title="set timer 666"
+                android:titleCondensed="cmd:set timer 666"
+                />
+            <item
+                android:id="@+id/set_alarm_10_45"
+                android:icon="@drawable/mr_ic_whatshot_black_24dp"
+                android:title="set alarm 10 45"
+                android:titleCondensed="cmd:set alarm 10 45"
                 />
             <item
                 android:id="@+id/ds_mode"

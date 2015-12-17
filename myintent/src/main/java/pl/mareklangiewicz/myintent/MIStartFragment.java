@@ -27,7 +27,7 @@ import com.noveogroup.android.log.Logger;
 import pl.mareklangiewicz.myfragments.MyFragment;
 import pl.mareklangiewicz.myviews.IMyNavigation;
 
-public final class MILogFragment extends MyFragment implements PlayStopButton.Listener, Countdown.Listener {
+public final class MIStartFragment extends MyFragment implements PlayStopButton.Listener, Countdown.Listener {
 
     private @Nullable View mRootView;
     private @Nullable MenuItem mSearchItem;

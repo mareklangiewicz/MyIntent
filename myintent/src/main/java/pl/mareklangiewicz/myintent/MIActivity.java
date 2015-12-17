@@ -35,6 +35,7 @@ import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -111,7 +112,7 @@ public class MIActivity extends MyActivity {
         //noinspection ConstantConditions
         mHomePageTextView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                playCommand("data " + getResources().getString(R.string.mr_my_homepage));
+                play("data " + getResources().getString(R.string.mr_my_homepage));
             }
         });
 
@@ -233,47 +234,65 @@ public class MIActivity extends MyActivity {
 
         }
 
-        playCommand(command);
+        play(command);
+    }
+
+
+    static private class PlayCmdRunnable implements Runnable {
+
+        private String mCommand;
+        private WeakReference<MIActivity> mMIActivityWR;
+
+        public PlayCmdRunnable(@NonNull String command, @NonNull MIActivity activity) {
+            mCommand = command;
+            mMIActivityWR = new WeakReference<>(activity);
+        }
+
+        @Override public void run() {
+
+            MIActivity activity = mMIActivityWR.get();
+
+            if(activity == null)
+                return;
+
+            boolean ok = activity.mLocalFragment != null && (activity.mLocalFragment instanceof MIStartFragment);
+
+            if(ok) {
+                ((MIStartFragment) activity.mLocalFragment).play(mCommand);
+                return;
+            }
+
+            ok = activity.onCommand("fragment .MIStartFragment");
+            ok = ok && activity.mLocalFragment != null && (activity.mLocalFragment instanceof MIStartFragment);
+
+            if(ok)
+                activity.play(mCommand); // IMPORTANT: we have to be asynchrous here again to let fragment initialize fully first.
+            else
+                activity.log.a("Can not select the \"Start\" section");
+        }
     }
 
 
     /**
-     * Inserts command to edit text and presses play.
-     * (Shows start fragment if it is not selected first)
+     * Sets current fragment to MIStartFragment and plays given command.
      * It will start the command if user doesn't press stop fast enough.
-     * (it runs the command itself asynchronously)
+     * (it runs everything asynchronously - after closing drawers)
      */
-    public void playCommand(@Nullable final String command) {
+    public void play(@Nullable final String command) {
 
         if(command == null) {
             log.d("null command received - ignoring");
             return;
         }
 
-        if(mLocalFragment instanceof MILogFragment)
-            closeDrawersAndPostRunnable(new Runnable() {
-                @Override public void run() {
-                    ((MILogFragment) mLocalFragment).play(command);
-                }
-            });
-        else
-            closeDrawersAndPostRunnable(new Runnable() {
-                @Override public void run() {
-                    boolean ok = onCommand("fragment .MILogFragment");
-                    if(!ok || mLocalFragment == null || !(mLocalFragment instanceof MILogFragment)) {
-                        log.a("Can not select the \"Start\" section");
-                        return;
-                    }
-                    playCommand(command);
-                }
-            });
+        closeDrawersAndPostRunnable(new PlayCmdRunnable(command, this));
     }
 
 
     private void onSearchIntent(Intent intent) {
         String command = intent.getStringExtra(SearchManager.QUERY).toLowerCase();
         log.v("search: %s", command);
-        playCommand(command);
+        play(command);
     }
 
     void startSpeechRecognizer() {
@@ -319,7 +338,7 @@ public class MIActivity extends MyActivity {
 //                }
                 String command = results.get(0).toLowerCase();
 
-                playCommand(command);
+                play(command);
             }
             else if(resultCode == RESULT_CANCELED) {
                 log.d("Voice recognition cancelled.");
@@ -417,10 +436,11 @@ public class MIActivity extends MyActivity {
 
     /**
      * Reports a weather via logging and tts (if available)
+     *
      * @param appid openweathermap api key (you should generate your own key on openweathermap website)
-     * @param city name of the city (may contain country code after comma (like: wroclaw,pl)
+     * @param city  name of the city (may contain country code after comma (like: wroclaw,pl)
      * @param units default (null) are Kelvin, you can change it to "metric" (Celsius), or "imperial" (Fahrenheit)
-     * @param day a day number. Default (null) is "1" (today/now), set it to "2" for tomorrow etc... (up to 16)
+     * @param day   a day number. Default (null) is "1" (today/now), set it to "2" for tomorrow etc... (up to 16)
      */
     public void weather(@NonNull String appid, @NonNull String city, @Nullable final String units, @Nullable String day) {
         int d = 1;
@@ -467,6 +487,7 @@ public class MIActivity extends MyActivity {
                     );
                     say(report, TextToSpeech.QUEUE_ADD);
                 }
+
                 @Override public void onFailure(Throwable t) {
                     log.e(t, "Fetching weather failed.");
                 }

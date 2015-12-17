@@ -83,7 +83,7 @@ public class CmdAdapter extends RecyclerView.Adapter<CmdAdapter.ViewHolder> impl
         final String command = mCommands.get(pos);
         Context context = v.getContext();
         if(context instanceof MIActivity) {
-            ((MIActivity)context).playCommand(command);
+            ((MIActivity)context).play(command);
         }
     }
 

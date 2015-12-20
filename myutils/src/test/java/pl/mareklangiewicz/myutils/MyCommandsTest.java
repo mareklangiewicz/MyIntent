@@ -20,7 +20,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.google.common.truth.Truth.assertThat;
-import static pl.mareklangiewicz.myutils.MyTextUtils.str;
+import static pl.mareklangiewicz.myutils.MyTextUtilsKt.str;
 
 /**
  * Created by Marek Langiewicz on 29.09.15.

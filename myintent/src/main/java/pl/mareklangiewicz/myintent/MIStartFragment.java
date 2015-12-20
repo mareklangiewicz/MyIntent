@@ -296,7 +296,7 @@ public final class MIStartFragment extends MyFragment implements PlayStopButton.
             log.v("mPSButton is null.");
             return;
         }
-        if(mEditText == null || mCountdown == null || mEditText.getText().toString().isEmpty() || isSomethingOnOurFragment())
+        if(mCountdown == null || mEditText == null || isSomethingOnOurFragment())
             mPSButton.setState(PlayStopButton.HIDDEN);
         else
             mPSButton.setState(mCountdown.isRunning() ? PlayStopButton.STOP : PlayStopButton.PLAY);
@@ -309,31 +309,29 @@ public final class MIStartFragment extends MyFragment implements PlayStopButton.
      */
     public void play(@Nullable String cmd) {
 
-        if(mSearchItem != null) {
+        if(mSearchItem != null)
             mSearchItem.collapseActionView();
-        }
 
         if(mCountdown == null) {
             log.e("Countdown not initialized.");
-            return;
         }
-
-        if(mEditText == null) { // maybe we will just clear it, but we still requre it to be initialized for simplicity
+        else if(mEditText == null) { // maybe we will just clear it, but we still requre it to be initialized for simplicity
             log.e("Edit Text not initialized.");
-            return;
+        }
+        else {
+            if(cmd == null || cmd.isEmpty())
+                cmd = mEditText.getText().toString();
+
+            if(cmd.isEmpty()) {
+                log.w("No command provided.");
+            }
+            else {
+                mEditText.setText("");
+                mCountdown.start(cmd);
+            }
         }
 
-        if(cmd == null || cmd.isEmpty())
-            cmd = mEditText.getText().toString();
-
-        if(cmd.isEmpty()) {
-            log.e("No command available - ignoring");
-            return;
-        }
-
-        mEditText.setText("");
-
-        mCountdown.start(cmd);
+        updatePS();
     }
 
     @Override public void onPlayStopChanged(@PlayStopButton.State int oldState, @PlayStopButton.State int newState, boolean byUser) {

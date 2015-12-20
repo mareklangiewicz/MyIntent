@@ -38,7 +38,7 @@ public interface IMyNavigation {
 
     boolean isEmpty();
 
-    Listener getListener();
+    @Nullable Listener getListener();
 
     void setListener(@Nullable Listener listener);
 

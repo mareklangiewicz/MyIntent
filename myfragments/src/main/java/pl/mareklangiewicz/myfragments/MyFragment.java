@@ -25,7 +25,7 @@ import com.noveogroup.android.log.MyLogger;
 import pl.mareklangiewicz.myviews.IMyManager;
 import pl.mareklangiewicz.myviews.IMyNavigation;
 
-import static pl.mareklangiewicz.myutils.MyTextUtils.str;
+import static pl.mareklangiewicz.myutils.MyTextUtilsKt.str;
 
 /**
  * This is my base class for common fragments.
@@ -176,8 +176,8 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
     @Override
     public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
         if(VV)
-            log.v("%s.%s context=%s attrs=%s  state=%s)", this.getClass().getSimpleName(), "onInflate", str(context), str(attrs), str
-                    (savedInstanceState));
+            log.v("%s.%s context=%s attrs=%s  state=%s)", this.getClass().getSimpleName(), "onInflate", str(context), str(attrs),
+                    str(savedInstanceState));
         super.onInflate(context, attrs, savedInstanceState);
     }
 
@@ -210,8 +210,8 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if(VV)
-            log.v("%s.%s inflater=%s container=%s state=%s", this.getClass().getSimpleName(), "onCreateView", str(inflater), str(container), str
-                    (savedInstanceState));
+            log.v("%s.%s inflater=%s container=%s state=%s", this.getClass().getSimpleName(), "onCreateView", str(inflater), str(container),
+                    str(savedInstanceState));
         return null;
     }
 

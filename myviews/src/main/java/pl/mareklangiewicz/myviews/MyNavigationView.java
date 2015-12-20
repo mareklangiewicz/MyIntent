@@ -118,7 +118,7 @@ public final class MyNavigationView extends NavigationView implements IMyNavigat
     }
 
     @Override
-    public Listener getListener() {
+    public @Nullable Listener getListener() {
         return mListener;
     }
 

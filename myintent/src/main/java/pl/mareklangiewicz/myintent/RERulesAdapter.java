@@ -18,7 +18,7 @@ import java.util.Locale;
 
 import pl.mareklangiewicz.myutils.MyCommands;
 
-import static pl.mareklangiewicz.myutils.MyTextUtils.str;
+import static pl.mareklangiewicz.myutils.MyTextUtilsKt.str;
 
 /**
  * Created by Marek Langiewicz on 15.10.15.

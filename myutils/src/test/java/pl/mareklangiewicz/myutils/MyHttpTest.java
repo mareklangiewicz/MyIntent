@@ -20,7 +20,7 @@ import pl.mareklangiewicz.myutils.MyHttp.OpenWeatherMap.Forecasts;
 import retrofit.Call;
 import retrofit.Response;
 
-import static pl.mareklangiewicz.myutils.MyTextUtils.str;
+import static pl.mareklangiewicz.myutils.MyTextUtilsKt.str;
 
 /**
  * Created by Marek Langiewicz on 07.12.15.

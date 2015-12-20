@@ -55,16 +55,20 @@ public class Countdown {
                 new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationCancel(Animator animation) {
+                        String oldcmd = mCommand;
+                        mCommand = null;
                         if(mListener != null)
                             //noinspection ConstantConditions
-                            mListener.onCountdownCancelled(mCommand);
+                            mListener.onCountdownCancelled(oldcmd);
                         mCommand = null;
                     }
 
                     @Override public void onAnimationEnd(Animator animation) {
-                        if(mListener != null && mCommand != null)
-                            mListener.onCountdownFinished(mCommand);
+                        String oldcmd = mCommand;
                         mCommand = null;
+                        if(mListener != null && oldcmd != null) {
+                            mListener.onCountdownFinished(oldcmd);
+                        }
                         mAnimator.setCurrentPlayTime(mBoost);
                     }
 

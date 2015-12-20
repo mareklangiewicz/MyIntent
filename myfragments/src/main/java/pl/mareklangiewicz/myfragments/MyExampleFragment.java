@@ -7,8 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import pl.mareklangiewicz.myviews.MyExampleView;
-
-import static pl.mareklangiewicz.myutils.MyTextUtils.str;
+import static pl.mareklangiewicz.myutils.MyTextUtilsKt.str;
 
 
 public final class MyExampleFragment extends Fragment {

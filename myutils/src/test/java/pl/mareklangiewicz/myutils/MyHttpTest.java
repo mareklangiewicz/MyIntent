@@ -44,16 +44,55 @@ public class MyHttpTest {
 
     }
 
+
+
     @Test
-    public void testGitHub() throws Exception {
+    public void testGitHubGetUser() throws Exception {
         MyHttp.GitHub.Service service = MyHttp.GitHub.create();
-        Call<List<MyHttp.GitHub.Contributor>> call = service.contributors("langara", "MyIntent");
-        Response<List<MyHttp.GitHub.Contributor>> response = call.execute();
-        log.w(str(response.body()));
-        call = service.contributors("square", "retrofit");
+        Call<MyHttp.GitHub.User> call = service.getUser("langara");
+        Response<MyHttp.GitHub.User> response = call.execute();
+        MyHttp.GitHub.User body = response.body();
+        log.w(str(body)); // set breakpoint here to see properties
+        call = service.getUser("JakeWharton");
         response = call.execute();
-        log.w(str(response.body()));
+        body = response.body();
+        log.w(str(body)); // set breakpoint here to see properties
     }
+
+
+    @Test
+    public void testGitHubGetUserAuth() throws Exception {
+        MyHttp.GitHub.Service service = MyHttp.GitHub.create();
+        Call<MyHttp.GitHub.User> call = service.getUserAuth("Basic bGFuZ2FyYTprYWxpNTUqKjEyMA==");
+        Response<MyHttp.GitHub.User> response = call.execute();
+        MyHttp.GitHub.User body = response.body();
+        log.w(str(body)); // set breakpoint here to see properties
+    }
+
+
+    @Test
+    public void testGitHubGetUserRepos() throws Exception {
+        MyHttp.GitHub.Service service = MyHttp.GitHub.create();
+        Call<List<MyHttp.GitHub.Repository>> call = service.getUserRepos("langara");
+        Response<List<MyHttp.GitHub.Repository>> response = call.execute();
+        List<MyHttp.GitHub.Repository> body = response.body();
+        log.w(str(body)); // set breakpoint here to see properties
+        call = service.getUserRepos("JakeWharton");
+        response = call.execute();
+        body = response.body();
+        log.w(str(body)); // set breakpoint here to see properties
+    }
+
+
+    @Test
+    public void testGitHubGetUserReposAuth() throws Exception {
+        MyHttp.GitHub.Service service = MyHttp.GitHub.create();
+        Call<List<MyHttp.GitHub.Repository>> call = service.getUserReposAuth("Basic bGFuZ2FyYTprYWxpNTUqKjEyMA==");
+        Response<List<MyHttp.GitHub.Repository>> response = call.execute();
+        List<MyHttp.GitHub.Repository> body = response.body();
+        log.w(str(body)); // set breakpoint here to see properties
+    }
+
 
     @Test
     public void testOpenWeatherMapGetWeather() throws Exception {

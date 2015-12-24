@@ -196,6 +196,10 @@ public final class MyHttp {
             Call<User> getUserAuth(@Header("Authorization") String auth);
 
             @Headers({ACCEPT, AGENT})
+            @GET("/user")
+            Call<User> getUserTFA(@Header("Authorization") String auth, @Header("X-GitHub-OTP") String code);
+
+            @Headers({ACCEPT, AGENT})
             @GET("/users/{user}/repos")
             Call<List<Repository>> getUserRepos(@Path("user") String user);
 
@@ -203,6 +207,9 @@ public final class MyHttp {
             @GET("/user/repos")
             Call<List<Repository>> getUserReposAuth(@Header("Authorization") String auth);
 
+            @Headers({ACCEPT, AGENT})
+            @GET("/user/repos")
+            Call<List<Repository>> getUserReposTFA(@Header("Authorization") String auth, @Header("X-GitHub-OTP") String code);
         }
 
         private static final Retrofit retrofit = new Retrofit.Builder()

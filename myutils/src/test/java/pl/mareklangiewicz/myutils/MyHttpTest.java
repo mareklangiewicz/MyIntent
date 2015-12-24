@@ -63,12 +63,21 @@ public class MyHttpTest {
     @Test
     public void testGitHubGetUserAuth() throws Exception {
         MyHttp.GitHub.Service service = MyHttp.GitHub.create();
-        Call<MyHttp.GitHub.User> call = service.getUserAuth("Basic bGFuZ2FyYTprYWxpNTUqKjEyMA==");
+        Call<MyHttp.GitHub.User> call = service.getUserAuth("Basic some_bad_base64_pass");
         Response<MyHttp.GitHub.User> response = call.execute();
         MyHttp.GitHub.User body = response.body();
         log.w(str(body)); // set breakpoint here to see properties
     }
 
+
+    @Test
+    public void testGitHubGetUserTFA() throws Exception {
+        MyHttp.GitHub.Service service = MyHttp.GitHub.create();
+        Call<MyHttp.GitHub.User> call = service.getUserTFA("Basic some_bad_base64_pass", "421164");
+        Response<MyHttp.GitHub.User> response = call.execute();
+        MyHttp.GitHub.User body = response.body();
+        log.w(str(body)); // set breakpoint here to see properties
+    }
 
     @Test
     public void testGitHubGetUserRepos() throws Exception {
@@ -87,12 +96,21 @@ public class MyHttpTest {
     @Test
     public void testGitHubGetUserReposAuth() throws Exception {
         MyHttp.GitHub.Service service = MyHttp.GitHub.create();
-        Call<List<MyHttp.GitHub.Repository>> call = service.getUserReposAuth("Basic bGFuZ2FyYTprYWxpNTUqKjEyMA==");
+        Call<List<MyHttp.GitHub.Repository>> call = service.getUserReposAuth("Basic some_bad_base64");
         Response<List<MyHttp.GitHub.Repository>> response = call.execute();
         List<MyHttp.GitHub.Repository> body = response.body();
         log.w(str(body)); // set breakpoint here to see properties
     }
 
+
+    @Test
+    public void testGitHubGetUserReposTFA() throws Exception {
+        MyHttp.GitHub.Service service = MyHttp.GitHub.create();
+        Call<List<MyHttp.GitHub.Repository>> call = service.getUserReposTFA("Basic some_bad_base64", "197187");
+        Response<List<MyHttp.GitHub.Repository>> response = call.execute();
+        List<MyHttp.GitHub.Repository> body = response.body();
+        log.w(str(body)); // set breakpoint here to see properties
+    }
 
     @Test
     public void testOpenWeatherMapGetWeather() throws Exception {

@@ -16,14 +16,10 @@ android {
 
     signingConfigs {
         release {
-            //noinspection GroovyAssignabilityCheck
-            storeFile file(RELEASE_STORE_FILE)
-            //noinspection GroovyAssignabilityCheck
-            storePassword RELEASE_STORE_PASSWORD
-            //noinspection GroovyAssignabilityCheck
-            keyAlias RELEASE_KEY_ALIAS
-            //noinspection GroovyAssignabilityCheck
-            keyPassword RELEASE_KEY_PASSWORD
+            storeFile file("$System.env.MYINTENT_STORE_FILE")
+            storePassword "$System.env.MYINTENT_STORE_PASSWORD"
+            keyAlias "$System.env.MYINTENT_KEY_ALIAS"
+            keyPassword "$System.env.MYINTENT_KEY_PASSWORD"
         }
     }
 
@@ -31,7 +27,6 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            //noinspection GroovyAssignabilityCheck
             signingConfig signingConfigs.release
         }
     }
@@ -59,8 +54,8 @@ dependencies {
     compile('com.afollestad.material-dialogs:commons:0.8.4.2@aar') {
         transitive = true
     }
-    compile 'com.google.android.gms:play-services-base:8.3.0'
-    compile 'com.google.android.gms:play-services-appindexing:8.3.0'
+    compile 'com.google.android.gms:play-services-base:8.4.0'
+    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
     compile project(':myactivities')
     compile project(':myfragments')
     compile project(':myloggers')

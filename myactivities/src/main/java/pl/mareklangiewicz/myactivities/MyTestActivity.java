@@ -14,6 +14,17 @@ import pl.mareklangiewicz.mydrawables.MyLivingDrawable;
 import pl.mareklangiewicz.mydrawables.MyMagicLinesDrawable;
 import pl.mareklangiewicz.myviews.IMyNavigation;
 
+import static android.animation.ObjectAnimator.ofInt;
+import static android.animation.ObjectAnimator.ofPropertyValuesHolder;
+import static android.animation.PropertyValuesHolder.ofFloat;
+import static android.view.View.ALPHA;
+import static android.view.View.TRANSLATION_Y;
+import static pl.mareklangiewicz.myactivities.R.id.magic_underline_view;
+import static pl.mareklangiewicz.myactivities.R.id.section_my_pie_tests;
+import static pl.mareklangiewicz.myactivities.R.id.text_home_page;
+import static pl.mareklangiewicz.myactivities.R.layout.ma_my_test_global_header;
+import static pl.mareklangiewicz.myactivities.R.menu.ma_my_test_global;
+
 /**
  * Test activity presenting most of the MyBlocks functionality
  */
@@ -28,32 +39,32 @@ public final class MyTestActivity extends pl.mareklangiewicz.myactivities.MyActi
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        log.i("Hello world!");
-        log.d("some boring debug message...");
-        log.w("Warning!... just kidding...");
+        log.i("Hello world!", null);
+        log.d("some boring debug message...", null);
+        log.w("Warning!... just kidding...", null);
 
         //noinspection ConstantConditions
-        getGlobalNavigation().inflateMenu(R.menu.ma_my_test_global);
-        getGlobalNavigation().inflateHeader(R.layout.ma_my_test_global_header);
+        getGlobalNavigation().inflateMenu(ma_my_test_global);
+        getGlobalNavigation().inflateHeader(ma_my_test_global_header);
 
         //noinspection ConstantConditions
-        View underline = getGlobalNavigation().getHeader().findViewById(R.id.magic_underline_view);
+        View underline = getGlobalNavigation().getHeader().findViewById(magic_underline_view);
         mMyMagicLinesDrawable.setColor(0x30ffffff).setStrokeWidth(dp2px(4));
         underline.setBackground(mMyMagicLinesDrawable);
 
-        View homepage = getGlobalNavigation().getHeader().findViewById(R.id.text_home_page);
+        View homepage = getGlobalNavigation().getHeader().findViewById(text_home_page);
 
-        PropertyValuesHolder pvha = PropertyValuesHolder.ofFloat(View.ALPHA, 0f, 0f, 1f);
-        PropertyValuesHolder pvhy = PropertyValuesHolder.ofFloat(View.TRANSLATION_Y, -50f, -50f, 0f);
+        PropertyValuesHolder pvha = ofFloat(ALPHA, 0f, 0f, 1f);
+        PropertyValuesHolder pvhy = ofFloat(TRANSLATION_Y, -50f, -50f, 0f);
 
-        mHomePageAnimator = ObjectAnimator.ofPropertyValuesHolder(homepage, pvha, pvhy);
+        mHomePageAnimator = ofPropertyValuesHolder(homepage, pvha, pvhy);
         mHomePageAnimator.setInterpolator(new LinearInterpolator());
 
-        mMagicLinesAnimator = ObjectAnimator.ofInt(mMyMagicLinesDrawable, "level", 0, 10000);
+        mMagicLinesAnimator = ofInt(mMyMagicLinesDrawable, "level", 0, 10000);
         mMagicLinesAnimator.setDuration(1000).setInterpolator(new LinearInterpolator());
 
         if(savedInstanceState == null) {
-            selectGlobalItem(R.id.section_my_pie_tests);
+            selectGlobalItem(section_my_pie_tests);
         }
     }
 
@@ -96,15 +107,15 @@ public final class MyTestActivity extends pl.mareklangiewicz.myactivities.MyActi
         @IdRes int id = item.getItemId();
 
         if(id == R.id.action_whats_up) {
-            log.i("[SNACK][SHORT]What's up mate?");
+            log.i("[SNACK][SHORT]What's up mate?", null);
             return true;
         }
         else if(id == R.id.action_settings) {
-            log.w("[SNACK]TODO: some settings (or not)..");
+            log.w("[SNACK]TODO: some settings (or not)..", null);
             return true;
         }
         else if(id == R.id.action_destroy_something) {
-            log.a("[SNACK]BUM!"); /* throw new InternalError("BUM!"); */
+            log.a("[SNACK]BUM!", null); /* throw new InternalError("BUM!"); */
             return true;
         }
 

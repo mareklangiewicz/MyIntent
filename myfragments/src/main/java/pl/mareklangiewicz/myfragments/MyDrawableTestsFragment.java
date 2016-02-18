@@ -24,6 +24,8 @@ import pl.mareklangiewicz.mydrawables.MyMagicLinesDrawable;
 import pl.mareklangiewicz.mydrawables.MyPlayStopDrawable;
 import pl.mareklangiewicz.mydrawables.MyPlusDrawable;
 
+import static android.animation.ObjectAnimator.ofInt;
+
 public final class MyDrawableTestsFragment extends MyFragment implements View.OnClickListener, SeekBar
         .OnSeekBarChangeListener {
 
@@ -90,8 +92,8 @@ public final class MyDrawableTestsFragment extends MyFragment implements View.On
         getFAB().setImageDrawable(d);
         getFAB().setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                ObjectAnimator.ofInt(d, "level", 0, 10000, 10000, 0).setDuration(7000).start();
-                log.w("[SNACK]FAB Clicked!");
+                ofInt(d, "level", 0, 10000, 10000, 0).setDuration(7000).start();
+                log.w("[SNACK]FAB Clicked!", null);
             }
         });
         getFAB().show();
@@ -131,11 +133,11 @@ public final class MyDrawableTestsFragment extends MyFragment implements View.On
 
     @Override public void onStopTrackingTouch(SeekBar seekBar) {
         if(seekBar == mLevelSeekBar)
-            log.i("level = %d", seekBar.getProgress());
+            log.i(String.format("level = %d", seekBar.getProgress()), null);
         else if(seekBar == mStrokeWidthSeekBar)
-            log.i("stroke width = %d", seekBar.getProgress());
+            log.i(String.format("stroke width = %d", seekBar.getProgress()), null);
         else
-            log.e("Unknown seek bar.");
+            log.e("Unknown seek bar.", null);
     }
 
     private static class MyViewHolder extends RecyclerView.ViewHolder {

@@ -5,14 +5,18 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
 
-import com.noveogroup.android.log.MyLogger;
+import com.noveogroup.android.log.MyAndroidLogger;
+
+import pl.mareklangiewicz.myutils.ILogger;
 
 /**
  * Created by Marek Langiewicz on 09.10.15.
+ *
+ * TODO LATER: use new testing support library
  */
 public class MIDBHelperTest extends AndroidTestCase {
 
-    private MyLogger log = new MyLogger("MITest");
+    private ILogger log = new MyAndroidLogger("MITest");
 
     private MIDBHelper mMIDBHelper;
 
@@ -44,22 +48,22 @@ public class MIDBHelperTest extends AndroidTestCase {
 
     public void logCursor(Cursor c) {
         String[] columns = c.getColumnNames();
-        log.i("column names:");
+        log.i("column names:", null);
         for(int i = 0; i < columns.length; ++i) {
-            log.i("col %d: %s", i, columns[i]);
+            log.i(String.format("col %d: %s", i, columns[i]), null);
         }
         int r = 0;
         for(c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-            log.i("row %d:", r);
+            log.i(String.format("row %d:", r), null);
             for(int i = 0; i < c.getColumnCount(); ++i) {
-                log.i("val %s: %s", columns[i], c.getString(i));
+                log.i(String.format("val %s: %s", columns[i], c.getString(i)), null);
             }
             r++;
         }
     }
 
     public void logTable(SQLiteDatabase db, String table) {
-        log.i("Table: %s", table);
+        log.i(String.format("Table: %s", table), null);
         Cursor c = db.rawQuery("SELECT * FROM " + table, null);
         logCursor(c);
         c.close();

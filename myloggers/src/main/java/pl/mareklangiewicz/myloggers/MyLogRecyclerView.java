@@ -6,7 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
-import com.noveogroup.android.log.MyLogger;
+import com.noveogroup.android.log.MyAndroidLogger;
 
 /**
  * Created by Marek Langiewicz on 22.07.15.
@@ -53,9 +53,9 @@ public final class MyLogRecyclerView extends RecyclerView {
 
     /**
      * WARNING: remember to set it back to null if the view is not used anymore - to avoid memory leaks
-     * WARNING: use MyLogger object from UI thread only - if you want to use this view with it.
+     * WARNING: use MyAndroidLogger object from UI thread only - if you want to use this view with it.
      */
-    public void setLog(@Nullable MyLogger log) {
+    public void setLog(@Nullable MyAndroidLogger log) {
         mAdapter.setLog(log);
     }
 

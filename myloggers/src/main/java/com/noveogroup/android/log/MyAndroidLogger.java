@@ -8,7 +8,11 @@ import android.support.annotation.UiThread;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Locale;
+
+import pl.mareklangiewicz.myutils.ILogger;
 
 /**
  * Created by Marek Langiewicz on 24.06.15.
@@ -16,12 +20,12 @@ import java.util.Locale;
 
 // Flagged as UiThread to be on the safe side - we will change this requirement if needed.
 @UiThread
-public final class MyLogger extends AbstractLogger {
+public final class MyAndroidLogger extends AbstractLogger implements ILogger {
 
     /**
      * Default logger for use in UI thread
      */
-    static public final MyLogger UIL = new MyLogger("ML");
+    static public final MyAndroidLogger UIL = new MyAndroidLogger("ML");
     public static final int COLOR_VERBOSE = 0xFFB0B0B0;
     public static final int COLOR_DEBUG = 0xFF606060;
     public static final int COLOR_INFO = 0xFF000000;
@@ -41,15 +45,15 @@ public final class MyLogger extends AbstractLogger {
     @NonNull
     private final MyHandler mHandler;
 
-    public MyLogger() {
+    public MyAndroidLogger() {
         this(Utils.getCallerClassName());
     }
 
-    public MyLogger(String name) {
+    public MyAndroidLogger(String name) {
         this(name, Level.VERBOSE, "%logger", "%s");
     }
 
-    public MyLogger(String name, Logger.Level level, String tagPattern, String messagePattern) {
+    public MyAndroidLogger(String name, Logger.Level level, String tagPattern, String messagePattern) {
         super(name);
         mHandler = new MyHandler(level, tagPattern, messagePattern);
     }
@@ -77,7 +81,7 @@ public final class MyLogger extends AbstractLogger {
 
     /**
      * WARNING: remember to set it back to null if the view is not used anymore - to avoid memory leaks
-     * WARNING: use MyLogger from UI thread only - if you want to use this feature.
+     * WARNING: use MyAndroidLogger from UI thread only - if you want to use this feature.
      */
     public void setSnackView(@Nullable View snackView) {
         mHandler.setSnackView(snackView);
@@ -89,7 +93,7 @@ public final class MyLogger extends AbstractLogger {
 
     /**
      * WARNING: remember to set it back to null if the view is not used anymore - to avoid memory leaks
-     * WARNING: use MyLogger from UI thread only - if you want to use this feature.
+     * WARNING: use MyAndroidLogger from UI thread only - if you want to use this feature.
      */
     public void setInvalidateView(@Nullable View invalidateView) {
         mHandler.setInvalidateView(invalidateView);
@@ -101,7 +105,7 @@ public final class MyLogger extends AbstractLogger {
 
     /**
      * WARNING: remember to set it back to null if the adapter is not used anymore - to avoid memory leaks
-     * WARNING: use MyLogger from UI thread only - if you want to use this feature.
+     * WARNING: use MyAndroidLogger from UI thread only - if you want to use this feature.
      */
     public void setAdapter(@Nullable RecyclerView.Adapter adapter) {
         mHandler.setAdapter(adapter);
@@ -152,4 +156,20 @@ public final class MyLogger extends AbstractLogger {
 
     }
 
+    @Override public void log(int priority, @NonNull String message, @Nullable Throwable throwable) {
+        Level level = Level.INFO;
+        switch(priority) {
+            case 2: level = Level.VERBOSE; break;
+            case 3: level = Level.DEBUG; break;
+            case 4: level = Level.INFO; break;
+            case 5: level = Level.WARN; break;
+            case 6: level = Level.ERROR; break;
+            case 7: level = Level.ASSERT; break;
+        }
+        print(level, message, throwable);
+    }
+
+    @Override public void q(@NotNull String message, @org.jetbrains.annotations.Nullable Throwable throwable) {
+
+    }
 }

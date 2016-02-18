@@ -1,9 +1,5 @@
 package pl.mareklangiewicz.myutils;
 
-import com.noveogroup.android.log.Logger;
-import com.noveogroup.android.log.MyHandler;
-import com.noveogroup.android.log.MyLogger;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,11 +11,10 @@ import static com.google.common.truth.Truth.assertThat;
  */
 public class MyMathUtilsTest {
 
-    private static final MyLogger log = new MyLogger("UT");
+    private static final ILogger log = new SystemLogger();
 
     @Before
     public void setUp() throws Exception {
-        MyHandler.sPrintLnLevel = Logger.Level.VERBOSE;
     }
 
     @After

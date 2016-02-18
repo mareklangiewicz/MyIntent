@@ -10,8 +10,6 @@ import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 
-import com.noveogroup.android.log.MyLogger;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -19,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static java.lang.String.format;
 
 //import com.google.common.base.MoreObjects;
 //import org.javatuples.KeyValue;
@@ -71,7 +71,7 @@ public final class MyCommands {
             setEditable(editable);
         }
 
-        static public @NonNull String applyAll(@NonNull Iterable<RERule> rules, @NonNull String cmd, @NonNull MyLogger log) {
+        static public @NonNull String applyAll(@NonNull Iterable<RERule> rules, @NonNull String cmd, @NonNull ILogger log) {
             for(RERule rule : rules) {
                 cmd = rule.apply(cmd, log);
             }
@@ -129,24 +129,24 @@ public final class MyCommands {
         /**
          * Applying a rule means matching and replacing ALL occurrences of re mMatch with mReplace
          */
-        public @NonNull String apply(@NonNull String cmd, @NonNull MyLogger log) {
+        public @NonNull String apply(@NonNull String cmd, @NonNull ILogger log) {
 
             Matcher matcher = mPattern.matcher(cmd);
 
             if(matcher.find(0)) {
                 cmd = matcher.replaceAll(mReplace);
                 if(V) {
-                    log.v("rule matched:");
-                    log.d("rule %s", toString());
-                    log.i("= cmd: %s", cmd);
+                    log.v("rule matched:", null);
+                    log.d(format("rule %s", toString()), null);
+                    log.i(format("= cmd: %s", cmd), null);
                 }
                 return cmd;
             }
             else {
                 if(VV) {
-                    log.v("rule NOT matched:");
-                    log.v("rule %s", toString());
-                    log.v("= cmd: %s", cmd);
+                    log.v("rule NOT matched:", null);
+                    log.v(format("rule %s", toString()), null);
+                    log.v(format("= cmd: %s", cmd), null);
                 }
                 return cmd;
             }
@@ -172,25 +172,25 @@ public final class MyCommands {
             setEditable(editable);
         }
 
-        static public @NonNull String applyAll(@NonNull Iterable<REGroup> groups, @NonNull String cmd, @NonNull MyLogger log) {
+        static public @NonNull String applyAll(@NonNull Iterable<REGroup> groups, @NonNull String cmd, @NonNull ILogger log) {
 
             if(V) {
-                log.v("Applying all matching RE rules to:");
-                log.i("> cmd: %s", cmd);
+                log.v("Applying all matching RE rules to:", null);
+                log.i(format("> cmd: %s", cmd), null);
             }
             else
-                log.v("> cmd: %s", cmd);
+                log.v(format("> cmd: %s", cmd), null);
 
             for(REGroup group : groups) {
                 cmd = group.apply(cmd, log);
             }
 
             if(V) {
-                log.v("All matching RE rules applied. Result:");
-                log.i("< cmd: %s", cmd);
+                log.v("All matching RE rules applied. Result:", null);
+                log.i(format("< cmd: %s", cmd), null);
             }
             else
-                log.v("< cmd: %s", cmd);
+                log.v(format("< cmd: %s", cmd), null);
 
             return cmd;
         }
@@ -244,19 +244,19 @@ public final class MyCommands {
          * It applies all rules in this group one by one in order to given command.
          * Otherwise it just returns given command.
          */
-        public @NonNull String apply(@NonNull String cmd, MyLogger log) {
+        public @NonNull String apply(@NonNull String cmd, ILogger log) {
 
             if(!matches(cmd)) {
                 if(VV) {
-                    log.v("group NOT matched:");
-                    log.v("group %s", toString());
+                    log.v("group NOT matched:", null);
+                    log.v(format("group %s", toString()), null);
                 }
                 return cmd;
             }
 
             if(V) {
-                log.v("group matched:");
-                log.d("group %s", toString());
+                log.v("group matched:", null);
+                log.d(format("group %s", toString()), null);
             }
             return RERule.applyAll(getRules(), cmd, log);
         }
@@ -671,7 +671,7 @@ public final class MyCommands {
 
     }
 
-    public static void setIntentFromCommand(Intent intent, Map<String, String> cmd, MyLogger log) {
+    public static void setIntentFromCommand(Intent intent, Map<String, String> cmd, ILogger log) {
 
         for(String key : cmd.keySet()) {
             String value = cmd.get(key);
@@ -708,7 +708,7 @@ public final class MyCommands {
                 case "component":
                     ComponentName cn = ComponentName.unflattenFromString(value);
                     if(cn == null)
-                        log.e("Illegal component name: %s", value);
+                        log.e(format("Illegal component name: %s", value), null);
                     intent.setComponent(cn);
                     break;
                 case "scheme":

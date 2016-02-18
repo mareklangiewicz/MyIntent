@@ -5,7 +5,7 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.noveogroup.android.log.Logger;
-import com.noveogroup.android.log.MyLogger;
+import com.noveogroup.android.log.MyAndroidLogger;
 
 import java.util.Locale;
 
@@ -38,7 +38,7 @@ public class MyMDLogAdapter extends MyLogAdapter {
 
         //noinspection ConstantConditions
         ((TextView) dialog.getCustomView().findViewById(R.id.log_level)).setText(level.toString());
-        ((TextView) dialog.getCustomView().findViewById(R.id.log_level)).setTextColor(MyLogger.getLevelColor(level));
+        ((TextView) dialog.getCustomView().findViewById(R.id.log_level)).setTextColor(MyAndroidLogger.getLevelColor(level));
         ((TextView) dialog.getCustomView().findViewById(R.id.log_time)).setText(String.format(Locale.US, "%tT", time));
         ((TextView) dialog.getCustomView().findViewById(R.id.log_message)).setText(message);
 

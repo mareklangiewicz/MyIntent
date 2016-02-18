@@ -1,9 +1,6 @@
 package pl.mareklangiewicz.myutils;
 
 import com.google.common.truth.Expect;
-import com.noveogroup.android.log.Logger;
-import com.noveogroup.android.log.MyHandler;
-import com.noveogroup.android.log.MyLogger;
 
 import org.junit.After;
 import org.junit.Before;
@@ -20,6 +17,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.google.common.truth.Truth.assertThat;
+import static java.lang.String.format;
+import static java.lang.System.currentTimeMillis;
+import static pl.mareklangiewicz.myutils.MyCommands.RERule;
+import static pl.mareklangiewicz.myutils.MyCommands.RE_ACTIVITY_GROUP;
+import static pl.mareklangiewicz.myutils.MyCommands.parseCommand;
 import static pl.mareklangiewicz.myutils.MyTextUtilsKt.str;
 
 /**
@@ -28,16 +30,13 @@ import static pl.mareklangiewicz.myutils.MyTextUtilsKt.str;
  */
 public class MyCommandsTest {
 
-    private static final MyLogger log = new MyLogger("UT");
+    private static final ILogger log = new SystemLogger();
 
     @Rule public final Expect EXPECT = Expect.create();
 
     @Before
     public void setUp() throws Exception {
         MyCommands.sUT = true;
-        MyHandler.sPrintLnLevel = Logger.Level.VERBOSE;
-//        MyHandler.sPrintLnLevel = Logger.Level.DEBUG;
-//        MyHandler.sPrintLnLevel = Logger.Level.INFO;
     }
 
     @After
@@ -50,15 +49,15 @@ public class MyCommandsTest {
     public void testSomething() throws Exception {
         Date d1 = new Date();
         Date d2 = new Date();
-        log.i(str(d1));
-        log.i(str(d2));
-        log.i("%b", d1.equals(d2));
+        log.i(str(d1), null);
+        log.i(str(d2), null);
+        log.i(format("%b", d1.equals(d2)), null);
 
-        long l1 = System.currentTimeMillis();
-        long l2 = System.currentTimeMillis();
-        log.i("%d", l1);
-        log.i("%d", l2);
-        log.i("%b", l1 == l2);
+        long l1 = currentTimeMillis();
+        long l2 = currentTimeMillis();
+        log.i(format("%d", l1), null);
+        log.i(format("%d", l2), null);
+        log.i(format("%b", l1 == l2), null);
         assertThat(l1).isEqualTo(l2);
     }
 
@@ -68,12 +67,12 @@ public class MyCommandsTest {
         for(String s: strings) {
             Matcher matcher = pattern.matcher(s);
             boolean matches = matchWholeString ? matcher.matches() : matcher.lookingAt();
-            log.d("RE:\"%s\" %s %s text: \"%s\"", re, matches ? "matches" : "does not match", matchWholeString ? "whole" : "looking at", s);
+            log.d(format("RE:\"%s\" %s %s text: \"%s\"", re, matches ? "matches" : "does not match", matchWholeString ? "whole" : "looking at", s), null);
             assertThat(matcher.groupCount()).isEqualTo(groupCount);
             assertThat(matches).isEqualTo(shouldMatch);
             if(matches) {
                 for(int i = 0; i <= groupCount; ++i)
-                    log.d("   group %d: \"%s\"", i, matcher.group(i));
+                    log.d(format("   group %d: \"%s\"", i, matcher.group(i)), null);
             }
         }
     }
@@ -89,9 +88,9 @@ public class MyCommandsTest {
                 "activity MyActivity"
         );
 
-        MyCommands.RERule arule = MyCommands.RE_ACTIVITY_GROUP.getRules().get(0);
+        RERule arule = RE_ACTIVITY_GROUP.getRules().get(0);
         String result = arule.apply("activity .MyActivity", log);
-        log.w("Result: %s", result);
+        log.w(format("Result: %s", result), null);
 
     }
     @Test
@@ -234,13 +233,13 @@ public class MyCommandsTest {
 
     @Test
     public void testRE_RULES() throws Exception {
-        log.i(str(MyCommands.RE_RULES.get(0)));
-        log.i(str(MyCommands.RE_RULES.get(1)));
-        log.i(str(MyCommands.RE_RULES.get(2)));
-        log.i(str(MyCommands.RE_RULES.get(3)));
-        log.i(str(MyCommands.RE_RULES.get(4)));
-        log.i(str(MyCommands.RE_RULES.get(5)));
-        log.i(str(MyCommands.RE_RULES.get(6)));
+        log.i(str(MyCommands.RE_RULES.get(0)), null);
+        log.i(str(MyCommands.RE_RULES.get(1)), null);
+        log.i(str(MyCommands.RE_RULES.get(2)), null);
+        log.i(str(MyCommands.RE_RULES.get(3)), null);
+        log.i(str(MyCommands.RE_RULES.get(4)), null);
+        log.i(str(MyCommands.RE_RULES.get(5)), null);
+        log.i(str(MyCommands.RE_RULES.get(6)), null);
     }
 
 
@@ -341,20 +340,20 @@ public class MyCommandsTest {
         );
         for(String command: commands) {
             map.clear();
-            MyCommands.parseCommand(command, map);
-            log.i("parseCommand: %s", command);
-            log.i("result: %s", str(map));
+            parseCommand(command, map);
+            log.i(format("parseCommand: %s", command), null);
+            log.i(format("result: %s", str(map)), null);
         }
 
     }
 
     @Test
     public void testParseCommandExtraSegment() throws Exception {
-        log.w(MyCommands.RE_EXTRA_ELEM);
+        log.w(MyCommands.RE_EXTRA_ELEM, null);
         String extra = "integer android.intent.extra.alarm.LENGTH 5";
         Map<String, String> map = new HashMap<>(20);
         MyCommands.parseCommandExtraSegment(extra, map);
-        log.w(str(map));
+        log.w(str(map), null);
 
     }
 

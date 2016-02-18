@@ -19,6 +19,13 @@ import pl.mareklangiewicz.myutils.MyMathUtils;
 import pl.mareklangiewicz.myviews.IMyNavigation;
 import pl.mareklangiewicz.myviews.MyPie;
 
+import static android.animation.ObjectAnimator.ofArgb;
+import static android.graphics.Color.blue;
+import static android.graphics.Color.green;
+import static android.graphics.Color.red;
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.LOLLIPOP;
+
 //TODO SOMEDAY: create UI to change animation speed (in local menu header)
 
 public final class MyPieTestsFragment extends MyFragment implements View.OnClickListener {
@@ -76,7 +83,7 @@ public final class MyPieTestsFragment extends MyFragment implements View.OnClick
         MenuItem item = getFirstCheckedItem(); //see MyNavigationView.getFirstCheckedItem warning..
 
         if(item == null) {
-            log.e("No item selected");
+            log.e("No item selected", null);
             mRandomize = "to";
         }
         else
@@ -86,7 +93,7 @@ public final class MyPieTestsFragment extends MyFragment implements View.OnClick
     @Override
     public boolean onItemSelected(IMyNavigation nav, MenuItem item) {
         if(nav != getLocalNavigation()) {
-            log.v("This item is not from our local menu.");
+            log.v("This item is not from our local menu.", null);
             return false;
         }
         mRandomize = item.getTitle().toString();
@@ -99,12 +106,12 @@ public final class MyPieTestsFragment extends MyFragment implements View.OnClick
             MyPie pie = (MyPie) v;
             if(mRandomize.equals("pieColor") || mRandomize.equals("ovalColor")) {
                 @ColorInt int value = MyMathUtils.getRandomColor(Color.rgb(0, 0, 0), Color.rgb(255, 255, 255));
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    ObjectAnimator.ofArgb(pie, mRandomize, value).start();
-                    log.i("[SNACK]MyPie:%s: random color is ... %X %X %X", mRandomize, Color.red(value), Color.green(value), Color.blue(value));
+                if(SDK_INT >= LOLLIPOP) {
+                    ofArgb(pie, mRandomize, value).start();
+                    log.i(String.format("[SNACK]MyPie:%s: random color is ... %X %X %X", mRandomize, red(value), green(value), blue(value)), null);
                 }
                 else
-                    log.w("[SNACK]Color animation is not supported on platforms before Lollipop");
+                    log.w("[SNACK]Color animation is not supported on platforms before Lollipop", null);
             }
             else {
                 float min = 0;
@@ -128,7 +135,7 @@ public final class MyPieTestsFragment extends MyFragment implements View.OnClick
 
                 float value = MyMathUtils.getRandomFloat(min, max);
                 ObjectAnimator.ofFloat(pie, mRandomize, value).start();
-                log.i("[SNACK]MyPie:%s: random %.2f..%.2f is ... %.2f", mRandomize, min, max, value);
+                log.i(String.format("[SNACK]MyPie:%s: random %.2f..%.2f is ... %.2f", mRandomize, min, max, value), null);
             }
         }
     }

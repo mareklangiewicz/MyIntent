@@ -8,19 +8,20 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.noveogroup.android.log.MyLogger;
+import com.noveogroup.android.log.MyAndroidLogger;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import pl.mareklangiewicz.mydrawables.MyPlayStopDrawable;
+import pl.mareklangiewicz.myutils.ILogger;
 
 /**
  * Created by Marek Langiewicz on 15.12.15.
  */
 public final class PlayStopButton {
 
-    private @NonNull final MyLogger log = MyLogger.UIL;
+    private @NonNull final ILogger log = MyAndroidLogger.UIL;
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({
@@ -59,7 +60,7 @@ public final class PlayStopButton {
         mView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 if(mState == HIDDEN) {
-                    log.v("Hidden button clicked. ignoring..");
+                    log.v("Hidden button clicked. ignoring..", null);
                     return;
                 }
                 setState(mState == STOP ? PLAY : STOP, true, false);
@@ -115,7 +116,7 @@ public final class PlayStopButton {
                         mAnimator.start();
                     }
                     else
-                        log.a("Incorrect animated button state.");
+                        log.a("Incorrect animated button state.", null);
                 }
             }
 

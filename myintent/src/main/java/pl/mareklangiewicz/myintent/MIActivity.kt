@@ -71,18 +71,18 @@ class MIActivity : MyActivity() {
         globalNavigation!!.inflateMenu(R.menu.mi_global)
         globalNavigation!!.inflateHeader(R.layout.mi_header)
         if (BuildConfig.DEBUG) {
-            val menu = globalNavigation!!.menu
+            val menu = globalNavigation!!.menu!!
             //noinspection ConstantConditions
-            menu.findItem(R.id.ds_mode).setTitle("build type: " + BuildConfig.BUILD_TYPE)
-            menu.findItem(R.id.ds_flavor).setTitle("build flavor: " + BuildConfig.FLAVOR)
-            menu.findItem(R.id.ds_version_code).setTitle("version code: " + BuildConfig.VERSION_CODE)
-            menu.findItem(R.id.ds_version_name).setTitle("version name: " + BuildConfig.VERSION_NAME)
-            menu.findItem(R.id.ds_time_stamp).setTitle("build time: %tF %tT".format(BuildConfig.TIME_STAMP, BuildConfig.TIME_STAMP))
+            menu.findItem(R.id.ds_mode).title = "build type: " + BuildConfig.BUILD_TYPE
+            menu.findItem(R.id.ds_flavor).title = "build flavor: " + BuildConfig.FLAVOR
+            menu.findItem(R.id.ds_version_code).title = "version code: " + BuildConfig.VERSION_CODE
+            menu.findItem(R.id.ds_version_name).title = "version name: " + BuildConfig.VERSION_NAME
+            menu.findItem(R.id.ds_time_stamp).title = "build time: %tF %tT".format(BuildConfig.TIME_STAMP, BuildConfig.TIME_STAMP)
         }
 
         //noinspection ConstantConditions
         mMyMagicLinesDrawable = MyMagicLinesDrawable()
-        mMyMagicLinesDrawable!!.setColor(822083583).setStrokeWidth(dp2px(4f))
+        mMyMagicLinesDrawable!!.setColor(822083583).strokeWidth = dp2px(4f)
         //noinspection ConstantConditions
         mMagicLinesView = globalNavigation!!.header!!.findViewById(R.id.magic_underline_view)
         mMagicLinesView!!.background = mMyMagicLinesDrawable
@@ -121,7 +121,7 @@ class MIActivity : MyActivity() {
 
         mTextToSpeech = TextToSpeech(applicationContext, TextToSpeech.OnInitListener { status ->
             if (status == TextToSpeech.SUCCESS && mTextToSpeech != null) {
-                mTextToSpeech!!.setLanguage(Locale.US)
+                mTextToSpeech!!.language = Locale.US
                 mTTSReady = true
                 log.d("Text to speech ready.")
             } else
@@ -160,7 +160,7 @@ class MIActivity : MyActivity() {
                 Intent.ACTION_SEARCH, SearchIntents.ACTION_SEARCH -> onSearchIntent(intent)
                 Intent.ACTION_VIEW -> onUri(intent.data)
                 Intent.ACTION_MAIN -> Unit
-                else -> log.e("Unknown intent received: %s", intent.str())
+                else -> log.e("Unknown intent received: ${intent.str()}")
             }
         } catch (e: RuntimeException) {
             log.a("Intent exception.", e)
@@ -186,7 +186,7 @@ class MIActivity : MyActivity() {
 
         if (command == null) {
             log.d("URI with empty fragment received. Entering help..")
-            log.v("uri: %s", uri.str())
+            log.v("uri: ${uri.str()}")
             closeDrawersAndPostCommand("fragment .MIHelpFragment")
             return
 
@@ -243,7 +243,7 @@ class MIActivity : MyActivity() {
 
     private fun onSearchIntent(intent: Intent) {
         val command = intent.getStringExtra(SearchManager.QUERY).toLowerCase()
-        log.v("search: %s", command)
+        log.v("search: $command")
         play(command)
     }
 
@@ -267,7 +267,7 @@ class MIActivity : MyActivity() {
             }
 
         } else {
-            log.a("No activity found for this intent: %s", intent.str())
+            log.a("No activity found for this intent: ${intent.str()}")
         }
     }
 
@@ -300,7 +300,7 @@ class MIActivity : MyActivity() {
             } else if (resultCode == RecognizerIntent.RESULT_SERVER_ERROR) {
                 log.e("Voice recognition: server error.")
             } else {
-                log.e("Voice recognition: error code: %d", resultCode)
+                log.e("Voice recognition: error code: $resultCode")
             }
         } else
             super.onActivityResult(requestCode, resultCode, data)
@@ -330,7 +330,7 @@ class MIActivity : MyActivity() {
             val result = AppIndex.AppIndexApi.start(mClient, action)
             result.setResultCallback { status ->
                 if (!status.isSuccess)
-                    log.d("App Indexing API problem: %s", status.str())
+                    log.d("App Indexing API problem: ${status.str()}")
             }
         }
 
@@ -397,7 +397,7 @@ class MIActivity : MyActivity() {
             try {
                 d = Integer.parseInt(day)
             } catch (e: NumberFormatException) {
-                log.e(e, "Bad day..")
+                log.e("Bad day..", e)
                 return
             }
 
@@ -429,7 +429,7 @@ class MIActivity : MyActivity() {
                 }
 
                 override fun onFailure(t: Throwable) {
-                    log.e(t, "Fetching weather failed.")
+                    log.e("Fetching weather failed.", t)
                 }
             })
 
@@ -454,7 +454,7 @@ class MIActivity : MyActivity() {
                 }
 
                 override fun onFailure(t: Throwable) {
-                    log.e(t, "Fetching forecast failed.")
+                    log.e("Fetching forecast failed.", t)
                 }
             })
 
@@ -596,7 +596,7 @@ class MIActivity : MyActivity() {
         if (mMagicLinesDrawableAnimator != null)
             mMagicLinesDrawableAnimator!!.cancel()
         if (mMyMagicLinesDrawable != null)
-            mMyMagicLinesDrawable!!.setLevel(0)
+            mMyMagicLinesDrawable!!.level = 0
     }
 
     override fun onItemSelected(nav: IMyNavigation, item: MenuItem): Boolean {

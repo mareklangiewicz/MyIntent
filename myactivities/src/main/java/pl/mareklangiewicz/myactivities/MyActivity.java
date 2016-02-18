@@ -29,7 +29,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import com.noveogroup.android.log.MyLogger;
+import com.noveogroup.android.log.MyAndroidLogger;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
@@ -38,6 +38,7 @@ import java.util.Map;
 import pl.mareklangiewicz.mydrawables.MyArrowDrawable;
 import pl.mareklangiewicz.mydrawables.MyLivingDrawable;
 import pl.mareklangiewicz.myfragments.MyFragment;
+import pl.mareklangiewicz.myutils.ILogger;
 import pl.mareklangiewicz.myutils.MyCommands;
 import pl.mareklangiewicz.myviews.IMyManager;
 import pl.mareklangiewicz.myviews.IMyNavigation;
@@ -71,7 +72,8 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
     /**
      * Default logger for use in UI thread
      */
-    protected @NonNull final MyLogger log = MyLogger.UIL;
+    private @NonNull final MyAndroidLogger malog = MyAndroidLogger.UIL;
+    protected @NonNull final ILogger log = malog;
     protected @Nullable DisplayMetrics mDisplayMetrics;
     protected @Nullable DrawerLayout mGlobalDrawerLayout;
     protected @Nullable LinearLayout mGlobalLinearLayout; // either this or mGlobalDrawerLayout will remain null
@@ -93,8 +95,8 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
     @CallSuper @Override protected void onCreate(Bundle savedInstanceState) {
         mDisplayMetrics = getResources().getDisplayMetrics();
         if(V) {
-            log.d("%s.%s state=%s", this.getClass().getSimpleName(), "onCreate", str(savedInstanceState));
-            log.v(str(mDisplayMetrics));
+            log.d(String.format("%s.%s state=%s", this.getClass().getSimpleName(), "onCreate", str(savedInstanceState)), null);
+            log.v(str(mDisplayMetrics), null);
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ma_my_activity);
@@ -135,7 +137,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
                 if(!empty)
                     toggleGlobalNavigation();
                 else
-                    log.d("Global navigation is empty.");
+                    log.d("Global navigation is empty.", null);
             }
         });
 
@@ -148,7 +150,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
                 if(!empty)
                     toggleLocalNavigation();
                 else
-                    log.d("Local navigation is empty.");
+                    log.d("Local navigation is empty.", null);
             }
         });
         int h = mToolbar.getMinimumHeight() * 3 / 4;
@@ -185,21 +187,27 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
     }
 
     private void toggleGlobalNavigation() {
+        //TODO NOW: uncomment after kotlinize (and test it..) (and create extension function for it..)
+//        val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+//        imm.hideSoftInputFromWindow(currentFocus.windowToken, 0)
         if(mGlobalDrawerLayout != null)
             toggleDrawer(mGlobalDrawerLayout, GravityCompat.START);
         else if(mGlobalLinearLayout != null)
             toggleMNVAndArrow(mGlobalNavigationView, mGlobalArrowDrawable);
         else
-            log.a("No global drawer or linear layout with global navigation.");
+            log.a("No global drawer or linear layout with global navigation.", null);
     }
 
     private void toggleLocalNavigation() {
+        //TODO NOW: uncomment after kotlinize (and test it..) (and create extension function for it..)
+//        val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+//        imm.hideSoftInputFromWindow(currentFocus.windowToken, 0)
         if(mLocalDrawerLayout != null)
             toggleDrawer(mLocalDrawerLayout, GravityCompat.END);
         else if(mLocalLinearLayout != null)
             toggleMNVAndArrow(mLocalNavigationView, mLocalArrowDrawable);
         else
-            log.a("No local drawer or linear layout with local navigation.");
+            log.a("No local drawer or linear layout with local navigation.", null);
     }
 
     private void toggleDrawer(@NonNull DrawerLayout drawerLayout, int gravity) {
@@ -210,7 +218,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
                 drawerLayout.openDrawer(gravity);
         }
         else
-            log.e("Drawer is locked.");
+            log.e("Drawer is locked.", null);
     }
 
     private void toggleMNVAndArrow(MyNavigationView mnv, MyLivingDrawable arrow) {
@@ -251,45 +259,45 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
     @CallSuper
     public void onIntent(@Nullable Intent intent) {
         if(VV) {
-            log.v("%s.%s: %s", this.getClass().getSimpleName(), "onIntent", str(intent));
+            log.v(String.format("%s.%s: %s", this.getClass().getSimpleName(), "onIntent", str(intent)), null);
         }
     }
 
     @Override protected void onStart() {
         if(VV) {
-            log.v("%s.%s", this.getClass().getSimpleName(), "onStart");
+            log.v(String.format("%s.%s", this.getClass().getSimpleName(), "onStart"), null);
         }
-        log.setSnackView(mCoordinatorLayout);
+        malog.setSnackView(mCoordinatorLayout);
         super.onStart();
     }
 
     @Override protected void onResume() {
         if(VV) {
-            log.v("%s.%s", this.getClass().getSimpleName(), "onResume");
+            log.v(String.format("%s.%s", this.getClass().getSimpleName(), "onResume"), null);
         }
-        log.setSnackView(mCoordinatorLayout);
+        malog.setSnackView(mCoordinatorLayout);
         super.onResume();
     }
 
     @Override protected void onPause() {
         if(VV) {
-            log.v("%s.%s", this.getClass().getSimpleName(), "onPause");
+            log.v(String.format("%s.%s", this.getClass().getSimpleName(), "onPause"), null);
         }
         super.onPause();
     }
 
     @Override protected void onStop() {
         if(VV) {
-            log.v("%s.%s", this.getClass().getSimpleName(), "onStop");
+            log.v(String.format("%s.%s", this.getClass().getSimpleName(), "onStop"), null);
         }
-        if(log.getSnackView() == mCoordinatorLayout)
-            log.setSnackView(null);
+        if(malog.getSnackView() == mCoordinatorLayout)
+            malog.setSnackView(null);
         super.onStop();
     }
 
     @CallSuper @Override protected void onDestroy() {
         if(V)
-            log.d("%s.%s", this.getClass().getSimpleName(), "onDestroy");
+            log.d(String.format("%s.%s", this.getClass().getSimpleName(), "onDestroy"), null);
 
         mGlobalDrawerLayout = null;
         mGlobalLinearLayout = null;
@@ -312,7 +320,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
 
     protected void updateLocalFragment(@Nullable Fragment fragment) {
         if(VV)
-            log.v("%s.%s fragment=%s", this.getClass().getSimpleName(), "updateLocalFragment", str(fragment));
+            log.v(String.format("%s.%s fragment=%s", this.getClass().getSimpleName(), "updateLocalFragment", str(fragment)), null);
 
         mLocalFragment = fragment;
         mMyLocalFragment = null;
@@ -342,7 +350,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
     public boolean onCommand(@Nullable String command) {
 
         if(command == null) {
-            log.d("null command received - ignoring");
+            log.d("null command received - ignoring", null);
             return false;
         }
 
@@ -361,7 +369,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
             MyCommands.parseCommand(command, map);
         }
         catch(RuntimeException e) {
-            log.e(e, "Illegal command: %s", command);
+            log.e(String.format("Illegal command: %s", command), e);
             return false;
         }
 
@@ -388,7 +396,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         }
         else if(map.get("start").equals(MyCommands.CMD_FRAGMENT)) {
             if(component == null) {
-                log.e("Fragment component is null.");
+                log.e("Fragment component is null.", null);
                 return false;
             }
             if(component.startsWith(".")) {
@@ -422,7 +430,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
             case MyCommands.CMD_NOTHING:
                 return true; // just for dry testing purposes
             default:
-                log.e("Unsupported command: %s", str(command));
+                log.e(String.format("Unsupported command: %s", str(command)), null);
                 return false;
         }
     }
@@ -447,7 +455,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
             }
         }
         else {
-            log.e("No activity found for this intent: %s", str(intent));
+            log.e(String.format("No activity found for this intent: %s", str(intent)), null);
             return false;
         }
         return true;
@@ -461,7 +469,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
 
         try {
             if(startService(intent) == null) {
-                log.e("Service not found for this intent: %s", str(intent));
+                log.e(String.format("Service not found for this intent: %s", str(intent)), null);
                 return false;
             }
         }
@@ -492,7 +500,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
             f = Fragment.instantiate(MyActivity.this, command.get("component"));
         }
         catch(Fragment.InstantiationException e) {
-            log.e(e, "Fragment class: %s not found.", command.get("component"));
+            log.e(String.format("Fragment class: %s not found.", command.get("component")), e);
             return false;
         }
 
@@ -514,13 +522,13 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
     }
 
     public boolean onCommandCustom(@NonNull Map<String, String> command) {
-        log.e("Unsupported custom command: %s", str(command));
+        log.e(String.format("Unsupported custom command: %s", str(command)), null);
         return false;
     }
 
     public void postRunnable(Runnable runnable, long delay) {
         if(mCoordinatorLayout == null) {
-            log.a("User interface is not ready.");
+            log.a("User interface is not ready.", null);
             return;
         }
         mCoordinatorLayout.postDelayed(runnable, delay);
@@ -607,7 +615,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
             else if(mGlobalLinearLayout != null)
                 setMNVAndArrow(!empty, mGlobalNavigationView, mGlobalArrowDrawable);
             else
-                log.a("No global drawer or linear layout with global navigation.");
+                log.a("No global drawer or linear layout with global navigation.", null);
         }
         else if(nav == getLocalNavigation()) {
             mLocalArrowDrawable.setAlpha(empty ? 0 : 0xa0);
@@ -616,10 +624,10 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
             else if(mLocalLinearLayout != null)
                 setMNVAndArrow(!empty, mLocalNavigationView, mLocalArrowDrawable);
             else
-                log.a("No local drawer or linear layout with local navigation.");
+                log.a("No local drawer or linear layout with local navigation.", null);
         }
         else
-            log.a("Unknown IMyNavigation object.");
+            log.a("Unknown IMyNavigation object.", null);
     }
 
     @Override public void onClearHeader(IMyNavigation nav) {
@@ -658,7 +666,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
             }
         }
         else {
-            log.d("Can not add shared elements to fragment transaction. API < 21");
+            log.d("Can not add shared elements to fragment transaction. API < 21", null);
         }
     }
 
@@ -677,7 +685,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
     private void selectItem(IMyNavigation nav, @IdRes int id) {
         Menu menu = nav.getMenu();
         if(menu == null) {
-            log.a("Menu not initialized.");
+            log.a("Menu not initialized.", null);
             return;
         }
         nav.setCheckedItem(id);

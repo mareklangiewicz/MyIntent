@@ -11,17 +11,19 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.noveogroup.android.log.MyLogger;
+import com.noveogroup.android.log.MyAndroidLogger;
 
 import java.util.Collections;
 import java.util.List;
+
+import pl.mareklangiewicz.myutils.ILogger;
 
 /**
  * Created by Marek Langiewicz on 12.11.15.
  */
 public class CmdAdapter extends RecyclerView.Adapter<CmdAdapter.ViewHolder> implements View.OnClickListener{
 
-    protected @NonNull final MyLogger log = MyLogger.UIL;
+    protected @NonNull final ILogger log = MyAndroidLogger.UIL;
 
     protected @DrawableRes int mImageRes = R.drawable.mi_ic_recent_command_black_24dp;
 
@@ -59,7 +61,7 @@ public class CmdAdapter extends RecyclerView.Adapter<CmdAdapter.ViewHolder> impl
     }
     @Override public void onBindViewHolder(CmdAdapter.ViewHolder holder, int position) {
         if(mCommands == null) {
-            log.e("Commands not set.");
+            log.e("Commands not set.", null);
             return;
         }
         String command = mCommands.get(position);

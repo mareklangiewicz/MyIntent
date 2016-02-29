@@ -30,7 +30,7 @@ import static pl.mareklangiewicz.myutils.MyTextUtilsKt.str;
  */
 public class MyCommandsTest {
 
-    private static final ILogger log = new SystemLogger();
+    private static final IMyLogger log = new MySystemLogger();
 
     @Rule public final Expect EXPECT = Expect.create();
 

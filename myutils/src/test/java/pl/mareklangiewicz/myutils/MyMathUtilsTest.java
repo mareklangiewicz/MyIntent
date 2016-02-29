@@ -11,7 +11,7 @@ import static com.google.common.truth.Truth.assertThat;
  */
 public class MyMathUtilsTest {
 
-    private static final ILogger log = new SystemLogger();
+    private static final IMyLogger log = new MySystemLogger();
 
     @Before
     public void setUp() throws Exception {

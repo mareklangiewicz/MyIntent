@@ -1,6 +1,6 @@
 package pl.mareklangiewicz.myrx
 
-import pl.mareklangiewicz.myutils.ILogger
+import pl.mareklangiewicz.myutils.IMyLogger
 import rx.Observable
 import rx.Observer
 import rx.Subscription
@@ -13,7 +13,7 @@ import rx.subscriptions.CompositeSubscription
 operator fun CompositeSubscription.plusAssign(subscription: Subscription) = add(subscription)
 
 inline fun <T> Observable<T>.lsubscribe(
-        log: ILogger,
+        log: IMyLogger,
         logOnError: String? = "error %s",
         logOnCompleted: String? = "completed",
         crossinline onNext: (T) -> Unit
@@ -28,7 +28,7 @@ inline fun <T> Observable<T>.lsubscribe(
 }
 
 fun <T> Observable<T>.lsubscribe(
-        log: ILogger,
+        log: IMyLogger,
         logOnError: String? = "error %s",
         logOnCompleted: String? = "completed",
         logOnNext: String? = "next %s"

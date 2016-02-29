@@ -16,14 +16,14 @@ import com.noveogroup.android.log.MyAndroidLogger;
 import java.util.Collections;
 import java.util.List;
 
-import pl.mareklangiewicz.myutils.ILogger;
+import pl.mareklangiewicz.myutils.IMyLogger;
 
 /**
  * Created by Marek Langiewicz on 12.11.15.
  */
 public class CmdAdapter extends RecyclerView.Adapter<CmdAdapter.ViewHolder> implements View.OnClickListener{
 
-    protected @NonNull final ILogger log = MyAndroidLogger.UIL;
+    protected @NonNull final IMyLogger log = MyAndroidLogger.UIL;
 
     protected @DrawableRes int mImageRes = R.drawable.mi_ic_recent_command_black_24dp;
 

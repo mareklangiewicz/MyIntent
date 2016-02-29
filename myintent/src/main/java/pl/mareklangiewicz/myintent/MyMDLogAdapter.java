@@ -3,6 +3,7 @@ package pl.mareklangiewicz.myintent;
 import android.view.View;
 import android.widget.TextView;
 
+//import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.noveogroup.android.log.Logger;
 import com.noveogroup.android.log.MyAndroidLogger;

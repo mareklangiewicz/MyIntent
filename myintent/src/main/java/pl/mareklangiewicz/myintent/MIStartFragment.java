@@ -349,6 +349,9 @@ public final class MIStartFragment extends MyFragment implements PlayStopButton.
                 if(mCountdown != null)
                     mCountdown.cancel();
                 break;
+            case PlayStopButton.HIDDEN:
+                log.d("Clicked on hidden button. ignoring..", null);
+                break;
         }
     }
 

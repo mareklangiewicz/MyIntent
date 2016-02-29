@@ -38,7 +38,7 @@ import java.util.Map;
 import pl.mareklangiewicz.mydrawables.MyArrowDrawable;
 import pl.mareklangiewicz.mydrawables.MyLivingDrawable;
 import pl.mareklangiewicz.myfragments.MyFragment;
-import pl.mareklangiewicz.myutils.ILogger;
+import pl.mareklangiewicz.myutils.IMyLogger;
 import pl.mareklangiewicz.myutils.MyCommands;
 import pl.mareklangiewicz.myviews.IMyManager;
 import pl.mareklangiewicz.myviews.IMyNavigation;
@@ -73,7 +73,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
      * Default logger for use in UI thread
      */
     private @NonNull final MyAndroidLogger malog = MyAndroidLogger.UIL;
-    protected @NonNull final ILogger log = malog;
+    protected @NonNull final IMyLogger log = malog;
     protected @Nullable DisplayMetrics mDisplayMetrics;
     protected @Nullable DrawerLayout mGlobalDrawerLayout;
     protected @Nullable LinearLayout mGlobalLinearLayout; // either this or mGlobalDrawerLayout will remain null

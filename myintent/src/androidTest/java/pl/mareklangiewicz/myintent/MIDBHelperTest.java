@@ -7,7 +7,7 @@ import android.test.AndroidTestCase;
 
 import com.noveogroup.android.log.MyAndroidLogger;
 
-import pl.mareklangiewicz.myutils.ILogger;
+import pl.mareklangiewicz.myutils.IMyLogger;
 
 /**
  * Created by Marek Langiewicz on 09.10.15.
@@ -16,7 +16,7 @@ import pl.mareklangiewicz.myutils.ILogger;
  */
 public class MIDBHelperTest extends AndroidTestCase {
 
-    private ILogger log = new MyAndroidLogger("MITest");
+    private IMyLogger log = new MyAndroidLogger("MITest");
 
     private MIDBHelper mMIDBHelper;
 

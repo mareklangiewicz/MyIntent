@@ -22,7 +22,7 @@ import android.view.ViewGroup;
 
 import com.noveogroup.android.log.MyAndroidLogger;
 
-import pl.mareklangiewicz.myutils.ILogger;
+import pl.mareklangiewicz.myutils.IMyLogger;
 import pl.mareklangiewicz.myviews.IMyManager;
 import pl.mareklangiewicz.myviews.IMyNavigation;
 
@@ -54,7 +54,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
     private static final boolean VV = false;
 
 
-    protected @NonNull final ILogger log = MyAndroidLogger.UIL;
+    protected @NonNull final IMyLogger log = MyAndroidLogger.UIL;
 
     public MyFragment() { }
 

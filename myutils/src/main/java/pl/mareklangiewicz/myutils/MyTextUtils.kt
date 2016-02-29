@@ -2,7 +2,6 @@ package pl.mareklangiewicz.myutils
 
 import android.os.Bundle
 import android.view.View
-import mod
 
 val V = true
 val VV = false

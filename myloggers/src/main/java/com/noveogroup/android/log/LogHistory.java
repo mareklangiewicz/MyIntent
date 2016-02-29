@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 /**
  * Created by marek on 24.06.15.
- * <p>
+ *
  * This class is not thread-safe
  * We don't allocate any objects after constructor,
  * so it should be fast and it shouldn't launch garbage collection.

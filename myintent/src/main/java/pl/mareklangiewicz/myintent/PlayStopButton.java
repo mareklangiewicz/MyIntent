@@ -14,14 +14,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import pl.mareklangiewicz.mydrawables.MyPlayStopDrawable;
-import pl.mareklangiewicz.myutils.ILogger;
+import pl.mareklangiewicz.myutils.IMyLogger;
 
 /**
  * Created by Marek Langiewicz on 15.12.15.
  */
 public final class PlayStopButton {
 
-    private @NonNull final ILogger log = MyAndroidLogger.UIL;
+    private @NonNull final IMyLogger log = MyAndroidLogger.UIL;
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({

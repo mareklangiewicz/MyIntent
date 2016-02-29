@@ -12,10 +12,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+//import com.afollestad.materialdialogs.MaterialDialog;
+
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.noveogroup.android.log.MyAndroidLogger;
 
 import java.util.List;
 
+import pl.mareklangiewicz.myutils.IMyLogger;
 import pl.mareklangiewicz.myutils.MyCommands;
 
 import static pl.mareklangiewicz.myutils.MyTextUtilsKt.str;
@@ -24,6 +28,8 @@ import static pl.mareklangiewicz.myutils.MyTextUtilsKt.str;
  * Created by Marek Langiewicz on 14.10.15.
  */
 public class REGroupsAdapter extends RecyclerView.Adapter<REGroupsAdapter.ViewHolder> implements View.OnClickListener {
+
+    protected @NonNull final IMyLogger log = MyAndroidLogger.UIL;
 
     static public final int RE_GROUP_VIEW_TAG_HOLDER = R.id.mi_re_group_view_tag_holder;
 

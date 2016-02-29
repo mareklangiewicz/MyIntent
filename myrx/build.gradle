@@ -29,7 +29,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':myutils')
-    compile 'com.android.support:support-annotations:23.1.1'
+    compile 'com.android.support:support-annotations:23.2.0'
     testCompile 'junit:junit:4.12'
     testCompile 'com.google.truth:truth:0.27'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"

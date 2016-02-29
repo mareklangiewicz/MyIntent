@@ -12,11 +12,11 @@ import android.view.View;
 
 import com.noveogroup.android.log.MyAndroidLogger;
 
-import pl.mareklangiewicz.myutils.ILogger;
+import pl.mareklangiewicz.myutils.IMyLogger;
 
 public final class MyNavigationView extends NavigationView implements IMyNavigation, NavigationView.OnNavigationItemSelectedListener {
 
-    protected final ILogger log = MyAndroidLogger.UIL;
+    protected final IMyLogger log = MyAndroidLogger.UIL;
 
     private @Nullable View mHeader;
 

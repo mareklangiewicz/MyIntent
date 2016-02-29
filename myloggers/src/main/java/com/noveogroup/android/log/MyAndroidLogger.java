@@ -12,7 +12,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 
-import pl.mareklangiewicz.myutils.ILogger;
+import pl.mareklangiewicz.myutils.IMyLogger;
+import pl.mareklangiewicz.myutils.MyLogLevel;
 
 /**
  * Created by Marek Langiewicz on 24.06.15.
@@ -20,7 +21,7 @@ import pl.mareklangiewicz.myutils.ILogger;
 
 // Flagged as UiThread to be on the safe side - we will change this requirement if needed.
 @UiThread
-public final class MyAndroidLogger extends AbstractLogger implements ILogger {
+public final class MyAndroidLogger extends AbstractLogger implements IMyLogger {
 
     /**
      * Default logger for use in UI thread
@@ -127,6 +128,8 @@ public final class MyAndroidLogger extends AbstractLogger implements ILogger {
 
     @Override
     public void print(@NonNull Level level, @Nullable Throwable throwable, @Nullable String messageFormat, @Nullable Object... args) {
+        if(args == null)
+            args = new Object[0];
         mHandler.print(getName(), level, throwable, messageFormat, args);
     }
 
@@ -156,17 +159,17 @@ public final class MyAndroidLogger extends AbstractLogger implements ILogger {
 
     }
 
-    @Override public void log(int priority, @NonNull String message, @Nullable Throwable throwable) {
-        Level level = Level.INFO;
-        switch(priority) {
-            case 2: level = Level.VERBOSE; break;
-            case 3: level = Level.DEBUG; break;
-            case 4: level = Level.INFO; break;
-            case 5: level = Level.WARN; break;
-            case 6: level = Level.ERROR; break;
-            case 7: level = Level.ASSERT; break;
+    @Override public void log(@NonNull MyLogLevel level, @NonNull String message, @Nullable Throwable throwable) {
+        Level lvl = Level.INFO;
+        switch(level.getNumber()) {
+            case 2: lvl = Level.VERBOSE; break;
+            case 3: lvl = Level.DEBUG; break;
+            case 4: lvl = Level.INFO; break;
+            case 5: lvl = Level.WARN; break;
+            case 6: lvl = Level.ERROR; break;
+            case 7: lvl = Level.ASSERT; break;
         }
-        print(level, message, throwable);
+        print(lvl, message, throwable);
     }
 
     @Override public void q(@NotNull String message, @org.jetbrains.annotations.Nullable Throwable throwable) {

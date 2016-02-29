@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+//import com.afollestad.materialdialogs.DialogAction;
+//import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.noveogroup.android.log.MyAndroidLogger;
@@ -16,7 +18,7 @@ import com.noveogroup.android.log.MyAndroidLogger;
 import java.util.List;
 import java.util.Locale;
 
-import pl.mareklangiewicz.myutils.ILogger;
+import pl.mareklangiewicz.myutils.IMyLogger;
 import pl.mareklangiewicz.myutils.MyCommands;
 
 import static pl.mareklangiewicz.myutils.MyTextUtilsKt.str;
@@ -26,7 +28,7 @@ import static pl.mareklangiewicz.myutils.MyTextUtilsKt.str;
  */
 public class RERulesAdapter extends RecyclerView.Adapter<RERulesAdapter.ViewHolder> implements View.OnClickListener {
 
-    protected @NonNull final ILogger log = MyAndroidLogger.UIL;
+    protected @NonNull final IMyLogger log = MyAndroidLogger.UIL;
 
     private @Nullable MyCommands.RERule explained; // if some rule can not be removed or moved it displays snackbar only once in a row.
         // we remember this rule here so we do not display an error for it more than once in a row.

@@ -12,7 +12,7 @@ import com.noveogroup.android.log.MyAndroidLogger;
 import java.util.ArrayList;
 import java.util.List;
 
-import pl.mareklangiewicz.myutils.ILogger;
+import pl.mareklangiewicz.myutils.IMyLogger;
 
 import static android.net.Uri.parse;
 import static java.lang.System.currentTimeMillis;
@@ -44,7 +44,7 @@ import static pl.mareklangiewicz.myutils.MyTextUtilsKt.str;
  */
 public class MIContentProviderTest extends AndroidTestCase {
 
-    private ILogger log = new MyAndroidLogger("MITest");
+    private IMyLogger log = new MyAndroidLogger("MITest");
 
     public void setUp() throws Exception {
         super.setUp();

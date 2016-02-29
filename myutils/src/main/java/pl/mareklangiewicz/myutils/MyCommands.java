@@ -71,7 +71,7 @@ public final class MyCommands {
             setEditable(editable);
         }
 
-        static public @NonNull String applyAll(@NonNull Iterable<RERule> rules, @NonNull String cmd, @NonNull ILogger log) {
+        static public @NonNull String applyAll(@NonNull Iterable<RERule> rules, @NonNull String cmd, @NonNull IMyLogger log) {
             for(RERule rule : rules) {
                 cmd = rule.apply(cmd, log);
             }
@@ -129,7 +129,7 @@ public final class MyCommands {
         /**
          * Applying a rule means matching and replacing ALL occurrences of re mMatch with mReplace
          */
-        public @NonNull String apply(@NonNull String cmd, @NonNull ILogger log) {
+        public @NonNull String apply(@NonNull String cmd, @NonNull IMyLogger log) {
 
             Matcher matcher = mPattern.matcher(cmd);
 
@@ -172,7 +172,7 @@ public final class MyCommands {
             setEditable(editable);
         }
 
-        static public @NonNull String applyAll(@NonNull Iterable<REGroup> groups, @NonNull String cmd, @NonNull ILogger log) {
+        static public @NonNull String applyAll(@NonNull Iterable<REGroup> groups, @NonNull String cmd, @NonNull IMyLogger log) {
 
             if(V) {
                 log.v("Applying all matching RE rules to:", null);
@@ -244,7 +244,7 @@ public final class MyCommands {
          * It applies all rules in this group one by one in order to given command.
          * Otherwise it just returns given command.
          */
-        public @NonNull String apply(@NonNull String cmd, ILogger log) {
+        public @NonNull String apply(@NonNull String cmd, IMyLogger log) {
 
             if(!matches(cmd)) {
                 if(VV) {
@@ -671,7 +671,7 @@ public final class MyCommands {
 
     }
 
-    public static void setIntentFromCommand(Intent intent, Map<String, String> cmd, ILogger log) {
+    public static void setIntentFromCommand(Intent intent, Map<String, String> cmd, IMyLogger log) {
 
         for(String key : cmd.keySet()) {
             String value = cmd.get(key);

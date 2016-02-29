@@ -8,16 +8,6 @@ import android.support.design.widget.Snackbar
  * Some utilities
  */
 
-/**
- * My confusing "ternary" conditional operator :-)
- * Use it like this:
- * val t = someBoolean % someTForTrue ?: someTForFalse
- * You can also do just:
- * someBoolean % doSomethingIfTrue()
- */
-operator inline fun <reified T> Boolean?.mod(yes: T): T? = if(this === true) yes else null
-
-
 operator fun TextView.setValue(obj: Any?, property: Any?, arg: CharSequence) { text = arg }
 
 operator fun TextView.getValue(obj: Any?, property: Any?): String = text.toString()

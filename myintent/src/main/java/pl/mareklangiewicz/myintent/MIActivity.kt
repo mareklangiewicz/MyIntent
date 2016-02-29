@@ -23,6 +23,7 @@ import android.view.animation.LinearInterpolator
 import android.widget.ImageView
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
+//import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.gms.actions.SearchIntents
 import com.google.android.gms.appindexing.Action
 import com.google.android.gms.appindexing.AppIndex

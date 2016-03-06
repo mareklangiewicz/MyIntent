@@ -108,6 +108,7 @@ public class MIContentProviderTest extends AndroidTestCase {
 
     }
 
+    @SuppressWarnings("ConstantConditions")
     public void testGetType() throws Exception {
         ContentResolver cr = getContext().getContentResolver();
         assertNotNull(cr);

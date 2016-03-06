@@ -7,7 +7,6 @@ import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.Editable;
@@ -82,12 +81,6 @@ public final class MIStartFragment extends MyFragment implements PlayStopButton.
 
         mRecyclerView = (RecyclerView) mRootView.findViewById(R.id.mi_log_recycler_view);
         mRecyclerView.setAdapter(mAdapter);
-
-        LinearLayoutManager llmanager = new LinearLayoutManager(getActivity());
-
-//        llmanager.setReverseLayout(true);
-        //noinspection ConstantConditions
-        mRecyclerView.setLayoutManager(llmanager);
 
         //TODO SOMEDAY: some nice simple header with fragment title
         inflateMenu(R.menu.mi_log_local);
@@ -337,21 +330,22 @@ public final class MIStartFragment extends MyFragment implements PlayStopButton.
         updatePS();
     }
 
-    @Override public void onPlayStopChanged(@PlayStopButton.State int oldState, @PlayStopButton.State int newState, boolean byUser) {
+    @Override public void onPlayStopChanged(int oldState, int newState, boolean byUser) {
 
         if(!byUser)
             return;
-        switch(oldState) {
-            case PlayStopButton.PLAY:
-                play(null);
-                break;
-            case PlayStopButton.STOP:
-                if(mCountdown != null)
-                    mCountdown.cancel();
-                break;
-            case PlayStopButton.HIDDEN:
-                log.d("Clicked on hidden button. ignoring..", null);
-                break;
+        if(oldState == PlayStopButton.PLAY) {
+            play(null);
+
+        }
+        else if(oldState == PlayStopButton.STOP) {
+            if(mCountdown != null)
+                mCountdown.cancel();
+
+        }
+        else if(oldState == PlayStopButton.HIDDEN) {
+            log.d("Clicked on hidden button. ignoring..", null);
+
         }
     }
 

@@ -12,7 +12,7 @@ public class MyAndroidLoggerTest {
 
     @Test
     public void testLog() throws Exception {
-        MyAndroidLogger logger = new MyAndroidLogger("TestLogger");
+//        MyAndroidLogger logger = new MyAndroidLogger("TestLogger");
 //        logger.print(Logger.Level.DEBUG, "some debug message", null);
     }
 }

@@ -113,10 +113,10 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         mLocalNavigationView = (MyNavigationView) findViewById(R.id.ma_local_navigation_view);
 
         if(mGlobalDrawerLayout != null)
-            mGlobalDrawerLayout.setDrawerListener(this);
+            mGlobalDrawerLayout.addDrawerListener(this);
 
         if(mLocalDrawerLayout != null)
-            mLocalDrawerLayout.setDrawerListener(this);
+            mLocalDrawerLayout.addDrawerListener(this);
 
         //noinspection ConstantConditions
         mGlobalNavigationView.setListener(this);
@@ -125,8 +125,13 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
 
         setSupportActionBar(mToolbar);
 
-        mGlobalArrowDrawable.setStrokeWidth(5).setRotateTo(360f + 180f).setAlpha(0xa0);
-        mLocalArrowDrawable.setStrokeWidth(5).setRotateFrom(180f).setAlpha(0xa0);
+        mGlobalArrowDrawable.setStrokeWidth(5);
+        mGlobalArrowDrawable.setRotateTo(360f + 180f);
+        mGlobalArrowDrawable.setAlpha(0xa0);
+
+        mLocalArrowDrawable.setStrokeWidth(5);
+        mLocalArrowDrawable.setRotateFrom(180f);
+        mLocalArrowDrawable.setAlpha(0xa0);
 
         //noinspection ConstantConditions
         mToolbar.setNavigationIcon(mGlobalArrowDrawable);
@@ -299,12 +304,18 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         if(V)
             log.d(String.format("%s.%s", this.getClass().getSimpleName(), "onDestroy"), null);
 
-        mGlobalDrawerLayout = null;
+        if(mGlobalDrawerLayout != null) {
+            mGlobalDrawerLayout.removeDrawerListener(this);
+            mGlobalDrawerLayout = null;
+        }
+        if(mLocalDrawerLayout != null) {
+            mLocalDrawerLayout.removeDrawerListener(this);
+            mLocalDrawerLayout = null;
+        }
         mGlobalLinearLayout = null;
         mCoordinatorLayout = null;
         mAppBarLayout = null;
         mToolbar = null;
-        mLocalDrawerLayout = null;
         mLocalLinearLayout = null;
         mLocalFrameLayout = null;
         mLocalNavigationView = null;

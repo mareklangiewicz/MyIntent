@@ -15,8 +15,9 @@ import android.view.ViewGroup;
 import com.noveogroup.android.log.Logger;
 import com.noveogroup.android.log.MyAndroidLogger;
 
-import pl.mareklangiewicz.myloggers.MyLogRecyclerView;
+import pl.mareklangiewicz.myloggers.MyLogAdapter;
 import pl.mareklangiewicz.myviews.IMyNavigation;
+import android.support.v7.widget.RecyclerView;
 
 /**
  * MyFragment showing MyAndroidLogger messages.
@@ -25,7 +26,11 @@ public final class MyLogFragment extends MyFragment {
 
     private @NonNull final MyAndroidLogger malog = (MyAndroidLogger) log;
 
-    private @Nullable MyLogRecyclerView mMLRView;
+    private @NonNull final MyLogAdapter adapter = new MyLogAdapter();
+
+    private @Nullable RecyclerView mMLRView;
+
+
 
     @Nullable
     @Override
@@ -33,9 +38,11 @@ public final class MyLogFragment extends MyFragment {
 
         super.onCreateView(inflater, container, savedInstanceState); //just for logging
 
+        adapter.setLog(malog);
+
         View rootView = inflater.inflate(R.layout.mf_my_log_fragment, container, false);
-        mMLRView = (MyLogRecyclerView) rootView.findViewById(R.id.my_log_recycler_view);
-        mMLRView.setLog(malog);
+        mMLRView = (RecyclerView) rootView.findViewById(R.id.my_log_recycler_view);
+        mMLRView.setAdapter(adapter);
         //TODO SOMEDAY: some nice simple header with fragment title
         inflateMenu(R.menu.mf_my_log);
         updateCheckedItem();
@@ -47,9 +54,7 @@ public final class MyLogFragment extends MyFragment {
 
     @Override
     public void onDestroyView() {
-        //noinspection ConstantConditions
-        mMLRView.setLog(null);
-        mMLRView = null;
+        adapter.setLog(null);
         super.onDestroyView();
     }
 

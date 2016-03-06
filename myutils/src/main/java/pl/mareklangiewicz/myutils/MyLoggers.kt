@@ -40,7 +40,7 @@ class MyEmptyLogger : IMyLogger {
 
 class MySystemLogger : IMyLogger {
     override fun log(level: MyLogLevel, message: String, throwable: Throwable?) {
-        val stream = (level > MyLogLevel.ERROR) % System.err ?: System.out
+        val stream = if(level > MyLogLevel.ERROR) System.err else System.out
         stream.println(message)
     }
 }

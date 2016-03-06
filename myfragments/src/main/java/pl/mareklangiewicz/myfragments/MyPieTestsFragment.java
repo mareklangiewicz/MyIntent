@@ -19,7 +19,6 @@ import pl.mareklangiewicz.myutils.MyMathUtils;
 import pl.mareklangiewicz.myviews.IMyNavigation;
 import pl.mareklangiewicz.myviews.MyPie;
 
-import static android.animation.ObjectAnimator.ofArgb;
 import static android.graphics.Color.blue;
 import static android.graphics.Color.green;
 import static android.graphics.Color.red;
@@ -107,7 +106,7 @@ public final class MyPieTestsFragment extends MyFragment implements View.OnClick
             if(mRandomize.equals("pieColor") || mRandomize.equals("ovalColor")) {
                 @ColorInt int value = MyMathUtils.getRandomColor(Color.rgb(0, 0, 0), Color.rgb(255, 255, 255));
                 if(SDK_INT >= LOLLIPOP) {
-                    ofArgb(pie, mRandomize, value).start();
+                    ObjectAnimator.ofArgb(pie, mRandomize, value).start();
                     log.i(String.format("[SNACK]MyPie:%s: random color is ... %X %X %X", mRandomize, red(value), green(value), blue(value)), null);
                 }
                 else

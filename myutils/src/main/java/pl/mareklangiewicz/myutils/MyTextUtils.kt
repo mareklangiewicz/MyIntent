@@ -10,17 +10,17 @@ val VV = false
  * str extension functions are for humans only. returned string format can change any time..
  */
 
-fun Double?.str() = VV % toVeryLongStr() ?: V % toLongStr() ?: toShortStr()
-fun Float?.str() = VV % toVeryLongStr() ?: V % toLongStr() ?: toShortStr()
-fun Long?.str() = VV % toVeryLongStr() ?: V % toLongStr() ?: toShortStr()
-fun Int?.str() = VV % toVeryLongStr() ?: V % toLongStr() ?: toShortStr()
-fun Short?.str() = VV % toVeryLongStr() ?: V % toLongStr() ?: toShortStr()
-fun Byte?.str() = VV % toVeryLongStr() ?: V % toLongStr() ?: toShortStr()
-fun Char?.str() = VV % toVeryLongStr() ?: V % toLongStr() ?: toShortStr()
-fun Boolean?.str() = VV % toVeryLongStr() ?: V % toLongStr() ?: toShortStr()
-fun <E> Array<E>?.str() = VV % toVeryLongStr() ?: V % toLongStr() ?: toShortStr()
-fun <E> Iterable<E>?.str() = VV % toVeryLongStr() ?: V % toLongStr() ?: toShortStr()
-fun Any?.str() = VV % toVeryLongStr() ?: V % toLongStr() ?: toShortStr()
+fun Double?.str() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
+fun Float?.str() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
+fun Long?.str() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
+fun Int?.str() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
+fun Short?.str() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
+fun Byte?.str() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
+fun Char?.str() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
+fun Boolean?.str() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
+fun <E> Array<E>?.str() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
+fun <E> Iterable<E>?.str() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
+fun Any?.str() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
 
 private fun <E> Array<E>?.toStr(max: Int) = this?.joinToString(prefix = "[", postfix = "]", limit = max) ?: "null"
 private fun <E> Iterable<E>?.toStr(max: Int) = this?.joinToString(prefix = "[", postfix = "]", limit = max) ?: "null"
@@ -54,21 +54,21 @@ fun Byte?.toVeryLongStr() = toString() // exact string representation can change
 fun Char?.toShortStr() = toString() // exact string representation can change..
 fun Char?.toLongStr() = toString() // exact string representation can change..
 fun Char?.toVeryLongStr() = toString() // exact string representation can change..
-fun Boolean?.toShortStr() = this?.let { it % "t" ?: "f" } ?: "null" // exact string representation can change..
-fun Boolean?.toLongStr() = this?.let { it % "true" ?: "false" } ?: "null" // exact string representation can change..
+fun Boolean?.toShortStr() = this?.let { if(it) "t" else "f" } ?: "null" // exact string representation can change..
+fun Boolean?.toLongStr() = this?.let { if(it) "true" else "false" } ?: "null" // exact string representation can change..
 fun Boolean?.toVeryLongStr() = toLongStr() // exact string representation can change..
 
 fun Any?.toShortStr() = toString() // TODO SOMEDAY: print some short id or something..
 fun Any?.toLongStr() = toString()
 fun Any?.toVeryLongStr() = toString() // TODO SOMEDAY: print some more info..
 
-fun Bundle?.str() = VV % toVeryLongStr() ?: V % toLongStr() ?: toShortStr()
+fun Bundle?.str() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
 
 fun Bundle?.toShortStr() = this?.let { "Bundle{size:${size()}}" } ?: "null"
 fun Bundle?.toLongStr() = toShortStr()
 fun Bundle?.toVeryLongStr() = toString()
 
-fun View?.str() = VV % toVeryLongStr() ?: V % toLongStr() ?: toShortStr()
+fun View?.str() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
 
 fun View?.toShortStr() = this?.let { "View{hash:${hashCode()}}" } ?: "null"
 fun View?.toLongStr() = toShortStr()

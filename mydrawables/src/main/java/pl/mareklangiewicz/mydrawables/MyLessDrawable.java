@@ -12,7 +12,7 @@ import android.support.annotation.NonNull;
  */
 public class MyLessDrawable extends MyLivingDrawable {
 
-    @Override public void drawLivingPath(@NonNull Path path, @IntRange(from = 0, to = 10000) int level, Rect bounds, int cx, int cy) {
+    @Override public void drawLivingPath(@NonNull Path path, @IntRange(from = 0, to = 10000) int level, @NonNull Rect bounds, int cx, int cy) {
 
         int w4 = bounds.width() / 4;
         int h4 = bounds.height() / 4;

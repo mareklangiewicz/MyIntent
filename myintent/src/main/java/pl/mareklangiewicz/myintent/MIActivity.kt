@@ -83,7 +83,8 @@ class MIActivity : MyActivity() {
 
         //noinspection ConstantConditions
         mMyMagicLinesDrawable = MyMagicLinesDrawable()
-        mMyMagicLinesDrawable!!.setColor(822083583).strokeWidth = dp2px(4f)
+        mMyMagicLinesDrawable!!.color = 822083583
+        mMyMagicLinesDrawable!!.strokeWidth = dp2px(4f)
         //noinspection ConstantConditions
         mMagicLinesView = globalNavigation!!.header!!.findViewById(R.id.magic_underline_view)
         mMagicLinesView!!.background = mMyMagicLinesDrawable

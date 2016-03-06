@@ -55,5 +55,6 @@ operator fun <U> Int.invoke(f: Function1<Unit, U>) = (1..this).forEach { f(Unit)
  * You can also do just:
  * someBoolean % doSomethingIfTrue()
  */
+@Deprecated( "It always computes its argument (and it is confusing).", ReplaceWith("if (this === true) yes else null"))
 operator fun <T> Boolean?.mod(yes: T): T? = if(this === true) yes else null
 

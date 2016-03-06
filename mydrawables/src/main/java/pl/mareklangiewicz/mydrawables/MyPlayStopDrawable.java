@@ -15,11 +15,11 @@ public class MyPlayStopDrawable extends MyLivingDrawable {
 
     public MyPlayStopDrawable() {
         super();
-        mPaint.setStrokeCap(Paint.Cap.ROUND);
-        mPaint.setStrokeJoin(Paint.Join.ROUND);
+        getMPaint().setStrokeCap(Paint.Cap.ROUND);
+        getMPaint().setStrokeJoin(Paint.Join.ROUND);
     }
 
-    @Override public void drawLivingPath(@NonNull Path path, @IntRange(from = 0, to = 10000) int level, Rect bounds, int cx, int cy) {
+    @Override public void drawLivingPath(@NonNull Path path, @IntRange(from = 0, to = 10000) int level, @NonNull Rect bounds, int cx, int cy) {
 
         int w8 = bounds.width() / 8;
         int h8 = bounds.height() / 8;

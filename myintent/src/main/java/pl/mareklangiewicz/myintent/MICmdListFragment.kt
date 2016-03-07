@@ -24,7 +24,6 @@ open class MICmdListFragment : MyFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mi_cmd_recycler_view.setHasFixedSize(true)
-        mi_cmd_recycler_view.layoutManager = LinearLayoutManager(activity)
         mi_cmd_recycler_view.adapter = mAdapter
     }
 

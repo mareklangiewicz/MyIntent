@@ -139,17 +139,12 @@ public class REGroupsAdapter extends RecyclerView.Adapter<REGroupsAdapter.ViewHo
                 mItemTouchHelper = null;
             }
             mRulesRecyclerView.setAdapter(null);
-            mRulesRecyclerView.setLayoutManager(null);
         }
 
 
         void setupRulesRecyclerView(List<MyCommands.RERule> rules) {
 
             resetRulesRecyclerView();
-
-//            LinearLayoutManager manager = new LinearLayoutManager(mRulesRecyclerView.getContext());
-            LinearLayoutManager manager = new WCLinearLayoutManager(mRulesRecyclerView.getContext());
-            mRulesRecyclerView.setLayoutManager(manager);
 
             mRulesRecyclerView.setItemAnimator(null); // FIXME SOMEDAY: remove this line when we get rid of WCLinearLayoutManager..
 

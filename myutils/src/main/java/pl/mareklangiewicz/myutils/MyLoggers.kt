@@ -8,13 +8,13 @@ import java.util.concurrent.atomic.AtomicLong
 
 
 /** number equals appropriate android logging level; colors look good on bright background; */
-enum class MyLogLevel(val number: Int, val symbol: Char, val color: Long) {
-    VERBOSE(2, 'V', 0xFFB0B0B0),
-    DEBUG  (3, 'D', 0xFF606060),
-    INFO   (4, 'I', 0xFF000000),
-    WARN   (5, 'W', 0xFF0000A0),
-    ERROR  (6, 'E', 0xFFA00000),
-    ASSERT (7, 'A', 0xFFE00000),
+enum class MyLogLevel(val number: Int, val symbol: Char, val color: Int) {
+    VERBOSE(2, 'V', 0xFFB0B0B0.toInt()),
+    DEBUG  (3, 'D', 0xFF606060.toInt()),
+    INFO   (4, 'I', 0xFF000000.toInt()),
+    WARN   (5, 'W', 0xFF0000A0.toInt()),
+    ERROR  (6, 'E', 0xFFA00000.toInt()),
+    ASSERT (7, 'A', 0xFFE00000.toInt()),
 }
 
 

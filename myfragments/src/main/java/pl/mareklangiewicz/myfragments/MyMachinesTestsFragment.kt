@@ -55,20 +55,42 @@ class MyMachinesTestsFragment : MyFragment() {
 
             val timer = Timer(Handler(), intervals)
                     .lmap { it * 5f + 5f }
-                    .leff { ObjectAnimator.ofFloat(mf_mmt_mp1, "to", it).start() }
+                    .leff { animTo(mf_mmt_mp1, "to", it) }
                     .lfilter { it % 10f == 0f }
                     .lmap { it / 2f }
-                    .leff { ObjectAnimator.ofFloat(mf_mmt_mp2, "to", it).start() }
-                    .leff { ObjectAnimator.ofFloat(mf_mmt_mp3, "to", MyMathUtils.getRandomFloat(50f, 99f)).start() }
-                    .leff { ObjectAnimator.ofFloat(mf_mmt_mp3, "from", MyMathUtils.getRandomFloat(1f, mf_mmt_mp3.to)).start() }
+                    .leff { animTo(mf_mmt_mp2, "to", it) }
+                    .leff { animTo(mf_mmt_mp3, "to", MyMathUtils.getRandomFloat(50f, 99f)) }
+                    .leff { animTo(mf_mmt_mp3, "from", MyMathUtils.getRandomFloat(1f, mf_mmt_mp3.to)) }
 
             timer { } (Start)
 
         }
 
         mf_mmt_b_test3.setOnClickListener {
-            log.i("Test 3")
-            log.i("TODO")
+
+            log.i("Test 3: Relay")
+
+            val relay = Relay<Float>()
+
+            val subscriptions = arrayOf<(Unit) -> Unit>( {}, {}, {} )
+
+            val intervals = (1..70).asEPullee().vemap { 300L }
+
+            val timer = Timer(Handler(), intervals)
+                    .leff {
+                        when(it) {
+                            10L -> subscriptions[0] = relay { animTo(mf_mmt_mp1, "to", it) }
+                            20L -> subscriptions[1] = relay { animTo(mf_mmt_mp2, "to", it) }
+                            30L -> subscriptions[2] = relay { animTo(mf_mmt_mp3, "to", it) }
+                            40L -> subscriptions[0](Unit) // unsubscribe
+                            50L -> subscriptions[1](Unit) // unsubscribe
+                            60L -> subscriptions[2](Unit) // unsubscribe
+                        }
+                    }
+                    .lmap { MyMathUtils.scale1d(it.toFloat(), 0f, 70f, 1f, 99f) }
+
+            timer(relay.pushee)(Start)
+
 
         }
 
@@ -85,6 +107,13 @@ class MyMachinesTestsFragment : MyFragment() {
         }
     }
 
+    fun animTo(obj: Any, property: String, goal: Float) {
+        ObjectAnimator.ofFloat(obj, property, goal).start()
+    }
+
+    fun animTo(obj: Any, property: String, goal: Int) {
+        ObjectAnimator.ofInt(obj, property, goal).start()
+    }
     override fun onDestroyView() {
         adapter.setLog(null)
         super.onDestroyView()

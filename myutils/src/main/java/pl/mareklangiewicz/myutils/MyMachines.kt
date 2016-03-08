@@ -2,6 +2,7 @@ package pl.mareklangiewicz.myutils
 
 import android.os.Handler
 import android.support.annotation.MainThread
+import java.util.*
 
 /**
  * Created by Marek Langiewicz on 20.02.16.
@@ -734,6 +735,33 @@ fun <R, H> IPuller<R , H>.ldropWhile (pred: Function1<R, Boolean>) = Puller(lift
 
  // TODO: tests, examples for all these take and drop versions..
 
+
+/**
+ * This is something similar to rx: Subject (or to Jake Wharton library: RxRelay) - but as always: it is simpler ;-)
+ * A realy is a pusher you can attach many pushees. Every time you gen a Unit -> Unit function you can use to detach your pushee.
+ * The relay itself has a "pushee" property that - when called - forwards given item to all currently attached pushees.
+ * TODO SOMEDAY: thread-safe version
+ */
+@MainThread
+class Relay<T>(initcap: Int = 16) : IPusher<T, Function1<Unit, Unit>> {
+
+    private val pushees: MutableCollection<Function1<T, Unit>> = ArrayList(initcap)
+
+    val pushee: Function1<T, Unit> = { for(p in pushees) p(it) }
+
+    override fun invoke(p: (T) -> Unit): (Unit) -> Unit {
+        pushees.add(p)
+        return Remove(p, pushees)
+    }
+
+    class Remove<F>(private val f: F, private val fs: MutableCollection<F>): Function1<Unit, Unit> {
+        override fun invoke(u: Unit) {
+            fs.remove(f)
+        }
+
+    }
+
+}
 
 
 

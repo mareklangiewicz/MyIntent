@@ -6,7 +6,7 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.noveogroup.android.log.MyAndroidLogger
+import com.noveogroup.android.log.MyOldAndroidLogger
 import kotlinx.android.synthetic.main.mf_my_machines_tests_fragment.*
 import pl.mareklangiewicz.myloggers.MyLogAdapter
 import pl.mareklangiewicz.myutils.*
@@ -27,7 +27,7 @@ class MyMachinesTestsFragment : MyFragment() {
 
         super.onViewCreated(view, savedInstanceState)
 
-        adapter.setLog(MyAndroidLogger.UIL)
+        adapter.setLog(MyOldAndroidLogger.UIL)
 
         mf_mmt_rv_log.adapter = adapter
 

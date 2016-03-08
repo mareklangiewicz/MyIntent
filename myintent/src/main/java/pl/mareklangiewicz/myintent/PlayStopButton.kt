@@ -3,7 +3,7 @@ package pl.mareklangiewicz.myintent
 import android.animation.ObjectAnimator
 import android.view.View
 import android.widget.ImageView
-import com.noveogroup.android.log.MyAndroidLogger
+import com.noveogroup.android.log.MyOldAndroidLogger
 import pl.mareklangiewicz.mydrawables.MyPlayStopDrawable
 
 /**
@@ -11,7 +11,7 @@ import pl.mareklangiewicz.mydrawables.MyPlayStopDrawable
  */
 class PlayStopButton(private val mView: ImageView) {
 
-    private val log = MyAndroidLogger.UIL
+    private val log = MyOldAndroidLogger.UIL
 
     private var mState = HIDDEN
 

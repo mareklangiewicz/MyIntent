@@ -22,14 +22,14 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.noveogroup.android.log.Logger;
-import com.noveogroup.android.log.MyAndroidLogger;
+import com.noveogroup.android.log.MyOldAndroidLogger;
 
 import pl.mareklangiewicz.myfragments.MyFragment;
 import pl.mareklangiewicz.myviews.IMyNavigation;
 
 public final class MIStartFragment extends MyFragment implements PlayStopButton.Listener, Countdown.Listener {
 
-    private @NonNull final MyAndroidLogger malog = (MyAndroidLogger) log;
+    private @NonNull final MyOldAndroidLogger malog = (MyOldAndroidLogger) log;
 
     private @Nullable View mRootView;
     private @Nullable MenuItem mSearchItem;
@@ -198,27 +198,27 @@ public final class MIStartFragment extends MyFragment implements PlayStopButton.
             return true;
         }
         else if(id == R.id.log_some_assert) {
-            log.a("some assert", null);
+            log.a("some assert");
             return true;
         }
         else if(id == R.id.log_some_error) {
-            log.e("some error", null);
+            log.e("some error");
             return true;
         }
         else if(id == R.id.log_some_warning) {
-            log.w("some warning", null);
+            log.w("some warning");
             return true;
         }
         else if(id == R.id.log_some_info) {
-            log.i("some info", null);
+            log.i("some info");
             return true;
         }
         else if(id == R.id.log_some_debug) {
-            log.d("some debug", null);
+            log.d("some debug");
             return true;
         }
         else if(id == R.id.log_some_verbose) {
-            log.v("some verbose", null);
+            log.v("some verbose");
             return true;
         }
         return super.onItemSelected(nav, item);
@@ -280,7 +280,7 @@ public final class MIStartFragment extends MyFragment implements PlayStopButton.
 
     private void lazyUpdateButtons() {
         if(mRootView == null) {
-            log.d("lazyUpdateButtons: mRootView == null", null);
+            log.d("lazyUpdateButtons: mRootView == null");
             return;
         }
         mRootView.removeCallbacks(mRunUpdateButtons);
@@ -289,7 +289,7 @@ public final class MIStartFragment extends MyFragment implements PlayStopButton.
 
     private void updatePS() {
         if(mPSButton == null) {
-            log.v("mPSButton is null.", null);
+            log.v("mPSButton is null.");
             return;
         }
         if(mCountdown == null || mEditText == null || isSomethingOnOurFragment())
@@ -309,17 +309,17 @@ public final class MIStartFragment extends MyFragment implements PlayStopButton.
             mSearchItem.collapseActionView();
 
         if(mCountdown == null) {
-            log.e("Countdown not initialized.", null);
+            log.e("Countdown not initialized.");
         }
         else if(mEditText == null) { // maybe we will just clear it, but we still requre it to be initialized for simplicity
-            log.e("Edit Text not initialized.", null);
+            log.e("Edit Text not initialized.");
         }
         else {
             if(cmd == null || cmd.isEmpty())
                 cmd = mEditText.getText().toString();
 
             if(cmd.isEmpty()) {
-                log.w("No command provided.", null);
+                log.w("No command provided.");
             }
             else {
                 mEditText.setText("");
@@ -344,13 +344,13 @@ public final class MIStartFragment extends MyFragment implements PlayStopButton.
 
         }
         else if(oldState == PlayStopButton.HIDDEN) {
-            log.d("Clicked on hidden button. ignoring..", null);
+            log.d("Clicked on hidden button. ignoring..");
 
         }
     }
 
     @Override public void onCountdownStarted(@NonNull String cmd) {
-        log.w(cmd, null);
+        log.w(cmd);
         updatePS();
     }
 
@@ -369,7 +369,7 @@ public final class MIStartFragment extends MyFragment implements PlayStopButton.
     }
 
     @Override public void onCountdownCancelled(@NonNull String cmd) {
-        log.w("cancelled", null);
+        log.w("cancelled");
         updatePS();
     }
 }

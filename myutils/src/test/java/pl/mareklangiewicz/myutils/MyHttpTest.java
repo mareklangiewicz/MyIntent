@@ -46,11 +46,11 @@ public class MyHttpTest {
         Call<MyHttp.GitHub.User> call = service.getUser("langara");
         Response<MyHttp.GitHub.User> response = call.execute();
         MyHttp.GitHub.User body = response.body();
-        log.w(str(body), null); // set breakpoint here to see properties
+        log.w(str(body)); // set breakpoint here to see properties
         call = service.getUser("JakeWharton");
         response = call.execute();
         body = response.body();
-        log.w(str(body), null); // set breakpoint here to see properties
+        log.w(str(body)); // set breakpoint here to see properties
     }
 
 
@@ -60,7 +60,7 @@ public class MyHttpTest {
         Call<MyHttp.GitHub.User> call = service.getUserAuth("Basic some_bad_base64_pass");
         Response<MyHttp.GitHub.User> response = call.execute();
         MyHttp.GitHub.User body = response.body();
-        log.w(str(body), null); // set breakpoint here to see properties
+        log.w(str(body)); // set breakpoint here to see properties
     }
 
 
@@ -70,7 +70,7 @@ public class MyHttpTest {
         Call<MyHttp.GitHub.User> call = service.getUserTFA("Basic some_bad_base64_pass", "421164");
         Response<MyHttp.GitHub.User> response = call.execute();
         MyHttp.GitHub.User body = response.body();
-        log.w(str(body), null); // set breakpoint here to see properties
+        log.w(str(body)); // set breakpoint here to see properties
     }
 
     @Test
@@ -79,11 +79,11 @@ public class MyHttpTest {
         Call<List<MyHttp.GitHub.Repository>> call = service.getUserRepos("langara");
         Response<List<MyHttp.GitHub.Repository>> response = call.execute();
         List<MyHttp.GitHub.Repository> body = response.body();
-        log.w(str(body), null); // set breakpoint here to see properties
+        log.w(str(body)); // set breakpoint here to see properties
         call = service.getUserRepos("JakeWharton");
         response = call.execute();
         body = response.body();
-        log.w(str(body), null); // set breakpoint here to see properties
+        log.w(str(body)); // set breakpoint here to see properties
     }
 
 
@@ -93,7 +93,7 @@ public class MyHttpTest {
         Call<List<MyHttp.GitHub.Repository>> call = service.getUserReposAuth("Basic some_bad_base64");
         Response<List<MyHttp.GitHub.Repository>> response = call.execute();
         List<MyHttp.GitHub.Repository> body = response.body();
-        log.w(str(body), null); // set breakpoint here to see properties
+        log.w(str(body)); // set breakpoint here to see properties
     }
 
 
@@ -103,7 +103,7 @@ public class MyHttpTest {
         Call<List<MyHttp.GitHub.Repository>> call = service.getUserReposTFA("Basic some_bad_base64", "197187");
         Response<List<MyHttp.GitHub.Repository>> response = call.execute();
         List<MyHttp.GitHub.Repository> body = response.body();
-        log.w(str(body), null); // set breakpoint here to see properties
+        log.w(str(body)); // set breakpoint here to see properties
     }
 
     @Test
@@ -119,31 +119,31 @@ public class MyHttpTest {
         Response<Forecast> response = call.execute();
         Forecast body = response.body();
 
-        log.w(adapter.toJson(body), null);
+        log.w(adapter.toJson(body));
 
         call = service.getWeatherByCity("8932d2a1192be84707c381df649a2925", "London", "metric");
         response = call.execute();
         body = response.body();
 
-        log.w(adapter.toJson(body), null);
+        log.w(adapter.toJson(body));
 
         call = service.getWeatherByCity("8932d2a1192be84707c381df649a2925", "Wroclaw", "metric");
         response = call.execute();
         body = response.body();
 
-        log.w(adapter.toJson(body), null);
+        log.w(adapter.toJson(body));
 
         call = service.getWeatherByCity("8932d2a1192be84707c381df649a2925", "Jelcz Laskowice", "metric");
         response = call.execute();
         body = response.body();
 
-        log.w(adapter.toJson(body), null);
+        log.w(adapter.toJson(body));
 
         call = service.getWeatherById("8932d2a1192be84707c381df649a2925", 2172797, "metric");
         response = call.execute();
         body = response.body();
 
-        log.w(adapter.toJson(body), null);
+        log.w(adapter.toJson(body));
     }
 
     @Test
@@ -159,25 +159,25 @@ public class MyHttpTest {
         Response<Forecasts> response = call.execute();
         Forecasts body = response.body();
 
-        log.w(adapter.toJson(body), null);
+        log.w(adapter.toJson(body));
 
         call = service.getForecastByCity("8932d2a1192be84707c381df649a2925", "London", 3, "metric");
         response = call.execute();
         body = response.body();
 
-        log.w(adapter.toJson(body), null);
+        log.w(adapter.toJson(body));
 
         call = service.getForecastByCity("8932d2a1192be84707c381df649a2925", "Wroclaw,pl", 3, "metric");
         response = call.execute();
         body = response.body();
 
-        log.w(adapter.toJson(body), null);
+        log.w(adapter.toJson(body));
 
         call = service.getForecastById("8932d2a1192be84707c381df649a2925", 2172797, 3, "metric");
         response = call.execute();
         body = response.body();
 
-        log.w(adapter.toJson(body), null);
+        log.w(adapter.toJson(body));
     }
 
     @Test
@@ -193,24 +193,24 @@ public class MyHttpTest {
         Response<DailyForecasts> response = call.execute();
         DailyForecasts body = response.body();
 
-        log.w(adapter.toJson(body), null);
+        log.w(adapter.toJson(body));
 
         call = service.getDailyForecastByCity("8932d2a1192be84707c381df649a2925", "London", 3, "metric");
         response = call.execute();
         body = response.body();
 
-        log.w(adapter.toJson(body), null);
+        log.w(adapter.toJson(body));
 
         call = service.getDailyForecastByCity("8932d2a1192be84707c381df649a2925", "Wroclaw,pl", 3, "metric");
         response = call.execute();
         body = response.body();
 
-        log.w(adapter.toJson(body), null);
+        log.w(adapter.toJson(body));
 
         call = service.getDailyForecastById("8932d2a1192be84707c381df649a2925", 2172797, 3, "metric");
         response = call.execute();
         body = response.body();
 
-        log.w(adapter.toJson(body), null);
+        log.w(adapter.toJson(body));
     }
 }

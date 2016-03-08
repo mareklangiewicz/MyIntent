@@ -7,7 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.test.AndroidTestCase;
 
-import com.noveogroup.android.log.MyAndroidLogger;
+import com.noveogroup.android.log.MyOldAndroidLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +44,7 @@ import static pl.mareklangiewicz.myutils.MyTextUtilsKt.str;
  */
 public class MIContentProviderTest extends AndroidTestCase {
 
-    private IMyLogger log = new MyAndroidLogger("MITest");
+    private IMyLogger log = new MyOldAndroidLogger();
 
     public void setUp() throws Exception {
         super.setUp();
@@ -112,26 +112,26 @@ public class MIContentProviderTest extends AndroidTestCase {
     public void testGetType() throws Exception {
         ContentResolver cr = getContext().getContentResolver();
         assertNotNull(cr);
-        log.i(cr.getType(Uri.parse("content://blabla")), null);
-        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider")), null);
-        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/cmd")), null);
-        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/cmd/recent")), null);
-        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/cmd/recent/123")), null);
-        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/cmd/example")), null);
-        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/cmd/example/666")), null);
-        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/cmd/example/blabla")), null);
-        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/cmd/search_suggest_query")), null);
-        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/cmd/search_suggest_query/121")), null);
-        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/cmd/search_suggest_query/blabla")), null);
-        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/rule/user")), null);
-        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/rule/user/123")), null);
+        log.i(cr.getType(Uri.parse("content://blabla")));
+        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider")));
+        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/cmd")));
+        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/cmd/recent")));
+        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/cmd/recent/123")));
+        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/cmd/example")));
+        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/cmd/example/666")));
+        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/cmd/example/blabla")));
+        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/cmd/search_suggest_query")));
+        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/cmd/search_suggest_query/121")));
+        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/cmd/search_suggest_query/blabla")));
+        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/rule/user")));
+        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/rule/user/123")));
 
     }
 
     public void testQueryUri(Uri uri) throws Exception {
         ContentResolver cr = getContext().getContentResolver();
         assertNotNull(cr);
-        log.w(String.format("testQueryUri: %s", uri.toString()), null);
+        log.w(String.format("testQueryUri: %s", uri.toString()));
         Cursor c = cr.query(uri, null, null, null, null);
         assertNotNull(c);
         logCursor(c);
@@ -196,22 +196,22 @@ public class MIContentProviderTest extends AndroidTestCase {
 
     private void logCursor(Cursor c) {
         assertNotNull(c);
-        log.i("Cursor:", null);
+        log.i("Cursor:");
         String[] columns = c.getColumnNames();
         for(int i = 0; i < columns.length; ++i)
-            log.i(String.format("col %d: %s", i, columns[i]), null);
+            log.i(String.format("col %d: %s", i, columns[i]));
         int count = c.getCount();
         if(count == 0) {
-            log.i("Cursor is empty (0 rows).", null);
+            log.i("Cursor is empty (0 rows).");
             return;
         }
 
         boolean ok = c.moveToFirst();
         assertTrue(ok);
         do {
-            log.i(String.format("Row %d:", c.getPosition()), null);
+            log.i(String.format("Row %d:", c.getPosition()));
             for(int i = 0; i < c.getColumnCount(); ++i)
-                log.i(String.format("%s: %s", c.getColumnName(i), c.getString(i)), null);
+                log.i(String.format("%s: %s", c.getColumnName(i), c.getString(i)));
         }
         while(c.moveToNext());
     }
@@ -221,10 +221,10 @@ public class MIContentProviderTest extends AndroidTestCase {
 
         ContentResolver cr = getContext().getContentResolver();
         assertNotNull(cr);
-        log.i(String.format("insert row to: %s", uri), null);
+        log.i(String.format("insert row to: %s", uri));
         Uri result = cr.insert(Uri.parse(uri), values);
         assertNotNull(result);
-        log.i(String.format("uri of inserted row: %s", result.toString()), null);
+        log.i(String.format("uri of inserted row: %s", result.toString()));
 
     }
 
@@ -250,13 +250,13 @@ public class MIContentProviderTest extends AndroidTestCase {
         insertRowTo(values, uri);
 
         String cmd = "piata komenda";
-        log.i(String.format("CmdRecent.insert: %s", cmd), null);
+        log.i(String.format("CmdRecent.insert: %s", cmd));
         insert(getContext(), cmd);
-        log.i("done.", null);
+        log.i("done.");
         cmd = "szosta komenda";
-        log.i(String.format("CmdRecent.insert: %s", cmd), null);
+        log.i(String.format("CmdRecent.insert: %s", cmd));
         insert(getContext(), cmd);
-        log.i("done.", null);
+        log.i("done.");
 
     }
 
@@ -298,14 +298,14 @@ public class MIContentProviderTest extends AndroidTestCase {
         insertRowTo(values, uri);
 
         RERule rule = RE_USER_GROUP.getRules().get(1);
-        log.i(String.format("RuleUser.insert: %s", str(rule)), null);
+        log.i(String.format("RuleUser.insert: %s", str(rule)));
         RuleUser.insert(getContext(), 77, rule);
-        log.i("done.", null);
+        log.i("done.");
 
         rule = RE_USER_GROUP.getRules().get(2);
-        log.i(String.format("RuleUser.insert: %s", str(rule)), null);
+        log.i(String.format("RuleUser.insert: %s", str(rule)));
         RuleUser.insert(getContext(), 76, rule);
-        log.i("done.", null);
+        log.i("done.");
 
     }
 
@@ -315,9 +315,9 @@ public class MIContentProviderTest extends AndroidTestCase {
         ContentValues values = new ContentValues();
         values.put(COL_COMMAND, "UPDATED blaaaaaa!!!!");
         Uri uri = parse("content://pl.mareklangiewicz.myintent.provider/cmd/recent");
-        log.i("update rows from cmd/recent where: Command LIKE '%%la%%'", null);
+        log.i("update rows from cmd/recent where: Command LIKE '%%la%%'");
         int updated = cr.update(uri, values, " Command LIKE '%la%' ", null);
-        log.i(String.format("%s rows updated.", updated), null);
+        log.i(String.format("%s rows updated.", updated));
     }
 
     public void testUpdateCmdRecentTime() throws Exception { //it change all recent commands time column to current.
@@ -326,9 +326,9 @@ public class MIContentProviderTest extends AndroidTestCase {
         ContentValues values = new ContentValues();
         values.put(COL_TIME, currentTimeMillis());
         Uri uri = parse("content://pl.mareklangiewicz.myintent.provider/cmd/recent");
-        log.i("update time of all rows from cmd/recent:", null);
+        log.i("update time of all rows from cmd/recent:");
         int updated = cr.update(uri, values, null, null);
-        log.i(String.format("%s rows updated.", updated), null);
+        log.i(String.format("%s rows updated.", updated));
     }
 
 
@@ -338,27 +338,27 @@ public class MIContentProviderTest extends AndroidTestCase {
         ContentValues values = new ContentValues();
         values.put(COL_NAME, "UPDATED BLEEEEE!!!!");
         Uri uri = parse("content://pl.mareklangiewicz.myintent.provider/rule/user");
-        log.i("update rows from rule/user where: Name LIKE '%%la%%'", null);
+        log.i("update rows from rule/user where: Name LIKE '%%la%%'");
         int updated = cr.update(uri, values, " Name LIKE '%la%' ", null);
-        log.i(String.format("%s rows updated.", updated), null);
+        log.i(String.format("%s rows updated.", updated));
     }
 
     public void testDeleteRecentLikeLa() throws Exception {
         ContentResolver cr = getContext().getContentResolver();
         assertNotNull(cr);
         Uri uri = parse("content://pl.mareklangiewicz.myintent.provider/cmd/recent");
-        log.i("delete rows from cmd/recent where: Command LIKE '%%la%%'", null);
+        log.i("delete rows from cmd/recent where: Command LIKE '%%la%%'");
         int deleted = cr.delete(uri, " Command LIKE '%la%' ", null);
-        log.i(String.format("%s rows deleted.", deleted), null);
+        log.i(String.format("%s rows deleted.", deleted));
     }
 
     public void testDeleteRuleUserLikeLa() throws Exception {
         ContentResolver cr = getContext().getContentResolver();
         assertNotNull(cr);
         Uri uri = parse("content://pl.mareklangiewicz.myintent.provider/rule/user");
-        log.i("delete rows from rule/user where: Name LIKE '%%la%%'", null);
+        log.i("delete rows from rule/user where: Name LIKE '%%la%%'");
         int deleted = cr.delete(uri, " Name LIKE '%la%' ", null);
-        log.i(String.format("%s rows deleted.", deleted), null);
+        log.i(String.format("%s rows deleted.", deleted));
     }
 
 
@@ -366,57 +366,57 @@ public class MIContentProviderTest extends AndroidTestCase {
         ContentResolver cr = getContext().getContentResolver();
         assertNotNull(cr);
         Uri uri = parse("content://pl.mareklangiewicz.myintent.provider/cmd/recent");
-        log.i("delete all rows from cmd/recent:", null);
+        log.i("delete all rows from cmd/recent:");
         int deleted = cr.delete(uri, null, null);
-        log.i(String.format("%s rows deleted.", deleted), null);
+        log.i(String.format("%s rows deleted.", deleted));
     }
 
     public void testDeleteAllRuleUserManually() throws Exception {
         ContentResolver cr = getContext().getContentResolver();
         assertNotNull(cr);
         Uri uri = parse("content://pl.mareklangiewicz.myintent.provider/rule/user");
-        log.i("delete all rows from rule/user:", null);
+        log.i("delete all rows from rule/user:");
         int deleted = cr.delete(uri, null, null);
-        log.i(String.format("%s rows deleted.", deleted), null);
+        log.i(String.format("%s rows deleted.", deleted));
     }
 
     public void testClearRecent() throws Exception {
-        log.i("CmdRecent.clear:", null);
+        log.i("CmdRecent.clear:");
         clear(getContext());
-        log.i("done.", null);
+        log.i("done.");
     }
 
     public void testClearExample() throws Exception {
-        log.i("CmdExample.clear:", null);
+        log.i("CmdExample.clear:");
         CmdExample.clear(getContext());
-        log.i("done.", null);
+        log.i("done.");
     }
 
     public void testClearRuleUser() throws Exception {
-        log.i("RuleUser.clear:", null);
+        log.i("RuleUser.clear:");
         RuleUser.clear(getContext());
-        log.i("done.", null);
+        log.i("done.");
     }
 
     public void testSaveRuleUserAllUserRules3Times() throws Exception {
         List<RERule> rules = RE_USER_GROUP.getRules();
-        log.i("RuleUser.save 1:", null);
+        log.i("RuleUser.save 1:");
         save(getContext(), rules);
-        log.i("RuleUser.save 2:", null);
+        log.i("RuleUser.save 2:");
         save(getContext(), rules);
-        log.i("RuleUser.save 3:", null);
+        log.i("RuleUser.save 3:");
         save(getContext(), rules);
-        log.i("done.", null);
+        log.i("done.");
     }
 
     public void testLoadRuleUser() throws Exception {
-        log.i("RuleUser.load", null);
+        log.i("RuleUser.load");
         List<RERule> rules = new ArrayList<>();
         boolean ok = load(getContext(), rules);
         assertTrue(ok);
-        log.i("RuleUser.load results:", null);
+        log.i("RuleUser.load results:");
         for(int i = 0; i < rules.size(); ++i)
-            log.i(str(rules.get(i)), null);
+            log.i(str(rules.get(i)));
     }
 
 }

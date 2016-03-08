@@ -39,9 +39,9 @@ public final class MyTestActivity extends pl.mareklangiewicz.myactivities.MyActi
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        log.i("Hello world!", null);
-        log.d("some boring debug message...", null);
-        log.w("Warning!... just kidding...", null);
+        log.i("Hello world!");
+        log.d("some boring debug message...");
+        log.w("Warning!... just kidding...");
 
         //noinspection ConstantConditions
         getGlobalNavigation().inflateMenu(ma_my_test_global);
@@ -108,15 +108,15 @@ public final class MyTestActivity extends pl.mareklangiewicz.myactivities.MyActi
         @IdRes int id = item.getItemId();
 
         if(id == R.id.action_whats_up) {
-            log.i("[SNACK][SHORT]What's up mate?", null);
+            log.i("[SNACK][SHORT]What's up mate?");
             return true;
         }
         else if(id == R.id.action_settings) {
-            log.w("[SNACK]TODO: some settings (or not)..", null);
+            log.w("[SNACK]TODO: some settings (or not)..");
             return true;
         }
         else if(id == R.id.action_destroy_something) {
-            log.a("[SNACK]BUM!", null); /* throw new InternalError("BUM!"); */
+            log.a("[SNACK]BUM!"); /* throw new InternalError("BUM!"); */
             return true;
         }
 

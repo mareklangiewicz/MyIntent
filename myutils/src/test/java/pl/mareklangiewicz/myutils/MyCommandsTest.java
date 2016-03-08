@@ -49,15 +49,15 @@ public class MyCommandsTest {
     public void testSomething() throws Exception {
         Date d1 = new Date();
         Date d2 = new Date();
-        log.i(str(d1), null);
-        log.i(str(d2), null);
-        log.i(format("%b", d1.equals(d2)), null);
+        log.i(str(d1));
+        log.i(str(d2));
+        log.i(format("%b", d1.equals(d2)));
 
         long l1 = currentTimeMillis();
         long l2 = currentTimeMillis();
-        log.i(format("%d", l1), null);
-        log.i(format("%d", l2), null);
-        log.i(format("%b", l1 == l2), null);
+        log.i(format("%d", l1));
+        log.i(format("%d", l2));
+        log.i(format("%b", l1 == l2));
         assertThat(l1).isEqualTo(l2);
     }
 
@@ -67,12 +67,12 @@ public class MyCommandsTest {
         for(String s: strings) {
             Matcher matcher = pattern.matcher(s);
             boolean matches = matchWholeString ? matcher.matches() : matcher.lookingAt();
-            log.d(format("RE:\"%s\" %s %s text: \"%s\"", re, matches ? "matches" : "does not match", matchWholeString ? "whole" : "looking at", s), null);
+            log.d(format("RE:\"%s\" %s %s text: \"%s\"", re, matches ? "matches" : "does not match", matchWholeString ? "whole" : "looking at", s));
             assertThat(matcher.groupCount()).isEqualTo(groupCount);
             assertThat(matches).isEqualTo(shouldMatch);
             if(matches) {
                 for(int i = 0; i <= groupCount; ++i)
-                    log.d(format("   group %d: \"%s\"", i, matcher.group(i)), null);
+                    log.d(format("   group %d: \"%s\"", i, matcher.group(i)));
             }
         }
     }
@@ -90,7 +90,7 @@ public class MyCommandsTest {
 
         RERule arule = RE_ACTIVITY_GROUP.getRules().get(0);
         String result = arule.apply("activity .MyActivity", log);
-        log.w(format("Result: %s", result), null);
+        log.w(format("Result: %s", result));
 
     }
     @Test
@@ -233,13 +233,13 @@ public class MyCommandsTest {
 
     @Test
     public void testRE_RULES() throws Exception {
-        log.i(str(MyCommands.RE_RULES.get(0)), null);
-        log.i(str(MyCommands.RE_RULES.get(1)), null);
-        log.i(str(MyCommands.RE_RULES.get(2)), null);
-        log.i(str(MyCommands.RE_RULES.get(3)), null);
-        log.i(str(MyCommands.RE_RULES.get(4)), null);
-        log.i(str(MyCommands.RE_RULES.get(5)), null);
-        log.i(str(MyCommands.RE_RULES.get(6)), null);
+        log.i(str(MyCommands.RE_RULES.get(0)));
+        log.i(str(MyCommands.RE_RULES.get(1)));
+        log.i(str(MyCommands.RE_RULES.get(2)));
+        log.i(str(MyCommands.RE_RULES.get(3)));
+        log.i(str(MyCommands.RE_RULES.get(4)));
+        log.i(str(MyCommands.RE_RULES.get(5)));
+        log.i(str(MyCommands.RE_RULES.get(6)));
     }
 
 
@@ -341,19 +341,19 @@ public class MyCommandsTest {
         for(String command: commands) {
             map.clear();
             parseCommand(command, map);
-            log.i(format("parseCommand: %s", command), null);
-            log.i(format("result: %s", str(map)), null);
+            log.i(format("parseCommand: %s", command));
+            log.i(format("result: %s", str(map)));
         }
 
     }
 
     @Test
     public void testParseCommandExtraSegment() throws Exception {
-        log.w(MyCommands.RE_EXTRA_ELEM, null);
+        log.w(MyCommands.RE_EXTRA_ELEM);
         String extra = "integer android.intent.extra.alarm.LENGTH 5";
         Map<String, String> map = new HashMap<>(20);
         MyCommands.parseCommandExtraSegment(extra, map);
-        log.w(str(map), null);
+        log.w(str(map));
 
     }
 

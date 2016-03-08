@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.noveogroup.android.log.LogHistory;
 import com.noveogroup.android.log.Logger;
-import com.noveogroup.android.log.MyAndroidLogger;
+import com.noveogroup.android.log.MyOldAndroidLogger;
 
 import java.util.Locale;
 
@@ -22,7 +22,7 @@ public class MyLogAdapter extends RecyclerView.Adapter<MyLogAdapter.ViewHolder> 
 
     static public final int LOG_ITEM_VIEW_TAG_HOLDER = R.id.ml_log_item_view_tag_holder;
 
-    protected  @Nullable MyAndroidLogger log;
+    protected  @Nullable MyOldAndroidLogger log;
     protected  @Nullable LogHistory history;
 
     public MyLogAdapter() {
@@ -34,7 +34,7 @@ public class MyLogAdapter extends RecyclerView.Adapter<MyLogAdapter.ViewHolder> 
      * WARNING: remember to set it back to null if the adapter is not used anymore - to avoid memory leaks
      * WARNING: use MyAndroidLogger object from UI thread only - if you want to use this adapter with it.
      */
-    public void setLog(@Nullable MyAndroidLogger log) {
+    public void setLog(@Nullable MyOldAndroidLogger log) {
         if(this.log != null)
             this.log.setAdapter(null);
         this.log = log;
@@ -71,7 +71,7 @@ public class MyLogAdapter extends RecyclerView.Adapter<MyLogAdapter.ViewHolder> 
             message = history.getFilteredMessage(position);
             level = history.getFilteredLevel(position);
         }
-        int color = MyAndroidLogger.getLevelColor(level);
+        int color = MyOldAndroidLogger.Companion.getLevelColor(level);
 
 /*
         if(Logger.Level.WARN.includes(level)) {
@@ -83,7 +83,7 @@ public class MyLogAdapter extends RecyclerView.Adapter<MyLogAdapter.ViewHolder> 
         message = String.format(Locale.US, "%s", message);
 
         holder.mCardView.setCardElevation(elevation);
-        holder.mHeadView.setText(String.format(Locale.US, "%03d%c", nr, MyAndroidLogger.getLevelChar(level)));
+        holder.mHeadView.setText(String.format(Locale.US, "%03d%c", nr, MyOldAndroidLogger.Companion.getLevelChar(level)));
 
         holder.mMessageView.setTextColor(color);
         holder.mMessageView.setText(message);

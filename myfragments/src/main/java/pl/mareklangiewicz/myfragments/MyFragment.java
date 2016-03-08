@@ -20,7 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.noveogroup.android.log.MyAndroidLogger;
+import com.noveogroup.android.log.MyOldAndroidLogger;
 
 import pl.mareklangiewicz.myutils.IMyLogger;
 import pl.mareklangiewicz.myviews.IMyManager;
@@ -54,7 +54,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
     private static final boolean VV = false;
 
 
-    protected @NonNull final IMyLogger log = MyAndroidLogger.UIL;
+    protected @NonNull final IMyLogger log = MyOldAndroidLogger.UIL;
 
     public MyFragment() { }
 
@@ -155,7 +155,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
     public void selectItem(@IdRes int id) {
         Menu menu = getMenu();
         if(menu == null) {
-            log.e("menu is null!", null);
+            log.e("menu is null!");
             return;
         }
         setCheckedItem(id);
@@ -178,7 +178,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
     public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
         if(VV)
             log.v(String.format("%s.%s context=%s attrs=%s  state=%s)", this.getClass().getSimpleName(), "onInflate", str(context), str(attrs),
-                    str(savedInstanceState)), null);
+                    str(savedInstanceState)));
         super.onInflate(context, attrs, savedInstanceState);
     }
 
@@ -186,7 +186,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
     @Override
     public void onCreate(Bundle savedInstanceState) {
         if(V)
-            log.v(String.format("%s.%s state=%s args=%s", this.getClass().getSimpleName(), "onCreate", str(savedInstanceState), str(getArguments())), null);
+            log.v(String.format("%s.%s state=%s args=%s", this.getClass().getSimpleName(), "onCreate", str(savedInstanceState), str(getArguments())));
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
     }
@@ -195,7 +195,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
     @Override
     public void onAttach(Context context) {
         if(VV)
-            log.v(String.format("%s.%s context=%s", this.getClass().getSimpleName(), "onAttach", str(context)), null);
+            log.v(String.format("%s.%s context=%s", this.getClass().getSimpleName(), "onAttach", str(context)));
         super.onAttach(context);
     }
 
@@ -203,7 +203,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         if(VV)
-            log.v(String.format("%s.%s state=%s", this.getClass().getSimpleName(), "onActivityCreated", str(savedInstanceState)), null);
+            log.v(String.format("%s.%s state=%s", this.getClass().getSimpleName(), "onActivityCreated", str(savedInstanceState)));
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -212,7 +212,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if(VV)
             log.v(String.format("%s.%s inflater=%s container=%s state=%s", this.getClass().getSimpleName(), "onCreateView", str(inflater), str(container),
-                    str(savedInstanceState)), null);
+                    str(savedInstanceState)));
         return null;
     }
 
@@ -220,7 +220,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         if(VV)
-            log.v(String.format("%s.%s view=%s state=%s", this.getClass().getSimpleName(), "onViewCreated", str(view), str(savedInstanceState)), null);
+            log.v(String.format("%s.%s view=%s state=%s", this.getClass().getSimpleName(), "onViewCreated", str(view), str(savedInstanceState)));
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -228,7 +228,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
     @Override
     public void onViewStateRestored(Bundle savedInstanceState) {
         if(VV)
-            log.v(String.format("%s.%s state=%s", this.getClass().getSimpleName(), "onViewStateRestored", str(savedInstanceState)), null);
+            log.v(String.format("%s.%s state=%s", this.getClass().getSimpleName(), "onViewStateRestored", str(savedInstanceState)));
         super.onViewStateRestored(savedInstanceState);
     }
 
@@ -236,7 +236,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
     @Override
     public void onStart() {
         if(V)
-            log.v(String.format("%s.%s", this.getClass().getSimpleName(), "onStart"), null);
+            log.v(String.format("%s.%s", this.getClass().getSimpleName(), "onStart"));
         super.onStart();
     }
 
@@ -244,7 +244,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
     @Override
     public void onResume() {
         if(V)
-            log.v(String.format("%s.%s", this.getClass().getSimpleName(), "onResume"), null);
+            log.v(String.format("%s.%s", this.getClass().getSimpleName(), "onResume"));
         super.onResume();
     }
 
@@ -252,7 +252,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
     @Override
     public void onPause() {
         if(V)
-            log.v(String.format("%s.%s", this.getClass().getSimpleName(), "onPause"), null);
+            log.v(String.format("%s.%s", this.getClass().getSimpleName(), "onPause"));
         super.onPause();
     }
 
@@ -260,7 +260,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
     @Override
     public void onSaveInstanceState(Bundle outState) {
         if(VV)
-            log.v(String.format("%s.%s outState=%s", this.getClass().getSimpleName(), "onSaveInstanceState", str(outState)), null);
+            log.v(String.format("%s.%s outState=%s", this.getClass().getSimpleName(), "onSaveInstanceState", str(outState)));
         super.onSaveInstanceState(outState);
     }
 
@@ -268,7 +268,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
     @Override
     public void onStop() {
         if(V)
-            log.v(String.format("%s.%s", this.getClass().getSimpleName(), "onStop"), null);
+            log.v(String.format("%s.%s", this.getClass().getSimpleName(), "onStop"));
         super.onStop();
     }
 
@@ -276,7 +276,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
     @Override
     public void onDestroyView() {
         if(VV)
-            log.v(String.format("%s.%s", this.getClass().getSimpleName(), "onDestroyView"), null);
+            log.v(String.format("%s.%s", this.getClass().getSimpleName(), "onDestroyView"));
         super.onDestroyView();
         clearMenu();
         clearHeader();
@@ -286,7 +286,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
     @Override
     public void onDestroy() {
         if(V)
-            log.v(String.format("%s.%s", this.getClass().getSimpleName(), "onDestroy"), null);
+            log.v(String.format("%s.%s", this.getClass().getSimpleName(), "onDestroy"));
         super.onDestroy();
     }
 
@@ -294,7 +294,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
     @Override
     public void onDetach() {
         if(VV)
-            log.v(String.format("%s.%s", this.getClass().getSimpleName(), "onDetach"), null);
+            log.v(String.format("%s.%s", this.getClass().getSimpleName(), "onDetach"));
         super.onDetach();
     }
 

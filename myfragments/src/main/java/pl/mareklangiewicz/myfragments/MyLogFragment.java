@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.noveogroup.android.log.Logger;
-import com.noveogroup.android.log.MyAndroidLogger;
+import com.noveogroup.android.log.MyOldAndroidLogger;
 
 import pl.mareklangiewicz.myloggers.MyLogAdapter;
 import pl.mareklangiewicz.myviews.IMyNavigation;
@@ -24,7 +24,7 @@ import android.support.v7.widget.RecyclerView;
  */
 public final class MyLogFragment extends MyFragment {
 
-    private @NonNull final MyAndroidLogger malog = (MyAndroidLogger) log;
+    private @NonNull final MyOldAndroidLogger malog = (MyOldAndroidLogger) log;
 
     private @NonNull final MyLogAdapter adapter = new MyLogAdapter();
 
@@ -89,27 +89,27 @@ public final class MyLogFragment extends MyFragment {
             return true;
         }
         else if(id == R.id.log_some_assert) {
-            log.a("some assert", null);
+            log.a("some assert");
             return true;
         }
         else if(id == R.id.log_some_error) {
-            log.e("some error", null);
+            log.e("some error");
             return true;
         }
         else if(id == R.id.log_some_warning) {
-            log.w("some warning", null);
+            log.w("some warning");
             return true;
         }
         else if(id == R.id.log_some_info) {
-            log.i("some info", null);
+            log.i("some info");
             return true;
         }
         else if(id == R.id.log_some_debug) {
-            log.d("some debug", null);
+            log.d("some debug");
             return true;
         }
         else if(id == R.id.log_some_verbose) {
-            log.v("some verbose", null);
+            log.v("some verbose");
             return true;
         }
         return super.onItemSelected(nav, item);

@@ -9,14 +9,14 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.noveogroup.android.log.MyAndroidLogger;
+import com.noveogroup.android.log.MyOldAndroidLogger;
 
 /**
  * Created by Marek Langiewicz on 30.06.15.
  */
 public final class MyLogSimpleView extends View {
     private final Paint mPaint = new Paint();
-    private @Nullable MyAndroidLogger log;
+    private @Nullable MyOldAndroidLogger log;
     private int mLines = 16;
 
     public MyLogSimpleView(Context context) {
@@ -57,7 +57,7 @@ public final class MyLogSimpleView extends View {
      * WARNING: remember to set it back to null if the view is not used anymore - to avoid memory leaks
      * WARNING: use MyAndroidLogger object from UI thread only - if you want to this view to use it.
      */
-    public void setLog(@Nullable MyAndroidLogger log) {
+    public void setLog(@Nullable MyOldAndroidLogger log) {
         if(this.log != null)
             this.log.setInvalidateView(null);
         this.log = log;

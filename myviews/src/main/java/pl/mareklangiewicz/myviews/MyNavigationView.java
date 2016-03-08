@@ -10,13 +10,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.noveogroup.android.log.MyAndroidLogger;
+import com.noveogroup.android.log.MyOldAndroidLogger;
 
 import pl.mareklangiewicz.myutils.IMyLogger;
 
 public final class MyNavigationView extends NavigationView implements IMyNavigation, NavigationView.OnNavigationItemSelectedListener {
 
-    protected final IMyLogger log = MyAndroidLogger.UIL;
+    protected final IMyLogger log = MyOldAndroidLogger.UIL;
 
     private @Nullable View mHeader;
 
@@ -92,7 +92,7 @@ public final class MyNavigationView extends NavigationView implements IMyNavigat
     public @Nullable MenuItem getFirstCheckedItem() {
         Menu menu = getMenu();
         if(menu == null) {
-            log.w("Menu is null", null);
+            log.w("Menu is null");
             return null;
         }
         return getFirstCheckedItem(menu);

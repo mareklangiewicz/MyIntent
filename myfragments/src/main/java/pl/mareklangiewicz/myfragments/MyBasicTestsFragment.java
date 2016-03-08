@@ -35,10 +35,10 @@ public final class MyBasicTestsFragment extends MyFragment {
                 if(actionId == EditorInfo.IME_ACTION_SEND) {
                     if((v.getText().toString().equalsIgnoreCase("Marek"))) {
                         v.setError("You are not Marek! I am Marek!!");
-                        log.e("[SNACK]You are not Marek! I am Marek!!", null);
+                        log.e("[SNACK]You are not Marek! I am Marek!!");
                     }
                     else {
-                        log.i(String.format("[SNACK]Hello %s!", v.getText()), null);
+                        log.i(String.format("[SNACK]Hello %s!", v.getText()));
                     }
                     return false; //false so keyboard is hidden anyway
                 }

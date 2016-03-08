@@ -15,7 +15,7 @@ import pl.mareklangiewicz.myviews.IMyNavigation;
 public class MyExampleActivity extends MyActivity {
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        log.i("Hi, I am the example activity..", null);
+        log.i("Hi, I am the example activity..");
         //noinspection ConstantConditions
         getGlobalNavigation().inflateMenu(R.menu.ma_my_example_global);
         getGlobalNavigation().inflateHeader(R.layout.ma_my_example_global_header);
@@ -30,7 +30,7 @@ public class MyExampleActivity extends MyActivity {
             return true;
         @IdRes int id = item.getItemId();
         if(id == R.id.my_example_action) {
-            log.i("[SNACK][SHORT]Example: ACTION!", null);
+            log.i("[SNACK][SHORT]Example: ACTION!");
             return true;
         }
         return false;

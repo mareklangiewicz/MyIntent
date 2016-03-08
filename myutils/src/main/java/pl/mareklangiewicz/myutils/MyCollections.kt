@@ -24,38 +24,8 @@ interface IMyMutableArray<T> : IMyArray<T> {
     operator fun set(idx: Int, t: T)
 }
 
-interface IMyConsumer<in T> {
-    fun accept(t: T)
-}
 
-class MyMultiConsumer<in T>(vararg val consumers: IMyConsumer<T>) : IMyConsumer<T> {
-    override fun accept(t: T) {
-        consumers.forEach { it.accept(t) }
-    }
-}
-
-
-class MyFilteredConsumer<T>(private val consumer: IMyConsumer<T>,private val filter: (T) -> Boolean) : IMyConsumer<T> {
-    override fun accept(t: T) {
-        if(filter(t)) consumer.accept(t)
-    }
-}
-
-fun <T> IMyConsumer<T>.acceptAll(iterable: Iterable<T>) {
-    iterable.forEach { accept(it) }
-}
-
-fun <T> IMyConsumer<T>.andThen(after: IMyConsumer<T>) = MyMultiConsumer(this, after)
-
-fun <T> IMyConsumer<T>.filter(filter: (T) -> Boolean): IMyConsumer<T> = MyFilteredConsumer(this, filter)
-
-
-interface IMySupplier<out T> {
-    fun get(): T
-}
-
-
-interface IMyBuffer<T> : IMyArray<T>, IMyConsumer<T>
+interface IMyBuffer<T> : IMyArray<T>, Function1<T, Unit> // SOMEDAY: use Pushee<T> when we have type aliases
 
 
 
@@ -71,7 +41,7 @@ class MyRingBuffer<T>(val capacity: Int = 256) : IMyBuffer<T> {
     override val size: Int
         get() = array.size
 
-    override fun accept(t: T) {
+    override fun invoke(t: T) {
         if(size < capacity)
             array.add(t)
         else {

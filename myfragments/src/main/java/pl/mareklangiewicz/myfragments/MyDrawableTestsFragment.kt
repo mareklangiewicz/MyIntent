@@ -66,7 +66,7 @@ class MyDrawableTestsFragment : MyFragment(), View.OnClickListener, SeekBar.OnSe
         fab?.setImageDrawable(d)
         fab?.setOnClickListener {
             ObjectAnimator.ofInt(d, "level", 0, 10000, 10000, 0).setDuration(7000).start()
-            log.w("[SNACK]FAB Clicked!", null)
+            log.w("[SNACK]FAB Clicked!")
         }
         fab?.show()
     }
@@ -97,11 +97,11 @@ class MyDrawableTestsFragment : MyFragment(), View.OnClickListener, SeekBar.OnSe
 
     override fun onStopTrackingTouch(seekBar: SeekBar) {
         if (seekBar === seek_bar_level)
-            log.i(String.format("level = %d", seekBar.progress), null)
+            log.i(String.format("level = %d", seekBar.progress))
         else if (seekBar === seek_bar_level)
-            log.i(String.format("stroke width = %d", seekBar.progress), null)
+            log.i(String.format("stroke width = %d", seekBar.progress))
         else
-            log.e("Unknown seek bar.", null)
+            log.e("Unknown seek bar.")
     }
 
     private class MyViewHolder(v: View, val mContent: View) : RecyclerView.ViewHolder(v)

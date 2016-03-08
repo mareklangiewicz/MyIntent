@@ -36,7 +36,7 @@ public final class MyDecoratorsTestsFragment extends MyFragment {
         if(id == R.id.action_decorate_views) {
             View view = getView();
             if(view == null) {
-                log.e("The root view of this fragment is null.", null);
+                log.e("The root view of this fragment is null.");
                 return false;
             }
             MyViewDecorator.decorateTree(view, "decorate", R.layout.mv_example_decoration, null);

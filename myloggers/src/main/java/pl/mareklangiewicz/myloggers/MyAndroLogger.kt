@@ -2,7 +2,6 @@ package pl.mareklangiewicz.myloggers
 
 import com.noveogroup.android.log.Logger
 import com.noveogroup.android.log.PatternHandler
-import pl.mareklangiewicz.myutils.IMyConsumer
 import pl.mareklangiewicz.myutils.IMyLogger
 import pl.mareklangiewicz.myutils.MyLogEntry
 import pl.mareklangiewicz.myutils.MyLogLevel
@@ -11,13 +10,11 @@ import pl.mareklangiewicz.myutils.MyLogLevel
  * Created by Marek Langiewicz on 19.02.16.
  */
 
-internal class MyAndroLogConsumer(
-        val tag: String = "",
+class MyAndroLogger(
         val level: Logger.Level = Logger.Level.VERBOSE,
         val tagPattern: String = "%logger",
         val messagePattern: String = "%s"
-) : IMyConsumer<MyLogEntry> {
-
+) : IMyLogger {
     val handler = PatternHandler(level, tagPattern, messagePattern)
 
     private fun ll(level: MyLogLevel): Logger.Level = when(level) {
@@ -29,14 +26,9 @@ internal class MyAndroLogConsumer(
         MyLogLevel.ASSERT -> Logger.Level.ASSERT
     }
 
-    override fun accept(t: MyLogEntry) {
-        handler.print(tag, ll(t.level), t.throwable, t.message)
+    override fun invoke(entry: MyLogEntry) {
+        handler.print(entry.tag, ll(entry.level), entry.throwable, entry.message)
     }
+
 }
 
-
-class MyAndroLogger(val tag: String = "ML") : IMyLogger {
-    override fun log(level: MyLogLevel, message: String, throwable: Throwable?) {
-        throw UnsupportedOperationException()
-    }
-}

@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 
-import com.noveogroup.android.log.MyAndroidLogger;
+import com.noveogroup.android.log.MyOldAndroidLogger;
 
 import pl.mareklangiewicz.myloggers.MyLogSimpleView;
 
@@ -43,7 +43,7 @@ public class MyStupidTestsFragment extends MyFragment implements DrawerLayout.Dr
 
         mMyLogSimpleView = (MyLogSimpleView) root.findViewById(R.id.my_stupid_log_simple_view);
 
-        mMyLogSimpleView.setLog((MyAndroidLogger)log);
+        mMyLogSimpleView.setLog((MyOldAndroidLogger)log);
 
         final NavigationView nv = (NavigationView) root.findViewById(R.id.stupid_navigation_view);
 
@@ -52,7 +52,7 @@ public class MyStupidTestsFragment extends MyFragment implements DrawerLayout.Dr
         nv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
-                log.i(String.format("[SNACK]%s", menuItem.getTitle()), null);
+                log.i(String.format("[SNACK]%s", menuItem.getTitle()));
                 return true;
             }
         });

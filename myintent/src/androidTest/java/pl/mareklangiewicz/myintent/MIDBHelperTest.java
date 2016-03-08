@@ -5,7 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
 
-import com.noveogroup.android.log.MyAndroidLogger;
+import com.noveogroup.android.log.MyOldAndroidLogger;
 
 import pl.mareklangiewicz.myutils.IMyLogger;
 
@@ -16,7 +16,7 @@ import pl.mareklangiewicz.myutils.IMyLogger;
  */
 public class MIDBHelperTest extends AndroidTestCase {
 
-    private IMyLogger log = new MyAndroidLogger("MITest");
+    private IMyLogger log = new MyOldAndroidLogger();
 
     private MIDBHelper mMIDBHelper;
 
@@ -48,22 +48,22 @@ public class MIDBHelperTest extends AndroidTestCase {
 
     public void logCursor(Cursor c) {
         String[] columns = c.getColumnNames();
-        log.i("column names:", null);
+        log.i("column names:");
         for(int i = 0; i < columns.length; ++i) {
-            log.i(String.format("col %d: %s", i, columns[i]), null);
+            log.i(String.format("col %d: %s", i, columns[i]));
         }
         int r = 0;
         for(c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-            log.i(String.format("row %d:", r), null);
+            log.i(String.format("row %d:", r));
             for(int i = 0; i < c.getColumnCount(); ++i) {
-                log.i(String.format("val %s: %s", columns[i], c.getString(i)), null);
+                log.i(String.format("val %s: %s", columns[i], c.getString(i)));
             }
             r++;
         }
     }
 
     public void logTable(SQLiteDatabase db, String table) {
-        log.i(String.format("Table: %s", table), null);
+        log.i(String.format("Table: %s", table));
         Cursor c = db.rawQuery("SELECT * FROM " + table, null);
         logCursor(c);
         c.close();

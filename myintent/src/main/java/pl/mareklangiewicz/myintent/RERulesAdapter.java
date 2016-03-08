@@ -13,7 +13,7 @@ import android.widget.TextView;
 //import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.noveogroup.android.log.MyAndroidLogger;
+import com.noveogroup.android.log.MyOldAndroidLogger;
 
 import java.util.List;
 import java.util.Locale;
@@ -28,7 +28,7 @@ import static pl.mareklangiewicz.myutils.MyTextUtilsKt.str;
  */
 public class RERulesAdapter extends RecyclerView.Adapter<RERulesAdapter.ViewHolder> implements View.OnClickListener {
 
-    protected @NonNull final IMyLogger log = MyAndroidLogger.UIL;
+    protected @NonNull final IMyLogger log = MyOldAndroidLogger.UIL;
 
     private @Nullable MyCommands.RERule explained; // if some rule can not be removed or moved it displays snackbar only once in a row.
         // we remember this rule here so we do not display an error for it more than once in a row.
@@ -67,7 +67,7 @@ public class RERulesAdapter extends RecyclerView.Adapter<RERulesAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         if(mRules == null) {
-            log.e("Rules not set.", null);
+            log.e("Rules not set.");
             return;
         }
         MyCommands.RERule rule = mRules.get(position);
@@ -82,7 +82,7 @@ public class RERulesAdapter extends RecyclerView.Adapter<RERulesAdapter.ViewHold
 
     public boolean move(int pos1, int pos2) {
         if(mRules == null) {
-            log.e("Rules not set.", null);
+            log.e("Rules not set.");
             return false;
         }
         try {
@@ -92,7 +92,7 @@ public class RERulesAdapter extends RecyclerView.Adapter<RERulesAdapter.ViewHold
         }
         catch(UnsupportedOperationException e) {
             if(mRules.get(pos1) != explained && mRules.get(pos1) != explained)
-                log.i("[SNACK]This group is not editable.", null);
+                log.i("[SNACK]This group is not editable.");
             explained = mRules.get(pos1);
             return false;
         }
@@ -101,7 +101,7 @@ public class RERulesAdapter extends RecyclerView.Adapter<RERulesAdapter.ViewHold
 
     public void remove(int pos) {
         if(mRules == null) {
-            log.e("Rules not set.", null);
+            log.e("Rules not set.");
             return;
         }
         try {
@@ -110,7 +110,7 @@ public class RERulesAdapter extends RecyclerView.Adapter<RERulesAdapter.ViewHold
         }
         catch(UnsupportedOperationException e) {
             if(mRules.get(pos) != explained)
-                log.i("[SNACK]This group is not editable.", null);
+                log.i("[SNACK]This group is not editable.");
             explained = mRules.get(pos);
             notifyDataSetChanged(); // so it redraws swiped rule at original position
         }

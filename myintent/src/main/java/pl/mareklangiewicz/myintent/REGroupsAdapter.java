@@ -3,7 +3,6 @@ package pl.mareklangiewicz.myintent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Html;
@@ -15,7 +14,7 @@ import android.widget.TextView;
 //import com.afollestad.materialdialogs.MaterialDialog;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.noveogroup.android.log.MyAndroidLogger;
+import com.noveogroup.android.log.MyOldAndroidLogger;
 
 import java.util.List;
 
@@ -29,7 +28,7 @@ import static pl.mareklangiewicz.myutils.MyTextUtilsKt.str;
  */
 public class REGroupsAdapter extends RecyclerView.Adapter<REGroupsAdapter.ViewHolder> implements View.OnClickListener {
 
-    protected @NonNull final IMyLogger log = MyAndroidLogger.UIL;
+    protected @NonNull final IMyLogger log = MyOldAndroidLogger.UIL;
 
     static public final int RE_GROUP_VIEW_TAG_HOLDER = R.id.mi_re_group_view_tag_holder;
 

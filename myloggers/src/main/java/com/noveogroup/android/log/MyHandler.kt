@@ -44,12 +44,12 @@ class MyHandler
      * WARNING: use MyHandler from UI thread only - if you want to use this feature.
      */
     var invalidateView: View? = null
-    private var mAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>? = null
+    private var mAdapter: RecyclerView.Adapter<out RecyclerView.ViewHolder>? = null
     /**
      * WARNING: remember to set it back to null if the adapter is not used anymore - to avoid memory leaks
      * WARNING: use MyHandler from UI thread only - if you want to use this feature.
      */
-    fun setAdapter(adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>?) {
+    fun setAdapter(adapter: RecyclerView.Adapter<out RecyclerView.ViewHolder>?) {
         mAdapter = adapter
     }
 

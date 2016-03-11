@@ -20,9 +20,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.noveogroup.android.log.MyOldAndroidLogger;
-
-import pl.mareklangiewicz.myutils.IMyLogger;
+import pl.mareklangiewicz.myloggers.MyAndroLogger;
+import pl.mareklangiewicz.myloggers.MyAndroLoggerKt;
 import pl.mareklangiewicz.myviews.IMyManager;
 import pl.mareklangiewicz.myviews.IMyNavigation;
 
@@ -53,8 +52,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
     private static final boolean V = true;
     private static final boolean VV = false;
 
-
-    protected @NonNull final IMyLogger log = MyOldAndroidLogger.UIL;
+    protected @NonNull final MyAndroLogger log = MyAndroLoggerKt.getMY_DEFAULT_ANDRO_LOGGER();
 
     public MyFragment() { }
 

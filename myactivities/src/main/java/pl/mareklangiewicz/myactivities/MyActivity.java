@@ -29,8 +29,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import com.noveogroup.android.log.MyOldAndroidLogger;
-
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +36,8 @@ import java.util.Map;
 import pl.mareklangiewicz.mydrawables.MyArrowDrawable;
 import pl.mareklangiewicz.mydrawables.MyLivingDrawable;
 import pl.mareklangiewicz.myfragments.MyFragment;
-import pl.mareklangiewicz.myutils.IMyLogger;
+import pl.mareklangiewicz.myloggers.MyAndroLogger;
+import pl.mareklangiewicz.myloggers.MyAndroLoggerKt;
 import pl.mareklangiewicz.myutils.MyCommands;
 import pl.mareklangiewicz.myviews.IMyManager;
 import pl.mareklangiewicz.myviews.IMyNavigation;
@@ -72,8 +71,8 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
     /**
      * Default logger for use in UI thread
      */
-    private @NonNull final MyOldAndroidLogger malog = MyOldAndroidLogger.UIL;
-    protected @NonNull final IMyLogger log = malog;
+    protected @NonNull final MyAndroLogger log = MyAndroLoggerKt.getMY_DEFAULT_ANDRO_LOGGER();
+
     protected @Nullable DisplayMetrics mDisplayMetrics;
     protected @Nullable DrawerLayout mGlobalDrawerLayout;
     protected @Nullable LinearLayout mGlobalLinearLayout; // either this or mGlobalDrawerLayout will remain null
@@ -272,7 +271,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         if(VV) {
             log.v(String.format("%s.%s", this.getClass().getSimpleName(), "onStart"));
         }
-        malog.setSnackView(mCoordinatorLayout);
+        log.setView(mCoordinatorLayout);
         super.onStart();
     }
 
@@ -280,7 +279,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         if(VV) {
             log.v(String.format("%s.%s", this.getClass().getSimpleName(), "onResume"));
         }
-        malog.setSnackView(mCoordinatorLayout);
+        log.setView(mCoordinatorLayout);
         super.onResume();
     }
 
@@ -295,8 +294,9 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         if(VV) {
             log.v(String.format("%s.%s", this.getClass().getSimpleName(), "onStop"));
         }
-        if(malog.getSnackView() == mCoordinatorLayout)
-            malog.setSnackView(null);
+        if(log.getView() == mCoordinatorLayout)
+            log.setView(null);
+
         super.onStop();
     }
 

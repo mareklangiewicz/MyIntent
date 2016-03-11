@@ -10,13 +10,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.noveogroup.android.log.MyOldAndroidLogger;
-
-import pl.mareklangiewicz.myutils.IMyLogger;
+import pl.mareklangiewicz.myloggers.MyAndroLogger;
+import pl.mareklangiewicz.myloggers.MyAndroLoggerKt;
 
 public final class MyNavigationView extends NavigationView implements IMyNavigation, NavigationView.OnNavigationItemSelectedListener {
 
-    protected final IMyLogger log = MyOldAndroidLogger.UIL;
+    protected @NonNull final MyAndroLogger log = MyAndroLoggerKt.getMY_DEFAULT_ANDRO_LOGGER();
 
     private @Nullable View mHeader;
 

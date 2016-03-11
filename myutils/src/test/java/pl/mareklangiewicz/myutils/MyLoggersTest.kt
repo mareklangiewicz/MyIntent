@@ -5,6 +5,7 @@ import org.junit.Test
 /**
  * Created by Marek Langiewicz on 07.03.16.
  */
+
 class MyLoggersTest {
     @Test
     fun test1() {
@@ -15,5 +16,21 @@ class MyLoggersTest {
         println(entry2)
         println(entry3)
 
+    }
+
+
+    @Test
+    fun test2() {
+        val log = MySystemLogger(MyLogLevel.DEBUG, MyLogLevel.ERROR)
+                .trace(8)
+        log.v("some verbose")
+        log.d("some debug")
+        log.i("some info")
+        log.w("some warning")
+        log.e("some error")
+        log.a("some assert")
+        log.q("some quiet - this should just be ignored...")
+        log.i("some info", "SOME OTHER CUSTOM TAG")
+        log.a("some assert", "SOME CUSTOM TAG")
     }
 }

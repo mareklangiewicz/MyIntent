@@ -2,7 +2,6 @@
 
 import os
 from PIL import Image
-from pprint import pprint
 
 app_path = "MyIntent/myintent"
 

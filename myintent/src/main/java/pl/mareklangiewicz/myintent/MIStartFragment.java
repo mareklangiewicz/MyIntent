@@ -21,21 +21,23 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import com.noveogroup.android.log.Logger;
-import com.noveogroup.android.log.MyOldAndroidLogger;
-
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
 import pl.mareklangiewicz.myfragments.MyFragment;
+import pl.mareklangiewicz.myutils.MyLogLevel;
 import pl.mareklangiewicz.myviews.IMyNavigation;
 
 public final class MIStartFragment extends MyFragment implements PlayStopButton.Listener, Countdown.Listener {
-
-    private @NonNull final MyOldAndroidLogger malog = (MyOldAndroidLogger) log;
 
     private @Nullable View mRootView;
     private @Nullable MenuItem mSearchItem;
     private @Nullable SearchView mSearchView;
     private @Nullable EditText mEditText;
-    private @Nullable MyMDLogAdapter mAdapter;
+
+    private final @NonNull MyMDAndroLogAdapter mAdapter = new MyMDAndroLogAdapter(log.getHistory());
+
+    Function1<Unit, Unit> sub = null;
+
     private @Nullable RecyclerView mRecyclerView;
     private @Nullable FloatingActionButton mFAB;
 
@@ -76,11 +78,16 @@ public final class MIStartFragment extends MyFragment implements PlayStopButton.
         mPSButton = new PlayStopButton((ImageView) mRootView.findViewById(R.id.play_stop_image_view));
         mPSButton.setListener(this);
 
-        mAdapter = new MyMDLogAdapter();
-        mAdapter.setLog(malog);
-
         mRecyclerView = (RecyclerView) mRootView.findViewById(R.id.mi_log_recycler_view);
         mRecyclerView.setAdapter(mAdapter);
+
+        sub = log.getHistory().getChanges().invoke(new Function1<Unit, Unit>() {
+            @Override public Unit invoke(Unit unit) {
+                mAdapter.notifyDataSetChanged();
+                return null;
+            }
+        });
+        mAdapter.notifyDataSetChanged(); // to make sure we are up to date
 
         //TODO SOMEDAY: some nice simple header with fragment title
         inflateMenu(R.menu.mi_log_local);
@@ -149,9 +156,10 @@ public final class MIStartFragment extends MyFragment implements PlayStopButton.
 
         mEditText = null;
 
-        //noinspection ConstantConditions
-        mAdapter.setLog(null);
-        mAdapter = null;
+        if(sub != null) {
+            sub.invoke(Unit.INSTANCE);
+            sub = null;
+        }
         //noinspection ConstantConditions
         mRecyclerView.setAdapter(null);
         mRecyclerView = null;
@@ -172,29 +180,27 @@ public final class MIStartFragment extends MyFragment implements PlayStopButton.
     public boolean onItemSelected(IMyNavigation nav, MenuItem item) {
         @IdRes int id = item.getItemId();
         if(id == R.id.log_level_error) {
-            malog.setHistoryFilterLevel(Logger.Level.ERROR);
+            log.getHistory().setLevel(MyLogLevel.ERROR);
             return true;
         }
         else if(id == R.id.log_level_warning) {
-            malog.setHistoryFilterLevel(Logger.Level.WARN);
+            log.getHistory().setLevel(MyLogLevel.WARN);
             return true;
         }
         else if(id == R.id.log_level_info) {
-            malog.setHistoryFilterLevel(Logger.Level.INFO);
+            log.getHistory().setLevel(MyLogLevel.INFO);
             return true;
         }
         else if(id == R.id.log_level_debug) {
-            malog.setHistoryFilterLevel(Logger.Level.DEBUG);
+            log.getHistory().setLevel(MyLogLevel.DEBUG);
             return true;
         }
         else if(id == R.id.log_level_verbose) {
-            malog.setHistoryFilterLevel(Logger.Level.VERBOSE);
+            log.getHistory().setLevel(MyLogLevel.VERBOSE);
             return true;
         }
         else if(id == R.id.clear_log_history) {
-            malog.getLogHistory().clear();
-            //noinspection ConstantConditions
-            mAdapter.notifyDataSetChanged();
+            log.getHistory().clear();
             return true;
         }
         else if(id == R.id.log_some_assert) {
@@ -225,7 +231,7 @@ public final class MIStartFragment extends MyFragment implements PlayStopButton.
     }
 
     private void updateCheckedItem() {
-        switch(malog.getLogHistory().getFilterLevel()) {
+        switch(log.getHistory().getLevel()) {
             case ERROR:
                 setCheckedItem(R.id.log_level_error);
                 break;

@@ -393,10 +393,10 @@ fun <P, R, U> Function1<U, IEvent<P>>.vemap(f: Function1<P, R>): Function1<U, IE
 
 
 /** allows to implement some side effect every time function is called with some argument */
-fun <A, B> Function1<A, B>.aeff(f: Function1<A, Unit>): Function1<A, B> = { f(it); this(it) }
+fun <A, B> Function1<A, B>.apeek(spy: Function1<A, Unit>): Function1<A, B> = { spy(it); this(it) }
 
 /** allows to implement some side effect every time function returns some value (similar to rx: doOnNext but pull based) */
-fun <A, B> Function1<A, B>.veff(f: Function1<B, Unit>): Function1<A, B> = this % f
+fun <A, B> Function1<A, B>.vpeek(spy: Function1<B, Unit>): Function1<A, B> = this % spy
 
 
 
@@ -701,15 +701,15 @@ fun <P, R> IEPuller<P>.lemap(f: Function1<R, P>): IEPuller<R> = EPuller(lmap(e(f
 
 
 
-fun <P, R, H> IMachine<P, R, H>.laeff(effect: Function1<P, Unit>): IMachine<P, R, H> = lift { f -> { effect(it); f(it) } }
+fun <P, R, H> IMachine<P, R, H>.lapeek(spy: Function1<P, Unit>): IMachine<P, R, H> = lift { f -> { spy(it); f(it) } }
 // TODO: tests, examples, check in practice if we even need to define it.. (probably yes: to avoid 'functional headache')
 
-fun <P, R, H> IMachine<P, R, H>.lveff(effect: Function1<R, Unit>): IMachine<P, R, H> = lift { it % effect }
+fun <P, R, H> IMachine<P, R, H>.lvpeek(spy: Function1<R, Unit>): IMachine<P, R, H> = lift { it % spy }
 // TODO: tests, examples, check in practice if we even need to define it.. (probably yes: to avoid 'functional headache')
 
 
-fun <P, H> IPusher<P, H>.leff(effect: Function1<P, Unit>): IPusher<P, H> = Pusher(laeff(effect))
-fun <R, H> IPuller<R, H>.leff(effect: Function1<R, Unit>): IPuller<R, H> = Puller(lveff(effect))
+fun <P, H> IPusher<P, H>.lpeek(spy: Function1<P, Unit>): IPusher<P, H> = Pusher(lapeek(spy))
+fun <R, H> IPuller<R, H>.lpeek(spy: Function1<R, Unit>): IPuller<R, H> = Puller(lvpeek(spy))
 
 
 

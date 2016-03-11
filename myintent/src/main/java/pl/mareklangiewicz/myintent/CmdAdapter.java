@@ -11,19 +11,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.noveogroup.android.log.MyOldAndroidLogger;
-
 import java.util.Collections;
 import java.util.List;
 
-import pl.mareklangiewicz.myutils.IMyLogger;
+import pl.mareklangiewicz.myloggers.MyAndroLogger;
+import pl.mareklangiewicz.myloggers.MyAndroLoggerKt;
 
 /**
  * Created by Marek Langiewicz on 12.11.15.
  */
 public class CmdAdapter extends RecyclerView.Adapter<CmdAdapter.ViewHolder> implements View.OnClickListener{
 
-    protected @NonNull final IMyLogger log = MyOldAndroidLogger.UIL;
+    protected @NonNull final MyAndroLogger log = MyAndroLoggerKt.getMY_DEFAULT_ANDRO_LOGGER();
 
     protected @DrawableRes int mImageRes = R.drawable.mi_ic_recent_command_black_24dp;
 

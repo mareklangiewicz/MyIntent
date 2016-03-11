@@ -5,14 +5,14 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.test.AndroidTestCase;
-
-import com.noveogroup.android.log.MyOldAndroidLogger;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import pl.mareklangiewicz.myutils.IMyLogger;
+import pl.mareklangiewicz.myloggers.MyAndroLogger;
+import pl.mareklangiewicz.myloggers.MyAndroLoggerKt;
 
 import static android.net.Uri.parse;
 import static java.lang.System.currentTimeMillis;
@@ -44,7 +44,7 @@ import static pl.mareklangiewicz.myutils.MyTextUtilsKt.str;
  */
 public class MIContentProviderTest extends AndroidTestCase {
 
-    private IMyLogger log = new MyOldAndroidLogger();
+    protected @NonNull final MyAndroLogger log = MyAndroLoggerKt.getMY_DEFAULT_ANDRO_LOGGER();
 
     public void setUp() throws Exception {
         super.setUp();

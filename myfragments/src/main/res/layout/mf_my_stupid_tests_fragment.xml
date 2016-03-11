@@ -46,7 +46,7 @@
             android:layout_margin="16dp"
             />
 
-        <pl.mareklangiewicz.myloggers.MyLogSimpleView
+        <pl.mareklangiewicz.myloggers.MyAndroLogView
             android:id="@+id/my_stupid_log_simple_view"
             android:layout_width="match_parent"
             android:layout_height="200dp"

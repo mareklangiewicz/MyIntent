@@ -13,9 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 
-import com.noveogroup.android.log.MyOldAndroidLogger;
-
-import pl.mareklangiewicz.myloggers.MyLogSimpleView;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
+import pl.mareklangiewicz.myloggers.MyAndroLogView;
 
 /**
  * Created by Marek Langiewicz on 10.09.15.
@@ -27,7 +27,9 @@ import pl.mareklangiewicz.myloggers.MyLogSimpleView;
 public class MyStupidTestsFragment extends MyFragment implements DrawerLayout.DrawerListener {
 
     CardView mWarningCardView;
-    MyLogSimpleView mMyLogSimpleView;
+    MyAndroLogView mMyAndroLogView;
+
+    Function1<Unit, Unit> sub = null;
 
     public MyStupidTestsFragment() { }
 
@@ -41,9 +43,16 @@ public class MyStupidTestsFragment extends MyFragment implements DrawerLayout.Dr
 
         mWarningCardView = (CardView) root.findViewById(R.id.stupid_warning);
 
-        mMyLogSimpleView = (MyLogSimpleView) root.findViewById(R.id.my_stupid_log_simple_view);
+        mMyAndroLogView = (MyAndroLogView) root.findViewById(R.id.my_stupid_log_simple_view);
 
-        mMyLogSimpleView.setLog((MyOldAndroidLogger)log);
+        mMyAndroLogView.setArray(log.getHistory());
+
+        sub = log.getHistory().getChanges().invoke(new Function1<Unit, Unit>() {
+            @Override public Unit invoke(Unit unit) {
+                mMyAndroLogView.invalidate();
+                return null;
+            }
+        });
 
         final NavigationView nv = (NavigationView) root.findViewById(R.id.stupid_navigation_view);
 
@@ -63,6 +72,7 @@ public class MyStupidTestsFragment extends MyFragment implements DrawerLayout.Dr
         return root;
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
@@ -75,9 +85,11 @@ public class MyStupidTestsFragment extends MyFragment implements DrawerLayout.Dr
     }
 
     @Override public void onDestroyView() {
+        if(sub != null) {
+            sub.invoke(Unit.INSTANCE);
+            sub = null;
+        }
         mWarningCardView = null;
-        mMyLogSimpleView.setLog(null);
-        mMyLogSimpleView = null;
         super.onDestroyView();
     }
 }

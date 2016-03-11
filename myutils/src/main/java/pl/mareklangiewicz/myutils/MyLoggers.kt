@@ -37,12 +37,11 @@ data class MyLogEntry(
 // alias IMyLogger = IPushee<MyLogEntry> // SOMEDAY: do it when Kotlin have type aliases
 // for now our IMyLogger IS just: Function1<MyLogEntry, Unit> without alias name...
 
-@Deprecated( "Remove this temporary class!.", ReplaceWith("Function1<MyLogEntry, Unit>"))
 interface IMyLogger : Function1<MyLogEntry, Unit> { // TODO NOW: remove this class and use Function1<MyLogEntry, Unit>
     fun log(
             message: String,
             level: MyLogLevel = MyLogLevel.INFO,
-            tag: String = "",
+            tag: String = "ML",
             throwable: Throwable? = null
     ) = this(MyLogEntry(message, level, tag, throwable))
 
@@ -64,16 +63,41 @@ fun Function1<MyLogEntry, Unit>.log(
         throwable: Throwable? = null
 ) = this(MyLogEntry(message, level, tag, throwable))
 
-fun Function1<MyLogEntry, Unit>.v(message: String, tag: String = "", throwable: Throwable? = null) { log(message, MyLogLevel.VERBOSE, tag, throwable) }
-fun Function1<MyLogEntry, Unit>.d(message: String, tag: String = "", throwable: Throwable? = null) { log(message, MyLogLevel.DEBUG  , tag, throwable) }
-fun Function1<MyLogEntry, Unit>.i(message: String, tag: String = "", throwable: Throwable? = null) { log(message, MyLogLevel.INFO   , tag, throwable) }
-fun Function1<MyLogEntry, Unit>.w(message: String, tag: String = "", throwable: Throwable? = null) { log(message, MyLogLevel.WARN   , tag, throwable) }
-fun Function1<MyLogEntry, Unit>.e(message: String, tag: String = "", throwable: Throwable? = null) { log(message, MyLogLevel.ERROR  , tag, throwable) }
-fun Function1<MyLogEntry, Unit>.a(message: String, tag: String = "", throwable: Throwable? = null) { log(message, MyLogLevel.ASSERT , tag, throwable) }
+fun Function1<MyLogEntry, Unit>.v(message: String, tag: String = "ML", throwable: Throwable? = null) { log(message, MyLogLevel.VERBOSE, tag, throwable) }
+fun Function1<MyLogEntry, Unit>.d(message: String, tag: String = "ML", throwable: Throwable? = null) { log(message, MyLogLevel.DEBUG  , tag, throwable) }
+fun Function1<MyLogEntry, Unit>.i(message: String, tag: String = "ML", throwable: Throwable? = null) { log(message, MyLogLevel.INFO   , tag, throwable) }
+fun Function1<MyLogEntry, Unit>.w(message: String, tag: String = "ML", throwable: Throwable? = null) { log(message, MyLogLevel.WARN   , tag, throwable) }
+fun Function1<MyLogEntry, Unit>.e(message: String, tag: String = "ML", throwable: Throwable? = null) { log(message, MyLogLevel.ERROR  , tag, throwable) }
+fun Function1<MyLogEntry, Unit>.a(message: String, tag: String = "ML", throwable: Throwable? = null) { log(message, MyLogLevel.ASSERT , tag, throwable) }
 
 @Suppress("UNUSED_PARAMETER", "unused")
 fun Function1<MyLogEntry, Unit>.q(message: String, tag: String = "", throwable: Throwable? = null) { }
 
+
+
+fun findStackTraceElement(depth: Int): StackTraceElement? {
+    val st = Thread.currentThread().stackTrace
+    if(st === null || st.size <= depth)
+        return null
+    return st[depth]
+}
+
+/**
+ * Add prefix to every log message with stack trace info.
+ * The prefix format is prepared for android studio, so you can just click
+ * on the log message and it will browse to exact place in source code.
+ * You have to provide a depth level of stack frame which actually calls
+ * the logger from user code. You can just try depths: 0, 1, 2, ...
+ * until it starts to log correctly.
+ * Warning: this can be slow - use it only in debug mode
+ */
+fun Function1<MyLogEntry, Unit>.trace(depth: Int): Function1<MyLogEntry, Unit>
+        = this.amap {
+    entry: MyLogEntry ->
+    val st = findStackTraceElement(depth)
+    if(st === null) entry else
+    entry.copy(message = "(${st.fileName}:${st.lineNumber}) ${entry.message}")
+}
 
 
 @Deprecated( "Not really needed now. Just use empty function.", ReplaceWith(" { } "))
@@ -82,13 +106,67 @@ class MyEmptyLogger : IMyLogger {
 }
 
 
-@Deprecated( "Not really needed now. Just use println function.", ReplaceWith(" { println(it) } "))
-class MySystemLogger : IMyLogger {
+/**
+ * Logs given entries on standard system out stream (or err).
+ * Ignores the log entry if level < outlvl
+ * Redirects entry to err stream if level > errlvl.
+ * WARNING: system err can be flushed at strange moments,
+ * so usually it is better to use only out stream to avoid message reordering.
+ */
+class MySystemLogger(val outlvl: MyLogLevel = MyLogLevel.VERBOSE, val errlvl: MyLogLevel = MyLogLevel.ASSERT) : IMyLogger {
     override fun invoke(le: MyLogEntry) {
-        val stream = if(le.level > MyLogLevel.ERROR) System.err else System.out
-        stream.println(le.message)
+        if(le.level < outlvl)
+            return
+        val stream = if(le.level > errlvl) System.err else System.out
+        stream.println(le)
     }
 }
 
-@Deprecated( "Not really needed now. Just use MyRingBuffer<MyLogEntry>.", ReplaceWith("MyRingBuffer<MyLogEntry>"))
-class MyHistoryLogger(buffer: IMyBuffer<MyLogEntry> = MyRingBuffer<MyLogEntry>()) : IMyBuffer<MyLogEntry> by buffer, IMyLogger
+class MyLogHistory : IMyLogger, IMyArray<MyLogEntry>, IClear {
+
+    private val fullBuffer = MyRingBuffer<MyLogEntry>()
+
+    private val filteredBuffer = MyRingBuffer<MyLogEntry>()
+
+    private val relay = Relay<Unit>()
+
+    val changes: IPusher<Unit, (Unit) -> Unit> = relay
+
+    var level = MyLogLevel.VERBOSE // minimum level of returned history
+        set(value) {
+            if(value != field) {
+                field = value
+                refilter()
+                relay.pushee(Unit)
+            }
+        }
+
+    override fun get(idx: Int) = filteredBuffer[size - 1 - idx]
+
+    override val size: Int
+        get() = filteredBuffer.size
+
+
+    override fun invoke(e: MyLogEntry) {
+        fullBuffer(e)
+        if(e.level >= level) {
+            filteredBuffer(e)
+            relay.pushee(Unit)
+        }
+    }
+
+    fun refilter() {
+        filteredBuffer.clear()
+        for(e in fullBuffer)
+            if(e.level >= level)
+                filteredBuffer(e)
+    }
+
+    override fun clear() {
+        fullBuffer.clear()
+        filteredBuffer.clear()
+        relay.pushee(Unit)
+    }
+
+}
+

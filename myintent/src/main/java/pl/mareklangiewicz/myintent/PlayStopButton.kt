@@ -3,15 +3,15 @@ package pl.mareklangiewicz.myintent
 import android.animation.ObjectAnimator
 import android.view.View
 import android.widget.ImageView
-import com.noveogroup.android.log.MyOldAndroidLogger
 import pl.mareklangiewicz.mydrawables.MyPlayStopDrawable
+import pl.mareklangiewicz.myloggers.MY_DEFAULT_ANDRO_LOGGER
 
 /**
  * Created by Marek Langiewicz on 15.12.15.
  */
 class PlayStopButton(private val mView: ImageView) {
 
-    private val log = MyOldAndroidLogger.UIL
+    private val log = MY_DEFAULT_ANDRO_LOGGER
 
     private var mState = HIDDEN
 
@@ -28,7 +28,7 @@ class PlayStopButton(private val mView: ImageView) {
         mAnimator = ObjectAnimator.ofInt(mDrawable, "level", 0, 10000).setDuration(ANIM_DURATION.toLong())
         mView.setOnClickListener(View.OnClickListener {
             if (mState == HIDDEN) {
-                log.v("Hidden button clicked. ignoring..", null)
+                log.v("Hidden button clicked. ignoring..")
                 return@OnClickListener
             }
             setState(if (mState == STOP) PLAY else STOP, true, false)

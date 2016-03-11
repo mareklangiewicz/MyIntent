@@ -3,11 +3,11 @@ package pl.mareklangiewicz.myintent;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 import android.test.AndroidTestCase;
 
-import com.noveogroup.android.log.MyOldAndroidLogger;
-
-import pl.mareklangiewicz.myutils.IMyLogger;
+import pl.mareklangiewicz.myloggers.MyAndroLogger;
+import pl.mareklangiewicz.myloggers.MyAndroLoggerKt;
 
 /**
  * Created by Marek Langiewicz on 09.10.15.
@@ -16,7 +16,7 @@ import pl.mareklangiewicz.myutils.IMyLogger;
  */
 public class MIDBHelperTest extends AndroidTestCase {
 
-    private IMyLogger log = new MyOldAndroidLogger();
+    protected @NonNull final MyAndroLogger log = MyAndroLoggerKt.getMY_DEFAULT_ANDRO_LOGGER();
 
     private MIDBHelper mMIDBHelper;
 

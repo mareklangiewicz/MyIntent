@@ -72,11 +72,11 @@ class MyMachinesTest {
 
         1 { { -> println("ble") }() }
 
-        val e = ePulleeOf("aaa", "bbb", "ccc").veff { println(it) }
+        val e = ePulleeOf("aaa", "bbb", "ccc").vpeek { println(it) }
 
         5 (e)
 
-        val ee = ePulleeOf("aaa", "bbb", "ccc").veff { println(it) }
+        val ee = ePulleeOf("aaa", "bbb", "ccc").vpeek { println(it) }
 
         for(i in ee.eiter())
             println(i)
@@ -108,7 +108,7 @@ class MyMachinesTest {
             println(i)
 
         val npullee3 = (1..30).asEPullee()
-                .veff { println(it) }
+                .vpeek { println(it) }
                 .vefilter { it % 3 == 0 }
 
         for(i in npullee3.eiter())
@@ -119,9 +119,9 @@ class MyMachinesTest {
     @Test
     fun testPushees() {
         val pushee = { s: String -> println("xxx $s") }
-                .aeff { println("yyy $it") }
+                .apeek { println("yyy $it") }
                 .afilter { it.length > 4 }
-                .aeff { println("zzz $it") }
+                .apeek { println("zzz $it") }
 
         pushee("a")
         pushee("aa")
@@ -134,8 +134,8 @@ class MyMachinesTest {
 
 
         val pushee2 = { s: String -> Unit }
-                .aeff(pushee)
-                .aeff(pushee)
+                .apeek(pushee)
+                .apeek(pushee)
 
         pushee2("b")
         pushee2("bb")
@@ -174,7 +174,7 @@ class MyMachinesTest {
                 .vnflat()
                 .vnmap { it * 2 }
 
-        val pp = pullee.veff(pni)
+        val pp = pullee.vpeek(pni)
         for (x in pp.niter())
             println(x)
     }
@@ -183,9 +183,9 @@ class MyMachinesTest {
     fun testStepPusher() {
 
         val ctl = StepPusher(3)
-                .leff { println("xxx $it")}
+                .lpeek { println("xxx $it")}
                 .ltake(5)
-                .leff { println("yyy $it") }
+                .lpeek { println("yyy $it") }
                 .lmap { it + 100 }
                 .invoke { println("zzz $it") }
 

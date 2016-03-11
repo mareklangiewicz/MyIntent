@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.transition.Slide;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -12,24 +13,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.noveogroup.android.log.Logger;
-import com.noveogroup.android.log.MyOldAndroidLogger;
-
-import pl.mareklangiewicz.myloggers.MyLogAdapter;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
+import pl.mareklangiewicz.myloggers.MyAndroLogAdapter;
+import pl.mareklangiewicz.myutils.MyLogLevel;
 import pl.mareklangiewicz.myviews.IMyNavigation;
-import android.support.v7.widget.RecyclerView;
 
 /**
  * MyFragment showing MyAndroidLogger messages.
  */
 public final class MyLogFragment extends MyFragment {
 
-    private @NonNull final MyOldAndroidLogger malog = (MyOldAndroidLogger) log;
+    private final @NonNull MyAndroLogAdapter adapter = new MyAndroLogAdapter(log.getHistory());
 
-    private @NonNull final MyLogAdapter adapter = new MyLogAdapter();
-
-    private @Nullable RecyclerView mMLRView;
-
+    Function1<Unit, Unit> sub = null;
 
 
     @Nullable
@@ -38,11 +35,17 @@ public final class MyLogFragment extends MyFragment {
 
         super.onCreateView(inflater, container, savedInstanceState); //just for logging
 
-        adapter.setLog(malog);
+        sub = log.getHistory().getChanges().invoke(new Function1<Unit, Unit>() {
+            @Override public Unit invoke(Unit unit) {
+                adapter.notifyDataSetChanged();
+                return null;
+            }
+        });
+        adapter.notifyDataSetChanged(); // to make sure we are up to date
 
         View rootView = inflater.inflate(R.layout.mf_my_log_fragment, container, false);
-        mMLRView = (RecyclerView) rootView.findViewById(R.id.my_log_recycler_view);
-        mMLRView.setAdapter(adapter);
+        RecyclerView rv = (RecyclerView) rootView.findViewById(R.id.my_log_recycler_view);
+        rv.setAdapter(adapter);
         //TODO SOMEDAY: some nice simple header with fragment title
         inflateMenu(R.menu.mf_my_log);
         updateCheckedItem();
@@ -54,7 +57,10 @@ public final class MyLogFragment extends MyFragment {
 
     @Override
     public void onDestroyView() {
-        adapter.setLog(null);
+        if(sub != null) {
+            sub.invoke(Unit.INSTANCE);
+            sub = null;
+        }
         super.onDestroyView();
     }
 
@@ -62,30 +68,27 @@ public final class MyLogFragment extends MyFragment {
     public boolean onItemSelected(IMyNavigation nav, MenuItem item) {
         @IdRes int id = item.getItemId();
         if(id == R.id.log_level_error) {
-            malog.setHistoryFilterLevel(Logger.Level.ERROR);
+            log.getHistory().setLevel(MyLogLevel.ERROR);
             return true;
         }
         else if(id == R.id.log_level_warning) {
-            malog.setHistoryFilterLevel(Logger.Level.WARN);
+            log.getHistory().setLevel(MyLogLevel.WARN);
             return true;
         }
         else if(id == R.id.log_level_info) {
-            malog.setHistoryFilterLevel(Logger.Level.INFO);
+            log.getHistory().setLevel(MyLogLevel.INFO);
             return true;
         }
         else if(id == R.id.log_level_debug) {
-            malog.setHistoryFilterLevel(Logger.Level.DEBUG);
+            log.getHistory().setLevel(MyLogLevel.DEBUG);
             return true;
         }
         else if(id == R.id.log_level_verbose) {
-            malog.setHistoryFilterLevel(Logger.Level.VERBOSE);
+            log.getHistory().setLevel(MyLogLevel.VERBOSE);
             return true;
         }
         else if(id == R.id.clear_log_history) {
-            malog.getLogHistory().clear();
-            if(mMLRView != null) {
-                mMLRView.getAdapter().notifyDataSetChanged();
-            }
+            log.getHistory().clear();
             return true;
         }
         else if(id == R.id.log_some_assert) {
@@ -116,7 +119,7 @@ public final class MyLogFragment extends MyFragment {
     }
 
     private void updateCheckedItem() {
-        switch(malog.getLogHistory().getFilterLevel()) {
+        switch(log.getHistory().getLevel()) {
             case ERROR:
                 setCheckedItem(R.id.log_level_error);
                 break;

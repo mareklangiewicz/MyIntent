@@ -27,16 +27,17 @@ interface IMyMutableArray<T> : IMyArray<T> {
 
 interface IMyBuffer<T> : IMyArray<T>, Function1<T, Unit> // SOMEDAY: use Pushee<T> when we have type aliases
 
+interface IClear {
+    fun clear()
+}
 
-
-class MyRingBuffer<T>(val capacity: Int = 256) : IMyBuffer<T> {
-
+class MyRingBuffer<T>(val capacity: Int = 256) : IMyBuffer<T>, IClear {
     private val array: ArrayList<T> = ArrayList(capacity)
 
     private var startpos: Int = 0
 
 
-    override fun get(idx: Int): T = array[startpos + idx % size]
+    override fun get(idx: Int): T = array[(startpos + idx) % size ]
 
     override val size: Int
         get() = array.size
@@ -48,6 +49,11 @@ class MyRingBuffer<T>(val capacity: Int = 256) : IMyBuffer<T> {
             array[startpos] = t
             startpos = (startpos + 1) % size
         }
+    }
+
+    override fun clear() {
+        array.clear()
+        startpos = 0
     }
 
 }

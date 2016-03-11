@@ -6,9 +6,8 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.noveogroup.android.log.MyOldAndroidLogger
 import kotlinx.android.synthetic.main.mf_my_machines_tests_fragment.*
-import pl.mareklangiewicz.myloggers.MyLogAdapter
+import pl.mareklangiewicz.myloggers.MyAndroLogAdapter
 import pl.mareklangiewicz.myutils.*
 
 /**
@@ -16,7 +15,9 @@ import pl.mareklangiewicz.myutils.*
  */
 class MyMachinesTestsFragment : MyFragment() {
 
-    val adapter = MyLogAdapter()
+    val adapter = MyAndroLogAdapter(log.history)
+
+    var sub: Function1<Unit, Unit>? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState) //just for logging
@@ -27,7 +28,10 @@ class MyMachinesTestsFragment : MyFragment() {
 
         super.onViewCreated(view, savedInstanceState)
 
-        adapter.setLog(MyOldAndroidLogger.UIL)
+        sub = log.history.changes {
+            adapter.notifyDataSetChanged()
+        }
+        adapter.notifyDataSetChanged()
 
         mf_mmt_rv_log.adapter = adapter
 
@@ -39,9 +43,9 @@ class MyMachinesTestsFragment : MyFragment() {
                     .vemap { 2000L - it * 100L }
 
             val timer = Timer(Handler(), intervals)
-                    .leff { log.i("item: $it") }
+                    .lpeek { log.i("item: $it") }
                     .lfilter { it % 5L == 0L }
-                    .leff { log.w("$it % 5 = 0") }
+                    .lpeek { log.w("$it % 5 = 0") }
 
             timer { } (Start)
 
@@ -55,12 +59,12 @@ class MyMachinesTestsFragment : MyFragment() {
 
             val timer = Timer(Handler(), intervals)
                     .lmap { it * 5f + 5f }
-                    .leff { animTo(mf_mmt_mp1, "to", it) }
+                    .lpeek { animTo(mf_mmt_mp1, "to", it) }
                     .lfilter { it % 10f == 0f }
                     .lmap { it / 2f }
-                    .leff { animTo(mf_mmt_mp2, "to", it) }
-                    .leff { animTo(mf_mmt_mp3, "to", MyMathUtils.getRandomFloat(50f, 99f)) }
-                    .leff { animTo(mf_mmt_mp3, "from", MyMathUtils.getRandomFloat(1f, mf_mmt_mp3.to)) }
+                    .lpeek { animTo(mf_mmt_mp2, "to", it) }
+                    .lpeek { animTo(mf_mmt_mp3, "to", MyMathUtils.getRandomFloat(50f, 99f)) }
+                    .lpeek { animTo(mf_mmt_mp3, "from", MyMathUtils.getRandomFloat(1f, mf_mmt_mp3.to)) }
 
             timer { } (Start)
 
@@ -77,7 +81,7 @@ class MyMachinesTestsFragment : MyFragment() {
             val intervals = (1..70).asEPullee().vemap { 300L }
 
             val timer = Timer(Handler(), intervals)
-                    .leff {
+                    .lpeek {
                         when(it) {
                             10L -> subscriptions[0] = relay { animTo(mf_mmt_mp1, "to", it) }
                             20L -> subscriptions[1] = relay { animTo(mf_mmt_mp2, "to", it) }
@@ -115,7 +119,7 @@ class MyMachinesTestsFragment : MyFragment() {
         ObjectAnimator.ofInt(obj, property, goal).start()
     }
     override fun onDestroyView() {
-        adapter.setLog(null)
+        sub?.invoke(Unit)
         super.onDestroyView()
     }
 }

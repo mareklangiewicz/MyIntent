@@ -14,8 +14,8 @@ import java.util.List;
 import pl.mareklangiewicz.myutils.MyHttp.OpenWeatherMap.DailyForecasts;
 import pl.mareklangiewicz.myutils.MyHttp.OpenWeatherMap.Forecast;
 import pl.mareklangiewicz.myutils.MyHttp.OpenWeatherMap.Forecasts;
-import retrofit.Call;
-import retrofit.Response;
+import retrofit2.Call;
+import retrofit2.Response;
 
 import static pl.mareklangiewicz.myutils.MyTextUtilsKt.*;
 

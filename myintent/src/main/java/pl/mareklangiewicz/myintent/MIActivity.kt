@@ -28,9 +28,10 @@ import pl.mareklangiewicz.myutils.MyCommands
 import pl.mareklangiewicz.myutils.MyHttp
 import pl.mareklangiewicz.myutils.str
 import pl.mareklangiewicz.myviews.IMyNavigation
-import retrofit.Callback
-import retrofit.Response
-import retrofit.Retrofit
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
 import java.lang.ref.WeakReference
 import java.util.*
 
@@ -379,17 +380,31 @@ class MIActivity : MyActivity() {
             val call = service.getWeatherByCity(appid, city, units)
 
             call.enqueue(object : Callback<MyHttp.OpenWeatherMap.Forecast> {
-                override fun onResponse(response: Response<MyHttp.OpenWeatherMap.Forecast>, retrofit: Retrofit) {
-                    val forecast = response.body()
+                override fun onResponse(call: Call<MyHttp.OpenWeatherMap.Forecast>?, response: Response<MyHttp.OpenWeatherMap.Forecast>?) {
+                    val forecast = response?.body()
+                    if(forecast === null) {
+                        log.e("Fetching weather failed: empty response.")
+                        return
+                    }
                     if (forecast.weather.size < 1) {
                         log.e("Weather error.")
                         return
                     }
-                    val report = "Weather in %s: %s, temperature: %.0f %s, pressure: %.0f hectopascals, humidity: %d%%, wind speed: %.0f %s".format(Locale.US, forecast.name, forecast.weather[0].description, forecast.main.temp, tempunit, forecast.main.pressure, forecast.main.humidity, forecast.wind.speed, speedunit)
+                    val report = "Weather in %s: %s, temperature: %.0f %s, pressure: %.0f hectopascals, humidity: %d%%, wind speed: %.0f %s".format(
+                            Locale.US,
+                            forecast.name,
+                            forecast.weather[0].description,
+                            forecast.main.temp,
+                            tempunit,
+                            forecast.main.pressure,
+                            forecast.main.humidity,
+                            forecast.wind.speed,
+                            speedunit
+                    )
                     babbler.say(report, false)
                 }
 
-                override fun onFailure(t: Throwable) {
+                override fun onFailure(call: Call<MyHttp.OpenWeatherMap.Forecast>?, t: Throwable?) {
                     log.e("Fetching weather failed.", t)
                 }
             })
@@ -400,8 +415,12 @@ class MIActivity : MyActivity() {
             val call = service.getDailyForecastByCity(appid, city, d.toLong(), units)
 
             call.enqueue(object : Callback<MyHttp.OpenWeatherMap.DailyForecasts> {
-                override fun onResponse(response: Response<MyHttp.OpenWeatherMap.DailyForecasts>, retrofit: Retrofit) {
-                    val forecasts = response.body()
+                override fun onResponse(call: Call<MyHttp.OpenWeatherMap.DailyForecasts>?, response: Response<MyHttp.OpenWeatherMap.DailyForecasts>?) {
+                    val forecasts = response?.body()
+                    if(forecasts === null) {
+                        log.e("Fetching weather failed: empty response.")
+                        return
+                    }
                     babbler.say("Weather forcast for " + forecasts.city.name + ":")
                     for (i in 1..forecasts.list.size - 1) {
                         if (forecasts.list[i].weather.size < 1) {
@@ -409,12 +428,16 @@ class MIActivity : MyActivity() {
                             return
                         }
                         val time = forecasts.list[i].dt * 1000
-                        val report = "On %tA: %s, %.0f %s.".format(Locale.US, time, forecasts.list[i].weather[0].description, forecasts.list[i].temp.day, tempunit)
+                        val report = "On %tA: %s, %.0f %s.".format(
+                                Locale.US, time,
+                                forecasts.list[i].weather[0].description,
+                                forecasts.list[i].temp.day, tempunit
+                        )
                         babbler.say(report, false)
                     }
                 }
 
-                override fun onFailure(t: Throwable) {
+                override fun onFailure(call: Call<MyHttp.OpenWeatherMap.DailyForecasts>?, t: Throwable?) {
                     log.e("Fetching forecast failed.", t)
                 }
             })

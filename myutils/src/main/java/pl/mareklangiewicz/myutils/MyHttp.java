@@ -2,19 +2,16 @@ package pl.mareklangiewicz.myutils;
 
 import android.support.annotation.Nullable;
 
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.logging.HttpLoggingInterceptor;
-
 import java.util.List;
 
-import retrofit.Call;
-import retrofit.MoshiConverterFactory;
-import retrofit.Retrofit;
-import retrofit.http.GET;
-import retrofit.http.Header;
-import retrofit.http.Headers;
-import retrofit.http.Path;
-import retrofit.http.Query;
+import retrofit2.Call;
+import retrofit2.Retrofit;
+import retrofit2.converter.moshi.MoshiConverterFactory;
+import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.Headers;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by Marek Langiewicz on 07.12.15.
@@ -218,20 +215,28 @@ public final class MyHttp {
                 .build();
 
         public static Service create() {
-            if(VV) {
-                OkHttpClient client = new OkHttpClient();
-                HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-                interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-                client.interceptors().add(interceptor);
 
-                Retrofit loggingretrofit = new Retrofit.Builder()
-                        .baseUrl(URL)
-                        .client(client)
-                        .addConverterFactory(MoshiConverterFactory.create())
-                        .build();
 
-                return loggingretrofit.create(Service.class);
-            }
+
+            // THIS IS OLD JAVA WAY TO INJECT SOME REQUEST/RESPONSE LOGGING
+//            if(VV) {
+//                OkHttpClient client = new OkHttpClient();
+//                HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+//                interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+//                client.interceptors().add(interceptor);
+//
+//                Retrofit loggingretrofit = new Retrofit.Builder()
+//                        .baseUrl(URL)
+//                        .client(client)
+//                        .addConverterFactory(MoshiConverterFactory.create())
+//                        .build();
+//
+//                return loggingretrofit.create(Service.class);
+//            }
+
+
+
+
             return retrofit.create(Service.class);
         }
 
@@ -427,20 +432,26 @@ public final class MyHttp {
 
         public static Service create() {
 
-            if(VV) {
-                OkHttpClient client = new OkHttpClient();
-                HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-                interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-                client.interceptors().add(interceptor);
 
-                Retrofit loggingretrofit = new Retrofit.Builder()
-                        .baseUrl(URL)
-                        .client(client)
-                        .addConverterFactory(MoshiConverterFactory.create())
-                        .build();
 
-                return loggingretrofit.create(Service.class);
-            }
+//            THIS IS OLD JAVA WAY TO INJECT SOME REQUEST/RESPONSE LOGGING
+//            if(VV) {
+//                OkHttpClient client = new OkHttpClient();
+//                HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+//                interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+//                client.interceptors().add(interceptor);
+//
+//                Retrofit loggingretrofit = new Retrofit.Builder()
+//                        .baseUrl(URL)
+//                        .client(client)
+//                        .addConverterFactory(MoshiConverterFactory.create())
+//                        .build();
+//
+//                return loggingretrofit.create(Service.class);
+//            }
+
+
+
 
             return retrofit.create(Service.class);
         }

@@ -25,7 +25,7 @@ import pl.mareklangiewicz.myloggers.MyAndroLoggerKt;
 import pl.mareklangiewicz.myviews.IMyManager;
 import pl.mareklangiewicz.myviews.IMyNavigation;
 
-import static pl.mareklangiewicz.myutils.MyTextUtilsKt.str;
+import static pl.mareklangiewicz.myutils.MyTextUtilsKt.*;
 
 /**
  * This is my base class for common fragments.
@@ -175,8 +175,8 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
     @Override
     public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
         if(VV)
-            log.v(String.format("%s.%s context=%s attrs=%s  state=%s)", this.getClass().getSimpleName(), "onInflate", str(context), str(attrs),
-                    str(savedInstanceState)));
+            log.v(String.format("%s.%s context=%s attrs=%s  state=%s)", this.getClass().getSimpleName(), "onInflate", getStr(context), getStr(attrs),
+                    getStr(savedInstanceState)));
         super.onInflate(context, attrs, savedInstanceState);
     }
 
@@ -184,7 +184,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
     @Override
     public void onCreate(Bundle savedInstanceState) {
         if(V)
-            log.v(String.format("%s.%s state=%s args=%s", this.getClass().getSimpleName(), "onCreate", str(savedInstanceState), str(getArguments())));
+            log.v(String.format("%s.%s state=%s args=%s", this.getClass().getSimpleName(), "onCreate", getStr(savedInstanceState), getStr(getArguments())));
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
     }
@@ -193,7 +193,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
     @Override
     public void onAttach(Context context) {
         if(VV)
-            log.v(String.format("%s.%s context=%s", this.getClass().getSimpleName(), "onAttach", str(context)));
+            log.v(String.format("%s.%s context=%s", this.getClass().getSimpleName(), "onAttach", getStr(context)));
         super.onAttach(context);
     }
 
@@ -201,7 +201,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         if(VV)
-            log.v(String.format("%s.%s state=%s", this.getClass().getSimpleName(), "onActivityCreated", str(savedInstanceState)));
+            log.v(String.format("%s.%s state=%s", this.getClass().getSimpleName(), "onActivityCreated", getStr(savedInstanceState)));
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -209,8 +209,8 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if(VV)
-            log.v(String.format("%s.%s inflater=%s container=%s state=%s", this.getClass().getSimpleName(), "onCreateView", str(inflater), str(container),
-                    str(savedInstanceState)));
+            log.v(String.format("%s.%s inflater=%s container=%s state=%s", this.getClass().getSimpleName(), "onCreateView", getStr(inflater), getStr(container),
+                    getStr(savedInstanceState)));
         return null;
     }
 
@@ -218,7 +218,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         if(VV)
-            log.v(String.format("%s.%s view=%s state=%s", this.getClass().getSimpleName(), "onViewCreated", str(view), str(savedInstanceState)));
+            log.v(String.format("%s.%s view=%s state=%s", this.getClass().getSimpleName(), "onViewCreated", getStr(view), getStr(savedInstanceState)));
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -226,7 +226,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
     @Override
     public void onViewStateRestored(Bundle savedInstanceState) {
         if(VV)
-            log.v(String.format("%s.%s state=%s", this.getClass().getSimpleName(), "onViewStateRestored", str(savedInstanceState)));
+            log.v(String.format("%s.%s state=%s", this.getClass().getSimpleName(), "onViewStateRestored", getStr(savedInstanceState)));
         super.onViewStateRestored(savedInstanceState);
     }
 
@@ -258,7 +258,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
     @Override
     public void onSaveInstanceState(Bundle outState) {
         if(VV)
-            log.v(String.format("%s.%s outState=%s", this.getClass().getSimpleName(), "onSaveInstanceState", str(outState)));
+            log.v(String.format("%s.%s outState=%s", this.getClass().getSimpleName(), "onSaveInstanceState", getStr(outState)));
         super.onSaveInstanceState(outState);
     }
 

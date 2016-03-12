@@ -47,7 +47,7 @@ class MyAndroLogView : View {
 
 
     override fun onDraw(canvas: Canvas) {
-        array?.apply { draw(canvas, 4, canvas.height - 2, paint, lines) }
+        array?.run { draw(canvas, 4, canvas.height - 2, paint, lines) }
         super.onDraw(canvas)
     }
 }

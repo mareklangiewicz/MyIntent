@@ -21,8 +21,9 @@ import static java.lang.String.format;
 import static java.lang.System.currentTimeMillis;
 import static pl.mareklangiewicz.myutils.MyCommands.RERule;
 import static pl.mareklangiewicz.myutils.MyCommands.RE_ACTIVITY_GROUP;
+import static pl.mareklangiewicz.myutils.MyCommands.RE_RULES;
 import static pl.mareklangiewicz.myutils.MyCommands.parseCommand;
-import static pl.mareklangiewicz.myutils.MyTextUtilsKt.str;
+import static pl.mareklangiewicz.myutils.MyTextUtilsKt.*;
 
 /**
  * Created by Marek Langiewicz on 29.09.15.
@@ -49,8 +50,8 @@ public class MyCommandsTest {
     public void testSomething() throws Exception {
         Date d1 = new Date();
         Date d2 = new Date();
-        log.i(str(d1));
-        log.i(str(d2));
+        log.i(getStr(d1));
+        log.i(getStr(d2));
         log.i(format("%b", d1.equals(d2)));
 
         long l1 = currentTimeMillis();
@@ -233,13 +234,13 @@ public class MyCommandsTest {
 
     @Test
     public void testRE_RULES() throws Exception {
-        log.i(str(MyCommands.RE_RULES.get(0)));
-        log.i(str(MyCommands.RE_RULES.get(1)));
-        log.i(str(MyCommands.RE_RULES.get(2)));
-        log.i(str(MyCommands.RE_RULES.get(3)));
-        log.i(str(MyCommands.RE_RULES.get(4)));
-        log.i(str(MyCommands.RE_RULES.get(5)));
-        log.i(str(MyCommands.RE_RULES.get(6)));
+        log.i(getStr(RE_RULES.get(0)));
+        log.i(getStr(RE_RULES.get(1)));
+        log.i(getStr(RE_RULES.get(2)));
+        log.i(getStr(RE_RULES.get(3)));
+        log.i(getStr(RE_RULES.get(4)));
+        log.i(getStr(RE_RULES.get(5)));
+        log.i(getStr(RE_RULES.get(6)));
     }
 
 
@@ -342,7 +343,7 @@ public class MyCommandsTest {
             map.clear();
             parseCommand(command, map);
             log.i(format("parseCommand: %s", command));
-            log.i(format("result: %s", str(map)));
+            log.i(format("result: %s", getStr(map)));
         }
 
     }
@@ -353,7 +354,7 @@ public class MyCommandsTest {
         String extra = "integer android.intent.extra.alarm.LENGTH 5";
         Map<String, String> map = new HashMap<>(20);
         MyCommands.parseCommandExtraSegment(extra, map);
-        log.w(str(map));
+        log.w(getStr(map));
 
     }
 

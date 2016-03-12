@@ -19,7 +19,7 @@ import pl.mareklangiewicz.myloggers.MyAndroLogger;
 import pl.mareklangiewicz.myloggers.MyAndroLoggerKt;
 import pl.mareklangiewicz.myutils.MyCommands;
 
-import static pl.mareklangiewicz.myutils.MyTextUtilsKt.str;
+import static pl.mareklangiewicz.myutils.MyTextUtilsKt.*;
 
 //import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -99,7 +99,7 @@ public class REGroupsAdapter extends RecyclerView.Adapter<REGroupsAdapter.ViewHo
         final MyCommands.REGroup group = mGroups.get(pos);
 
         MaterialDialog dialog = new MaterialDialog.Builder(v.getContext())
-                .title("RE Group " + str(pos + 1))
+                .title("RE Group " + getStr(pos + 1))
                 .customView(R.layout.mi_re_group_details, true)
                 .iconRes(R.mipmap.mi_ic_launcher)
                 .limitIconToDefaultSize() // limits the displayed icon size to 48dp

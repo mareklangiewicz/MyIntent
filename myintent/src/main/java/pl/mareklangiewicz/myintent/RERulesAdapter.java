@@ -19,7 +19,7 @@ import pl.mareklangiewicz.myloggers.MyAndroLogger;
 import pl.mareklangiewicz.myloggers.MyAndroLoggerKt;
 import pl.mareklangiewicz.myutils.MyCommands;
 
-import static pl.mareklangiewicz.myutils.MyTextUtilsKt.str;
+import static pl.mareklangiewicz.myutils.MyTextUtilsKt.*;
 
 //import com.afollestad.materialdialogs.DialogAction;
 //import com.afollestad.materialdialogs.MaterialDialog;
@@ -155,7 +155,7 @@ public class RERulesAdapter extends RecyclerView.Adapter<RERulesAdapter.ViewHold
                         .build()
                 :
                 new MaterialDialog.Builder(v.getContext())
-                        .title("RE Rule " + str(pos + 1))
+                        .title("RE Rule " + getStr(pos + 1))
                         .customView(R.layout.mi_re_rule_ro_details, true)
                         .iconRes(R.mipmap.mi_ic_launcher)
                         .limitIconToDefaultSize() // limits the displayed icon size to 48dp

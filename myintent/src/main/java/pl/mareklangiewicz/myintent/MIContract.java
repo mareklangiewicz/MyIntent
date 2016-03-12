@@ -12,7 +12,7 @@ import java.util.List;
 
 import pl.mareklangiewicz.myutils.MyCommands;
 
-import static pl.mareklangiewicz.myutils.MyTextUtilsKt.str;
+import static pl.mareklangiewicz.myutils.MyTextUtilsKt.*;
 
 /**
  * Created by Marek Langiewicz on 07.10.15.
@@ -59,7 +59,7 @@ public final class MIContract {
          */
         public static boolean load(Context context, List<String> commands, int limit) {
 
-            String slimit = limit <= 0 ? "" : " LIMIT " + str(limit) + " ";
+            String slimit = limit <= 0 ? "" : " LIMIT " + getStr(limit) + " ";
             ContentResolver cr = context.getContentResolver();
             Cursor c = cr.query(URI, null, null, null, " " + COL_TIME + " DESC " + slimit);
             if(c == null)

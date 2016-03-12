@@ -10,17 +10,17 @@ val VV = false
  * str extension functions are for humans only. returned string format can change any time..
  */
 
-fun Double?.str() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
-fun Float?.str() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
-fun Long?.str() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
-fun Int?.str() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
-fun Short?.str() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
-fun Byte?.str() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
-fun Char?.str() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
-fun Boolean?.str() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
-fun <E> Array<E>?.str() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
-fun <E> Iterable<E>?.str() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
-fun Any?.str() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
+val Double?.str: String get() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
+val Float?.str: String get() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
+val Long?.str: String get() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
+val Int?.str: String get() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
+val Short?.str: String get() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
+val Byte?.str: String get() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
+val Char?.str: String get() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
+val Boolean?.str: String get() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
+val <E> Array<E>?.str: String get() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
+val <E> Iterable<E>?.str: String get() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
+val Any?.str: String get() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
 
 private fun <E> Array<E>?.toStr(max: Int) = this?.joinToString(prefix = "[", postfix = "]", limit = max) ?: "null"
 private fun <E> Iterable<E>?.toStr(max: Int) = this?.joinToString(prefix = "[", postfix = "]", limit = max) ?: "null"
@@ -62,13 +62,13 @@ fun Any?.toShortStr() = toString() // TODO SOMEDAY: print some short id or somet
 fun Any?.toLongStr() = toString()
 fun Any?.toVeryLongStr() = toString() // TODO SOMEDAY: print some more info..
 
-fun Bundle?.str() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
+val Bundle?.str: String get() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
 
 fun Bundle?.toShortStr() = this?.let { "Bundle{size:${size()}}" } ?: "null"
 fun Bundle?.toLongStr() = toShortStr()
 fun Bundle?.toVeryLongStr() = toString()
 
-fun View?.str() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
+val View?.str: String get() = if(VV) toVeryLongStr() else if(V) toLongStr() else toShortStr()
 
 fun View?.toShortStr() = this?.let { "View{hash:${hashCode()}}" } ?: "null"
 fun View?.toLongStr() = toShortStr()

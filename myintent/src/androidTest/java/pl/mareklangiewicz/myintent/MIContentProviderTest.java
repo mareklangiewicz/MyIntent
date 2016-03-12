@@ -32,7 +32,7 @@ import static pl.mareklangiewicz.myintent.MIContract.RuleUser.load;
 import static pl.mareklangiewicz.myintent.MIContract.RuleUser.save;
 import static pl.mareklangiewicz.myutils.MyCommands.RERule;
 import static pl.mareklangiewicz.myutils.MyCommands.RE_USER_GROUP;
-import static pl.mareklangiewicz.myutils.MyTextUtilsKt.str;
+import static pl.mareklangiewicz.myutils.MyTextUtilsKt.*;
 
 /**
  * Created by Marek Langiewicz on 10.10.15.
@@ -298,12 +298,12 @@ public class MIContentProviderTest extends AndroidTestCase {
         insertRowTo(values, uri);
 
         RERule rule = RE_USER_GROUP.getRules().get(1);
-        log.i(String.format("RuleUser.insert: %s", str(rule)));
+        log.i(String.format("RuleUser.insert: %s", getStr(rule)));
         RuleUser.insert(getContext(), 77, rule);
         log.i("done.");
 
         rule = RE_USER_GROUP.getRules().get(2);
-        log.i(String.format("RuleUser.insert: %s", str(rule)));
+        log.i(String.format("RuleUser.insert: %s", getStr(rule)));
         RuleUser.insert(getContext(), 76, rule);
         log.i("done.");
 
@@ -416,7 +416,7 @@ public class MIContentProviderTest extends AndroidTestCase {
         assertTrue(ok);
         log.i("RuleUser.load results:");
         for(int i = 0; i < rules.size(); ++i)
-            log.i(str(rules.get(i)));
+            log.i(getStr(rules.get(i)));
     }
 
 }

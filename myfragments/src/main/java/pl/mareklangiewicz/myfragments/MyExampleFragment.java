@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import pl.mareklangiewicz.myviews.MyExampleView;
-import static pl.mareklangiewicz.myutils.MyTextUtilsKt.str;
+import static pl.mareklangiewicz.myutils.MyTextUtilsKt.*;
 
 
 public final class MyExampleFragment extends Fragment {
@@ -36,7 +36,7 @@ public final class MyExampleFragment extends Fragment {
             for(String key : args.keySet()) {
                 text.append(key);
                 text.append(": ");
-                text.append(str(args.get(key)));
+                text.append(getStr(args.get(key)));
                 text.append("\n");
             }
             mev.setText(text.toString());

@@ -87,6 +87,7 @@ class PlayStopButton(private val mView: ImageView) {
     }
 
     companion object {
+        // TODO LATER: change to enum
         const val HIDDEN = 0
         const val PLAY = 1
         const val STOP = 2

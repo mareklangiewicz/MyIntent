@@ -12,7 +12,7 @@ import java.util.Random
  * Generates cool effect of animated lines (random)
  * Check MyBlocks app for demo (look at left drawer header).
  */
-class MyMagicLinesDrawable : MyLivingDrawable() {
+open class MyMagicLinesDrawable : MyLivingDrawable() {
 
     private val RANDOM = Random()
     private var mLines: IntArray? = null

@@ -44,9 +44,8 @@ import pl.mareklangiewicz.myviews.IMyNavigation;
 import pl.mareklangiewicz.myviews.MyNavigationView;
 
 import static pl.mareklangiewicz.myutils.MyMathUtils.scale0d;
-import static pl.mareklangiewicz.myutils.MyTextUtilsKt.str;
+import static pl.mareklangiewicz.myutils.MyTextUtilsKt.*;
 
-@SuppressLint("Registered")
 public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavigation.Listener, DrawerLayout.DrawerListener {
 
 
@@ -94,8 +93,8 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
     @CallSuper @Override protected void onCreate(Bundle savedInstanceState) {
         mDisplayMetrics = getResources().getDisplayMetrics();
         if(V) {
-            log.d(String.format("%s.%s state=%s", this.getClass().getSimpleName(), "onCreate", str(savedInstanceState)));
-            log.v(str(mDisplayMetrics));
+            log.d(String.format("%s.%s state=%s", this.getClass().getSimpleName(), "onCreate", getStr(savedInstanceState)));
+            log.v(getStr(mDisplayMetrics));
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ma_my_activity);
@@ -263,7 +262,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
     @CallSuper
     public void onIntent(@Nullable Intent intent) {
         if(VV) {
-            log.v(String.format("%s.%s: %s", this.getClass().getSimpleName(), "onIntent", str(intent)));
+            log.v(String.format("%s.%s: %s", this.getClass().getSimpleName(), "onIntent", getStr(intent)));
         }
     }
 
@@ -287,10 +286,12 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         if(VV) {
             log.v(String.format("%s.%s", this.getClass().getSimpleName(), "onPause"));
         }
+        if(log.getView() == mCoordinatorLayout)
+            log.setView(null);
         super.onPause();
     }
 
-    @Override protected void onStop() {
+    @CallSuper @Override protected void onStop() {
         if(VV) {
             log.v(String.format("%s.%s", this.getClass().getSimpleName(), "onStop"));
         }
@@ -303,6 +304,9 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
     @CallSuper @Override protected void onDestroy() {
         if(V)
             log.d(String.format("%s.%s", this.getClass().getSimpleName(), "onDestroy"));
+
+        if(log.getView() == mCoordinatorLayout)
+            log.setView(null);
 
         if(mGlobalDrawerLayout != null) {
             mGlobalDrawerLayout.removeDrawerListener(this);
@@ -331,7 +335,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
 
     protected void updateLocalFragment(@Nullable Fragment fragment) {
         if(VV)
-            log.v(String.format("%s.%s fragment=%s", this.getClass().getSimpleName(), "updateLocalFragment", str(fragment)));
+            log.v(String.format("%s.%s fragment=%s", this.getClass().getSimpleName(), "updateLocalFragment", getStr(fragment)));
 
         mLocalFragment = fragment;
         mMyLocalFragment = null;
@@ -441,7 +445,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
             case MyCommands.CMD_NOTHING:
                 return true; // just for dry testing purposes
             default:
-                log.e(String.format("Unsupported command: %s", str(command)));
+                log.e(String.format("Unsupported command: %s", getStr(command)));
                 return false;
         }
     }
@@ -466,7 +470,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
             }
         }
         else {
-            log.e(String.format("No activity found for this intent: %s", str(intent)));
+            log.e(String.format("No activity found for this intent: %s", getStr(intent)));
             return false;
         }
         return true;
@@ -480,7 +484,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
 
         try {
             if(startService(intent) == null) {
-                log.e(String.format("Service not found for this intent: %s", str(intent)));
+                log.e(String.format("Service not found for this intent: %s", getStr(intent)));
                 return false;
             }
         }
@@ -533,7 +537,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
     }
 
     public boolean onCommandCustom(@NonNull Map<String, String> command) {
-        log.e(String.format("Unsupported custom command: %s", str(command)));
+        log.e(String.format("Unsupported custom command: %s", getStr(command)));
         return false;
     }
 

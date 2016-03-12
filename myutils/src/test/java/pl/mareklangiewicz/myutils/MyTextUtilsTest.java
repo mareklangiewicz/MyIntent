@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
-import static pl.mareklangiewicz.myutils.MyTextUtilsKt.str;
+import static pl.mareklangiewicz.myutils.MyTextUtilsKt.*;
 
 /**
  * Created by Marek Langiewicz on 01.10.15.
@@ -26,7 +26,7 @@ public class MyTextUtilsTest {
     @Test
     public void testStr() throws Exception {
         List<String> list = Arrays.asList("bla", "ble");
-        System.out.println(str(list));
+        System.out.println(getStr(list));
     }
 
     @Test

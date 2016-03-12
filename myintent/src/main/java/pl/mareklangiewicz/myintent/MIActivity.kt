@@ -1,7 +1,5 @@
 package pl.mareklangiewicz.myintent
 
-import android.animation.ObjectAnimator
-import android.animation.PropertyValuesHolder
 import android.app.Activity
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -15,25 +13,19 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.speech.RecognizerIntent
-import android.speech.tts.TextToSpeech
 import android.support.annotation.IdRes
 import android.view.MenuItem
 import android.view.View
-import android.view.animation.LinearInterpolator
-import android.widget.ImageView
-import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
-//import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.gms.actions.SearchIntents
 import com.google.android.gms.appindexing.Action
 import com.google.android.gms.appindexing.AppIndex
 import com.google.android.gms.common.api.GoogleApiClient
+import kotlinx.android.synthetic.main.mi_header.view.*
 import pl.mareklangiewicz.myactivities.MyActivity
-import pl.mareklangiewicz.mydrawables.MyLivingDrawable
-import pl.mareklangiewicz.mydrawables.MyMagicLinesDrawable
+import pl.mareklangiewicz.myutils.MyBabbler
 import pl.mareklangiewicz.myutils.MyCommands
 import pl.mareklangiewicz.myutils.MyHttp
-import pl.mareklangiewicz.myutils.MyMathUtils.getRandomInt
 import pl.mareklangiewicz.myutils.str
 import pl.mareklangiewicz.myviews.IMyNavigation
 import retrofit.Callback
@@ -41,6 +33,7 @@ import retrofit.Response
 import retrofit.Retrofit
 import java.lang.ref.WeakReference
 import java.util.*
+
 /**
  * Created by Marek Langiewicz on 02.10.15.
  * My Intent main activity.
@@ -51,29 +44,23 @@ class MIActivity : MyActivity() {
 
     private val SPEECH_REQUEST_CODE = 0
 
-    private var mSkipSavingToDb = false
-    private var mMyMagicLinesDrawable: MyLivingDrawable? = null
-    private var mMagicLinesView: View? = null
-    private var mLogoImageView: ImageView? = null
-    private var mLogoTextView: TextView? = null
-    private var mHomePageTextView: TextView? = null
-    private var mLogoTextViewAnimator: ObjectAnimator? = null
-    private var mHomePageTextViewAnimator: ObjectAnimator? = null
-    private var mMagicLinesDrawableAnimator: ObjectAnimator? = null
-    private var mTextToSpeech: TextToSpeech? = null
-    private var mTTSReady = false
-    private var mClient: GoogleApiClient? = null
+    private lateinit var animations: MIActivityAnimations
+    private lateinit var gapi: GoogleApiClient
+    private var dbsave = true
+
+    private lateinit var babbler: MyBabbler
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //noinspection ConstantConditions
-        globalNavigation!!.inflateMenu(R.menu.mi_global)
-        globalNavigation!!.inflateHeader(R.layout.mi_header)
+        val nav = globalNavigation!!
+
+        nav.inflateMenu(R.menu.mi_global)
+        nav.inflateHeader(R.layout.mi_header)
+
         if (BuildConfig.DEBUG) {
-            val menu = globalNavigation!!.menu!!
-            //noinspection ConstantConditions
+            val menu = nav.menu!!
             menu.findItem(R.id.ds_mode).title = "build type: " + BuildConfig.BUILD_TYPE
             menu.findItem(R.id.ds_flavor).title = "build flavor: " + BuildConfig.FLAVOR
             menu.findItem(R.id.ds_version_code).title = "version code: " + BuildConfig.VERSION_CODE
@@ -81,35 +68,19 @@ class MIActivity : MyActivity() {
             menu.findItem(R.id.ds_time_stamp).title = "build time: %tF %tT".format(BuildConfig.TIME_STAMP, BuildConfig.TIME_STAMP)
         }
 
-        //noinspection ConstantConditions
-        mMyMagicLinesDrawable = MyMagicLinesDrawable()
-        mMyMagicLinesDrawable!!.color = 822083583
-        mMyMagicLinesDrawable!!.strokeWidth = dp2px(4f)
-        //noinspection ConstantConditions
-        mMagicLinesView = globalNavigation!!.header!!.findViewById(R.id.magic_underline_view)
-        mMagicLinesView!!.background = mMyMagicLinesDrawable
-        mLogoImageView = globalNavigation!!.header!!.findViewById(R.id.image_logo) as ImageView
-        mLogoTextView = globalNavigation!!.header!!.findViewById(R.id.text_logo) as TextView
-        mHomePageTextView = globalNavigation!!.header!!.findViewById(R.id.text_home_page) as TextView
+        val header = nav.header!!
 
-        //noinspection ConstantConditions
-        mLogoImageView!!.setOnClickListener { closeDrawersAndPostCommand("start custom action listen") }
+        animations = MIActivityAnimations(
+                header.mi_gh_tv_logo,
+                header.mi_gh_tv_home_page,
+                header.mi_gh_v_magic_underline,
+                lcolor = 822083583,
+                lwidth = dp2px(4f)
+        )
 
-        //noinspection ConstantConditions
-        mHomePageTextView!!.setOnClickListener { play("data " + resources.getString(R.string.mr_my_homepage)) }
+        header.mi_gh_iv_logo!!.setOnClickListener { closeDrawersAndPostCommand("start custom action listen") }
 
-        val pvha1 = PropertyValuesHolder.ofFloat(View.ALPHA, 0f, 0.2f, 1f)
-        val pvhy1 = PropertyValuesHolder.ofFloat(View.TRANSLATION_Y, -130f, -30f, 0f)
-        val pvha2 = PropertyValuesHolder.ofFloat(View.ALPHA, 0f, 0f, 0.7f)
-        val pvhy2 = PropertyValuesHolder.ofFloat(View.TRANSLATION_Y, -50f, -50f, 0f)
-
-        mLogoTextViewAnimator = ObjectAnimator.ofPropertyValuesHolder(mLogoTextView, pvha1, pvhy1)
-        mHomePageTextViewAnimator = ObjectAnimator.ofPropertyValuesHolder(mHomePageTextView, pvha2, pvhy2)
-        mLogoTextViewAnimator!!.interpolator = LinearInterpolator()
-        mHomePageTextViewAnimator!!.interpolator = LinearInterpolator()
-
-        mMagicLinesDrawableAnimator = ObjectAnimator.ofInt(mMyMagicLinesDrawable, "level", 0, 10000)
-        mMagicLinesDrawableAnimator!!.setDuration(1000).interpolator = LinearInterpolator()
+        header.mi_gh_tv_home_page!!.setOnClickListener { play("data " + resources.getString(R.string.mr_my_homepage)) }
 
         if (savedInstanceState == null) {
 
@@ -121,16 +92,11 @@ class MIActivity : MyActivity() {
             selectGlobalItem(R.id.mi_start)
         }
 
-        mTextToSpeech = TextToSpeech(applicationContext, TextToSpeech.OnInitListener { status ->
-            if (status == TextToSpeech.SUCCESS && mTextToSpeech != null) {
-                mTextToSpeech!!.language = Locale.US
-                mTTSReady = true
-                log.d("Text to speech ready.")
-            } else
-                log.d("Text to speech disabled.")
-        })
+        val app = application as MIApplication
 
-        mClient = GoogleApiClient.Builder(this).addApi(AppIndex.API).build()
+        babbler = MyBabbler(applicationContext, log, app.FUNNY_QUOTES, app.SMART_QUOTES)
+
+        gapi = GoogleApiClient.Builder(this).addApi(AppIndex.API).build()
     }
 
     override fun onIntent(intent: Intent?) {
@@ -153,16 +119,12 @@ class MIActivity : MyActivity() {
                 return
             }
 
-            var action: String? = intent.action
-
-            if (action == null)
-                action = Intent.ACTION_MAIN
-
+            val action = intent.action ?: Intent.ACTION_MAIN
             when (action) {
                 Intent.ACTION_SEARCH, SearchIntents.ACTION_SEARCH -> onSearchIntent(intent)
                 Intent.ACTION_VIEW -> onUri(intent.data)
                 Intent.ACTION_MAIN -> Unit
-                else -> log.e("Unknown intent received: ${intent.str()}")
+                else -> log.e("Unknown intent received: ${intent.str}")
             }
         } catch (e: RuntimeException) {
             log.a("Intent exception.", e)
@@ -172,9 +134,7 @@ class MIActivity : MyActivity() {
 
     override fun onStart() {
         super.onStart()
-
-        //noinspection ConstantConditions
-        mClient!!.connect()
+        gapi.connect()
     }
 
     fun onUri(uri: Uri?) {
@@ -188,7 +148,7 @@ class MIActivity : MyActivity() {
 
         if (command == null) {
             log.d("URI with empty fragment received. Entering help..")
-            log.v("uri: ${uri.str()}")
+            log.v("uri: ${uri.str}")
             closeDrawersAndPostCommand("fragment .MIHelpFragment")
             return
 
@@ -269,7 +229,7 @@ class MIActivity : MyActivity() {
             }
 
         } else {
-            log.a("No activity found for this intent: ${intent.str()}")
+            log.a("No activity found for this intent: ${intent.str}")
         }
     }
 
@@ -312,10 +272,9 @@ class MIActivity : MyActivity() {
 
         updateWidgets()
 
-        //noinspection ConstantConditions
-        mClient!!.disconnect()
+        gapi.disconnect()
 
-        if (!mSkipSavingToDb) {
+        if (dbsave) {
             MIContract.RuleUser.clear(this)
             MIContract.RuleUser.save(this, MyCommands.RE_USER_GROUP.rules)
         }
@@ -328,11 +287,11 @@ class MIActivity : MyActivity() {
 
         if (ok) {
             val action = Action.newAction(Action.TYPE_VIEW, command,
-                    Uri.parse("android-app://pl.mareklangiewicz.myintent/http/mareklangiewicz.pl/mi#" + command!!))
-            val result = AppIndex.AppIndexApi.start(mClient, action)
+                    Uri.parse("android-app://pl.mareklangiewicz.myintent/http/mareklangiewicz.pl/mi#" + command))
+            val result = AppIndex.AppIndexApi.start(gapi, action)
             result.setResultCallback { status ->
                 if (!status.isSuccess)
-                    log.d("App Indexing API problem: ${status.str()}")
+                    log.d("App Indexing API problem: ${status.str}")
             }
         }
 
@@ -345,7 +304,7 @@ class MIActivity : MyActivity() {
             return true
         }
         if (command["action"] == "say") {
-            say(command["data"])
+            babbler.say(command["data"])
             return true
         }
         if (command["action"] == "exit") {
@@ -384,7 +343,7 @@ class MIActivity : MyActivity() {
 
     /**
      * Reports a weather via logging and tts (if available)
-
+     *
      * @param appid openweathermap api key (you should generate your own key on openweathermap website)
      * *
      * @param city  name of the city (may contain country code after comma (like: wroclaw,pl)
@@ -427,7 +386,7 @@ class MIActivity : MyActivity() {
                         return
                     }
                     val report = "Weather in %s: %s, temperature: %.0f %s, pressure: %.0f hectopascals, humidity: %d%%, wind speed: %.0f %s".format(Locale.US, forecast.name, forecast.weather[0].description, forecast.main.temp, tempunit, forecast.main.pressure, forecast.main.humidity, forecast.wind.speed, speedunit)
-                    say(report, TextToSpeech.QUEUE_ADD)
+                    babbler.say(report, false)
                 }
 
                 override fun onFailure(t: Throwable) {
@@ -443,7 +402,7 @@ class MIActivity : MyActivity() {
             call.enqueue(object : Callback<MyHttp.OpenWeatherMap.DailyForecasts> {
                 override fun onResponse(response: Response<MyHttp.OpenWeatherMap.DailyForecasts>, retrofit: Retrofit) {
                     val forecasts = response.body()
-                    say("Weather forcast for " + forecasts.city.name + ":")
+                    babbler.say("Weather forcast for " + forecasts.city.name + ":")
                     for (i in 1..forecasts.list.size - 1) {
                         if (forecasts.list[i].weather.size < 1) {
                             log.e("Weather forecast error.")
@@ -451,7 +410,7 @@ class MIActivity : MyActivity() {
                         }
                         val time = forecasts.list[i].dt * 1000
                         val report = "On %tA: %s, %.0f %s.".format(Locale.US, time, forecasts.list[i].weather[0].description, forecasts.list[i].temp.day, tempunit)
-                        say(report, TextToSpeech.QUEUE_ADD)
+                        babbler.say(report, false)
                     }
                 }
 
@@ -463,62 +422,6 @@ class MIActivity : MyActivity() {
         }
 
     }
-
-    private fun remAuthor(quote: String): String {
-        val idx = quote.indexOf("[")
-        return if (idx == -1) quote else quote.substring(0, idx)
-    }
-
-    private fun getRandomQuote(quotes: Array<String>): String {
-        return remAuthor(quotes[getRandomInt(0, quotes.size - 1)])
-    }
-
-    @JvmOverloads protected fun say(text: String?, queuemode: Int = TextToSpeech.QUEUE_FLUSH) {
-        val time = System.currentTimeMillis()
-        if (text == null) {
-            log.w("null")
-            return
-        }
-        if ("weekday" == text) {
-            say("%tA".format(Locale.US, time))
-            return
-        }
-        if ("date" == text) {
-            say("%tF".format(Locale.US, time))
-            return
-        }
-        if ("time" == text) {
-            say("%tl:%tM %tp".format(Locale.US, time, time, time))
-            return
-        }
-        if ("something funny" == text) {
-            val quotes = (application as MIApplication).FUNNY_QUOTES
-            say(getRandomQuote(quotes))
-            return
-        }
-        if ("something smart" == text) {
-            val quotes = (application as MIApplication).SMART_QUOTES
-            say(getRandomQuote(quotes))
-            return
-        }
-        if ("something positive" == text) {
-            //TODO SOMEDAY http://www.brainyquote.com/quotes/topics/topic_positive.html
-            log.i("Not implemented.")
-            return
-        }
-        if ("something motivational" == text) {
-            //TODO SOMEDAY http://www.brainyquote.com/quotes/topics/topic_motivational.html
-            log.i("Not implemented.")
-            return
-        }
-        log.w("[SNACK]" + text)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (mTextToSpeech != null && mTTSReady) {
-                mTextToSpeech!!.speak(text, queuemode, null, null)
-            }
-        }
-    }
-
 
     protected fun suicide() {
         System.exit(0)
@@ -542,7 +445,7 @@ class MIActivity : MyActivity() {
                 .onPositive(
                         { dialog, action ->
                             deleteDatabase(MIDBHelper.DATABASE_NAME)
-                            mSkipSavingToDb = true
+                            dbsave = false
                             resurrection()
                         }
                 )
@@ -550,22 +453,7 @@ class MIActivity : MyActivity() {
     }
 
     override fun onDestroy() {
-
-        mClient = null
-
-        if (mTextToSpeech != null) {
-            mTextToSpeech!!.shutdown()
-            mTextToSpeech = null
-        }
-        mMagicLinesDrawableAnimator = null
-        mHomePageTextViewAnimator = null
-        mLogoTextViewAnimator = null
-        mHomePageTextView = null
-        mLogoTextView = null
-        mLogoImageView = null
-        mMagicLinesView = null
-        mMyMagicLinesDrawable = null
-
+        babbler.shutdown()
         super.onDestroy()
     }
 
@@ -573,12 +461,7 @@ class MIActivity : MyActivity() {
         super.onDrawerSlide(drawerView, slideOffset)
         if (drawerView !== mGlobalNavigationView)
             return
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            if (mLogoTextViewAnimator != null)
-                mLogoTextViewAnimator!!.setCurrentFraction(slideOffset)
-            if (mHomePageTextViewAnimator != null)
-                mHomePageTextViewAnimator!!.setCurrentFraction(slideOffset)
-        }
+        animations.onGlobalDrawerSlide(slideOffset)
     }
 
 
@@ -586,19 +469,14 @@ class MIActivity : MyActivity() {
         super.onDrawerOpened(drawerView)
         if (drawerView !== mGlobalNavigationView)
             return
-        if (mMagicLinesDrawableAnimator != null)
-            if (!mMagicLinesDrawableAnimator!!.isStarted)
-                mMagicLinesDrawableAnimator!!.start()
+        animations.onGlobalDrawerOpened()
     }
 
     override fun onDrawerClosed(drawerView: View) {
         super.onDrawerClosed(drawerView)
         if (drawerView !== mGlobalNavigationView)
             return
-        if (mMagicLinesDrawableAnimator != null)
-            mMagicLinesDrawableAnimator!!.cancel()
-        if (mMyMagicLinesDrawable != null)
-            mMyMagicLinesDrawable!!.level = 0
+        animations.onGlobalDrawerClosed()
     }
 
     override fun onItemSelected(nav: IMyNavigation, item: MenuItem): Boolean {

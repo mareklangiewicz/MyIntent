@@ -54,6 +54,10 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
 
     protected @NonNull final MyAndroLogger log = MyAndroLoggerKt.getMY_DEFAULT_ANDRO_LOGGER();
 
+    protected boolean isViewCreated = false;
+    // it will be changed to true at 'onViewCreated' callback.
+    // kotlin extensions are working from this point on.
+
     public MyFragment() { }
 
 
@@ -217,6 +221,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
     @CallSuper
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        isViewCreated = true;
         if(VV)
             log.v(String.format("%s.%s view=%s state=%s", this.getClass().getSimpleName(), "onViewCreated", getStr(view), getStr(savedInstanceState)));
         super.onViewCreated(view, savedInstanceState);

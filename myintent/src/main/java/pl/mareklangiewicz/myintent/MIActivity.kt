@@ -25,9 +25,7 @@ import kotlinx.android.synthetic.main.mi_header.view.*
 import pl.mareklangiewicz.myactivities.MyActivity
 import pl.mareklangiewicz.myutils.MyBabbler
 import pl.mareklangiewicz.myutils.MyCommands
-import pl.mareklangiewicz.myutils.myhttp.OWMDailyForecasts
-import pl.mareklangiewicz.myutils.myhttp.OWMForecast
-import pl.mareklangiewicz.myutils.myhttp.createOWMService
+import pl.mareklangiewicz.myutils.myhttp.OpenWeatherMap
 import pl.mareklangiewicz.myutils.str
 import pl.mareklangiewicz.myviews.IMyNavigation
 import retrofit2.Call
@@ -373,15 +371,13 @@ class MIActivity : MyActivity() {
         val tempunit = if (units == "kelvins") "kelvins" else (if (units == "imperial") "\u00B0F" else "\u00B0C")
         val speedunit = if (units == "kelvins") "meters per second" else (if (units == "imperial") "miles per hour" else "meters per second")
 
-        val service = createOWMService()
-
         if (d == 1) {
             // we want current weather
 
-            val call = service.getWeatherByCity(appid, city, units)
+            val call = OpenWeatherMap.service.getWeatherByCity(appid, city, units)
 
-            call.enqueue(object : Callback<OWMForecast> {
-                override fun onResponse(call: Call<OWMForecast>?, response: Response<OWMForecast>?) {
+            call.enqueue(object : Callback<OpenWeatherMap.Forecast> {
+                override fun onResponse(call: Call<OpenWeatherMap.Forecast>?, response: Response<OpenWeatherMap.Forecast>?) {
                     val forecast = response?.body()
                     if(forecast === null || forecast.weather === null) {
                         log.e("Fetching weather failed: empty response.")
@@ -405,7 +401,7 @@ class MIActivity : MyActivity() {
                     babbler.say(report, false)
                 }
 
-                override fun onFailure(call: Call<OWMForecast>?, t: Throwable?) {
+                override fun onFailure(call: Call<OpenWeatherMap.Forecast>?, t: Throwable?) {
                     log.e("Fetching weather failed.", t)
                 }
             })
@@ -413,10 +409,10 @@ class MIActivity : MyActivity() {
         } else {
             // we want forecast
 
-            val call = service.getDailyForecastByCity(appid, city, d.toLong(), units)
+            val call = OpenWeatherMap.service.getDailyForecastByCity(appid, city, d.toLong(), units)
 
-            call.enqueue(object : Callback<OWMDailyForecasts> {
-                override fun onResponse(call: Call<OWMDailyForecasts>?, response: Response<OWMDailyForecasts>?) {
+            call.enqueue(object : Callback<OpenWeatherMap.DailyForecasts> {
+                override fun onResponse(call: Call<OpenWeatherMap.DailyForecasts>?, response: Response<OpenWeatherMap.DailyForecasts>?) {
                     val forecasts = response?.body()
                     if(forecasts === null) {
                         log.e("Fetching weather failed: empty response.")
@@ -438,7 +434,7 @@ class MIActivity : MyActivity() {
                     }
                 }
 
-                override fun onFailure(call: Call<OWMDailyForecasts>?, t: Throwable?) {
+                override fun onFailure(call: Call<OpenWeatherMap.DailyForecasts>?, t: Throwable?) {
                     log.e("Fetching forecast failed.", t)
                 }
             })

@@ -21,9 +21,6 @@ import pl.mareklangiewicz.myutils.MyCommands;
 
 import static pl.mareklangiewicz.myutils.MyTextUtilsKt.*;
 
-//import com.afollestad.materialdialogs.DialogAction;
-//import com.afollestad.materialdialogs.MaterialDialog;
-
 /**
  * Created by Marek Langiewicz on 15.10.15.
  */

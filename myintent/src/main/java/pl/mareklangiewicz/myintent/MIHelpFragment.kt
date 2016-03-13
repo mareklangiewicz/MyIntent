@@ -13,8 +13,8 @@ class MIHelpFragment : MyWebFragment() {
 
         if(url == "") url = "file:///android_asset/mi.html"
 
-        settings.setUserAgentString(settings.getUserAgentString() + " " + getString(R.string.mi_user_agent_suffix))
-        settings.setJavaScriptEnabled(true)
+        settings.userAgentString = settings.userAgentString + " " + getString(R.string.mi_user_agent_suffix)
+        settings.javaScriptEnabled = true
 
         super.onViewCreated(view, savedInstanceState)
     }

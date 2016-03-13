@@ -11,14 +11,8 @@ import org.junit.Test;
 
 import java.util.List;
 
-import pl.mareklangiewicz.myutils.myhttp.GHRepository;
-import pl.mareklangiewicz.myutils.myhttp.GHService;
-import pl.mareklangiewicz.myutils.myhttp.GHUser;
-import pl.mareklangiewicz.myutils.myhttp.MyHttpKt;
-import pl.mareklangiewicz.myutils.myhttp.OWMDailyForecasts;
-import pl.mareklangiewicz.myutils.myhttp.OWMForecast;
-import pl.mareklangiewicz.myutils.myhttp.OWMForecasts;
-import pl.mareklangiewicz.myutils.myhttp.OWMService;
+import pl.mareklangiewicz.myutils.myhttp.GitHub;
+import pl.mareklangiewicz.myutils.myhttp.OpenWeatherMap;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -48,10 +42,10 @@ public class MyHttpTest {
 
     @Test
     public void testGitHubGetUser() throws Exception {
-        GHService service = MyHttpKt.createGHService();
-        Call<GHUser> call = service.getUser("langara");
-        Response<GHUser> response = call.execute();
-        GHUser body = response.body();
+        GitHub.Service service = GitHub.INSTANCE.getService();
+        Call<GitHub.User> call = service.getUser("langara");
+        Response<GitHub.User> response = call.execute();
+        GitHub.User body = response.body();
         log.w(getStr(body)); // set breakpoint here to see properties
         call = service.getUser("JakeWharton");
         response = call.execute();
@@ -62,29 +56,29 @@ public class MyHttpTest {
 
     @Test
     public void testGitHubGetUserAuth() throws Exception {
-        GHService service = MyHttpKt.createGHService();
-        Call<GHUser> call = service.getUserAuth("Basic some_bad_base64_pass");
-        Response<GHUser> response = call.execute();
-        GHUser body = response.body();
+        GitHub.Service service = GitHub.INSTANCE.getService();
+        Call<GitHub.User> call = service.getUserAuth("Basic some_bad_base64_pass");
+        Response<GitHub.User> response = call.execute();
+        GitHub.User body = response.body();
         log.w(getStr(body)); // set breakpoint here to see properties
     }
 
 
     @Test
     public void testGitHubGetUserTFA() throws Exception {
-        GHService service = MyHttpKt.createGHService();
-        Call<GHUser> call = service.getUserTFA("Basic some_bad_base64_pass", "421164");
-        Response<GHUser> response = call.execute();
-        GHUser body = response.body();
+        GitHub.Service service = GitHub.INSTANCE.getService();
+        Call<GitHub.User> call = service.getUserTFA("Basic some_bad_base64_pass", "421164");
+        Response<GitHub.User> response = call.execute();
+        GitHub.User body = response.body();
         log.w(getStr(body)); // set breakpoint here to see properties
     }
 
     @Test
     public void testGitHubGetUserRepos() throws Exception {
-        GHService service = MyHttpKt.createGHService();
-        Call<List<GHRepository>> call = service.getUserRepos("langara");
-        Response<List<GHRepository>> response = call.execute();
-        List<GHRepository> body = response.body();
+        GitHub.Service service = GitHub.INSTANCE.getService();
+        Call<List<GitHub.Repository>> call = service.getUserRepos("langara");
+        Response<List<GitHub.Repository>> response = call.execute();
+        List<GitHub.Repository> body = response.body();
         log.w(getStr(body)); // set breakpoint here to see properties
         call = service.getUserRepos("JakeWharton");
         response = call.execute();
@@ -95,20 +89,20 @@ public class MyHttpTest {
 
     @Test
     public void testGitHubGetUserReposAuth() throws Exception {
-        GHService service = MyHttpKt.createGHService();
-        Call<List<GHRepository>> call = service.getUserReposAuth("Basic some_bad_base64");
-        Response<List<GHRepository>> response = call.execute();
-        List<GHRepository> body = response.body();
+        GitHub.Service service = GitHub.INSTANCE.getService();
+        Call<List<GitHub.Repository>> call = service.getUserReposAuth("Basic some_bad_base64");
+        Response<List<GitHub.Repository>> response = call.execute();
+        List<GitHub.Repository> body = response.body();
         log.w(getStr(body)); // set breakpoint here to see properties
     }
 
 
     @Test
     public void testGitHubGetUserReposTFA() throws Exception {
-        GHService service = MyHttpKt.createGHService();
-        Call<List<GHRepository>> call = service.getUserReposTFA("Basic some_bad_base64", "197187");
-        Response<List<GHRepository>> response = call.execute();
-        List<GHRepository> body = response.body();
+        GitHub.Service service = GitHub.INSTANCE.getService();
+        Call<List<GitHub.Repository>> call = service.getUserReposTFA("Basic some_bad_base64", "197187");
+        Response<List<GitHub.Repository>> response = call.execute();
+        List<GitHub.Repository> body = response.body();
         log.w(getStr(body)); // set breakpoint here to see properties
     }
 
@@ -117,13 +111,13 @@ public class MyHttpTest {
 
         // Moshi adapter just for logging..
         Moshi moshi = new Moshi.Builder().build();
-        JsonAdapter<OWMForecast> adapter = moshi.adapter(OWMForecast.class);
+        JsonAdapter<OpenWeatherMap.Forecast> adapter = moshi.adapter(OpenWeatherMap.Forecast.class);
 
-        OWMService service = MyHttpKt.createOWMService();
+        OpenWeatherMap.Service service = OpenWeatherMap.INSTANCE.getService();
 
-        Call<OWMForecast> call = service.getWeatherByLocation("8932d2a1192be84707c381df649a2925", 30.9f, 30.9f, "metric");
-        Response<OWMForecast> response = call.execute();
-        OWMForecast body = response.body();
+        Call<OpenWeatherMap.Forecast> call = service.getWeatherByLocation("8932d2a1192be84707c381df649a2925", 30.9f, 30.9f, "metric");
+        Response<OpenWeatherMap.Forecast> response = call.execute();
+        OpenWeatherMap.Forecast body = response.body();
 
         log.w(adapter.toJson(body));
 
@@ -157,13 +151,13 @@ public class MyHttpTest {
 
         // Moshi adapter just for logging..
         Moshi moshi = new Moshi.Builder().build();
-        JsonAdapter<OWMForecasts> adapter = moshi.adapter(OWMForecasts.class);
+        JsonAdapter<OpenWeatherMap.Forecasts> adapter = moshi.adapter(OpenWeatherMap.Forecasts.class);
 
-        OWMService service = MyHttpKt.createOWMService();
+        OpenWeatherMap.Service service = OpenWeatherMap.INSTANCE.getService();
 
-        Call<OWMForecasts> call = service.getForecastByLocation("8932d2a1192be84707c381df649a2925", 50.5f, 50.5f, 3, "metric");
-        Response<OWMForecasts> response = call.execute();
-        OWMForecasts body = response.body();
+        Call<OpenWeatherMap.Forecasts> call = service.getForecastByLocation("8932d2a1192be84707c381df649a2925", 50.5f, 50.5f, 3, "metric");
+        Response<OpenWeatherMap.Forecasts> response = call.execute();
+        OpenWeatherMap.Forecasts body = response.body();
 
         log.w(adapter.toJson(body));
 
@@ -191,13 +185,13 @@ public class MyHttpTest {
 
         // Moshi adapter just for logging..
         Moshi moshi = new Moshi.Builder().build();
-        JsonAdapter<OWMDailyForecasts> adapter = moshi.adapter(OWMDailyForecasts.class);
+        JsonAdapter<OpenWeatherMap.DailyForecasts> adapter = moshi.adapter(OpenWeatherMap.DailyForecasts.class);
 
-        OWMService service = MyHttpKt.createOWMService();
+        OpenWeatherMap.Service service = OpenWeatherMap.INSTANCE.getService();
 
-        Call<OWMDailyForecasts> call = service.getDailyForecastByLocation("8932d2a1192be84707c381df649a2925", 50.5f, 50.5f, 3, "metric");
-        Response<OWMDailyForecasts> response = call.execute();
-        OWMDailyForecasts body = response.body();
+        Call<OpenWeatherMap.DailyForecasts> call = service.getDailyForecastByLocation("8932d2a1192be84707c381df649a2925", 50.5f, 50.5f, 3, "metric");
+        Response<OpenWeatherMap.DailyForecasts> response = call.execute();
+        OpenWeatherMap.DailyForecasts body = response.body();
 
         log.w(adapter.toJson(body));
 

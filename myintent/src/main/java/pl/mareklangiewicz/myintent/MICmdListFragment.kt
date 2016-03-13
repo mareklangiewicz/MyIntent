@@ -30,7 +30,7 @@ open class MICmdListFragment : MyFragment() {
         get() = adapter.imageRes
         set(value) { adapter.imageRes = value }
 
-    var commands: List<String>?
+    var commands: List<String>
         get() = adapter.commands
         set(commands) { adapter.commands = commands }
 }

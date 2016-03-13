@@ -2,7 +2,7 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/command_card_view"
+    android:id="@+id/mi_cmd_cv"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
@@ -20,7 +20,7 @@
         >
 
         <ImageView
-            android:id="@+id/cmd_image_view"
+            android:id="@+id/mi_cmd_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="3dp"
@@ -38,7 +38,7 @@
             />
 
         <TextView
-            android:id="@+id/cmd_text_view"
+            android:id="@+id/mi_cmd_tv"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"

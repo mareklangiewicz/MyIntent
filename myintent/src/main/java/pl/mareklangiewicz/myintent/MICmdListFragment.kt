@@ -13,7 +13,7 @@ import pl.mareklangiewicz.myfragments.MyFragment
  */
 open class MICmdListFragment : MyFragment() {
 
-    private val mAdapter = CmdAdapter()
+    private val adapter = CmdAdapter()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState) // just for logging
@@ -23,19 +23,15 @@ open class MICmdListFragment : MyFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mi_cmd_recycler_view.setHasFixedSize(true)
-        mi_cmd_recycler_view.adapter = mAdapter
+        mi_cmd_recycler_view.adapter = adapter
     }
 
-    fun setImageRes(@DrawableRes res: Int) {
-        mAdapter.imageRes = res
-    }
+    var imageRes: Int
+        get() = adapter.imageRes
+        set(value) { adapter.imageRes = value }
 
     var commands: List<String>?
-        get() {
-            return mAdapter.commands
-        }
-        set(commands) {
-            mAdapter.commands = commands
-        }
+        get() = adapter.commands
+        set(commands) { adapter.commands = commands }
 }
 

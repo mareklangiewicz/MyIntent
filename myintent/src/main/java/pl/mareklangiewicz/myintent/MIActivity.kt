@@ -25,13 +25,14 @@ import kotlinx.android.synthetic.main.mi_header.view.*
 import pl.mareklangiewicz.myactivities.MyActivity
 import pl.mareklangiewicz.myutils.MyBabbler
 import pl.mareklangiewicz.myutils.MyCommands
-import pl.mareklangiewicz.myutils.MyHttp
+import pl.mareklangiewicz.myutils.myhttp.OWMDailyForecasts
+import pl.mareklangiewicz.myutils.myhttp.OWMForecast
+import pl.mareklangiewicz.myutils.myhttp.createOWMService
 import pl.mareklangiewicz.myutils.str
 import pl.mareklangiewicz.myviews.IMyNavigation
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
 import java.lang.ref.WeakReference
 import java.util.*
 
@@ -334,8 +335,8 @@ class MIActivity : MyActivity() {
             weather(
                     appid,
                     city,
-                    command["extra string units"],
-                    command["extra integer day"])
+                    command["extra string units"] ?: "kelvins",
+                    command["extra integer day"] ?: "1")
             return true
         }
 
@@ -349,62 +350,62 @@ class MIActivity : MyActivity() {
      * *
      * @param city  name of the city (may contain country code after comma (like: wroclaw,pl)
      * *
-     * @param units default (null) are Kelvin, you can change it to "metric" (Celsius), or "imperial" (Fahrenheit)
+     * @param units default are "kelvins", you can change it to "metric" (Celsius), or "imperial" (Fahrenheit)
      * *
-     * @param day   a day number. Default (null) is "1" (today/now), set it to "2" for tomorrow etc... (up to 16)
+     * @param day   a day number. Default is "1" (today/now), set it to "2" for tomorrow etc... (up to 16)
+     *
+     * TODO SOMEDAY: remove all !! operators in this function...
      */
-    fun weather(appid: String, city: String, units: String?, day: String?) {
-        var d = 1
-        if (day != null) {
-            try {
-                d = Integer.parseInt(day)
-            } catch (e: NumberFormatException) {
-                log.e("Bad day..", e)
-                return
-            }
-
+    fun weather(appid: String, city: String, units: String = "kelvins", day: String = "1") {
+        val d: Int
+        try {
+            d = Integer.parseInt(day)
+        } catch (e: NumberFormatException) {
+            log.e("Bad day..", e)
+            return
         }
+
         if (d < 1 || d > 16) {
             log.e("Bad day...")
             return
         }
 
-        val tempunit = if (units == null) "kelvins" else (if (units == "imperial") "\u00B0F" else "\u00B0C")
-        val speedunit = if (units == null) "meters per second" else (if (units == "imperial") "miles per hour" else "meters per second")
+        val tempunit = if (units == "kelvins") "kelvins" else (if (units == "imperial") "\u00B0F" else "\u00B0C")
+        val speedunit = if (units == "kelvins") "meters per second" else (if (units == "imperial") "miles per hour" else "meters per second")
 
-        val service = MyHttp.OpenWeatherMap.create()
+        val service = createOWMService()
 
         if (d == 1) {
             // we want current weather
 
             val call = service.getWeatherByCity(appid, city, units)
 
-            call.enqueue(object : Callback<MyHttp.OpenWeatherMap.Forecast> {
-                override fun onResponse(call: Call<MyHttp.OpenWeatherMap.Forecast>?, response: Response<MyHttp.OpenWeatherMap.Forecast>?) {
+            call.enqueue(object : Callback<OWMForecast> {
+                override fun onResponse(call: Call<OWMForecast>?, response: Response<OWMForecast>?) {
                     val forecast = response?.body()
-                    if(forecast === null) {
+                    if(forecast === null || forecast.weather === null) {
                         log.e("Fetching weather failed: empty response.")
                         return
                     }
-                    if (forecast.weather.size < 1) {
+                    if (forecast.weather!!.size < 1) {
                         log.e("Weather error.")
                         return
                     }
                     val report = "Weather in %s: %s, temperature: %.0f %s, pressure: %.0f hectopascals, humidity: %d%%, wind speed: %.0f %s".format(
                             Locale.US,
                             forecast.name,
-                            forecast.weather[0].description,
-                            forecast.main.temp,
+                            forecast.weather!![0].description,
+                            forecast.main!!.temp,
                             tempunit,
-                            forecast.main.pressure,
-                            forecast.main.humidity,
-                            forecast.wind.speed,
+                            forecast.main!!.pressure,
+                            forecast.main!!.humidity,
+                            forecast.wind!!.speed,
                             speedunit
                     )
                     babbler.say(report, false)
                 }
 
-                override fun onFailure(call: Call<MyHttp.OpenWeatherMap.Forecast>?, t: Throwable?) {
+                override fun onFailure(call: Call<OWMForecast>?, t: Throwable?) {
                     log.e("Fetching weather failed.", t)
                 }
             })
@@ -414,30 +415,30 @@ class MIActivity : MyActivity() {
 
             val call = service.getDailyForecastByCity(appid, city, d.toLong(), units)
 
-            call.enqueue(object : Callback<MyHttp.OpenWeatherMap.DailyForecasts> {
-                override fun onResponse(call: Call<MyHttp.OpenWeatherMap.DailyForecasts>?, response: Response<MyHttp.OpenWeatherMap.DailyForecasts>?) {
+            call.enqueue(object : Callback<OWMDailyForecasts> {
+                override fun onResponse(call: Call<OWMDailyForecasts>?, response: Response<OWMDailyForecasts>?) {
                     val forecasts = response?.body()
                     if(forecasts === null) {
                         log.e("Fetching weather failed: empty response.")
                         return
                     }
-                    babbler.say("Weather forcast for " + forecasts.city.name + ":")
-                    for (i in 1..forecasts.list.size - 1) {
-                        if (forecasts.list[i].weather.size < 1) {
+                    babbler.say("Weather forcast for " + forecasts.city!!.name + ":")
+                    for (i in 1..forecasts.list!!.size - 1) {
+                        if (forecasts.list!![i].weather!!.size < 1) {
                             log.e("Weather forecast error.")
                             return
                         }
-                        val time = forecasts.list[i].dt * 1000
+                        val time = forecasts.list!![i].dt * 1000
                         val report = "On %tA: %s, %.0f %s.".format(
                                 Locale.US, time,
-                                forecasts.list[i].weather[0].description,
-                                forecasts.list[i].temp.day, tempunit
+                                forecasts.list!![i].weather!![0].description,
+                                forecasts.list!![i].temp!!.day, tempunit
                         )
                         babbler.say(report, false)
                     }
                 }
 
-                override fun onFailure(call: Call<MyHttp.OpenWeatherMap.DailyForecasts>?, t: Throwable?) {
+                override fun onFailure(call: Call<OWMDailyForecasts>?, t: Throwable?) {
                     log.e("Fetching forecast failed.", t)
                 }
             })

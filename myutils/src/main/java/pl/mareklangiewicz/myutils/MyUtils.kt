@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.support.design.widget.Snackbar
+import android.database.sqlite.SQLiteDatabase
 
 /**
  * Created by Marek Langiewicz on 29.01.16.
@@ -51,3 +52,18 @@ fun Cursor.getIntOrNull(columnName: String): Int? {
 fun ContentResolver.clear(uri: Uri): Int = delete(uri, null, null)
 
 inline fun ContentResolver.insert(uri: Uri, cvbuilder: ContentValues.() -> Unit): Uri = insert(uri, ContentValues().apply(cvbuilder))
+
+fun SQLiteDatabase.createTable(name: String, vararg columns: String) {
+    val sql = StringBuilder("CREATE TABLE ")
+    sql.append(name)
+    sql.append(" ( ")
+    for (i in columns.indices) {
+        sql.append(columns[i])
+        if (i < columns.size - 1)
+            sql.append(" , ")
+    }
+    sql.append(" ) ")
+    execSQL(sql.toString())
+}
+
+fun SQLiteDatabase.dropTable(name: String) = execSQL("DROP TABLE IF EXISTS " + name)

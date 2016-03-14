@@ -8,6 +8,7 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.provider.BaseColumns;
 import android.support.annotation.NonNull;
 
 public class MIContentProvider extends ContentProvider {
@@ -91,12 +92,12 @@ public class MIContentProvider extends ContentProvider {
 
         switch(match) {
             case MATCH_CMD_RECENT_ITEM: // WARNING: selection and selectionArgs are ignored in this case!
-                selection = " " + MIContract.CmdRecent._ID + " = ? ";
+                selection = " " + BaseColumns._ID + " = ? ";
                 selectionArgs = new String[] {uri.getLastPathSegment()};
             case MATCH_CMD_RECENT_DIR:
                 return db.query(MIContract.CmdRecent.INSTANCE.getTABLE_NAME(), projection, selection, selectionArgs, null, null, sortOrder, limit);
             case MATCH_CMD_EXAMPLE_ITEM:// WARNING: selection and selectionArgs are ignored in this case!
-                selection = " " + MIContract.CmdExample._ID + " = ? ";
+                selection = " " + BaseColumns._ID + " = ? ";
                 selectionArgs = new String[] {uri.getLastPathSegment()};
             case MATCH_CMD_EXAMPLE_DIR:
                 return db.query(MIContract.CmdExample.INSTANCE.getTABLE_NAME(), projection, selection, selectionArgs, null, null, sortOrder, limit);
@@ -107,7 +108,7 @@ public class MIContentProvider extends ContentProvider {
                 sortOrder = " " + MIContract.CmdSuggest.INSTANCE.getCOL_PRIORITY() + " DESC , " + MIContract.CmdSuggest.INSTANCE.getCOL_TIME() + " DESC ";
                 return db.query(MIContract.CmdSuggest.INSTANCE.getTABLE_NAME(), projection, selection, selectionArgs, null, null, sortOrder, limit);
             case MATCH_RULE_USER_ITEM:// WARNING: selection and selectionArgs are ignored in this case!
-                selection = " " + MIContract.RuleUser._ID + " = ? ";
+                selection = " " + BaseColumns._ID + " = ? ";
                 selectionArgs = new String[] {uri.getLastPathSegment()};
             case MATCH_RULE_USER_DIR:
                 return db.query(MIContract.RuleUser.INSTANCE.getTABLE_NAME(), projection, selection, selectionArgs, null, null, sortOrder, limit);
@@ -150,17 +151,17 @@ public class MIContentProvider extends ContentProvider {
 
         switch(match) {
             case MATCH_CMD_RECENT_ITEM:
-                selection = " " + MIContract.CmdRecent._ID + " = ? ";
+                selection = " " + BaseColumns._ID + " = ? ";
                 selectionArgs = new String[] {uri.getLastPathSegment()};
             case MATCH_CMD_RECENT_DIR:
                 return db.delete(MIContract.CmdRecent.INSTANCE.getTABLE_NAME(), selection, selectionArgs);
             case MATCH_CMD_EXAMPLE_ITEM:
-                selection = " " + MIContract.CmdExample._ID + " = ? ";
+                selection = " " + BaseColumns._ID + " = ? ";
                 selectionArgs = new String[] {uri.getLastPathSegment()};
             case MATCH_CMD_EXAMPLE_DIR:
                 return db.delete(MIContract.CmdExample.INSTANCE.getTABLE_NAME(), selection, selectionArgs);
             case MATCH_RULE_USER_ITEM:
-                selection = " " + MIContract.RuleUser._ID + " = ? ";
+                selection = " " + BaseColumns._ID + " = ? ";
                 selectionArgs = new String[] {uri.getLastPathSegment()};
             case MATCH_RULE_USER_DIR:
                 return db.delete(MIContract.RuleUser.INSTANCE.getTABLE_NAME(), selection, selectionArgs);
@@ -177,17 +178,17 @@ public class MIContentProvider extends ContentProvider {
 
         switch(match) {
             case MATCH_CMD_RECENT_ITEM:
-                selection = " " + MIContract.CmdRecent._ID + " = ? ";
+                selection = " " + BaseColumns._ID + " = ? ";
                 selectionArgs = new String[] {uri.getLastPathSegment()};
             case MATCH_CMD_RECENT_DIR:
                 return db.update(MIContract.CmdRecent.INSTANCE.getTABLE_NAME(), values, selection, selectionArgs);
             case MATCH_CMD_EXAMPLE_ITEM:
-                selection = " " + MIContract.CmdExample._ID + " = ? ";
+                selection = " " + BaseColumns._ID + " = ? ";
                 selectionArgs = new String[] {uri.getLastPathSegment()};
             case MATCH_CMD_EXAMPLE_DIR:
                 return db.update(MIContract.CmdExample.INSTANCE.getTABLE_NAME(), values, selection, selectionArgs);
             case MATCH_RULE_USER_ITEM:
-                selection = " " + MIContract.RuleUser._ID + " = ? ";
+                selection = " " + BaseColumns._ID + " = ? ";
                 selectionArgs = new String[] {uri.getLastPathSegment()};
             case MATCH_RULE_USER_DIR:
                 return db.update(MIContract.RuleUser.INSTANCE.getTABLE_NAME(), values, selection, selectionArgs);

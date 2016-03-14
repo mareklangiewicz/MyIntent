@@ -4,7 +4,6 @@ import android.app.SearchManager
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
-import android.provider.BaseColumns
 import clear
 import getInt
 import getString
@@ -20,7 +19,7 @@ object MIContract {
     val AUTH = "pl.mareklangiewicz.myintent.provider"
     val BASE_URI = Uri.parse("content://" + AUTH)
 
-    object CmdRecent : BaseColumns {
+    object CmdRecent {
 
         val PATH = "cmd/recent"
 
@@ -60,7 +59,7 @@ object MIContract {
     }
 
 
-    object CmdExample : BaseColumns {
+    object CmdExample {
 
         val PATH = "cmd/example"
 
@@ -94,7 +93,7 @@ object MIContract {
     }
 
 
-    object CmdSuggest : BaseColumns {
+    object CmdSuggest {
 
         val PATH = "cmd/" + SearchManager.SUGGEST_URI_PATH_QUERY
 
@@ -112,7 +111,7 @@ object MIContract {
     }
 
 
-    object RuleUser : BaseColumns {
+    object RuleUser {
 
         val PATH = "rule/user"
 

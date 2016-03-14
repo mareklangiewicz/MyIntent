@@ -23,6 +23,7 @@ import com.google.android.gms.appindexing.AppIndex
 import com.google.android.gms.common.api.GoogleApiClient
 import kotlinx.android.synthetic.main.mi_header.view.*
 import pl.mareklangiewicz.myactivities.MyActivity
+import pl.mareklangiewicz.myintent.MIContract.RuleUser
 import pl.mareklangiewicz.myutils.MyBabbler
 import pl.mareklangiewicz.myutils.MyCommands
 import pl.mareklangiewicz.myutils.myhttp.OpenWeatherMap
@@ -86,7 +87,7 @@ class MIActivity : MyActivity() {
 
             val rules = MyCommands.RE_USER_GROUP.rules
             rules.clear()
-            val ok = MIContract.RuleUser.load(this, rules)
+            val ok = RuleUser.load(this, rules)
             if (!ok)
                 log.a("Can not load user rules from data base.")
             selectGlobalItem(R.id.mi_start)
@@ -275,8 +276,8 @@ class MIActivity : MyActivity() {
         gapi.disconnect()
 
         if (dbsave) {
-            MIContract.RuleUser.clear(this)
-            MIContract.RuleUser.save(this, MyCommands.RE_USER_GROUP.rules)
+            RuleUser.clear(this)
+            RuleUser.save(this, MyCommands.RE_USER_GROUP.rules)
         }
         super.onStop()
     }

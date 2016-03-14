@@ -365,7 +365,7 @@ public final class MIStartFragment extends MyFragment implements PlayStopButton.
         try {
             boolean ok = ((MIActivity) getActivity()).onCommand(cmd);
             if(ok)
-                MIContract.CmdRecent.insert(getActivity(), cmd);
+                MIContract.CmdRecent.INSTANCE.insert(getActivity(), cmd);
         }
         catch(RuntimeException e) {
             log.e(e.getMessage(), e);

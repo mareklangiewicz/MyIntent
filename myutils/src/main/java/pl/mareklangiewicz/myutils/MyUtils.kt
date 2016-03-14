@@ -1,3 +1,7 @@
+import android.content.ContentResolver
+import android.content.ContentValues
+import android.database.Cursor
+import android.net.Uri
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -29,3 +33,21 @@ val ViewGroup.views: List<View>
     get() = (0 until childCount).map { this[it] }
 
 
+fun Cursor.getString(columnName: String): String = getString(getColumnIndexOrThrow(columnName))
+fun Cursor.getInt(columnName: String): Int = getInt(getColumnIndexOrThrow(columnName))
+
+fun Cursor.getStringOrNull(columnName: String): String? {
+    val index = getColumnIndexOrThrow(columnName)
+    return if (isNull(index)) null else getString(index)
+}
+fun Cursor.getIntOrNull(columnName: String): Int? {
+    val index = getColumnIndexOrThrow(columnName)
+    return if (isNull(index)) null else getInt(index)
+}
+
+// TODO SOMEDAY: similar Cursor extensions for other data types
+
+
+fun ContentResolver.clear(uri: Uri): Int = delete(uri, null, null)
+
+inline fun ContentResolver.insert(uri: Uri, cvbuilder: ContentValues.() -> Unit): Uri = insert(uri, ContentValues().apply(cvbuilder))

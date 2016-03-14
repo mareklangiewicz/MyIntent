@@ -35,7 +35,7 @@ public class RecentCommandsRemoteViewsService extends RemoteViewsService {
 
         private void reload() {
             mCommands.clear();
-            MIContract.CmdRecent.load(mContext, mCommands, MAX);
+            MIContract.CmdRecent.INSTANCE.load(mContext, mCommands, MAX);
         }
 
         @Override public void onDataSetChanged() {

@@ -39,39 +39,39 @@ data class MyLogEntry(
 
 interface IMyLogger : Function1<MyLogEntry, Unit> { // TODO NOW: remove this class and use Function1<MyLogEntry, Unit>
     fun log(
-            message: String,
+            message: Any?,
             level: MyLogLevel = MyLogLevel.INFO,
             tag: String = "ML",
             throwable: Throwable? = null
-    ) = this(MyLogEntry(message, level, tag, throwable))
+    ) = this(MyLogEntry(message.toString(), level, tag, throwable))
 
-    fun v(message: String) { log(message, MyLogLevel.VERBOSE) }
-    fun d(message: String) { log(message, MyLogLevel.DEBUG  ) }
-    fun i(message: String) { log(message, MyLogLevel.INFO   ) }
-    fun w(message: String) { log(message, MyLogLevel.WARN   ) }
-    fun e(message: String) { log(message, MyLogLevel.ERROR  ) }
-    fun a(message: String) { log(message, MyLogLevel.ASSERT ) }
-    fun e(message: String, throwable: Throwable?) { log(message, MyLogLevel.ERROR , throwable = throwable) }
-    fun a(message: String, throwable: Throwable?) { log(message, MyLogLevel.ASSERT, throwable = throwable) }
+    fun v(message: Any?) { log(message, MyLogLevel.VERBOSE) }
+    fun d(message: Any?) { log(message, MyLogLevel.DEBUG  ) }
+    fun i(message: Any?) { log(message, MyLogLevel.INFO   ) }
+    fun w(message: Any?) { log(message, MyLogLevel.WARN   ) }
+    fun e(message: Any?) { log(message, MyLogLevel.ERROR  ) }
+    fun a(message: Any?) { log(message, MyLogLevel.ASSERT ) }
+    fun e(message: Any?, throwable: Throwable?) { log(message, MyLogLevel.ERROR , throwable = throwable) }
+    fun a(message: Any?, throwable: Throwable?) { log(message, MyLogLevel.ASSERT, throwable = throwable) }
 }
 
 
 fun Function1<MyLogEntry, Unit>.log(
-        message: String,
+        message: Any?,
         level: MyLogLevel = MyLogLevel.INFO,
         tag: String = "",
         throwable: Throwable? = null
-) = this(MyLogEntry(message, level, tag, throwable))
+) = this(MyLogEntry(message.toString(), level, tag, throwable))
 
-fun Function1<MyLogEntry, Unit>.v(message: String, tag: String = "ML", throwable: Throwable? = null) { log(message, MyLogLevel.VERBOSE, tag, throwable) }
-fun Function1<MyLogEntry, Unit>.d(message: String, tag: String = "ML", throwable: Throwable? = null) { log(message, MyLogLevel.DEBUG  , tag, throwable) }
-fun Function1<MyLogEntry, Unit>.i(message: String, tag: String = "ML", throwable: Throwable? = null) { log(message, MyLogLevel.INFO   , tag, throwable) }
-fun Function1<MyLogEntry, Unit>.w(message: String, tag: String = "ML", throwable: Throwable? = null) { log(message, MyLogLevel.WARN   , tag, throwable) }
-fun Function1<MyLogEntry, Unit>.e(message: String, tag: String = "ML", throwable: Throwable? = null) { log(message, MyLogLevel.ERROR  , tag, throwable) }
-fun Function1<MyLogEntry, Unit>.a(message: String, tag: String = "ML", throwable: Throwable? = null) { log(message, MyLogLevel.ASSERT , tag, throwable) }
+fun Function1<MyLogEntry, Unit>.v(message: Any?, tag: String = "ML", throwable: Throwable? = null) { log(message, MyLogLevel.VERBOSE, tag, throwable) }
+fun Function1<MyLogEntry, Unit>.d(message: Any?, tag: String = "ML", throwable: Throwable? = null) { log(message, MyLogLevel.DEBUG  , tag, throwable) }
+fun Function1<MyLogEntry, Unit>.i(message: Any?, tag: String = "ML", throwable: Throwable? = null) { log(message, MyLogLevel.INFO   , tag, throwable) }
+fun Function1<MyLogEntry, Unit>.w(message: Any?, tag: String = "ML", throwable: Throwable? = null) { log(message, MyLogLevel.WARN   , tag, throwable) }
+fun Function1<MyLogEntry, Unit>.e(message: Any?, tag: String = "ML", throwable: Throwable? = null) { log(message, MyLogLevel.ERROR  , tag, throwable) }
+fun Function1<MyLogEntry, Unit>.a(message: Any?, tag: String = "ML", throwable: Throwable? = null) { log(message, MyLogLevel.ASSERT , tag, throwable) }
 
 @Suppress("UNUSED_PARAMETER", "unused")
-fun Function1<MyLogEntry, Unit>.q(message: String, tag: String = "", throwable: Throwable? = null) { }
+fun Function1<MyLogEntry, Unit>.q(message: Any?, tag: String = "", throwable: Throwable? = null) { }
 
 
 

@@ -11,6 +11,15 @@ import pl.mareklangiewicz.myloggers.MY_DEFAULT_ANDRO_LOGGER
  */
 class PlayStopButton(private val mView: ImageView) {
 
+    companion object {
+        // TODO LATER: change to enum
+        const val HIDDEN = 0
+        const val PLAY = 1
+        const val STOP = 2
+
+        const val ANIM_DURATION = 300
+    }
+
     private val log = MY_DEFAULT_ANDRO_LOGGER
 
     private var mState = HIDDEN
@@ -21,7 +30,6 @@ class PlayStopButton(private val mView: ImageView) {
 
     var listener: Listener? = null
 
-    private val ANIM_DURATION = 300
 
     init {
         mView.setImageDrawable(mDrawable)
@@ -84,13 +92,6 @@ class PlayStopButton(private val mView: ImageView) {
 
     interface Listener {
         fun onPlayStopChanged(oldState: Int, newState: Int, byUser: Boolean)
-    }
-
-    companion object {
-        // TODO LATER: change to enum
-        const val HIDDEN = 0
-        const val PLAY = 1
-        const val STOP = 2
     }
 
 }

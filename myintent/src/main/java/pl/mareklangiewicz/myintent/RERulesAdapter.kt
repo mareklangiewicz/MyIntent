@@ -5,9 +5,10 @@ import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import kotlinx.android.synthetic.main.mi_re_rule_layout.view.*
+import kotlinx.android.synthetic.main.mi_re_rule_ro_details.view.*
+import kotlinx.android.synthetic.main.mi_re_rule_rw_details.view.*
 import pl.mareklangiewicz.myloggers.MY_DEFAULT_ANDRO_LOGGER
 import pl.mareklangiewicz.myutils.MyCommands
 import pl.mareklangiewicz.myutils.str
@@ -109,40 +110,54 @@ class RERulesAdapter() : RecyclerView.Adapter<RERulesAdapter.ViewHolder>(), View
         val rule = rs[pos]
 
 
-        val onApply = MaterialDialog.SingleButtonCallback { dialog, dialogAction ->
-            val cv = dialog.customView!!
-            rule.name = (cv.findViewById(R.id.re_rule_name) as TextView).text.toString()
-            rule.description = (cv.findViewById(R.id.re_rule_description) as TextView).text.toString()
-            rule.match = (cv.findViewById(R.id.re_rule_match) as TextView).text.toString()
-            rule.replace = (cv.findViewById(R.id.re_rule_replace) as TextView).text.toString()
-            notifyItemChanged(pos)
-        }
+        if(rule.editable) {
 
-        val dialog = if (rule.editable)
-            MaterialDialog.Builder(view.context)
-                    .title("RE Rule")
-                    .customView(R.layout.mi_re_rule_details, true)
+            val onApply = MaterialDialog.SingleButtonCallback { dialog, dialogAction ->
+                val cv = dialog.customView!!
+                rule.name = cv.re_rule_rw_name.text.toString()
+                rule.description = cv.re_rule_rw_description.text.toString()
+                rule.match = cv.re_rule_rw_match.text.toString()
+                rule.replace = cv.re_rule_rw_replace.text.toString()
+                notifyItemChanged(pos)
+            }
+
+            val dialog = MaterialDialog.Builder(view.context)
+                    .title("RE Rule ${(pos + 1).str}")
+                    .customView(R.layout.mi_re_rule_rw_details, true)
                     .positiveText("Apply")
                     .negativeText("Cancel")
                     .iconRes(R.mipmap.mi_ic_launcher)
                     .limitIconToDefaultSize() // limits the displayed icon size to 48dp
                     .onPositive(onApply)
                     .build()
-        else
-            MaterialDialog.Builder(view.context)
-                    .title("RE Rule " + (pos + 1).str)
+
+            val cv = dialog.customView!!
+
+            cv.re_rule_rw_name.setText(rule.name)
+            cv.re_rule_rw_description.setText(rule.description)
+            cv.re_rule_rw_match.setText(rule.match)
+            cv.re_rule_rw_replace.setText(rule.replace)
+
+            dialog.show()
+        }
+        else {
+
+            val dialog = MaterialDialog.Builder(view.context)
+                    .title("RE Rule ${(pos + 1).str}")
                     .customView(R.layout.mi_re_rule_ro_details, true)
                     .iconRes(R.mipmap.mi_ic_launcher)
                     .limitIconToDefaultSize() // limits the displayed icon size to 48dp
                     .build()
 
-        val cv = dialog.customView!!
-        (cv.findViewById(R.id.re_rule_name) as TextView).text = rule.name
-        (cv.findViewById(R.id.re_rule_description) as TextView).text = rule.description
-        (cv.findViewById(R.id.re_rule_match) as TextView).text = rule.match
-        (cv.findViewById(R.id.re_rule_replace) as TextView).text = rule.replace
+            val cv = dialog.customView!!
 
-        dialog.show()
+            cv.re_rule_ro_name.text = rule.name
+            cv.re_rule_ro_description.text = rule.description
+            cv.re_rule_ro_match.text = rule.match
+            cv.re_rule_ro_replace.text = rule.replace
+
+            dialog.show()
+        }
     }
 
 

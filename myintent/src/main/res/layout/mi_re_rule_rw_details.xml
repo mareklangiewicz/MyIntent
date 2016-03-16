@@ -7,7 +7,7 @@
     >
 
     <TextView
-        android:id="@+id/re_rule_editable"
+        android:id="@+id/re_rule_rw_editable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -27,7 +27,7 @@
         />
 
     <EditText
-        android:id="@+id/re_rule_name"
+        android:id="@+id/re_rule_rw_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -47,7 +47,7 @@
         />
 
     <EditText
-        android:id="@+id/re_rule_description"
+        android:id="@+id/re_rule_rw_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -67,7 +67,7 @@
         />
 
     <EditText
-        android:id="@+id/re_rule_match"
+        android:id="@+id/re_rule_rw_match"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -87,7 +87,7 @@
         />
 
     <EditText
-        android:id="@+id/re_rule_replace"
+        android:id="@+id/re_rule_rw_replace"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"

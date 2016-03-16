@@ -355,12 +355,16 @@ public final class MIStartFragment extends MyFragment implements PlayStopButton.
         }
     }
 
-    @Override public void onCountdownStarted(@NonNull String cmd) {
+    @Override public void onCountdownStarted(@Nullable String cmd) {
         log.w(cmd);
         updatePS();
     }
 
-    @Override public void onCountdownFinished(@NonNull String cmd) {
+    @Override public void onCountdownFinished(@Nullable String cmd) {
+        if(cmd == null) {
+            log.d("onCountdownFinished(null)");
+            return;
+        }
 
         try {
             boolean ok = ((MIActivity) getActivity()).onCommand(cmd);
@@ -374,7 +378,7 @@ public final class MIStartFragment extends MyFragment implements PlayStopButton.
         updatePS();
     }
 
-    @Override public void onCountdownCancelled(@NonNull String cmd) {
+    @Override public void onCountdownCancelled(@Nullable String cmd) {
         log.w("cancelled");
         updatePS();
     }

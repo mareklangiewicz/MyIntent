@@ -19,7 +19,7 @@ class Countdown internal constructor(private val bar: ProgressBar) {
     var listener: Listener? = null
 
     private val animator: ObjectAnimator = ObjectAnimator.ofInt(bar, "progress", 0, 10000).apply {
-        setDuration(3000)
+        duration = 3000
         interpolator = LinearInterpolator()
     }
 

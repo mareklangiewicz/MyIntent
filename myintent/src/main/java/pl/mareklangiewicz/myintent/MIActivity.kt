@@ -525,7 +525,7 @@ class MIActivity : MyActivity() {
         val awm = AppWidgetManager.getInstance(this)
         awm.notifyAppWidgetViewDataChanged(
                 awm.getAppWidgetIds(
-                        ComponentName(this, RecentCommandsAppWidgetProvider::class.java)),
+                        ComponentName(this, RecentCommandsAWProvider::class.java)),
                 R.id.recent_commands_listview)
     }
 

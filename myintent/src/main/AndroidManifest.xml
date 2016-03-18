@@ -124,7 +124,7 @@
                 android:readPermission="android.permission.GLOBAL_SEARCH"
                 />
         </provider>
-        <receiver android:name="RecentCommandsAppWidgetProvider">
+        <receiver android:name="RecentCommandsAWProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
             </intent-filter>

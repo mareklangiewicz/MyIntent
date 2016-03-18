@@ -44,7 +44,7 @@ public class RecentCommandsAppWidgetProvider extends AppWidgetProvider {
         PendingIntent listenPendingIntent = PendingIntent.getActivity(context, 0, listenIntent, 0);
         views.setOnClickPendingIntent(R.id.widget_listen, listenPendingIntent);
 
-        Intent serviceIntent = new Intent(context, RecentCommandsRemoteViewsService.class);
+        Intent serviceIntent = new Intent(context, RecentCommandsRVService.class);
         serviceIntent.setData(Uri.parse(serviceIntent.toUri(Intent.URI_INTENT_SCHEME)));
         serviceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id);
         views.setRemoteAdapter(R.id.recent_commands_listview, serviceIntent);

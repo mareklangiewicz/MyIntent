@@ -14,7 +14,7 @@
         >
 
         <EditText
-            android:id="@+id/edit_text"
+            android:id="@+id/mi_lf_et_command"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
@@ -27,7 +27,7 @@
             />
 
         <ImageView
-            android:id="@+id/play_stop_image_view"
+            android:id="@+id/mi_lf_iv_play_stop"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="bottom"
@@ -43,7 +43,7 @@
     </LinearLayout>
 
     <ProgressBar
-        android:id="@+id/progress_bar"
+        android:id="@+id/mi_lf_pb_countdown"
         style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
         />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/mi_log_recycler_view"
+        android:id="@+id/mi_lf_rv_log"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"

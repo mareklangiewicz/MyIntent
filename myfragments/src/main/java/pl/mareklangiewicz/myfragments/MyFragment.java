@@ -54,9 +54,14 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
 
     protected @NonNull final MyAndroLogger log = MyAndroLoggerKt.getMY_DEFAULT_ANDRO_LOGGER();
 
-    protected boolean isViewCreated = false;
+
     // it will be changed to true at 'onViewCreated' callback.
     // kotlin extensions are working from this point on.
+    protected boolean isViewCreated = false;
+
+
+    // it will be changed to true at 'onDestroyView' callback.
+    protected boolean isViewDestroyed = false;
 
     public MyFragment() { }
 
@@ -283,6 +288,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
         super.onDestroyView();
         clearMenu();
         clearHeader();
+        isViewDestroyed = true;
     }
 
     @CallSuper

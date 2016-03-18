@@ -738,7 +738,7 @@ fun <R, H> IPuller<R , H>.ldropWhile (pred: Function1<R, Boolean>) = Puller(lift
 
 /**
  * This is something similar to rx: Subject (or to Jake Wharton library: RxRelay) - but as always: it is simpler ;-)
- * A realy is a pusher you can attach many pushees. Every time you gen a Unit -> Unit function you can use to detach your pushee.
+ * A realy is a pusher you can attach many pushees. Every time you get a Unit -> Unit function you can use to detach your pushee.
  * The relay itself has a "pushee" property that - when called - forwards given item to all currently attached pushees.
  * TODO SOMEDAY: thread-safe version
  */

@@ -59,7 +59,7 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
         fab?.setImageResource(R.drawable.mi_ic_mic_white_24dp)
 
         fab?.setOnClickListener {
-            if(isViewCreated && !isViewDestroyed) {
+            if(isViewAvailable) {
                 mCountdown.cancel()
                 mi_lf_et_command.setText("")
                 (activity as MIActivity).onCommand("start custom action listen")
@@ -174,8 +174,8 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
 
 
     private fun lazyUpdateButtons() {
-        if (isViewDestroyed) {
-            log.d("The view is destroyed already.")
+        if (!isViewAvailable) {
+            log.d("View is not available.")
             return
         }
         view?.removeCallbacks(updateButtonsRunnable)
@@ -183,7 +183,7 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
     }
 
     private fun updatePS() {
-        if (!isViewCreated || isViewDestroyed) {
+        if (!isViewAvailable) {
             log.v("UI not ready.")
             return
         }
@@ -200,7 +200,7 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
      */
     fun play(cmd: String = "") {
 
-        if(!isViewCreated || isViewDestroyed) {
+        if(!isViewAvailable) {
             log.e("UI not ready.")
             return
         }

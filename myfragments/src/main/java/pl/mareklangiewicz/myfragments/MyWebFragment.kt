@@ -17,11 +17,11 @@ open class MyWebFragment : MyFragment() {
             if (value == field)
                 return
             field = value
-            if(isViewCreated)
+            if(isViewAvailable)
                 my_web_view.loadUrl(value)
         }
 
-    // use it after onViewCreated (when isViewCreated == true)
+    // use it after onViewCreated (when isViewAvailable == true)
     val settings: WebSettings
             get() = my_web_view.settings
 

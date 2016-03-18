@@ -55,13 +55,10 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
     protected @NonNull final MyAndroLogger log = MyAndroLoggerKt.getMY_DEFAULT_ANDRO_LOGGER();
 
 
-    // it will be changed to true at 'onViewCreated' callback.
+    // it will be changed to true at 'onViewCreated' callback and set back to false at 'onDestroyView'
     // kotlin extensions are working from this point on.
-    protected boolean isViewCreated = false;
+    protected boolean isViewAvailable = false;
 
-
-    // it will be changed to true at 'onDestroyView' callback.
-    protected boolean isViewDestroyed = false;
 
     public MyFragment() { }
 
@@ -226,7 +223,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
     @CallSuper
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        isViewCreated = true;
+        isViewAvailable = true;
         if(VV)
             log.v(String.format("%s.%s view=%s state=%s", this.getClass().getSimpleName(), "onViewCreated", getStr(view), getStr(savedInstanceState)));
         super.onViewCreated(view, savedInstanceState);
@@ -288,7 +285,7 @@ public class MyFragment extends Fragment implements IMyManager, IMyNavigation, I
         super.onDestroyView();
         clearMenu();
         clearHeader();
-        isViewDestroyed = true;
+        isViewAvailable = false;
     }
 
     @CallSuper

@@ -15,8 +15,7 @@ import pl.mareklangiewicz.myviews.IMyNavigation
 
 class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listener {
 
-    lateinit var mSearchItem: MenuItem
-    lateinit var mSearchView: SearchView
+    var mSearchItem: MenuItem? = null
 
     private val adapter = MyMDAndroLogAdapter(log.history)
 
@@ -88,6 +87,8 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
 
         view?.removeCallbacks(updateButtonsRunnable)
 
+        mSearchItem = null
+
         mPSButton.listener = null
         mPSButton.state = HIDDEN
 
@@ -108,11 +109,11 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.mi_log_options, menu)
         mSearchItem = menu.findItem(R.id.action_search)
-        mSearchView = mSearchItem.actionView as SearchView
+        val sview = mSearchItem?.actionView as SearchView
         val manager = activity.getSystemService(Context.SEARCH_SERVICE) as SearchManager
 
-        mSearchView.setSearchableInfo(manager.getSearchableInfo(activity.componentName))
-        mSearchView.setIconifiedByDefault(true)
+        sview.setSearchableInfo(manager.getSearchableInfo(activity.componentName))
+        sview.setIconifiedByDefault(true)
     }
 
     override fun onItemSelected(nav: IMyNavigation, item: MenuItem): Boolean {
@@ -213,7 +214,7 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
             return
         }
 
-        mSearchItem.collapseActionView()
+        mSearchItem?.collapseActionView()
         mi_lf_et_command.setText("")
         mCountdown.start(acmd)
         updatePS()

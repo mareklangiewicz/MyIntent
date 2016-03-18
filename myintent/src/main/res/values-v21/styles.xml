@@ -9,5 +9,13 @@
         <item name="android:windowTranslucentStatus">@bool/mi_window_transluctent_status</item>
     </style>
 
+    <style name="mi_BlueAppTheme"
+        parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/mi_bat_primary</item>
+        <item name="colorPrimaryDark">@color/mi_bat_primary_dark</item>
+        <item name="colorAccent">@color/mi_bat_accent</item>
+        <item name="android:windowTranslucentStatus">@bool/mi_window_transluctent_status</item>
+    </style>
+
     <bool name="mi_window_transluctent_status">true</bool>
 </resources>

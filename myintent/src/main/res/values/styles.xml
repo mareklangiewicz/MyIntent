@@ -6,4 +6,12 @@
         <item name="colorPrimaryDark">@color/mi_primary_dark</item>
         <item name="colorAccent">@color/mi_accent</item>
     </style>
+
+    <style name="mi_BlueAppTheme"
+        parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/mi_bat_primary</item>
+        <item name="colorPrimaryDark">@color/mi_bat_primary_dark</item>
+        <item name="colorAccent">@color/mi_bat_accent</item>
+    </style>
+
 </resources>

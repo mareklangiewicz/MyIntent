@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <color name="mi_primary">#70af27</color>
     <color name="mi_primary_dark">#195900</color>
     <color name="mi_accent">#b70900</color>
+
+    <color name="mi_bat_primary">#ff00a0ff</color>
+    <color name="mi_bat_primary_dark">#ff0040a0</color>
+    <color name="mi_bat_accent">#fff02020</color>
+
 </resources>

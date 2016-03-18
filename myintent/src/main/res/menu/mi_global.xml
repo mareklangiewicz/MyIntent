@@ -90,6 +90,18 @@
                 android:title=""
                 />
             <item
+                android:id="@+id/ds_git_sha"
+                android:title=""
+                />
+            <item
+                android:id="@+id/ds_git_tag"
+                android:title=""
+                />
+            <item
+                android:id="@+id/ds_git_info"
+                android:title=""
+                />
+            <item
                 android:id="@+id/ds_time_stamp"
                 android:title=""
                 />

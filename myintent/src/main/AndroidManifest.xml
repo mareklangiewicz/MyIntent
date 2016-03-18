@@ -4,9 +4,9 @@
     package="pl.mareklangiewicz.myintent"
     >
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <uses-feature
         android:name="android.hardware.telephony"
@@ -45,42 +45,42 @@
                 />
 
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
             <intent-filter>
-                <action android:name="android.intent.action.SEARCH"/>
+                <action android:name="android.intent.action.SEARCH" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
 
             <intent-filter>
-                <action android:name="com.google.android.gms.actions.SEARCH_ACTION"/>
+                <action android:name="com.google.android.gms.actions.SEARCH_ACTION" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
 
             <intent-filter android:priority="999">
-                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.intent.action.VIEW" />
 
-                <data android:scheme="mi"/>
+                <data android:scheme="mi" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
             <intent-filter android:priority="999">
-                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.intent.action.VIEW" />
                 <data
                     android:host="mi"
                     android:path="/"
                     android:scheme="http"
                     />
 
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
 
             <!-- FIXME SOMEDAY: I can not use autoVerify - my homepage is on github, so I can not set assetlinks.json correctly.. -->
@@ -89,7 +89,7 @@
                 android:priority="999"
                 tools:ignore="UnusedAttribute"
                 >
-                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.intent.action.VIEW" />
 
                 <data
                     android:host="mareklangiewicz.pl"
@@ -97,11 +97,10 @@
                     android:scheme="http"
                     />
 
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
-
 
 
         <!--This activity is only for debugging -->
@@ -109,8 +108,13 @@
             android:name="pl.mareklangiewicz.myactivities.MyTestActivity"
             android:label="@string/mi_my_test_activity"
             android:enabled="@bool/mi_debug_mode"
-            />
-
+            android:theme="@style/mi_BlueAppTheme"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <provider
             android:name=".MIContentProvider"
@@ -126,7 +130,7 @@
         </provider>
         <receiver android:name="RecentCommandsAWProvider">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"

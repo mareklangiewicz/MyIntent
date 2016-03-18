@@ -21,6 +21,7 @@ import com.google.android.gms.actions.SearchIntents
 import com.google.android.gms.appindexing.Action
 import com.google.android.gms.appindexing.AppIndex
 import com.google.android.gms.common.api.GoogleApiClient
+import hu.supercluster.paperwork.Paperwork
 import kotlinx.android.synthetic.main.mi_header.view.*
 import pl.mareklangiewicz.myactivities.MyActivity
 import pl.mareklangiewicz.myintent.MIContract.RuleUser
@@ -61,12 +62,16 @@ class MIActivity : MyActivity() {
         nav.inflateHeader(R.layout.mi_header)
 
         if (BuildConfig.DEBUG) {
+            val paperwork = Paperwork(this)
             val menu = nav.menu!!
-            menu.findItem(R.id.ds_mode).title = "build type: " + BuildConfig.BUILD_TYPE
-            menu.findItem(R.id.ds_flavor).title = "build flavor: " + BuildConfig.FLAVOR
-            menu.findItem(R.id.ds_version_code).title = "version code: " + BuildConfig.VERSION_CODE
-            menu.findItem(R.id.ds_version_name).title = "version name: " + BuildConfig.VERSION_NAME
-            menu.findItem(R.id.ds_time_stamp).title = "build time: %tF %tT".format(BuildConfig.TIME_STAMP, BuildConfig.TIME_STAMP)
+            menu.findItem(R.id.ds_mode).title = "build type: ${BuildConfig.BUILD_TYPE}"
+            menu.findItem(R.id.ds_flavor).title = "build flavor: ${BuildConfig.FLAVOR}"
+            menu.findItem(R.id.ds_version_code).title = "version code: ${BuildConfig.VERSION_CODE}"
+            menu.findItem(R.id.ds_version_name).title = "version name: ${BuildConfig.VERSION_NAME}"
+            menu.findItem(R.id.ds_time_stamp).title = "build time: ${paperwork.get("buildTime")}"
+            menu.findItem(R.id.ds_git_sha).title = "git sha: ${paperwork.get("gitSha")}"
+            menu.findItem(R.id.ds_git_tag).title = "git tag: ${paperwork.get("gitTag")}"
+            menu.findItem(R.id.ds_git_info).title = "git info: ${paperwork.get("gitInfo")}"
         }
 
         val header = nav.header!!

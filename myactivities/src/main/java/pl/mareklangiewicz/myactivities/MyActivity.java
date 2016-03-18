@@ -742,6 +742,17 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
             mMyLocalFragment.onDrawerStateChanged(newState);
     }
 
+
+    @CallSuper
+    @Override public void onBackPressed() {
+        if(mGlobalDrawerLayout != null && mGlobalDrawerLayout.isDrawerOpen(GravityCompat.START))
+            mGlobalDrawerLayout.closeDrawer(GravityCompat.START);
+        else if(mLocalDrawerLayout != null && mLocalDrawerLayout.isDrawerOpen(GravityCompat.END))
+            mLocalDrawerLayout.closeDrawer(GravityCompat.END);
+        else
+            super.onBackPressed();
+    }
+
     public float dp2px(float dp) {
         if(mDisplayMetrics == null)
             throw new IllegalStateException("display metrics not ready");

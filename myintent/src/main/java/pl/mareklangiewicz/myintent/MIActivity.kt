@@ -9,6 +9,7 @@ import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -242,8 +243,12 @@ class MIActivity : MyActivity() {
     // This callback is invoked when the Speech Recognizer returns.
     // This is where we process the intent and extract the speech text from the intent.
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == SPEECH_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
+
+        if (requestCode != SPEECH_REQUEST_CODE)
+            return super.onActivityResult(requestCode, resultCode, data)
+
+        when (resultCode) {
+            Activity.RESULT_OK -> {
                 val results = data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                 //                float[] scores = data.getFloatArrayExtra(RecognizerIntent.EXTRA_CONFIDENCE_SCORES);
                 //                log.v("Voice recognition results:");
@@ -255,23 +260,15 @@ class MIActivity : MyActivity() {
                 val command = results[0].toLowerCase()
 
                 play(command)
-            } else if (resultCode == Activity.RESULT_CANCELED) {
-                log.d("Voice recognition cancelled.")
-            } else if (resultCode == RecognizerIntent.RESULT_AUDIO_ERROR) {
-                log.e("Voice recognition: audio error.")
-            } else if (resultCode == RecognizerIntent.RESULT_CLIENT_ERROR) {
-                log.e("Voice recognition: generic client error.")
-            } else if (resultCode == RecognizerIntent.RESULT_NETWORK_ERROR) {
-                log.e("Voice recognition: network error.")
-            } else if (resultCode == RecognizerIntent.RESULT_NO_MATCH) {
-                log.e("Voice recognition: no match.")
-            } else if (resultCode == RecognizerIntent.RESULT_SERVER_ERROR) {
-                log.e("Voice recognition: server error.")
-            } else {
-                log.e("Voice recognition: error code: $resultCode")
             }
-        } else
-            super.onActivityResult(requestCode, resultCode, data)
+            Activity.RESULT_CANCELED -> log.d("Voice recognition cancelled.")
+            RecognizerIntent.RESULT_AUDIO_ERROR -> log.e("Voice recognition: audio error.")
+            RecognizerIntent.RESULT_CLIENT_ERROR -> log.e("Voice recognition: generic client error.")
+            RecognizerIntent.RESULT_NETWORK_ERROR -> log.e("Voice recognition: network error.")
+            RecognizerIntent.RESULT_NO_MATCH -> log.e("Voice recognition: no match.")
+            RecognizerIntent.RESULT_SERVER_ERROR -> log.e("Voice recognition: server error.")
+            else -> log.e("Voice recognition: error code: $resultCode")
+        }
     }
 
     override fun onStop() {
@@ -313,6 +310,15 @@ class MIActivity : MyActivity() {
             babbler.say(command["data"])
             return true
         }
+        if (command["action"] == "orientation") {
+            when(command["data"]) {
+                "portrait" -> requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                "landscape" -> requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                "unspecified" -> requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                else -> return false
+            }
+            return true
+        }
         if (command["action"] == "exit") {
             finish()
             return true
@@ -349,15 +355,10 @@ class MIActivity : MyActivity() {
 
     /**
      * Reports a weather via logging and tts (if available)
-     *
      * @param appid openweathermap api key (you should generate your own key on openweathermap website)
-     * *
      * @param city  name of the city (may contain country code after comma (like: wroclaw,pl)
-     * *
      * @param units default are "kelvins", you can change it to "metric" (Celsius), or "imperial" (Fahrenheit)
-     * *
      * @param day   a day number. Default is "1" (today/now), set it to "2" for tomorrow etc... (up to 16)
-     *
      * TODO SOMEDAY: remove all !! operators in this function...
      */
     fun weather(appid: String, city: String, units: String = "kelvins", day: String = "1") {
@@ -385,7 +386,7 @@ class MIActivity : MyActivity() {
             call.enqueue(object : Callback<OpenWeatherMap.Forecast> {
                 override fun onResponse(call: Call<OpenWeatherMap.Forecast>?, response: Response<OpenWeatherMap.Forecast>?) {
                     val forecast = response?.body()
-                    if(forecast === null || forecast.weather === null) {
+                    if (forecast === null || forecast.weather === null) {
                         log.e("Fetching weather failed: empty response.")
                         return
                     }
@@ -420,7 +421,7 @@ class MIActivity : MyActivity() {
             call.enqueue(object : Callback<OpenWeatherMap.DailyForecasts> {
                 override fun onResponse(call: Call<OpenWeatherMap.DailyForecasts>?, response: Response<OpenWeatherMap.DailyForecasts>?) {
                     val forecasts = response?.body()
-                    if(forecasts === null) {
+                    if (forecasts === null) {
                         log.e("Fetching weather failed: empty response.")
                         return
                     }

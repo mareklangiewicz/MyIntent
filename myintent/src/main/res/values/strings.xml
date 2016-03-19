@@ -32,4 +32,7 @@
     <string name="mi_start_my_test_activity">Start MyTestActivity</string>
     <string name="mi_debug_stuff">Debug stuff</string>
     <string name="mi_clear_log_history">Clear log history</string>
+    <string name="mi_orientation_portrait">Orientation: Portrait</string>
+    <string name="mi_orientation_landscape">Orientation: Landscape</string>
+    <string name="mi_orientation_unspecified">Orientation: Unspecified</string>
 </resources>

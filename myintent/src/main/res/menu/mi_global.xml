@@ -56,6 +56,24 @@
         >
         <menu>
             <item
+                android:id="@+id/ds_orientation_portrait"
+                android:icon="@drawable/mr_ic_whatshot_black_24dp"
+                android:title="@string/mi_orientation_portrait"
+                android:titleCondensed="cmd:start custom action orientation data portrait"
+                />
+            <item
+                android:id="@+id/ds_orientation_landscape"
+                android:icon="@drawable/mr_ic_whatshot_black_24dp"
+                android:title="@string/mi_orientation_landscape"
+                android:titleCondensed="cmd:start custom action orientation data landscape"
+                />
+            <item
+                android:id="@+id/ds_orientation_unspecified"
+                android:icon="@drawable/mr_ic_whatshot_black_24dp"
+                android:title="@string/mi_orientation_unspecified"
+                android:titleCondensed="cmd:start custom action orientation data unspecified"
+                />
+            <item
                 android:id="@+id/start_my_test_activity"
                 android:icon="@drawable/mr_ic_whatshot_black_24dp"
                 android:title="@string/mi_start_my_test_activity"

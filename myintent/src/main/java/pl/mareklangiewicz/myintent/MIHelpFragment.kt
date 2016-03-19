@@ -9,7 +9,7 @@ import pl.mareklangiewicz.myfragments.MyWebFragment
  */
 class MIHelpFragment : MyWebFragment() {
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         if(url == "") url = "file:///android_asset/mi.html"
 

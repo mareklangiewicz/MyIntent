@@ -36,7 +36,7 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
         return inflater.inflate(R.layout.mi_log_fragment, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         super.onViewCreated(view, savedInstanceState)
 

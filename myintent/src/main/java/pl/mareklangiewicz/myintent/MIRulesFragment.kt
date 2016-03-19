@@ -33,7 +33,7 @@ class MIRulesFragment : MyFragment() {
         return inflater.inflate(R.layout.mi_rules_fragment, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mi_rules_recycler_view.setHasFixedSize(true)
         mi_rules_recycler_view.adapter = adapter

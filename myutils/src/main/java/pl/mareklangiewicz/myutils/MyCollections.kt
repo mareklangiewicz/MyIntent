@@ -31,7 +31,23 @@ interface IClear {
     fun clear()
 }
 
-class MyRingBuffer<T>(val capacity: Int = 256) : IMyBuffer<T>, IClear {
+
+open class MyALBuffer<T>(val capacity: Int = 16) : IMyBuffer<T>, IClear {
+
+    private val array: ArrayList<T> = ArrayList(capacity)
+
+    override fun get(idx: Int): T = array[idx]
+
+    override val size: Int
+        get() = array.size
+
+    override fun invoke(t: T) { array.add(t) }
+    override fun clear() { array.clear() }
+}
+
+
+open class MyRingBuffer<T>(val capacity: Int = 256) : IMyBuffer<T>, IClear {
+
     private val array: ArrayList<T> = ArrayList(capacity)
 
     private var startpos: Int = 0
@@ -55,6 +71,23 @@ class MyRingBuffer<T>(val capacity: Int = 256) : IMyBuffer<T>, IClear {
         array.clear()
         startpos = 0
     }
-
 }
+
+interface IToDo : IMyBuffer<Function1<Unit, Unit>> {
+
+    /**
+     * invokes all accumulated tasks and clears to do buffer.
+     */
+    fun doItAll()
+}
+
+class ToDo(capacity: Int = 1) : MyALBuffer<Function1<Unit, Unit>>(capacity), IToDo {
+
+    override fun doItAll() {
+        for(task in this)
+            task(Unit)
+        clear()
+    }
+}
+
 

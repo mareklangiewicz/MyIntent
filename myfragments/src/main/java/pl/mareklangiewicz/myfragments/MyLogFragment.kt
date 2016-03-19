@@ -24,7 +24,7 @@ class MyLogFragment : MyFragment() {
         return inflater.inflate(R.layout.mf_my_log_fragment, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         my_log_recycler_view.adapter = adapter

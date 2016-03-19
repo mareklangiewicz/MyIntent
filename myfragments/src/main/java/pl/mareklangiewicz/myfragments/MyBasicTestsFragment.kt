@@ -18,7 +18,7 @@ class MyBasicTestsFragment : MyFragment() {
         return inflater.inflate(R.layout.mf_my_basic_tests_fragment, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mf_mbtf_et_name.setOnEditorActionListener(TextView.OnEditorActionListener { textView, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEND) {
@@ -34,8 +34,8 @@ class MyBasicTestsFragment : MyFragment() {
         })
     }
 
-    override fun onDrawerSlide(view: View, slideOffset: Float) {
-        if (view !== localNavigation) return
+    override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+        if (drawerView !== localNavigation) return
         mf_mbtf_pie1.rotation = slideOffset * 360
         mf_mbtf_pie3.to = 75 - slideOffset * 50
     }

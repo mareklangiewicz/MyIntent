@@ -36,7 +36,7 @@ class MyPieTestsFragment : MyFragment(), View.OnClickListener {
         return inflater.inflate(R.layout.mf_my_pie_tests_fragment, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         inflateHeader(R.layout.mf_my_pie_tests_header)
@@ -57,8 +57,10 @@ class MyPieTestsFragment : MyFragment(), View.OnClickListener {
 
         hanimator.interpolator = AccelerateInterpolator()
 
-        if (savedInstanceState == null)
-            selectItem(R.id.mpt_randomize_to)
+        if (savedInstanceState == null) {
+            setCheckedItem(R.id.mpt_randomize_to)
+            randomize = "to"
+        }
     }
 
     override fun onResume() {
@@ -109,11 +111,11 @@ class MyPieTestsFragment : MyFragment(), View.OnClickListener {
     }
 
 
-    override fun onDrawerSlide(view: View, slideOffset: Float) {
-        if (view !== localNavigation) return
+    override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+        if (drawerView !== localNavigation) return
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) hanimator.setCurrentFraction(slideOffset)
     }
-    override fun onDrawerOpened(view: View) { }
-    override fun onDrawerClosed(view: View) { }
-    override fun onDrawerStateChanged(i: Int) { }
+    override fun onDrawerOpened(drawerView: View) { }
+    override fun onDrawerClosed(drawerView: View) { }
+    override fun onDrawerStateChanged(newState: Int) { }
 }

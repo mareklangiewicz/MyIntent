@@ -9,7 +9,7 @@ import java.util.ArrayList
  * Created by Marek Langiewicz on 12.11.15.
  */
 class MIExampleCmdListFragment : MICmdListFragment() {
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         imageRes = R.drawable.mi_ic_example_command_black_24dp
         var cmds = ArrayList<String>()

@@ -24,7 +24,7 @@ class MyMachinesTestsFragment : MyFragment() {
         return inflater.inflate(R.layout.mf_my_machines_tests_fragment, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         super.onViewCreated(view, savedInstanceState)
 

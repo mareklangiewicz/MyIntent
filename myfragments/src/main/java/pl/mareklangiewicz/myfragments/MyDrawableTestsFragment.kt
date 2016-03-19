@@ -48,7 +48,7 @@ class MyDrawableTestsFragment : MyFragment(), View.OnClickListener, SeekBar.OnSe
         return inflater.inflate(R.layout.mf_my_dawable_tests_fragment, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         seek_bar_level.setOnSeekBarChangeListener(this)
         seek_bar_stroke_width.setOnSeekBarChangeListener(this)

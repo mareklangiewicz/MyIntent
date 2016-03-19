@@ -19,7 +19,7 @@ open class MICmdListFragment : MyFragment() {
         return inflater.inflate(R.layout.mi_cmd_list_fragment, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mi_cmd_recycler_view.setHasFixedSize(true)
         mi_cmd_recycler_view.adapter = adapter

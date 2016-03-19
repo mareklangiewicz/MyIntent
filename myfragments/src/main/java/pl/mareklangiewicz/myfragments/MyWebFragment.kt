@@ -36,7 +36,7 @@ open class MyWebFragment : MyFragment() {
         return inflater.inflate(R.layout.mf_my_web_fragment, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         my_web_view.loadUrl(url)
     }

@@ -19,11 +19,6 @@ import static android.animation.ObjectAnimator.ofPropertyValuesHolder;
 import static android.animation.PropertyValuesHolder.ofFloat;
 import static android.view.View.ALPHA;
 import static android.view.View.TRANSLATION_Y;
-import static pl.mareklangiewicz.myactivities.R.id.ma_mta_gh_v_underline;
-import static pl.mareklangiewicz.myactivities.R.id.section_my_pie_tests;
-import static pl.mareklangiewicz.myactivities.R.id.ma_mta_gh_tv_home_page;
-import static pl.mareklangiewicz.myactivities.R.layout.ma_my_test_global_header;
-import static pl.mareklangiewicz.myactivities.R.menu.ma_my_test_global;
 
 /**
  * Test activity presenting most of the MyBlocks functionality
@@ -44,16 +39,16 @@ public final class MyTestActivity extends pl.mareklangiewicz.myactivities.MyActi
         log.w("Warning!... just kidding...");
 
         //noinspection ConstantConditions
-        getGlobalNavigation().inflateMenu(ma_my_test_global);
-        getGlobalNavigation().inflateHeader(ma_my_test_global_header);
+        getGlobalNavigation().inflateMenu(R.menu.ma_my_test_global);
+        getGlobalNavigation().inflateHeader(R.layout.ma_my_test_global_header);
 
         //noinspection ConstantConditions
-        View underline = getGlobalNavigation().getHeader().findViewById(ma_mta_gh_v_underline);
+        View underline = getGlobalNavigation().getHeader().findViewById(R.id.ma_mta_gh_v_underline);
         mMyMagicLinesDrawable.setColor(0x30ffffff);
         mMyMagicLinesDrawable.setStrokeWidth(dp2px(4));
         underline.setBackground(mMyMagicLinesDrawable);
 
-        View homepage = getGlobalNavigation().getHeader().findViewById(ma_mta_gh_tv_home_page);
+        View homepage = getGlobalNavigation().getHeader().findViewById(R.id.ma_mta_gh_tv_home_page);
 
         PropertyValuesHolder pvha = ofFloat(ALPHA, 0f, 0f, 1f);
         PropertyValuesHolder pvhy = ofFloat(TRANSLATION_Y, -50f, -50f, 0f);
@@ -65,7 +60,7 @@ public final class MyTestActivity extends pl.mareklangiewicz.myactivities.MyActi
         mMagicLinesAnimator.setDuration(1000).setInterpolator(new LinearInterpolator());
 
         if(savedInstanceState == null) {
-            selectGlobalItem(section_my_pie_tests);
+            selectGlobalItem(R.id.section_my_pie_tests);
         }
     }
 

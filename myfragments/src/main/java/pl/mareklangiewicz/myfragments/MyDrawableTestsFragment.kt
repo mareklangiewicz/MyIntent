@@ -18,7 +18,7 @@ import pl.mareklangiewicz.mydrawables.*
 
 class MyDrawableTestsFragment : MyFragment(), View.OnClickListener, SeekBar.OnSeekBarChangeListener {
 
-    private val mDrawables = arrayOf(
+    private val drawables = arrayOf(
             MyPlusDrawable().apply { color = 0xff00a000.toInt(); rotateTo = 180f },
             MyPlusDrawable().apply { colorFrom = 0xffc00000.toInt(); colorTo = 0xff0000c0.toInt(); rotateTo = 90f },
             MyPlusDrawable().apply { color = 0xff00a000.toInt(); rotateTo = -360f },
@@ -84,10 +84,10 @@ class MyDrawableTestsFragment : MyFragment(), View.OnClickListener, SeekBar.OnSe
 
     override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
         if (seekBar === seek_bar_level) {
-            for (drawable in mDrawables)
+            for (drawable in drawables)
                 drawable.level = progress
         } else if (seekBar === seek_bar_stroke_width) {
-            for (drawable in mDrawables)
+            for (drawable in drawables)
                 drawable.strokeWidth = progress.toFloat()
         }
     }
@@ -104,7 +104,7 @@ class MyDrawableTestsFragment : MyFragment(), View.OnClickListener, SeekBar.OnSe
             log.e("Unknown seek bar.")
     }
 
-    private class MyViewHolder(v: View, val mContent: View) : RecyclerView.ViewHolder(v)
+    private class MyViewHolder(v: View, val content: View) : RecyclerView.ViewHolder(v)
 
     private inner class MyAdapter() : RecyclerView.Adapter<MyViewHolder>() {
         init {
@@ -125,8 +125,8 @@ class MyDrawableTestsFragment : MyFragment(), View.OnClickListener, SeekBar.OnSe
         }
 
         override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-            val content = holder.mContent
-            val drawable = mDrawables[position]
+            val content = holder.content
+            val drawable = drawables[position]
             val animator = ObjectAnimator.ofInt(drawable, "level", 0, 10000, 10000, 0)
             animator.duration = 3000
             animator.interpolator = LinearInterpolator()
@@ -136,7 +136,7 @@ class MyDrawableTestsFragment : MyFragment(), View.OnClickListener, SeekBar.OnSe
         }
 
         override fun getItemCount(): Int {
-            return mDrawables.size
+            return drawables.size
         }
 
         override fun getItemId(position: Int): Long {

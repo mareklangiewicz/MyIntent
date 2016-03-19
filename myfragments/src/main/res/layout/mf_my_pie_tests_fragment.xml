@@ -1,7 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/top_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -9,7 +8,6 @@
     >
 
     <LinearLayout
-        android:id="@+id/h_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2"
@@ -17,7 +15,7 @@
         >
 
         <pl.mareklangiewicz.myviews.MyPie
-            android:id="@+id/pie1"
+            android:id="@+id/mf_mptf_pie1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="8dp"
@@ -30,7 +28,7 @@
             />
 
         <pl.mareklangiewicz.myviews.MyPie
-            android:id="@+id/pie2"
+            android:id="@+id/mf_mptf_pie2"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="8dp"
@@ -42,7 +40,7 @@
             />
 
         <pl.mareklangiewicz.myviews.MyPie
-            android:id="@+id/pie3"
+            android:id="@+id/mf_mptf_pie3"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="8dp"
@@ -59,7 +57,7 @@
     </LinearLayout>
 
     <pl.mareklangiewicz.myviews.MyPie
-        android:id="@+id/pie4"
+        android:id="@+id/mf_mptf_pie4"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="8dp"

@@ -8,7 +8,7 @@
     >
 
     <pl.mareklangiewicz.myviews.MyPie
-        android:id="@+id/header_pie"
+        android:id="@+id/mf_mpth_pie"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="8dp"

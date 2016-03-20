@@ -12,4 +12,5 @@ interface IMyUIManager {
     val fab: FloatingActionButton?
     val gnav: IMyUINavigation?
     val lnav: IMyUINavigation?
+    // TODO LATER: maybe define some command consumer here? so we do not couple fragments with MyActivity class directly..
 }

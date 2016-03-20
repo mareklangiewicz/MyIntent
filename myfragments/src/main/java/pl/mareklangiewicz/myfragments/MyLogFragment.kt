@@ -33,7 +33,7 @@ class MyLogFragment : MyFragment() {
         adapter.notifyDataSetChanged() // to make sure we are up to date
 
         //TODO SOMEDAY: some nice simple header with fragment title
-        inflateMenu(R.menu.mf_my_log)
+        manager?.lnav?.inflateMenu(R.menu.mf_my_log)
 
         updateCheckedItem()
 
@@ -45,6 +45,7 @@ class MyLogFragment : MyFragment() {
     override fun onDestroyView() {
         sub?.invoke(Unit)
         sub = null
+        manager?.lnav?.clearMenu()
         super.onDestroyView()
     }
 
@@ -68,13 +69,14 @@ class MyLogFragment : MyFragment() {
     }
 
     private fun updateCheckedItem() {
-        when (log.history.level) {
-            MyLogLevel.ERROR, MyLogLevel.ASSERT -> setCheckedItem(R.id.log_level_error, false)
-            MyLogLevel.WARN -> setCheckedItem(R.id.log_level_warning, false)
-            MyLogLevel.INFO -> setCheckedItem(R.id.log_level_info, false)
-            MyLogLevel.DEBUG -> setCheckedItem(R.id.log_level_debug, false)
-            MyLogLevel.VERBOSE -> setCheckedItem(R.id.log_level_verbose, false)
+        val id = when (log.history.level) {
+            MyLogLevel.ERROR, MyLogLevel.ASSERT -> R.id.log_level_error
+            MyLogLevel.WARN -> R.id.log_level_warning
+            MyLogLevel.INFO -> R.id.log_level_info
+            MyLogLevel.DEBUG -> R.id.log_level_debug
+            MyLogLevel.VERBOSE -> R.id.log_level_verbose
         }
+        manager?.lnav?.setCheckedItem(id, false)
     }
 
 }

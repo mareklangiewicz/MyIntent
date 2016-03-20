@@ -63,16 +63,16 @@ class MyDrawableTestsFragment : MyFragment(), View.OnClickListener, SeekBar.OnSe
     override fun onResume() {
         super.onResume()
         val d = MyCheckDrawable().apply { strokeWidth = 6f; colorFrom = 0xff0000f0.toInt(); colorTo = 0xff00f000.toInt(); rotateTo = 360f }
-        fab?.setImageDrawable(d)
-        fab?.setOnClickListener {
+        manager?.fab?.setImageDrawable(d)
+        manager?.fab?.setOnClickListener {
             ObjectAnimator.ofInt(d, "level", 0, 10000, 10000, 0).setDuration(7000).start()
             log.w("[SNACK]FAB Clicked!")
         }
-        fab?.show()
+        manager?.fab?.show()
     }
 
     override fun onPause() {
-        fab?.hide()
+        manager?.fab?.hide()
         super.onPause()
     }
 

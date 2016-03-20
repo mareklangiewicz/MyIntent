@@ -39,8 +39,8 @@ class MyPieTestsFragment : MyFragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        inflateHeader(R.layout.mf_my_pie_tests_header)
-        inflateMenu(R.menu.mf_my_pie_tests)
+        manager?.lnav?.inflateHeader(R.layout.mf_my_pie_tests_header)
+        manager?.lnav?.inflateMenu(R.menu.mf_my_pie_tests)
 
         mf_mptf_pie1.setOnClickListener(this)
         mf_mptf_pie2.setOnClickListener(this)
@@ -58,16 +58,22 @@ class MyPieTestsFragment : MyFragment(), View.OnClickListener {
         hanimator.interpolator = AccelerateInterpolator()
 
         if (savedInstanceState == null)
-            setCheckedItem(R.id.mpt_randomize_to, true)
+            manager?.lnav?.setCheckedItem(R.id.mpt_randomize_to, true)
     }
 
     override fun onResume() {
         super.onResume()
-        randomize = firstCheckedItem?.run { title.toString() } ?: "to".apply { log.e("No item selected") }
+        randomize = manager?.lnav?.firstCheckedItem?.run { title.toString() } ?: "to".apply { log.e("No item selected") }
+    }
+
+    override fun onDestroyView() {
+        manager?.lnav?.clearHeader()
+        manager?.lnav?.clearMenu()
+        super.onDestroyView()
     }
 
     override fun onItemSelected(nav: IMyUINavigation, item: MenuItem): Boolean {
-        if (nav !== lnav) {
+        if (nav !== manager?.lnav) {
             log.v("This item is not from our local menu.")
             return false
         }
@@ -110,7 +116,7 @@ class MyPieTestsFragment : MyFragment(), View.OnClickListener {
 
 
     override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
-        if (drawerView !== lnav) return
+        if (drawerView !== manager?.lnav) return
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) hanimator.setCurrentFraction(slideOffset)
     }
     override fun onDrawerOpened(drawerView: View) { }

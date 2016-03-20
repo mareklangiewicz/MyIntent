@@ -12,9 +12,14 @@ class MyDecoratorsTestsFragment : MyFragment() {
 
         super.onCreateView(inflater, container, savedInstanceState) //just for logging
 
-        inflateHeader(R.layout.mf_my_basic_header)
+        manager?.lnav?.inflateHeader(R.layout.mf_my_basic_header)
         setHasOptionsMenu(true)
         return inflater.inflate(R.layout.mf_my_decorators_tests_fragment, container, false)
+    }
+
+    override fun onDestroyView() {
+        manager?.lnav?.clearHeader()
+        super.onDestroyView()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) = inflater.inflate(R.menu.mf_my_decorators, menu)

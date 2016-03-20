@@ -14,7 +14,7 @@ class MyBasicTestsFragment : MyFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState) //just for logging
-        inflateHeader(R.layout.mf_my_basic_header)
+        manager?.lnav?.inflateHeader(R.layout.mf_my_basic_header)
         return inflater.inflate(R.layout.mf_my_basic_tests_fragment, container, false)
     }
 
@@ -34,8 +34,13 @@ class MyBasicTestsFragment : MyFragment() {
         })
     }
 
+    override fun onDestroyView() {
+        manager?.lnav?.clearHeader()
+        super.onDestroyView()
+    }
+
     override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
-        if (drawerView !== lnav) return
+        if (drawerView !== manager?.lnav) return
         mf_mbtf_pie1.rotation = slideOffset * 360
         mf_mbtf_pie3.to = 75 - slideOffset * 50
     }

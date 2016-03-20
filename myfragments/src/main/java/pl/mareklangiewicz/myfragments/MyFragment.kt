@@ -31,7 +31,7 @@ import android.support.design.widget.FloatingActionButton
  * - don't add this fragment transactions to back stack
  * or invoke setRetainInstance(false) after MyFragment.onCreate.
  */
-open class MyFragment : Fragment(), IMyUIManager, IMyUINavigation, IMyUINavigation.Listener, DrawerLayout.DrawerListener {
+open class MyFragment : Fragment(), IMyUINavigation.Listener, DrawerLayout.DrawerListener {
 
 
     val V = true
@@ -55,6 +55,8 @@ open class MyFragment : Fragment(), IMyUIManager, IMyUINavigation, IMyUINavigati
     // kotlin extensions are working correctly when it is true.
     protected var isViewAvailable = false
 
+    protected val manager: IMyUIManager?
+        get() = activity as? IMyUIManager
 
     /**
      * Override it to your needs
@@ -68,67 +70,6 @@ open class MyFragment : Fragment(), IMyUIManager, IMyUINavigation, IMyUINavigati
     override fun onClearMenu(nav: IMyUINavigation) { }
     override fun onInflateHeader(nav: IMyUINavigation) { }
     override fun onInflateMenu(nav: IMyUINavigation) { }
-
-    override val gnav: IMyUINavigation?
-        get() = (activity as? IMyUIManager)?.gnav
-
-    override val lnav: IMyUINavigation?
-        get() = (activity as? IMyUIManager)?.lnav
-
-    override var mytitle: CharSequence
-        get() = (activity as? IMyUIManager)?.mytitle ?: ""
-        set(value) { (activity as? IMyUIManager)?.mytitle = value }
-
-
-    override val fab: FloatingActionButton?
-            get() = (activity as? IMyUIManager)?.fab
-
-    private fun gln() = (activity as? IMyUIManager)?.lnav
-
-    override fun getMenu() = gln()?.menu
-    override fun getHeader() = gln()?.header
-
-    override fun clearMenu() {
-        gln()?.clearMenu()
-    }
-
-    override fun clearHeader() {
-        gln()?.clearHeader()
-    }
-
-    override fun inflateMenu(@MenuRes id: Int) {
-        gln()?.inflateMenu(id)
-    }
-
-    override fun inflateHeader(@LayoutRes id: Int) {
-        gln()?.inflateHeader(id)
-    }
-
-    override fun setCheckedItem(@IdRes id: Int, callback: Boolean) {
-        gln()?.setCheckedItem(id, callback)
-    }
-
-    override fun overlaps(view: View?) = gln()?.overlaps(view) ?: false
-
-    /**
-     * WARNING: see MyNavigationView.getFirstCheckedItem warning!
-     */
-    override fun getFirstCheckedItem(): MenuItem? {
-        return gln()?.firstCheckedItem
-    }
-
-    override fun isEmpty(): Boolean {
-        return gln()?.isEmpty ?: true
-    }
-
-    override fun getListener(): IMyUINavigation.Listener? {
-        return gln()?.listener
-    }
-
-    override fun setListener(listener: IMyUINavigation.Listener?) {
-        throw IllegalStateException("MyFragments can not change navigation listeners.")
-    }
-
 
     // These will be called by MyActivity for both global and local drawer events...
 
@@ -202,8 +143,6 @@ open class MyFragment : Fragment(), IMyUIManager, IMyUINavigation, IMyUINavigati
     @CallSuper override fun onDestroyView() {
         if (VV) log.v("${javaClass.simpleName}.onDestroyView")
         super.onDestroyView()
-        clearMenu()
-        clearHeader()
         isViewAvailable = false
     }
 

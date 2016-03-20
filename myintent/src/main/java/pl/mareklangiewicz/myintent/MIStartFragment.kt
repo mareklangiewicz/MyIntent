@@ -52,12 +52,12 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
         adapter.notifyDataSetChanged() // to make sure we are up to date
 
         //TODO SOMEDAY: some nice simple header with fragment title
-        inflateMenu(R.menu.mi_log_local)
+        manager?.lnav?.inflateMenu(R.menu.mi_log_local)
         updateCheckedItem()
 
-        fab?.setImageResource(R.drawable.mi_ic_mic_white_24dp)
+        manager?.fab?.setImageResource(R.drawable.mi_ic_mic_white_24dp)
 
-        fab?.setOnClickListener {
+        manager?.fab?.setOnClickListener {
             if(isViewAvailable) {
                 mCountdown.cancel()
                 mi_lf_et_command.setText("")
@@ -92,8 +92,10 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
         mPSButton.listener = null
         mPSButton.state = HIDDEN
 
-        fab?.setOnClickListener(null)
-        fab?.hide()
+        manager?.fab?.setOnClickListener(null)
+        manager?.fab?.hide()
+
+        manager?.lnav?.clearMenu()
 
         mCountdown.cancel()
         mCountdown.listener = null
@@ -136,13 +138,14 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
     }
 
     private fun updateCheckedItem() {
-        when (log.history.level) {
-            MyLogLevel.ERROR, MyLogLevel.ASSERT -> setCheckedItem(R.id.mi_ll_i_error, false)
-            MyLogLevel.WARN -> setCheckedItem(R.id.mi_ll_i_warning, false)
-            MyLogLevel.INFO -> setCheckedItem(R.id.mi_ll_i_info, false)
-            MyLogLevel.DEBUG -> setCheckedItem(R.id.mi_ll_i_debug, false)
-            MyLogLevel.VERBOSE -> setCheckedItem(R.id.mi_ll_i_verbose, false)
+        val id = when (log.history.level) {
+            MyLogLevel.ERROR, MyLogLevel.ASSERT -> R.id.mi_ll_i_error
+            MyLogLevel.WARN -> R.id.mi_ll_i_warning
+            MyLogLevel.INFO -> R.id.mi_ll_i_info
+            MyLogLevel.DEBUG -> R.id.mi_ll_i_debug
+            MyLogLevel.VERBOSE -> R.id.mi_ll_i_verbose
         }
+        manager?.lnav?.setCheckedItem(id, false)
     }
 
     override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
@@ -150,7 +153,7 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
         if (slideOffset == 0f) {
             lazyUpdateButtons()
         } else {
-            fab?.hide()
+            manager?.fab?.hide()
             mPSButton.state = HIDDEN
         }
     }
@@ -160,17 +163,13 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
     }
 
     private val isSomethingOnOurFragment: Boolean
-        get() {
-            val lnav = lnav
-            val gnav = gnav
-            return view === null || lnav !== null && lnav.overlaps(view) || gnav !== null && gnav.overlaps(view)
-        }
+        get() = view !== null && ( manager?.lnav?.overlaps(view) ?: false || manager?.gnav?.overlaps(view) ?: false )
 
     private fun updateFAB() {
         if (isSomethingOnOurFragment)
-            fab?.hide()
+            manager?.fab?.hide()
         else
-            fab?.show()
+            manager?.fab?.show()
     }
 
 

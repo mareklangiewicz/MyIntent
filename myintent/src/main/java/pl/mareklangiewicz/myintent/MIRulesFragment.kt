@@ -22,8 +22,8 @@ class MIRulesFragment : MyFragment() {
 
         super.onCreateView(inflater, container, savedInstanceState) //just for logging
 
-        inflateHeader(R.layout.mi_rules_header)
-        inflateMenu(R.menu.mi_rules_local)
+        manager?.lnav?.inflateHeader(R.layout.mi_rules_header)
+        manager?.lnav?.inflateMenu(R.menu.mi_rules_local)
 
         if (RE_USER_GROUP.rules.size > 20)
             log.w("You have more than 20 user rules!")
@@ -37,6 +37,12 @@ class MIRulesFragment : MyFragment() {
         super.onViewCreated(view, savedInstanceState)
         mi_rules_recycler_view.setHasFixedSize(true)
         mi_rules_recycler_view.adapter = adapter
+    }
+
+    override fun onDestroyView() {
+        manager?.lnav?.clearMenu()
+        manager?.lnav?.clearHeader()
+        super.onDestroyView()
     }
 
     override fun onItemSelected(nav: IMyUINavigation, item: MenuItem): Boolean = when (item.itemId) {

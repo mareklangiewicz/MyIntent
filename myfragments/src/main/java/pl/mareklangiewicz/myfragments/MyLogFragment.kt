@@ -33,7 +33,7 @@ class MyLogFragment : MyFragment() {
         adapter.notifyDataSetChanged() // to make sure we are up to date
 
         //TODO SOMEDAY: some nice simple header with fragment title
-        manager?.lnav?.inflateMenu(R.menu.mf_my_log)
+        manager?.lnav?.menuId = R.menu.mf_my_log
 
         updateCheckedItem()
 
@@ -45,7 +45,7 @@ class MyLogFragment : MyFragment() {
     override fun onDestroyView() {
         sub?.invoke(Unit)
         sub = null
-        manager?.lnav?.clearMenu()
+        manager?.lnav?.menuId = -1
         super.onDestroyView()
     }
 

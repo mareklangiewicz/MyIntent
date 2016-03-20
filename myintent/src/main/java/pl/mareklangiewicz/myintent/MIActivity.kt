@@ -59,11 +59,11 @@ class MIActivity : MyActivity() {
 
         val nav = gnav!!
 
-        nav.inflateMenu(R.menu.mi_global)
-        nav.inflateHeader(R.layout.mi_header)
+        nav.menuId = R.menu.mi_global
+        nav.headerId = R.layout.mi_header
 
-        val menu = nav.menu!!
-        val header = nav.header!!
+        val menu = nav.menuObj!!
+        val header = nav.headerObj!!
 
         if (BuildConfig.DEBUG) {
             val paperwork = Paperwork(this)

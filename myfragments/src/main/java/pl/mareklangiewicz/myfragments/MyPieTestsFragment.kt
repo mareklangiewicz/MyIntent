@@ -39,8 +39,8 @@ class MyPieTestsFragment : MyFragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        manager?.lnav?.inflateHeader(R.layout.mf_my_pie_tests_header)
-        manager?.lnav?.inflateMenu(R.menu.mf_my_pie_tests)
+        manager?.lnav?.headerId = R.layout.mf_my_pie_tests_header
+        manager?.lnav?.menuId = R.menu.mf_my_pie_tests
 
         mf_mptf_pie1.setOnClickListener(this)
         mf_mptf_pie2.setOnClickListener(this)
@@ -67,8 +67,8 @@ class MyPieTestsFragment : MyFragment(), View.OnClickListener {
     }
 
     override fun onDestroyView() {
-        manager?.lnav?.clearHeader()
-        manager?.lnav?.clearMenu()
+        manager?.lnav?.headerId = -1
+        manager?.lnav?.menuId = -1
         super.onDestroyView()
     }
 

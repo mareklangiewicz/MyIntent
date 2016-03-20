@@ -22,8 +22,8 @@ class MIRulesFragment : MyFragment() {
 
         super.onCreateView(inflater, container, savedInstanceState) //just for logging
 
-        manager?.lnav?.inflateHeader(R.layout.mi_rules_header)
-        manager?.lnav?.inflateMenu(R.menu.mi_rules_local)
+        manager?.lnav?.headerId = R.layout.mi_rules_header
+        manager?.lnav?.menuId = R.menu.mi_rules_local
 
         if (RE_USER_GROUP.rules.size > 20)
             log.w("You have more than 20 user rules!")
@@ -40,8 +40,8 @@ class MIRulesFragment : MyFragment() {
     }
 
     override fun onDestroyView() {
-        manager?.lnav?.clearMenu()
-        manager?.lnav?.clearHeader()
+        manager?.lnav?.menuId = -1
+        manager?.lnav?.headerId = -1
         super.onDestroyView()
     }
 

@@ -137,7 +137,7 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 //noinspection ConstantConditions
-                boolean empty = getGnav().isEmpty();
+                boolean empty = getGnav().getEmpty();
                 if(!empty)
                     toggleGlobalNavigation();
                 else
@@ -150,7 +150,7 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
         mLocalArrowView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 //noinspection ConstantConditions
-                boolean empty = getLnav().isEmpty();
+                boolean empty = getLnav().getEmpty();
                 if(!empty)
                     toggleLocalNavigation();
                 else
@@ -372,7 +372,7 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
 
         IMyUINavigation gnav = getGnav();
         if(gnav != null) {
-            Menu menu = getGnav().getMenu();
+            Menu menu = getGnav().getMenuObj();
             if(menu != null)
                 checkFirstCheckableItemWithCommand(menu, command);
         }
@@ -603,7 +603,7 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
     /**
      * You can override it, but you should call super version first and do your custom logic only if it returns false.
      */
-    @CallSuper @Override public boolean onItemSelected(IMyUINavigation nav, MenuItem item) {
+    @CallSuper @Override public boolean onItemSelected(@NonNull IMyUINavigation nav, @NonNull MenuItem item) {
         final String ctitle = item.getTitleCondensed().toString();
         if(ctitle.startsWith(COMMAND_PREFIX)) {
             final String cmd = ctitle.substring(COMMAND_PREFIX.length());
@@ -622,8 +622,8 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
         return false;
     }
 
-    @Override @CallSuper public void onNavigationChanged(IMyUINavigation nav) {
-        boolean empty = nav.isEmpty();
+    @Override @CallSuper public void onNavigationChanged(@NonNull IMyUINavigation nav) {
+        boolean empty = nav.getEmpty();
         if(nav == getGnav()) {
             mGlobalArrowDrawable.setAlpha(empty ? 0 : 0xa0);
             if(mGlobalDrawerLayout != null)

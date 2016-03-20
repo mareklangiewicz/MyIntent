@@ -5,6 +5,7 @@ import android.animation.PropertyValuesHolder;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,16 +40,16 @@ public final class MyTestActivity extends pl.mareklangiewicz.myactivities.MyActi
         log.w("Warning!... just kidding...");
 
         //noinspection ConstantConditions
-        getGnav().inflateMenu(R.menu.ma_my_test_global);
-        getGnav().inflateHeader(R.layout.ma_my_test_global_header);
+        getGnav().setMenuId(R.menu.ma_my_test_global);
+        getGnav().setHeaderId(R.layout.ma_my_test_global_header);
 
         //noinspection ConstantConditions
-        View underline = getGnav().getHeader().findViewById(R.id.ma_mta_gh_v_underline);
+        View underline = getGnav().getHeaderObj().findViewById(R.id.ma_mta_gh_v_underline);
         mMyMagicLinesDrawable.setColor(0x30ffffff);
         mMyMagicLinesDrawable.setStrokeWidth(dp2px(4));
         underline.setBackground(mMyMagicLinesDrawable);
 
-        View homepage = getGnav().getHeader().findViewById(R.id.ma_mta_gh_tv_home_page);
+        View homepage = getGnav().getHeaderObj().findViewById(R.id.ma_mta_gh_tv_home_page);
 
         PropertyValuesHolder pvha = ofFloat(ALPHA, 0f, 0f, 1f);
         PropertyValuesHolder pvhy = ofFloat(TRANSLATION_Y, -50f, -50f, 0f);
@@ -92,7 +93,7 @@ public final class MyTestActivity extends pl.mareklangiewicz.myactivities.MyActi
         mMyMagicLinesDrawable.setLevel(0);
     }
 
-    @Override public boolean onItemSelected(IMyUINavigation nav, MenuItem item) {
+    @Override public boolean onItemSelected(@NonNull IMyUINavigation nav, @NonNull MenuItem item) {
 
         boolean done = super.onItemSelected(nav, item);
 

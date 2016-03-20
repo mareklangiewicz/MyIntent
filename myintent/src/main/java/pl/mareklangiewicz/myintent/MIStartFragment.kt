@@ -52,7 +52,7 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
         adapter.notifyDataSetChanged() // to make sure we are up to date
 
         //TODO SOMEDAY: some nice simple header with fragment title
-        manager?.lnav?.inflateMenu(R.menu.mi_log_local)
+        manager?.lnav?.menuId = R.menu.mi_log_local
         updateCheckedItem()
 
         manager?.fab?.setImageResource(R.drawable.mi_ic_mic_white_24dp)
@@ -95,7 +95,7 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
         manager?.fab?.setOnClickListener(null)
         manager?.fab?.hide()
 
-        manager?.lnav?.clearMenu()
+        manager?.lnav?.menuId = -1
 
         mCountdown.cancel()
         mCountdown.listener = null

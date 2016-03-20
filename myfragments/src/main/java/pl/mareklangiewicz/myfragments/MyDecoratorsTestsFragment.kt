@@ -12,13 +12,13 @@ class MyDecoratorsTestsFragment : MyFragment() {
 
         super.onCreateView(inflater, container, savedInstanceState) //just for logging
 
-        manager?.lnav?.inflateHeader(R.layout.mf_my_basic_header)
+        manager?.lnav?.headerId = R.layout.mf_my_basic_header
         setHasOptionsMenu(true)
         return inflater.inflate(R.layout.mf_my_decorators_tests_fragment, container, false)
     }
 
     override fun onDestroyView() {
-        manager?.lnav?.clearHeader()
+        manager?.lnav?.headerId = -1
         super.onDestroyView()
     }
 

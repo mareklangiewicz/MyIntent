@@ -14,7 +14,7 @@ class MyBasicTestsFragment : MyFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState) //just for logging
-        manager?.lnav?.inflateHeader(R.layout.mf_my_basic_header)
+        manager?.lnav?.headerId = R.layout.mf_my_basic_header
         return inflater.inflate(R.layout.mf_my_basic_tests_fragment, container, false)
     }
 
@@ -35,7 +35,7 @@ class MyBasicTestsFragment : MyFragment() {
     }
 
     override fun onDestroyView() {
-        manager?.lnav?.clearHeader()
+        manager?.lnav?.headerId = -1
         super.onDestroyView()
     }
 

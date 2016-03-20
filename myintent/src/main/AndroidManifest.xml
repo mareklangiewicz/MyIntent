@@ -116,6 +116,12 @@
             </intent-filter>
         </activity>
 
+        <!--This activity is only for debugging -->
+        <activity
+            android:name="pl.mareklangiewicz.myactivities.MyExampleActivity"
+            android:enabled="@bool/mi_debug_mode"
+            />
+
         <provider
             android:name=".MIContentProvider"
             android:authorities="pl.mareklangiewicz.myintent.provider"

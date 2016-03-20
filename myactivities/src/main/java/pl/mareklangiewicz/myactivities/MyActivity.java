@@ -697,6 +697,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         return mLocalNavigationView;
     }
 
+    @Deprecated // we should do it manually (we know more when we do it)
     private void selectItem(IMyNavigation nav, @IdRes int id) {
         Menu menu = nav.getMenu();
         if(menu == null) {
@@ -707,10 +708,12 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         onItemSelected(nav, menu.findItem(id));
     }
 
+    @Deprecated // we should do it manually (we know more when we do it)
     public void selectGlobalItem(@IdRes int id) {
         selectItem(getGlobalNavigation(), id);
     }
 
+    @Deprecated // we should do it manually (we know more when we do it)
     public void selectLocalItem(@IdRes int id) {
         selectItem(getLocalNavigation(), id);
     }

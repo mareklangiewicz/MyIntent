@@ -20,7 +20,7 @@ public class MyExampleActivity extends MyActivity {
         getGlobalNavigation().inflateMenu(R.menu.ma_my_example_global);
         getGlobalNavigation().inflateHeader(R.layout.ma_my_example_global_header);
         if(savedInstanceState == null) {
-            selectGlobalItem(R.id.my_example_fragment_1);
+            selectGlobalItem(R.id.ma_meg_i_my_example_fragment_1);
         }
     }
 
@@ -29,7 +29,7 @@ public class MyExampleActivity extends MyActivity {
         if(done)
             return true;
         @IdRes int id = item.getItemId();
-        if(id == R.id.my_example_action) {
+        if(id == R.id.ma_meg_i_my_example_action) {
             log.i("[SNACK][SHORT]Example: ACTION!");
             return true;
         }

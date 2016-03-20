@@ -124,12 +124,6 @@
                 android:titleCondensed="cmd:activity pl.mareklangiewicz.myactivities.MyExampleActivity"
                 />
             <item
-                android:id="@+id/action_start_example_activity_2"
-                android:icon="@drawable/mr_ic_whatshot_black_24dp"
-                android:title="@string/ma_start_example_activity_2"
-                android:titleCondensed="cmd:activity .MyExampleActivity2"
-                />
-            <item
                 android:id="@+id/action_destroy_something"
                 android:icon="@drawable/mr_ic_whatshot_black_24dp"
                 android:title="@string/ma_destroy_something"

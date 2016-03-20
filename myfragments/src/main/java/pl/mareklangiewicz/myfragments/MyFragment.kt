@@ -5,9 +5,6 @@ import android.app.Fragment
 import android.content.Context
 import android.os.Bundle
 import android.support.annotation.CallSuper
-import android.support.annotation.IdRes
-import android.support.annotation.LayoutRes
-import android.support.annotation.MenuRes
 import android.support.v4.widget.DrawerLayout
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -16,9 +13,8 @@ import android.view.View
 import android.view.ViewGroup
 import pl.mareklangiewicz.myloggers.MY_DEFAULT_ANDRO_LOGGER
 import pl.mareklangiewicz.myutils.str
-import pl.mareklangiewicz.myviews.IMyUINavigation
 import pl.mareklangiewicz.myviews.IMyUIManager
-import android.support.design.widget.FloatingActionButton
+import pl.mareklangiewicz.myviews.IMyUINavigation
 
 
 /**
@@ -66,12 +62,7 @@ open class MyFragment : Fragment(), IMyUINavigation.Listener, DrawerLayout.Drawe
      */
     override fun onItemSelected(nav: IMyUINavigation, item: MenuItem): Boolean = false
 
-    override fun onClearHeader(nav: IMyUINavigation) { }
-    override fun onClearMenu(nav: IMyUINavigation) { }
-    override fun onInflateHeader(nav: IMyUINavigation) { }
-    override fun onInflateMenu(nav: IMyUINavigation) { }
-
-    // These will be called by MyActivity for both global and local drawer events...
+    override fun onNavigationChanged(nav: IMyUINavigation) { } // will be called by MyActivity for both global and local drawer events...
 
     override fun onDrawerSlide(drawerView: View, slideOffset: Float) { }
     override fun onDrawerOpened(drawerView: View) { }

@@ -43,15 +43,9 @@ public interface IMyUINavigation {
     void setListener(@Nullable Listener listener);
 
     interface Listener {
-        boolean onItemSelected(IMyUINavigation nav, MenuItem item);
-
-        void onClearHeader(IMyUINavigation nav);
-
-        void onClearMenu(IMyUINavigation nav);
-
-        void onInflateHeader(IMyUINavigation nav);
-
-        void onInflateMenu(IMyUINavigation nav);
+        boolean onItemSelected(IMyUINavigation nav, MenuItem item); // TODO NOW: change to items: IPusher<MenuItem>
+        void onNavigationChanged(IMyUINavigation nav);
+        // TODO NOW: change to changes: IPusher<Unit> (we can later use map to attach nav; then merge? to merge global and local navigation if needed..
     }
 
 }

@@ -9,7 +9,7 @@ import pl.mareklangiewicz.myviews.IMyUINavigation;
 
 /**
  * Created by Marek Langiewicz on 22.09.15.
- * Simple example activity using MyBlock stuff...
+ * Simple example activity using MyActivity features...
  */
 @SuppressLint("Registered")
 public class MyExampleActivity extends MyActivity {

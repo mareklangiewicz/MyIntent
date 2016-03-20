@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
-import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -247,8 +246,8 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
         if(mLocalDrawerLayout != null)
             onDrawerSlide(mLocalNavigationView, mLocalDrawerLayout.isDrawerOpen(GravityCompat.END) ? 1f : 0f);
         // ensure that drawers and menu icons are updated:
-        onNavigationContentChanged(getGnav());
-        onNavigationContentChanged(getLnav());
+        onNavigationChanged(getGnav());
+        onNavigationChanged(getLnav());
         if(savedInstanceState == null)
             onIntent(getIntent());
     }
@@ -623,7 +622,7 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
         return false;
     }
 
-    @CallSuper protected void onNavigationContentChanged(IMyUINavigation nav) {
+    @Override @CallSuper public void onNavigationChanged(IMyUINavigation nav) {
         boolean empty = nav.isEmpty();
         if(nav == getGnav()) {
             mGlobalArrowDrawable.setAlpha(empty ? 0 : 0xa0);
@@ -645,30 +644,9 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
         }
         else
             log.a("Unknown IMyUINavigation object.");
-    }
 
-    @Override public void onClearHeader(IMyUINavigation nav) {
-        onNavigationContentChanged(nav);
         if(mMyLocalFragment != null)
-            mMyLocalFragment.onClearHeader(nav);
-    }
-
-    @Override public void onClearMenu(IMyUINavigation nav) {
-        onNavigationContentChanged(nav);
-        if(mMyLocalFragment != null)
-            mMyLocalFragment.onClearMenu(nav);
-    }
-
-    @Override public void onInflateHeader(IMyUINavigation nav) {
-        onNavigationContentChanged(nav);
-        if(mMyLocalFragment != null)
-            mMyLocalFragment.onInflateHeader(nav);
-    }
-
-    @Override public void onInflateMenu(IMyUINavigation nav) {
-        onNavigationContentChanged(nav);
-        if(mMyLocalFragment != null)
-            mMyLocalFragment.onInflateMenu(nav);
+            mMyLocalFragment.onNavigationChanged(nav);
     }
 
     private void addAllSharedElementsToFragmentTransaction(View root, FragmentTransaction ft) {

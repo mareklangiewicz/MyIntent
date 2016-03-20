@@ -66,7 +66,7 @@ public final class MyNavigationView extends NavigationView implements IMyUINavig
     public void inflateHeader(@LayoutRes int id) {
         mHeader = inflateHeaderView(id);
         if(mListener != null)
-            mListener.onInflateHeader(this);
+            mListener.onNavigationChanged(this);
     }
 
     @Override public boolean overlaps(@Nullable View view) {
@@ -77,7 +77,7 @@ public final class MyNavigationView extends NavigationView implements IMyUINavig
     public void inflateMenu(int resId) {
         super.inflateMenu(resId);
         if(mListener != null)
-            mListener.onInflateMenu(this);
+            mListener.onNavigationChanged(this);
     }
 
     /**
@@ -102,7 +102,7 @@ public final class MyNavigationView extends NavigationView implements IMyUINavig
     public void clearMenu() {
         getMenu().clear();
         if(mListener != null)
-            mListener.onClearMenu(this);
+            mListener.onNavigationChanged(this);
     }
 
     @Override
@@ -112,7 +112,7 @@ public final class MyNavigationView extends NavigationView implements IMyUINavig
         removeHeaderView(mHeader);
         mHeader = null;
         if(mListener != null)
-            mListener.onClearHeader(this);
+            mListener.onNavigationChanged(this);
     }
 
     /**

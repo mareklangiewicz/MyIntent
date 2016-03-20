@@ -1,6 +1,7 @@
 package pl.mareklangiewicz.myviews;
 
 import android.content.Context;
+import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,7 +14,7 @@ import android.view.View;
 import pl.mareklangiewicz.myloggers.MyAndroLogger;
 import pl.mareklangiewicz.myloggers.MyAndroLoggerKt;
 
-public final class MyNavigationView extends NavigationView implements IMyNavigation, NavigationView.OnNavigationItemSelectedListener {
+public final class MyNavigationView extends NavigationView implements IMyUINavigation, NavigationView.OnNavigationItemSelectedListener {
 
     protected @NonNull final MyAndroLogger log = MyAndroLoggerKt.getMY_DEFAULT_ANDRO_LOGGER();
 
@@ -112,6 +113,17 @@ public final class MyNavigationView extends NavigationView implements IMyNavigat
         mHeader = null;
         if(mListener != null)
             mListener.onClearHeader(this);
+    }
+
+    /**
+     *
+     * @param id The ID of checked item.
+     * @param callback - if true: it additionally calls listener.onItemSelected (if any listener is provided)
+     */
+    @Override public void setCheckedItem(@IdRes int id, boolean callback) {
+        super.setCheckedItem(id);
+        if(callback)
+            onNavigationItemSelected(getMenu().findItem(id));
     }
 
     public boolean isEmpty() {

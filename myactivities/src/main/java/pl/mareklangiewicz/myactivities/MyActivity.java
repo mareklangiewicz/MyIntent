@@ -29,6 +29,8 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,14 +41,14 @@ import pl.mareklangiewicz.myfragments.MyFragment;
 import pl.mareklangiewicz.myloggers.MyAndroLogger;
 import pl.mareklangiewicz.myloggers.MyAndroLoggerKt;
 import pl.mareklangiewicz.myutils.MyCommands;
-import pl.mareklangiewicz.myviews.IMyManager;
-import pl.mareklangiewicz.myviews.IMyNavigation;
+import pl.mareklangiewicz.myviews.IMyUIManager;
+import pl.mareklangiewicz.myviews.IMyUINavigation;
 import pl.mareklangiewicz.myviews.MyNavigationView;
 
 import static pl.mareklangiewicz.myutils.MyMathUtils.scale0d;
 import static pl.mareklangiewicz.myutils.MyTextUtilsKt.*;
 
-public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavigation.Listener, DrawerLayout.DrawerListener {
+public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUINavigation.Listener, DrawerLayout.DrawerListener {
 
 
     static public final String COMMAND_PREFIX = "cmd:";
@@ -136,7 +138,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 //noinspection ConstantConditions
-                boolean empty = getGlobalNavigation().isEmpty();
+                boolean empty = getGnav().isEmpty();
                 if(!empty)
                     toggleGlobalNavigation();
                 else
@@ -149,7 +151,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         mLocalArrowView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 //noinspection ConstantConditions
-                boolean empty = getLocalNavigation().isEmpty();
+                boolean empty = getLnav().isEmpty();
                 if(!empty)
                     toggleLocalNavigation();
                 else
@@ -245,8 +247,8 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         if(mLocalDrawerLayout != null)
             onDrawerSlide(mLocalNavigationView, mLocalDrawerLayout.isDrawerOpen(GravityCompat.END) ? 1f : 0f);
         // ensure that drawers and menu icons are updated:
-        onNavigationContentChanged(getGlobalNavigation());
-        onNavigationContentChanged(getLocalNavigation());
+        onNavigationContentChanged(getGnav());
+        onNavigationContentChanged(getLnav());
         if(savedInstanceState == null)
             onIntent(getIntent());
     }
@@ -369,9 +371,9 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
             return false;
         }
 
-        IMyNavigation gnav = getGlobalNavigation();
+        IMyUINavigation gnav = getGnav();
         if(gnav != null) {
-            Menu menu = getGlobalNavigation().getMenu();
+            Menu menu = getGnav().getMenu();
             if(menu != null)
                 checkFirstCheckableItemWithCommand(menu, command);
         }
@@ -602,7 +604,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
     /**
      * You can override it, but you should call super version first and do your custom logic only if it returns false.
      */
-    @CallSuper @Override public boolean onItemSelected(IMyNavigation nav, MenuItem item) {
+    @CallSuper @Override public boolean onItemSelected(IMyUINavigation nav, MenuItem item) {
         final String ctitle = item.getTitleCondensed().toString();
         if(ctitle.startsWith(COMMAND_PREFIX)) {
             final String cmd = ctitle.substring(COMMAND_PREFIX.length());
@@ -621,9 +623,9 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         return false;
     }
 
-    @CallSuper protected void onNavigationContentChanged(IMyNavigation nav) {
+    @CallSuper protected void onNavigationContentChanged(IMyUINavigation nav) {
         boolean empty = nav.isEmpty();
-        if(nav == getGlobalNavigation()) {
+        if(nav == getGnav()) {
             mGlobalArrowDrawable.setAlpha(empty ? 0 : 0xa0);
             if(mGlobalDrawerLayout != null)
                 mGlobalDrawerLayout.setDrawerLockMode(empty ? DrawerLayout.LOCK_MODE_LOCKED_CLOSED : DrawerLayout.LOCK_MODE_UNLOCKED);
@@ -632,7 +634,7 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
             else
                 log.a("No global drawer or linear layout with global navigation.");
         }
-        else if(nav == getLocalNavigation()) {
+        else if(nav == getLnav()) {
             mLocalArrowDrawable.setAlpha(empty ? 0 : 0xa0);
             if(mLocalDrawerLayout != null)
                 mLocalDrawerLayout.setDrawerLockMode(empty ? DrawerLayout.LOCK_MODE_LOCKED_CLOSED : DrawerLayout.LOCK_MODE_UNLOCKED);
@@ -642,28 +644,28 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
                 log.a("No local drawer or linear layout with local navigation.");
         }
         else
-            log.a("Unknown IMyNavigation object.");
+            log.a("Unknown IMyUINavigation object.");
     }
 
-    @Override public void onClearHeader(IMyNavigation nav) {
+    @Override public void onClearHeader(IMyUINavigation nav) {
         onNavigationContentChanged(nav);
         if(mMyLocalFragment != null)
             mMyLocalFragment.onClearHeader(nav);
     }
 
-    @Override public void onClearMenu(IMyNavigation nav) {
+    @Override public void onClearMenu(IMyUINavigation nav) {
         onNavigationContentChanged(nav);
         if(mMyLocalFragment != null)
             mMyLocalFragment.onClearMenu(nav);
     }
 
-    @Override public void onInflateHeader(IMyNavigation nav) {
+    @Override public void onInflateHeader(IMyUINavigation nav) {
         onNavigationContentChanged(nav);
         if(mMyLocalFragment != null)
             mMyLocalFragment.onInflateHeader(nav);
     }
 
-    @Override public void onInflateMenu(IMyNavigation nav) {
+    @Override public void onInflateMenu(IMyUINavigation nav) {
         onNavigationContentChanged(nav);
         if(mMyLocalFragment != null)
             mMyLocalFragment.onInflateMenu(nav);
@@ -685,39 +687,26 @@ public class MyActivity extends AppCompatActivity implements IMyManager, IMyNavi
         }
     }
 
-    @Override public @Nullable FloatingActionButton getFAB() {
+
+    @Override public @Nullable FloatingActionButton getFab() {
         return mFAB;
     }
 
-    @Override public IMyNavigation getGlobalNavigation() {
+    @NotNull @Override public CharSequence getMytitle() {
+        return getTitle();
+    }
+
+    @Override public void setMytitle(@NotNull CharSequence charSequence) {
+        setTitle(charSequence);
+    }
+
+    @Override public IMyUINavigation getGnav() {
         return mGlobalNavigationView;
     }
 
-    @Override public IMyNavigation getLocalNavigation() {
+    @Override public IMyUINavigation getLnav() {
         return mLocalNavigationView;
     }
-
-    @Deprecated // we should do it manually (we know more when we do it)
-    private void selectItem(IMyNavigation nav, @IdRes int id) {
-        Menu menu = nav.getMenu();
-        if(menu == null) {
-            log.a("Menu not initialized.");
-            return;
-        }
-        nav.setCheckedItem(id);
-        onItemSelected(nav, menu.findItem(id));
-    }
-
-    @Deprecated // we should do it manually (we know more when we do it)
-    public void selectGlobalItem(@IdRes int id) {
-        selectItem(getGlobalNavigation(), id);
-    }
-
-    @Deprecated // we should do it manually (we know more when we do it)
-    public void selectLocalItem(@IdRes int id) {
-        selectItem(getLocalNavigation(), id);
-    }
-
 
     @CallSuper @Override public void onDrawerSlide(View drawerView, float slideOffset) {
         if(drawerView == mGlobalNavigationView) {

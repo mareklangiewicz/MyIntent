@@ -19,7 +19,7 @@ import android.view.animation.AccelerateInterpolator
 import kotlinx.android.synthetic.main.mf_my_pie_tests_fragment.*
 import kotlinx.android.synthetic.main.mf_my_pie_tests_header.*
 import pl.mareklangiewicz.myutils.MyMathUtils
-import pl.mareklangiewicz.myviews.IMyNavigation
+import pl.mareklangiewicz.myviews.IMyUINavigation
 import pl.mareklangiewicz.myviews.MyPie
 import java.lang.String.format
 
@@ -57,10 +57,8 @@ class MyPieTestsFragment : MyFragment(), View.OnClickListener {
 
         hanimator.interpolator = AccelerateInterpolator()
 
-        if (savedInstanceState == null) {
-            setCheckedItem(R.id.mpt_randomize_to)
-            randomize = "to"
-        }
+        if (savedInstanceState == null)
+            setCheckedItem(R.id.mpt_randomize_to, true)
     }
 
     override fun onResume() {
@@ -68,8 +66,8 @@ class MyPieTestsFragment : MyFragment(), View.OnClickListener {
         randomize = firstCheckedItem?.run { title.toString() } ?: "to".apply { log.e("No item selected") }
     }
 
-    override fun onItemSelected(nav: IMyNavigation, item: MenuItem): Boolean {
-        if (nav !== localNavigation) {
+    override fun onItemSelected(nav: IMyUINavigation, item: MenuItem): Boolean {
+        if (nav !== lnav) {
             log.v("This item is not from our local menu.")
             return false
         }
@@ -112,7 +110,7 @@ class MyPieTestsFragment : MyFragment(), View.OnClickListener {
 
 
     override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
-        if (drawerView !== localNavigation) return
+        if (drawerView !== lnav) return
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) hanimator.setCurrentFraction(slideOffset)
     }
     override fun onDrawerOpened(drawerView: View) { }

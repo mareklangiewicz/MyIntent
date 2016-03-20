@@ -16,8 +16,9 @@ import android.view.View
 import android.view.ViewGroup
 import pl.mareklangiewicz.myloggers.MY_DEFAULT_ANDRO_LOGGER
 import pl.mareklangiewicz.myutils.str
-import pl.mareklangiewicz.myviews.IMyManager
-import pl.mareklangiewicz.myviews.IMyNavigation
+import pl.mareklangiewicz.myviews.IMyUINavigation
+import pl.mareklangiewicz.myviews.IMyUIManager
+import android.support.design.widget.FloatingActionButton
 
 
 /**
@@ -30,7 +31,7 @@ import pl.mareklangiewicz.myviews.IMyNavigation
  * - don't add this fragment transactions to back stack
  * or invoke setRetainInstance(false) after MyFragment.onCreate.
  */
-open class MyFragment : Fragment(), IMyManager, IMyNavigation, IMyNavigation.Listener, DrawerLayout.DrawerListener {
+open class MyFragment : Fragment(), IMyUIManager, IMyUINavigation, IMyUINavigation.Listener, DrawerLayout.DrawerListener {
 
 
     val V = true
@@ -61,24 +62,28 @@ open class MyFragment : Fragment(), IMyManager, IMyNavigation, IMyNavigation.Lis
      * @param item Selected menu item from global or local menu.
      * @return True if item was successfully selected.
      */
-    override fun onItemSelected(nav: IMyNavigation, item: MenuItem): Boolean = false
+    override fun onItemSelected(nav: IMyUINavigation, item: MenuItem): Boolean = false
 
-    override fun onClearHeader(nav: IMyNavigation) { }
-    override fun onClearMenu(nav: IMyNavigation) { }
-    override fun onInflateHeader(nav: IMyNavigation) { }
-    override fun onInflateMenu(nav: IMyNavigation) { }
+    override fun onClearHeader(nav: IMyUINavigation) { }
+    override fun onClearMenu(nav: IMyUINavigation) { }
+    override fun onInflateHeader(nav: IMyUINavigation) { }
+    override fun onInflateMenu(nav: IMyUINavigation) { }
 
-    override fun getLocalNavigation() = (activity as? IMyManager)?.localNavigation
-    override fun getGlobalNavigation() = (activity as? IMyManager)?.globalNavigation
-    override fun getTitle(): CharSequence = activity.title
+    override val gnav: IMyUINavigation?
+        get() = (activity as? IMyUIManager)?.gnav
 
-    override fun setTitle(title: CharSequence) {
-        activity.title = title
-    }
+    override val lnav: IMyUINavigation?
+        get() = (activity as? IMyUIManager)?.lnav
 
-    override fun getFAB() = (activity as? IMyManager)?.fab
+    override var mytitle: CharSequence
+        get() = (activity as? IMyUIManager)?.mytitle ?: ""
+        set(value) { (activity as? IMyUIManager)?.mytitle = value }
 
-    private fun gln() = (activity as? IMyManager)?.localNavigation
+
+    override val fab: FloatingActionButton?
+            get() = (activity as? IMyUIManager)?.fab
+
+    private fun gln() = (activity as? IMyUIManager)?.lnav
 
     override fun getMenu() = gln()?.menu
     override fun getHeader() = gln()?.header
@@ -99,8 +104,8 @@ open class MyFragment : Fragment(), IMyManager, IMyNavigation, IMyNavigation.Lis
         gln()?.inflateHeader(id)
     }
 
-    override fun setCheckedItem(@IdRes id: Int) {
-        gln()?.setCheckedItem(id)
+    override fun setCheckedItem(@IdRes id: Int, callback: Boolean) {
+        gln()?.setCheckedItem(id, callback)
     }
 
     override fun overlaps(view: View?) = gln()?.overlaps(view) ?: false
@@ -116,11 +121,11 @@ open class MyFragment : Fragment(), IMyManager, IMyNavigation, IMyNavigation.Lis
         return gln()?.isEmpty ?: true
     }
 
-    override fun getListener(): IMyNavigation.Listener? {
+    override fun getListener(): IMyUINavigation.Listener? {
         return gln()?.listener
     }
 
-    override fun setListener(listener: IMyNavigation.Listener?) {
+    override fun setListener(listener: IMyUINavigation.Listener?) {
         throw IllegalStateException("MyFragments can not change navigation listeners.")
     }
 

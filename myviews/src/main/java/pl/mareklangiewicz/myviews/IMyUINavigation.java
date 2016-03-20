@@ -12,7 +12,7 @@ import android.view.View;
  * Created by Marek Langiewicz on 02.09.15.
  * An interface usually implemented by our navigation views and used by fragments.
  */
-public interface IMyNavigation {
+public interface IMyUINavigation {
 
     @Nullable Menu getMenu();
 
@@ -26,7 +26,7 @@ public interface IMyNavigation {
 
     void inflateHeader(@LayoutRes int id);
 
-    void setCheckedItem(@IdRes int id);
+    void setCheckedItem(@IdRes int id, boolean callback);
 
     boolean overlaps(@Nullable View view);
 
@@ -43,15 +43,15 @@ public interface IMyNavigation {
     void setListener(@Nullable Listener listener);
 
     interface Listener {
-        boolean onItemSelected(IMyNavigation nav, MenuItem item);
+        boolean onItemSelected(IMyUINavigation nav, MenuItem item);
 
-        void onClearHeader(IMyNavigation nav);
+        void onClearHeader(IMyUINavigation nav);
 
-        void onClearMenu(IMyNavigation nav);
+        void onClearMenu(IMyUINavigation nav);
 
-        void onInflateHeader(IMyNavigation nav);
+        void onInflateHeader(IMyUINavigation nav);
 
-        void onInflateMenu(IMyNavigation nav);
+        void onInflateMenu(IMyUINavigation nav);
     }
 
 }

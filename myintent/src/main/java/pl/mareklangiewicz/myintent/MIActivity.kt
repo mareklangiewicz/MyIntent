@@ -30,7 +30,7 @@ import pl.mareklangiewicz.myutils.MyBabbler
 import pl.mareklangiewicz.myutils.MyCommands
 import pl.mareklangiewicz.myutils.myhttp.OpenWeatherMap
 import pl.mareklangiewicz.myutils.str
-import pl.mareklangiewicz.myviews.IMyNavigation
+import pl.mareklangiewicz.myviews.IMyUINavigation
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -57,14 +57,16 @@ class MIActivity : MyActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val nav = globalNavigation!!
+        val nav = gnav!!
 
         nav.inflateMenu(R.menu.mi_global)
         nav.inflateHeader(R.layout.mi_header)
 
+        val menu = nav.menu!!
+        val header = nav.header!!
+
         if (BuildConfig.DEBUG) {
             val paperwork = Paperwork(this)
-            val menu = nav.menu!!
             menu.findItem(R.id.ds_mode).title = "build type: ${BuildConfig.BUILD_TYPE}"
             menu.findItem(R.id.ds_flavor).title = "build flavor: ${BuildConfig.FLAVOR}"
             menu.findItem(R.id.ds_version_code).title = "version code: ${BuildConfig.VERSION_CODE}"
@@ -75,7 +77,6 @@ class MIActivity : MyActivity() {
             menu.findItem(R.id.ds_git_info).title = "git info: ${paperwork.get("gitInfo")}"
         }
 
-        val header = nav.header!!
 
         animations = MIActivityAnimations(
                 header.mi_gh_tv_logo,
@@ -96,7 +97,7 @@ class MIActivity : MyActivity() {
             val ok = RuleUser.load(this, rules)
             if (!ok)
                 log.a("Can not load user rules from data base.")
-            selectGlobalItem(R.id.mi_start)
+            nav.setCheckedItem(R.id.mi_start, true)
         }
 
         val app = application as MIApplication
@@ -506,7 +507,7 @@ class MIActivity : MyActivity() {
         animations.onGlobalDrawerClosed()
     }
 
-    override fun onItemSelected(nav: IMyNavigation, item: MenuItem): Boolean {
+    override fun onItemSelected(nav: IMyUINavigation, item: MenuItem): Boolean {
 
         val done = super.onItemSelected(nav, item)
 

@@ -7,7 +7,7 @@ import android.view.*
 import kotlinx.android.synthetic.main.mf_my_log_fragment.*
 import pl.mareklangiewicz.myloggers.MyAndroLogAdapter
 import pl.mareklangiewicz.myutils.MyLogLevel
-import pl.mareklangiewicz.myviews.IMyNavigation
+import pl.mareklangiewicz.myviews.IMyUINavigation
 
 /**
  * MyFragment showing MyAndroidLogger messages.
@@ -48,7 +48,7 @@ class MyLogFragment : MyFragment() {
         super.onDestroyView()
     }
 
-    override fun onItemSelected(nav: IMyNavigation, item: MenuItem): Boolean {
+    override fun onItemSelected(nav: IMyUINavigation, item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.log_level_error ->   log.history.level = MyLogLevel.ERROR
             R.id.log_level_warning -> log.history.level = MyLogLevel.WARN
@@ -69,11 +69,11 @@ class MyLogFragment : MyFragment() {
 
     private fun updateCheckedItem() {
         when (log.history.level) {
-            MyLogLevel.ERROR, MyLogLevel.ASSERT -> setCheckedItem(R.id.log_level_error)
-            MyLogLevel.WARN -> setCheckedItem(R.id.log_level_warning)
-            MyLogLevel.INFO -> setCheckedItem(R.id.log_level_info)
-            MyLogLevel.DEBUG -> setCheckedItem(R.id.log_level_debug)
-            MyLogLevel.VERBOSE -> setCheckedItem(R.id.log_level_verbose)
+            MyLogLevel.ERROR, MyLogLevel.ASSERT -> setCheckedItem(R.id.log_level_error, false)
+            MyLogLevel.WARN -> setCheckedItem(R.id.log_level_warning, false)
+            MyLogLevel.INFO -> setCheckedItem(R.id.log_level_info, false)
+            MyLogLevel.DEBUG -> setCheckedItem(R.id.log_level_debug, false)
+            MyLogLevel.VERBOSE -> setCheckedItem(R.id.log_level_verbose, false)
         }
     }
 

@@ -35,7 +35,7 @@ class MyBasicTestsFragment : MyFragment() {
     }
 
     override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
-        if (drawerView !== localNavigation) return
+        if (drawerView !== lnav) return
         mf_mbtf_pie1.rotation = slideOffset * 360
         mf_mbtf_pie3.to = 75 - slideOffset * 50
     }

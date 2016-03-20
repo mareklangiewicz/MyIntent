@@ -12,7 +12,7 @@ import android.view.animation.LinearInterpolator;
 
 import pl.mareklangiewicz.mydrawables.MyLivingDrawable;
 import pl.mareklangiewicz.mydrawables.MyMagicLinesDrawable;
-import pl.mareklangiewicz.myviews.IMyNavigation;
+import pl.mareklangiewicz.myviews.IMyUINavigation;
 
 import static android.animation.ObjectAnimator.ofInt;
 import static android.animation.ObjectAnimator.ofPropertyValuesHolder;
@@ -39,16 +39,16 @@ public final class MyTestActivity extends pl.mareklangiewicz.myactivities.MyActi
         log.w("Warning!... just kidding...");
 
         //noinspection ConstantConditions
-        getGlobalNavigation().inflateMenu(R.menu.ma_my_test_global);
-        getGlobalNavigation().inflateHeader(R.layout.ma_my_test_global_header);
+        getGnav().inflateMenu(R.menu.ma_my_test_global);
+        getGnav().inflateHeader(R.layout.ma_my_test_global_header);
 
         //noinspection ConstantConditions
-        View underline = getGlobalNavigation().getHeader().findViewById(R.id.ma_mta_gh_v_underline);
+        View underline = getGnav().getHeader().findViewById(R.id.ma_mta_gh_v_underline);
         mMyMagicLinesDrawable.setColor(0x30ffffff);
         mMyMagicLinesDrawable.setStrokeWidth(dp2px(4));
         underline.setBackground(mMyMagicLinesDrawable);
 
-        View homepage = getGlobalNavigation().getHeader().findViewById(R.id.ma_mta_gh_tv_home_page);
+        View homepage = getGnav().getHeader().findViewById(R.id.ma_mta_gh_tv_home_page);
 
         PropertyValuesHolder pvha = ofFloat(ALPHA, 0f, 0f, 1f);
         PropertyValuesHolder pvhy = ofFloat(TRANSLATION_Y, -50f, -50f, 0f);
@@ -59,9 +59,8 @@ public final class MyTestActivity extends pl.mareklangiewicz.myactivities.MyActi
         mMagicLinesAnimator = ofInt(mMyMagicLinesDrawable, "level", 0, 10000);
         mMagicLinesAnimator.setDuration(1000).setInterpolator(new LinearInterpolator());
 
-        if(savedInstanceState == null) {
-            selectGlobalItem(R.id.section_my_pie_tests);
-        }
+        if(savedInstanceState == null)
+            getGnav().setCheckedItem(R.id.section_my_pie_tests, true);
     }
 
     @Override public void onDrawerSlide(View drawerView, float slideOffset) {
@@ -93,7 +92,7 @@ public final class MyTestActivity extends pl.mareklangiewicz.myactivities.MyActi
         mMyMagicLinesDrawable.setLevel(0);
     }
 
-    @Override public boolean onItemSelected(IMyNavigation nav, MenuItem item) {
+    @Override public boolean onItemSelected(IMyUINavigation nav, MenuItem item) {
 
         boolean done = super.onItemSelected(nav, item);
 

@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.mi_rules_fragment.*
 import pl.mareklangiewicz.myfragments.MyFragment
 import pl.mareklangiewicz.myutils.MyCommands
 import pl.mareklangiewicz.myutils.MyCommands.RE_USER_GROUP
-import pl.mareklangiewicz.myviews.IMyNavigation
+import pl.mareklangiewicz.myviews.IMyUINavigation
 
 /**
  * Created by Marek Langiewicz on 14.10.15.
@@ -39,7 +39,7 @@ class MIRulesFragment : MyFragment() {
         mi_rules_recycler_view.adapter = adapter
     }
 
-    override fun onItemSelected(nav: IMyNavigation, item: MenuItem): Boolean = when (item.itemId) {
+    override fun onItemSelected(nav: IMyUINavigation, item: MenuItem): Boolean = when (item.itemId) {
         R.id.new_user_rule -> {
             MyCommands.RE_USER_GROUP.rules.add(MyCommands.RERule(true, "", "", "", ""))
             adapter.notifyItemChanged(1)

@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.view.MenuItem;
 
-import pl.mareklangiewicz.myviews.IMyNavigation;
+import pl.mareklangiewicz.myviews.IMyUINavigation;
 
 /**
  * Created by Marek Langiewicz on 22.09.15.
@@ -17,14 +17,13 @@ public class MyExampleActivity extends MyActivity {
         super.onCreate(savedInstanceState);
         log.i("Hi, I am the example activity..");
         //noinspection ConstantConditions
-        getGlobalNavigation().inflateMenu(R.menu.ma_my_example_global);
-        getGlobalNavigation().inflateHeader(R.layout.ma_my_example_global_header);
-        if(savedInstanceState == null) {
-            selectGlobalItem(R.id.ma_meg_i_my_example_fragment_1);
-        }
+        getGnav().inflateMenu(R.menu.ma_my_example_global);
+        getGnav().inflateHeader(R.layout.ma_my_example_global_header);
+        if(savedInstanceState == null)
+            getGnav().setCheckedItem(R.id.ma_meg_i_my_example_fragment_1, true);
     }
 
-    @Override public boolean onItemSelected(IMyNavigation nav, MenuItem item) {
+    @Override public boolean onItemSelected(IMyUINavigation nav, MenuItem item) {
         boolean done = super.onItemSelected(nav, item);
         if(done)
             return true;

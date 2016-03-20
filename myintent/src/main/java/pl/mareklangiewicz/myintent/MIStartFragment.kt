@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.mi_log_fragment.*
 import pl.mareklangiewicz.myfragments.MyFragment
 import pl.mareklangiewicz.myintent.PlayStopButton.State.*
 import pl.mareklangiewicz.myutils.MyLogLevel
-import pl.mareklangiewicz.myviews.IMyNavigation
+import pl.mareklangiewicz.myviews.IMyUINavigation
 
 class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listener {
 
@@ -116,7 +116,7 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
         sview.setIconifiedByDefault(true)
     }
 
-    override fun onItemSelected(nav: IMyNavigation, item: MenuItem): Boolean {
+    override fun onItemSelected(nav: IMyUINavigation, item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.mi_ll_i_error        -> log.history.level = MyLogLevel.ERROR
             R.id.mi_ll_i_warning      -> log.history.level = MyLogLevel.WARN
@@ -137,11 +137,11 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
 
     private fun updateCheckedItem() {
         when (log.history.level) {
-            MyLogLevel.ERROR, MyLogLevel.ASSERT -> setCheckedItem(R.id.mi_ll_i_error)
-            MyLogLevel.WARN -> setCheckedItem(R.id.mi_ll_i_warning)
-            MyLogLevel.INFO -> setCheckedItem(R.id.mi_ll_i_info)
-            MyLogLevel.DEBUG -> setCheckedItem(R.id.mi_ll_i_debug)
-            MyLogLevel.VERBOSE -> setCheckedItem(R.id.mi_ll_i_verbose)
+            MyLogLevel.ERROR, MyLogLevel.ASSERT -> setCheckedItem(R.id.mi_ll_i_error, false)
+            MyLogLevel.WARN -> setCheckedItem(R.id.mi_ll_i_warning, false)
+            MyLogLevel.INFO -> setCheckedItem(R.id.mi_ll_i_info, false)
+            MyLogLevel.DEBUG -> setCheckedItem(R.id.mi_ll_i_debug, false)
+            MyLogLevel.VERBOSE -> setCheckedItem(R.id.mi_ll_i_verbose, false)
         }
     }
 
@@ -161,8 +161,8 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
 
     private val isSomethingOnOurFragment: Boolean
         get() {
-            val lnav = localNavigation
-            val gnav = globalNavigation
+            val lnav = lnav
+            val gnav = gnav
             return view === null || lnav !== null && lnav.overlaps(view) || gnav !== null && gnav.overlaps(view)
         }
 

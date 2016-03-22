@@ -20,9 +20,6 @@ import java.util.regex.Pattern;
 
 import static java.lang.String.format;
 
-//import com.google.common.base.MoreObjects;
-//import org.javatuples.KeyValue;
-
 /**
  * Created by Marek Langiewicz on 29.09.15.
  */
@@ -628,7 +625,7 @@ public final class MyCommands {
             String keyword = matcher.group(2);
             String value = matcher.group(3);
 
-            if(!sUT) { // FIXME SOMEDAY: this 'if' is temporary hack
+            if(!sUT) { // FIXME NOW: this 'if' is temporary hack
                 keyword = Uri.decode(keyword);
                 value = Uri.decode(value);
             }

@@ -37,11 +37,11 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     testCompile project(':myutils')
     testCompile 'junit:junit:4.12'
-    testCompile 'com.google.truth:truth:0.27'
+    testCompile 'com.google.truth:truth:0.28'
     androidTestCompile 'com.android.support:support-annotations:23.2.1'
     androidTestCompile 'com.android.support.test:runner:0.4.1'
     androidTestCompile 'com.android.support.test:rules:0.4.1'
-    androidTestCompile 'com.google.truth:truth:0.27'
+    androidTestCompile 'com.google.truth:truth:0.28'
     testCompile 'junit:junit:4.12'
 }
 

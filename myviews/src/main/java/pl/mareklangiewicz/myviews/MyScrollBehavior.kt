@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.support.design.widget.CoordinatorLayout
+import android.support.v4.view.ViewCompat
 import android.util.AttributeSet
 import android.view.View
 import pl.mareklangiewicz.myloggers.MY_DEFAULT_ANDRO_LOGGER
@@ -48,7 +49,11 @@ class MyScrollBehavior<V : View> : CoordinatorLayout.Behavior<V> {
             log.d("This behavior requies at least lollipop mr1 device.")
             return false
         }
+
+        if(nestedScrollAxes and ViewCompat.SCROLL_AXIS_VERTICAL == 0) return false
+
         if (animator == null) animator = ObjectAnimator.ofInt(child, property, min, max)
+
         return true
     }
 
@@ -58,7 +63,7 @@ class MyScrollBehavior<V : View> : CoordinatorLayout.Behavior<V> {
         if (animator == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1)
             return
 
-        val progress = MyMathUtils.scale1d(dyConsumed.toFloat(), scroll_min.toFloat(), scroll_max.toFloat(), 0f, 1f)
+        val progress = MyMathUtils.scale1d((dyConsumed+dyUnconsumed).toFloat(), scroll_min.toFloat(), scroll_max.toFloat(), 0f, 1f)
         animator!!.setCurrentFraction(progress)
     }
 }

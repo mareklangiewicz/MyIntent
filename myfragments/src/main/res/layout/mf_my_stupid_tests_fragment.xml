@@ -13,7 +13,7 @@
         app:layout_behavior="pl.mareklangiewicz.myviews.MyScrollBehavior"
         app:mv_behavior_property="progress"
         app:mv_behavior_scroll_min="0"
-        app:mv_behavior_scroll_max="200"
+        app:mv_behavior_scroll_max="-100"
         style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
         />
 
@@ -24,7 +24,7 @@
         app:layout_behavior="pl.mareklangiewicz.myviews.MyScrollBehavior"
         app:mv_behavior_property="progress"
         app:mv_behavior_scroll_min="0"
-        app:mv_behavior_scroll_max="-200"
+        app:mv_behavior_scroll_max="100"
         style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
         />
 

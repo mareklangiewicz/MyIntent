@@ -5,7 +5,7 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.view.animation.LinearInterpolator
 import android.widget.ProgressBar
-import pl.mareklangiewicz.myutils.MyMathUtils
+import pl.mareklangiewicz.myutils.scale0d
 
 /**
  * Created by Marek Langiewicz on 16.12.15.
@@ -27,7 +27,7 @@ class Countdown internal constructor(private val bar: ProgressBar) {
     init {
 
         bar.setOnTouchListener { view, event ->
-            boost = MyMathUtils.scale0d(event.x, bar.width.toFloat(), animator.duration.toFloat()).toLong()
+            boost = scale0d(event.x, bar.width.toFloat(), animator.duration.toFloat()).toLong()
             animator.currentPlayTime = boost
             true
         }

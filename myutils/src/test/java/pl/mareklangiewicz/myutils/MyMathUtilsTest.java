@@ -45,13 +45,13 @@ public class MyMathUtilsTest {
     @Test
     public void testGetRandomInt() throws Exception {
         for(int i = 0; i < 30000; ++i) {
-            int r = MyMathUtils.getRandomInt(1, 5);
+            int r = MyMathUtilsKt.getRandomInt(1, 5);
 //            log.v("getRandomInt(1, 5): %d", r);
             assertThat(r).isAtLeast(1);
             assertThat(r).isLessThan(5);
         }
         for(int i = 0; i < 30000; ++i) {
-            int r = MyMathUtils.getRandomInt(-10000, 0);
+            int r = MyMathUtilsKt.getRandomInt(-10000, 0);
 //            log.v("getRandomInt(-10000, 0): %d", r);
             assertThat(r).isAtLeast(-10000);
             assertThat(r).isLessThan(0);

@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Build
 import android.speech.tts.TextToSpeech
 import java.util.*
-import pl.mareklangiewicz.myutils.MyMathUtils.getRandomInt
 
 /**
  * Created by Marek Langiewicz on 12.03.16.

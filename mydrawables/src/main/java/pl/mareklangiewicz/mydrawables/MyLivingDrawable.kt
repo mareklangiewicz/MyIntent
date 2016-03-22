@@ -3,8 +3,8 @@ package pl.mareklangiewicz.mydrawables
 import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.support.annotation.IntRange
-import pl.mareklangiewicz.myutils.MyMathUtils.scale0d
-import pl.mareklangiewicz.myutils.MyMathUtils.scale1d
+import pl.mareklangiewicz.myutils.scale0d
+import pl.mareklangiewicz.myutils.scale1d
 
 /**
  * Created by Marek Langiewicz on 16.09.15.

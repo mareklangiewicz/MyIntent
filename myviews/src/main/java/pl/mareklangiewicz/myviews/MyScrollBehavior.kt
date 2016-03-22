@@ -9,7 +9,7 @@ import android.support.v4.view.ViewCompat
 import android.util.AttributeSet
 import android.view.View
 import pl.mareklangiewicz.myloggers.MY_DEFAULT_ANDRO_LOGGER
-import pl.mareklangiewicz.myutils.MyMathUtils
+import pl.mareklangiewicz.myutils.scale1d
 
 /**
  * Created by Marek Langiewicz on 22.03.16.
@@ -63,7 +63,7 @@ class MyScrollBehavior<V : View> : CoordinatorLayout.Behavior<V> {
         if (animator == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1)
             return
 
-        val progress = MyMathUtils.scale1d((dyConsumed+dyUnconsumed).toFloat(), scroll_min.toFloat(), scroll_max.toFloat(), 0f, 1f)
+        val progress = scale1d((dyConsumed+dyUnconsumed).toFloat(), scroll_min.toFloat(), scroll_max.toFloat(), 0f, 1f)
         animator!!.setCurrentFraction(progress)
     }
 }

@@ -14,7 +14,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
-import pl.mareklangiewicz.myutils.MyMathUtils;
+import pl.mareklangiewicz.myutils.MyMathUtilsKt;
 
 public final class MyPie extends View {
 
@@ -27,8 +27,8 @@ public final class MyPie extends View {
         @Override
         public void draw(Canvas canvas, Paint paint) {
             canvas.drawArc(rect(),
-                    MyMathUtils.scale1d(mFrom, mMinimum, mMaximum, 270, 270 + 360),
-                    MyMathUtils.scale1d(mTo - mFrom, mMinimum, mMaximum, 0, 360),
+                    MyMathUtilsKt.scale1d(mFrom, mMinimum, mMaximum, 270, 270 + 360),
+                    MyMathUtilsKt.scale1d(mTo - mFrom, mMinimum, mMaximum, 0, 360),
                     true, paint
             );
         }

@@ -63,8 +63,8 @@ class MyMachinesTestsFragment : MyFragment() {
                     .lfilter { it % 10f == 0f }
                     .lmap { it / 2f }
                     .lpeek { animTo(mf_mmt_mp2, "to", it) }
-                    .lpeek { animTo(mf_mmt_mp3, "to", MyMathUtils.getRandomFloat(50f, 99f)) }
-                    .lpeek { animTo(mf_mmt_mp3, "from", MyMathUtils.getRandomFloat(1f, mf_mmt_mp3.to)) }
+                    .lpeek { animTo(mf_mmt_mp3, "to", getRandomFloat(50f, 99f)) }
+                    .lpeek { animTo(mf_mmt_mp3, "from", getRandomFloat(1f, mf_mmt_mp3.to)) }
 
             timer { } (Start)
 
@@ -91,7 +91,7 @@ class MyMachinesTestsFragment : MyFragment() {
                             60L -> subscriptions[2](Unit) // unsubscribe
                         }
                     }
-                    .lmap { MyMathUtils.scale1d(it.toFloat(), 0f, 70f, 1f, 99f) }
+                    .lmap { scale1d(it.toFloat(), 0f, 70f, 1f, 99f) }
 
             timer(relay.pushee)(Start)
 

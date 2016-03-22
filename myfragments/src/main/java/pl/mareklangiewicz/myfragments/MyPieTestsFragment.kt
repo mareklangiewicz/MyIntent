@@ -18,7 +18,8 @@ import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import kotlinx.android.synthetic.main.mf_my_pie_tests_fragment.*
 import kotlinx.android.synthetic.main.mf_my_pie_tests_header.*
-import pl.mareklangiewicz.myutils.MyMathUtils
+import pl.mareklangiewicz.myutils.getRandomColor
+import pl.mareklangiewicz.myutils.getRandomFloat
 import pl.mareklangiewicz.myviews.IMyUINavigation
 import pl.mareklangiewicz.myviews.MyPie
 import java.lang.String.format
@@ -86,7 +87,7 @@ class MyPieTestsFragment : MyFragment(), View.OnClickListener {
         if ( v !is MyPie) return
 
         if (randomize == "pieColor" || randomize == "ovalColor") {
-            @ColorInt val value = MyMathUtils.getRandomColor(Color.rgb(0, 0, 0), Color.rgb(255, 255, 255))
+            @ColorInt val value = getRandomColor(Color.rgb(0, 0, 0), Color.rgb(255, 255, 255))
             if (SDK_INT >= LOLLIPOP) {
                 ofArgb(v, randomize, value).start()
                 log.i(format("[SNACK]MyPie:%s: random color is ... %X %X %X", randomize, red(value), green(value), blue(value)))
@@ -108,7 +109,7 @@ class MyPieTestsFragment : MyFragment(), View.OnClickListener {
                 "maximum" -> min = v.to
             }
 
-            val value = MyMathUtils.getRandomFloat(min, max)
+            val value = getRandomFloat(min, max)
             ObjectAnimator.ofFloat(v, randomize, value).start()
             log.i(String.format("[SNACK]MyPie:%s: random %.2f..%.2f is ... %.2f", randomize, min, max, value))
         }

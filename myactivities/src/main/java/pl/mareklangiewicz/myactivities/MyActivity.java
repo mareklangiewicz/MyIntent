@@ -38,11 +38,11 @@ import pl.mareklangiewicz.myfragments.MyFragment;
 import pl.mareklangiewicz.myloggers.MyAndroLogger;
 import pl.mareklangiewicz.myloggers.MyAndroLoggerKt;
 import pl.mareklangiewicz.myutils.MyCommands;
+import pl.mareklangiewicz.myutils.MyMathUtilsKt;
 import pl.mareklangiewicz.myviews.IMyUIManager;
 import pl.mareklangiewicz.myviews.IMyUINavigation;
 import pl.mareklangiewicz.myviews.MyNavigationView;
 
-import static pl.mareklangiewicz.myutils.MyMathUtils.scale0d;
 import static pl.mareklangiewicz.myutils.MyTextUtilsKt.*;
 
 public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUINavigation.Listener, DrawerLayout.DrawerListener {
@@ -686,10 +686,10 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
 
     @CallSuper @Override public void onDrawerSlide(View drawerView, float slideOffset) {
         if(drawerView == mGlobalNavigationView) {
-            mGlobalArrowDrawable.setLevel((int) scale0d(slideOffset, 1f, 10000f));
+            mGlobalArrowDrawable.setLevel((int) MyMathUtilsKt.scale0d(slideOffset, 1f, 10000f));
         }
         else if(drawerView == mLocalNavigationView) {
-            mLocalArrowDrawable.setLevel((int) scale0d(slideOffset, 1f, 10000f));
+            mLocalArrowDrawable.setLevel((int) MyMathUtilsKt.scale0d(slideOffset, 1f, 10000f));
         }
         if(mMyLocalFragment != null)
             mMyLocalFragment.onDrawerSlide(drawerView, slideOffset);

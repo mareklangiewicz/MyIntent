@@ -28,8 +28,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
@@ -670,11 +668,11 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
         return mFAB;
     }
 
-    @NotNull @Override public CharSequence getMytitle() {
+    @NonNull @Override public CharSequence getMytitle() {
         return getTitle();
     }
 
-    @Override public void setMytitle(@NotNull CharSequence charSequence) {
+    @Override public void setMytitle(@NonNull CharSequence charSequence) {
         setTitle(charSequence);
     }
 

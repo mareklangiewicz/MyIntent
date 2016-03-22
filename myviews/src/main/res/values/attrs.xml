@@ -17,4 +17,11 @@
         <attr name="mv_decoration"
             format="reference"/>
     </declare-styleable>
+    <declare-styleable name="mv_MyScrollBehavior">
+        <attr name="mv_behavior_property" format="string"/>
+        <attr name="mv_behavior_scroll_min" format="integer"/>
+        <attr name="mv_behavior_scroll_max" format="integer"/>
+        <attr name="mv_behavior_min" format="integer"/>
+        <attr name="mv_behavior_max" format="integer"/>
+    </declare-styleable>
 </resources>

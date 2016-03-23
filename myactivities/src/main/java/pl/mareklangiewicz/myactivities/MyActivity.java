@@ -62,7 +62,7 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
     */
     private static final boolean V = true;
     private static final boolean VV = false;
-    private static final String DEFAULT_COMMAND_NAME = MyCommands.CMD_ACTIVITY;
+    private static final String DEFAULT_COMMAND_NAME = MyCommands.INSTANCE.getCMD_ACTIVITY();
     private static final String DEFAULT_INTENT_ACTION = Intent.ACTION_VIEW;
     protected final MyLivingDrawable mGlobalArrowDrawable = new MyArrowDrawable();
     protected final MyLivingDrawable mLocalArrowDrawable = new MyArrowDrawable();
@@ -375,12 +375,12 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
                 checkFirstCheckableItemWithCommand(menu, command);
         }
 
-        command = MyCommands.REGroup.applyAll(MyCommands.RE_RULES, command, log);
+        command = MyCommands.REGroup.Companion.applyAll(MyCommands.INSTANCE.getRE_RULES(), command, log);
 
         Map<String, String> map = new HashMap<>(20);
 
         try {
-            MyCommands.parseCommand(command, map);
+            MyCommands.INSTANCE.parseCommand(command, map);
         }
         catch(RuntimeException e) {
             log.e(String.format("Illegal command: %s", command), e);
@@ -398,7 +398,7 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
             map.put("start", start);
         }
 
-        if(start.equals(MyCommands.CMD_ACTIVITY)) {
+        if(start.equals(MyCommands.INSTANCE.getCMD_ACTIVITY())) {
             if(component == null && action == null) {
                 action = DEFAULT_INTENT_ACTION;
                 map.put("action", action);
@@ -408,7 +408,7 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
                 map.put("component", component);
             }
         }
-        else if(map.get("start").equals(MyCommands.CMD_FRAGMENT)) {
+        else if(map.get("start").equals(MyCommands.INSTANCE.getCMD_FRAGMENT())) {
             if(component == null) {
                 log.e("Fragment component is null.");
                 return false;
@@ -430,18 +430,19 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
      */
     public boolean onCommand(@NonNull Map<String, String> command) {
 
+        //TODO NOW: use constants from MyCommands in switch cases (after moving to Kotlin)
         switch(command.get("start")) {
-            case MyCommands.CMD_ACTIVITY:
+            case "activity":
                 return onCommandStartActivity(command);
-            case MyCommands.CMD_SERVICE:
+            case "service":
                 return onCommandStartService(command);
-            case MyCommands.CMD_BROADCAST:
+            case "broadcast":
                 return onCommandStartBroadcast(command);
-            case MyCommands.CMD_FRAGMENT:
+            case "fragment":
                 return onCommandStartFragment(command);
-            case MyCommands.CMD_CUSTOM:
+            case "custom":
                 return onCommandCustom(command);
-            case MyCommands.CMD_NOTHING:
+            case "nothing":
                 return true; // just for dry testing purposes
             default:
                 log.e(String.format("Unsupported command: %s", getStr(command)));
@@ -453,7 +454,7 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
 
         Intent intent = new Intent();
 
-        MyCommands.setIntentFromCommand(intent, command, log);
+        MyCommands.INSTANCE.setIntentFromCommand(intent, command, log);
 
         if(intent.resolveActivity(getPackageManager()) != null) {
             try {
@@ -479,7 +480,7 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
 
         Intent intent = new Intent();
 
-        MyCommands.setIntentFromCommand(intent, command, log);
+        MyCommands.INSTANCE.setIntentFromCommand(intent, command, log);
 
         try {
             if(startService(intent) == null) {
@@ -497,7 +498,7 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
     public boolean onCommandStartBroadcast(@NonNull Map<String, String> command) {
 
         Intent intent = new Intent();
-        MyCommands.setIntentFromCommand(intent, command, log);
+        MyCommands.INSTANCE.setIntentFromCommand(intent, command, log);
         sendBroadcast(intent);
         return true;
     }
@@ -520,7 +521,7 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
 
         Bundle args = new Bundle();
 
-        MyCommands.setBundleFromCommandExtras(args, command);
+        MyCommands.INSTANCE.setBundleFromCommandExtras(args, command);
 
         if(args.size() > 0)
             f.setArguments(args);

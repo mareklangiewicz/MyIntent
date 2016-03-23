@@ -7,7 +7,7 @@ import android.net.Uri.parse
 import android.test.AndroidTestCase
 import junit.framework.Assert
 import pl.mareklangiewicz.myloggers.MY_DEFAULT_ANDRO_LOGGER
-import pl.mareklangiewicz.myutils.MyCommands.*
+import pl.mareklangiewicz.myutils.MyCommands
 import pl.mareklangiewicz.myutils.str
 import java.lang.System.currentTimeMillis
 import java.util.*
@@ -236,12 +236,12 @@ class MIContentProviderTest : AndroidTestCase() {
         values.put(MIContract.RuleUser.COL_REPLACE, "Replace y")
         insertRowTo(values, uri)
 
-        var rule = RE_SETTINGS_GROUP.rules[1]
+        var rule = MyCommands.RE_SETTINGS_GROUP.rules[1]
         log.i(String.format("RuleUser.insert: %s", rule.str))
         MIContract.RuleUser.insert(context, 77, rule)
         log.i("done.")
 
-        rule = RE_SETTINGS_GROUP.rules[2]
+        rule = MyCommands.RE_SETTINGS_GROUP.rules[2]
         log.i(String.format("RuleUser.insert: %s", rule.str))
         MIContract.RuleUser.insert(context, 76, rule)
         log.i("done.")
@@ -351,7 +351,7 @@ class MIContentProviderTest : AndroidTestCase() {
 
     @Throws(Exception::class)
     fun testSaveRuleUserAllUserRules3Times() {
-        val rules = RE_USER_GROUP.rules
+        val rules = MyCommands.RE_USER_GROUP.rules
         log.i("RuleUser.save 1:")
         MIContract.RuleUser.save(context, rules)
         log.i("RuleUser.save 2:")
@@ -364,7 +364,7 @@ class MIContentProviderTest : AndroidTestCase() {
     @Throws(Exception::class)
     fun testLoadRuleUser() {
         log.i("RuleUser.load")
-        val rules = ArrayList<RERule>()
+        val rules = ArrayList<MyCommands.RERule>()
         val ok = MIContract.RuleUser.load(context, rules)
         Assert.assertTrue(ok)
         log.i("RuleUser.load results:")

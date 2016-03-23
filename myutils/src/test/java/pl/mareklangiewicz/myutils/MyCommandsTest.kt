@@ -5,7 +5,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
-import pl.mareklangiewicz.myutils.MyCommands.*
+import pl.mareklangiewicz.myutils.MyCommands.RE_RULES
 import java.lang.String.format
 import java.lang.System.currentTimeMillis
 import java.util.*
@@ -61,7 +61,7 @@ class MyCommandsTest {
         testRE(re, 1, true, false,
                 "activity MyActivity")
 
-        val arule = RE_ACTIVITY_GROUP.rules[0]
+        val arule = MyCommands.RE_ACTIVITY_GROUP.rules[0]
         val result = arule.apply("activity .MyActivity", log)
         log.w(format("Result: %s", result))
 
@@ -215,7 +215,7 @@ class MyCommandsTest {
 
 
     fun testREGroupApplyAll(input: String, expected: String) {
-        val command = MyCommands.REGroup.applyAll(MyCommands.RE_RULES, input, log)
+        val command = MyCommands.REGroup.applyAll(RE_RULES, input, log)
         assertThat(command).isEqualTo(expected)
     }
 
@@ -311,7 +311,7 @@ class MyCommandsTest {
                 "action a.b.X.Y extra string bla blabla extra integer satan 666 task hell")
         for (command in commands) {
             map.clear()
-            parseCommand(command, map)
+            MyCommands.parseCommand(command, map)
             log.i(format("parseCommand: %s", command))
             log.i(format("result: %s", map.str))
         }

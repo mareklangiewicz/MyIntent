@@ -18,7 +18,7 @@ class MyHttpTest {
     private val log = MySystemLogger()
 
     @Before fun setUp() {
-        MyCommands.sUT = true
+        sUT = true
     }
 
     @After fun tearDown() { }

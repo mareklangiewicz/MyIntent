@@ -26,8 +26,9 @@ import hu.supercluster.paperwork.Paperwork
 import kotlinx.android.synthetic.main.mi_header.view.*
 import pl.mareklangiewicz.myactivities.MyActivity
 import pl.mareklangiewicz.myintent.MIContract.RuleUser
+import pl.mareklangiewicz.myutils.EX_COMMAND
 import pl.mareklangiewicz.myutils.MyBabbler
-import pl.mareklangiewicz.myutils.MyCommands
+import pl.mareklangiewicz.myutils.RE_USER_GROUP
 import pl.mareklangiewicz.myutils.myhttp.OpenWeatherMap
 import pl.mareklangiewicz.myutils.str
 import pl.mareklangiewicz.myviews.IMyUINavigation
@@ -92,7 +93,7 @@ class MIActivity : MyActivity() {
 
         if (savedInstanceState == null) {
 
-            val rules = MyCommands.RE_USER_GROUP.rules
+            val rules = RE_USER_GROUP.rules
             rules.clear()
             val ok = RuleUser.load(this, rules)
             if (!ok)
@@ -121,7 +122,7 @@ class MIActivity : MyActivity() {
             if ((intent.flags and Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) != 0)
                 return
 
-            val cmd = intent.getStringExtra(MyCommands.EX_COMMAND)
+            val cmd = intent.getStringExtra(EX_COMMAND)
             if (cmd != null) {
                 closeDrawersAndPostCommand(cmd)
                 return
@@ -280,7 +281,7 @@ class MIActivity : MyActivity() {
 
         if (dbsave) {
             RuleUser.clear(this)
-            RuleUser.save(this, MyCommands.RE_USER_GROUP.rules)
+            RuleUser.save(this, RE_USER_GROUP.rules)
         }
         super.onStop()
     }

@@ -76,8 +76,7 @@ class Countdown internal constructor(private val bar: ProgressBar) {
             animator.cancel() //IMPORTANT: it calls onAnimationCancelled followed by onAnimationEnd
     }
 
-    val isRunning: Boolean
-        get() = command != null
+    val isRunning: Boolean get() = command != null
 
     interface Listener { // TODO SOMEDAY: use MyMachines.Relay to objects publish these events
         fun onCountdownStarted(cmd: String?)

@@ -8,8 +8,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.RemoteViews
-
-import pl.mareklangiewicz.myutils.MyCommands
+import pl.mareklangiewicz.myutils.EX_COMMAND
 
 class RecentCommandsAWProvider : AppWidgetProvider() {
 
@@ -35,7 +34,7 @@ class RecentCommandsAWProvider : AppWidgetProvider() {
         views.setOnClickPendingIntent(R.id.widget_start, startPendingIntent)
 
         val listenIntent = Intent(context, MIActivity::class.java)
-        listenIntent.putExtra(MyCommands.EX_COMMAND, "start custom action listen")
+        listenIntent.putExtra(EX_COMMAND, "start custom action listen")
         listenIntent.data = Uri.parse(listenIntent.toUri(Intent.URI_INTENT_SCHEME))
         val listenPendingIntent = PendingIntent.getActivity(context, 0, listenIntent, 0)
         views.setOnClickPendingIntent(R.id.widget_listen, listenPendingIntent)

@@ -12,7 +12,6 @@ android {
         targetSdkVersion 23
         versionCode 5
         versionName "1.0.3-alpha"
-        buildConfigField "long", "TIME_STAMP", System.currentTimeMillis() + "L"
     }
 
     signingConfigs {

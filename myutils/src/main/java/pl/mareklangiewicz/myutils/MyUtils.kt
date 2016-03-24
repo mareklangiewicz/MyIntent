@@ -30,8 +30,7 @@ fun Snackbar.action(action: String, color: Int? = null, listener: (View) -> Unit
 
 operator fun ViewGroup.get(pos: Int): View = getChildAt(pos)
 
-val ViewGroup.views: List<View>
-    get() = (0 until childCount).map { this[it] }
+val ViewGroup.views: List<View> get() = (0 until childCount).map { this[it] }
 
 
 fun Cursor.getString(columnName: String): String = getString(getColumnIndexOrThrow(columnName))

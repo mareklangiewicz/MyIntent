@@ -22,8 +22,7 @@ open class MyWebFragment : MyFragment() {
         }
 
     // use it after onViewCreated (when isViewAvailable == true)
-    val settings: WebSettings
-            get() = my_web_view.settings
+    val settings: WebSettings get() = my_web_view.settings
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

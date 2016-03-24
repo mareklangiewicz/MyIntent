@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.mi_re_rule_layout.view.*
 import kotlinx.android.synthetic.main.mi_re_rule_ro_details.view.*
 import kotlinx.android.synthetic.main.mi_re_rule_rw_details.view.*
 import pl.mareklangiewicz.myloggers.MY_DEFAULT_ANDRO_LOGGER
-import pl.mareklangiewicz.myutils.MyCommands
+import pl.mareklangiewicz.myutils.RERule
 import pl.mareklangiewicz.myutils.str
 
 /**
@@ -22,7 +22,7 @@ class RERulesAdapter() : RecyclerView.Adapter<RERulesAdapter.ViewHolder>(), View
 
     protected val log = MY_DEFAULT_ANDRO_LOGGER
 
-    private var explained: MyCommands.RERule? = null
+    private var explained: RERule? = null
     // if some rule can not be removed or moved it displays snackbar only once in a row.
     // we remember this rule here so we do not display an error for it more than once in a row.
 
@@ -30,11 +30,11 @@ class RERulesAdapter() : RecyclerView.Adapter<RERulesAdapter.ViewHolder>(), View
         setHasStableIds(false)
     }
 
-    constructor(arules: MutableList<MyCommands.RERule>) : this() {
+    constructor(arules: MutableList<RERule>) : this() {
         rules = arules
     }
 
-    var rules: MutableList<MyCommands.RERule>? = null
+    var rules: MutableList<RERule>? = null
         set(value) {
             field = value
             notifyDataSetChanged()

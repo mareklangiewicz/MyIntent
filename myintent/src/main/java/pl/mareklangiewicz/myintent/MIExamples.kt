@@ -1,9 +1,10 @@
 package pl.mareklangiewicz.myintent
 
+import pl.mareklangiewicz.myutils.DEFAULT_EXAMPLE_COMMANDS
+import pl.mareklangiewicz.myutils.DEFAULT_EXAMPLE_RULES
+import pl.mareklangiewicz.myutils.RERule
 import java.util.ArrayList
 
-import pl.mareklangiewicz.myutils.MyCommands
-import pl.mareklangiewicz.myutils.MyCommands.RERule
 
 /**
  * Created by Marek Langiewicz on 31.10.15.
@@ -11,7 +12,7 @@ import pl.mareklangiewicz.myutils.MyCommands.RERule
 object MIExamples {
 
     val EXAMPLE_COMMANDS: MutableList<String> = ArrayList<String>().apply {
-        addAll(MyCommands.DEFAULT_EXAMPLE_COMMANDS)
+        addAll(DEFAULT_EXAMPLE_COMMANDS)
         add("settings bluetooth")
         add("settings roaming")
         add("settings display")
@@ -76,7 +77,7 @@ object MIExamples {
     }
 
     val EXAMPLE_RULES: MutableList<RERule> = ArrayList<RERule>().apply {
-        addAll(MyCommands.DEFAULT_EXAMPLE_RULES)
+        addAll(DEFAULT_EXAMPLE_RULES)
         add(RERule(true, "", "", "^play (some )?drums", "type application/ogg data http://mareklangiewicz.pl/homepage_2007/muzyka/hydrokoza.ogg"))
         add(RERule(true, "", "", "^play (some )?more drums", "type application/ogg data http://mareklangiewicz.pl/homepage_2007/muzyka/drum.ogg"))
         add(RERule(true, "", "", "^take me to( the | a | )", "teleport to "))

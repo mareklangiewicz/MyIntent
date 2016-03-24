@@ -30,11 +30,11 @@ import pl.mareklangiewicz.myviews.IMyUINavigation
 open class MyFragment : Fragment(), IMyUINavigation.Listener, DrawerLayout.DrawerListener {
 
 
-    val V = true
-    val VV = false
+    private val V = true
+    private val VV = false
 
-//    val V = BuildConfig.VERBOSE
-//    val VV = BuildConfig.VERY_VERBOSE
+//    private val V = BuildConfig.VERBOSE
+//    private val VV = BuildConfig.VERY_VERBOSE
 //
 //    FIXME SOMEDAY: enable version with BuildConfig when Google fix issue with propagating build types to libraries.
 //    Now it is always 'release' in libraries.. see:
@@ -51,8 +51,7 @@ open class MyFragment : Fragment(), IMyUINavigation.Listener, DrawerLayout.Drawe
     // kotlin extensions are working correctly when it is true.
     protected var isViewAvailable = false
 
-    protected val manager: IMyUIManager?
-        get() = activity as? IMyUIManager
+    protected val manager: IMyUIManager? get() = activity as? IMyUIManager
 
     /**
      * Override it to your needs

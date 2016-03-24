@@ -29,8 +29,7 @@ class MyNavigationView : NavigationView, IMyUINavigation, NavigationView.OnNavig
             listener?.onNavigationChanged(this)
         }
 
-    override val menuObj: Menu?
-        get() = if (super.getMenu().size() == 0) null else super.getMenu()
+    override val menuObj: Menu? get() = if (super.getMenu().size() == 0) null else super.getMenu()
 
 
     override var headerId = -1
@@ -42,8 +41,7 @@ class MyNavigationView : NavigationView, IMyUINavigation, NavigationView.OnNavig
             listener?.onNavigationChanged(this)
         }
 
-    override val headerObj: View?
-        get() = if (headerCount == 0) null else getHeaderView(0)
+    override val headerObj: View? get() = if (headerCount == 0) null else getHeaderView(0)
 
     override var listener: IMyUINavigation.Listener? = null
 
@@ -97,8 +95,7 @@ class MyNavigationView : NavigationView, IMyUINavigation, NavigationView.OnNavig
             onNavigationItemSelected(item)
     }
 
-    override val empty: Boolean
-        get() = menuId == -1 && headerId == -1
+    override val empty: Boolean get() = menuId == -1 && headerId == -1
 
     override fun setNavigationItemSelectedListener(listener: NavigationView.OnNavigationItemSelectedListener) {
         throw IllegalAccessError("This method is blocked. Use setListener.")

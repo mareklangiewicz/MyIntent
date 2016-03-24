@@ -38,8 +38,7 @@ open class MyALBuffer<T>(val capacity: Int = 16) : IMyBuffer<T>, IClear {
 
     override fun get(idx: Int): T = array[idx]
 
-    override val size: Int
-        get() = array.size
+    override val size: Int get() = array.size
 
     override fun invoke(t: T) { array.add(t) }
     override fun clear() { array.clear() }
@@ -55,8 +54,7 @@ open class MyRingBuffer<T>(val capacity: Int = 256) : IMyBuffer<T>, IClear {
 
     override fun get(idx: Int): T = array[(startpos + idx) % size ]
 
-    override val size: Int
-        get() = array.size
+    override val size: Int get() = array.size
 
     override fun invoke(t: T) {
         if(size < capacity)

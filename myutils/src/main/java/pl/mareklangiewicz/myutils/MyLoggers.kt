@@ -143,9 +143,7 @@ class MyLogHistory : IMyLogger, IMyArray<MyLogEntry>, IClear {
 
     override fun get(idx: Int) = filteredBuffer[size - 1 - idx]
 
-    override val size: Int
-        get() = filteredBuffer.size
-
+    override val size: Int get() = filteredBuffer.size
 
     override fun invoke(e: MyLogEntry) {
         fullBuffer(e)

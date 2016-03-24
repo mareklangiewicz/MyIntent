@@ -37,8 +37,9 @@ import pl.mareklangiewicz.mydrawables.MyLivingDrawable;
 import pl.mareklangiewicz.myfragments.MyFragment;
 import pl.mareklangiewicz.myloggers.MyAndroLogger;
 import pl.mareklangiewicz.myloggers.MyAndroLoggerKt;
-import pl.mareklangiewicz.myutils.MyCommands;
+import pl.mareklangiewicz.myutils.MyCommandsKt;
 import pl.mareklangiewicz.myutils.MyMathUtilsKt;
+import pl.mareklangiewicz.myutils.REGroup;
 import pl.mareklangiewicz.myviews.IMyUIManager;
 import pl.mareklangiewicz.myviews.IMyUINavigation;
 import pl.mareklangiewicz.myviews.MyNavigationView;
@@ -62,7 +63,7 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
     */
     private static final boolean V = true;
     private static final boolean VV = false;
-    private static final String DEFAULT_COMMAND_NAME = MyCommands.INSTANCE.getCMD_ACTIVITY();
+    private static final String DEFAULT_COMMAND_NAME = MyCommandsKt.getCMD_ACTIVITY();
     private static final String DEFAULT_INTENT_ACTION = Intent.ACTION_VIEW;
     protected final MyLivingDrawable mGlobalArrowDrawable = new MyArrowDrawable();
     protected final MyLivingDrawable mLocalArrowDrawable = new MyArrowDrawable();
@@ -375,12 +376,12 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
                 checkFirstCheckableItemWithCommand(menu, command);
         }
 
-        command = MyCommands.REGroup.Companion.applyAll(MyCommands.INSTANCE.getRE_RULES(), command, log);
+        command = MyCommandsKt.applyAllGroups(MyCommandsKt.getRE_RULES(), command, log);
 
         Map<String, String> map = new HashMap<>(20);
 
         try {
-            MyCommands.INSTANCE.parseCommand(command, map);
+            MyCommandsKt.parseCommand(command, map);
         }
         catch(RuntimeException e) {
             log.e(String.format("Illegal command: %s", command), e);
@@ -398,7 +399,7 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
             map.put("start", start);
         }
 
-        if(start.equals(MyCommands.INSTANCE.getCMD_ACTIVITY())) {
+        if(start.equals(MyCommandsKt.getCMD_ACTIVITY())) {
             if(component == null && action == null) {
                 action = DEFAULT_INTENT_ACTION;
                 map.put("action", action);
@@ -408,7 +409,7 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
                 map.put("component", component);
             }
         }
-        else if(map.get("start").equals(MyCommands.INSTANCE.getCMD_FRAGMENT())) {
+        else if(map.get("start").equals(MyCommandsKt.getCMD_FRAGMENT())) {
             if(component == null) {
                 log.e("Fragment component is null.");
                 return false;
@@ -454,7 +455,7 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
 
         Intent intent = new Intent();
 
-        MyCommands.INSTANCE.setIntentFromCommand(intent, command, log);
+        MyCommandsKt.setIntentFromCommand(intent, command, log);
 
         if(intent.resolveActivity(getPackageManager()) != null) {
             try {
@@ -480,7 +481,7 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
 
         Intent intent = new Intent();
 
-        MyCommands.INSTANCE.setIntentFromCommand(intent, command, log);
+        MyCommandsKt.setIntentFromCommand(intent, command, log);
 
         try {
             if(startService(intent) == null) {
@@ -498,7 +499,7 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
     public boolean onCommandStartBroadcast(@NonNull Map<String, String> command) {
 
         Intent intent = new Intent();
-        MyCommands.INSTANCE.setIntentFromCommand(intent, command, log);
+        MyCommandsKt.setIntentFromCommand(intent, command, log);
         sendBroadcast(intent);
         return true;
     }
@@ -521,7 +522,7 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
 
         Bundle args = new Bundle();
 
-        MyCommands.INSTANCE.setBundleFromCommandExtras(args, command);
+        MyCommandsKt.setBundleFromCommandExtras(args, command);
 
         if(args.size() > 0)
             f.setArguments(args);

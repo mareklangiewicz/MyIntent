@@ -5,7 +5,6 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
-import pl.mareklangiewicz.myutils.MyCommands.RE_RULES
 import java.lang.String.format
 import java.lang.System.currentTimeMillis
 import java.util.*
@@ -16,7 +15,7 @@ import java.util.regex.Pattern
  */
 class MyCommandsTest {
 
-    @Before fun setUp() { MyCommands.sUT = true } // TODO: remove this sUT hack..
+    @Before fun setUp() { sUT = true } // TODO: remove this sUT hack..
 
     @After fun tearDown() { }
 
@@ -61,7 +60,7 @@ class MyCommandsTest {
         testRE(re, 1, true, false,
                 "activity MyActivity")
 
-        val arule = MyCommands.RE_ACTIVITY_GROUP.rules[0]
+        val arule = RE_ACTIVITY_GROUP.rules[0]
         val result = arule.apply("activity .MyActivity", log)
         log.w(format("Result: %s", result))
 
@@ -70,12 +69,12 @@ class MyCommandsTest {
     @Test
     @Throws(Exception::class)
     fun testRE_ID() {
-        testRE(MyCommands.RE_ID, 1, true, true,
+        testRE(RE_ID, 1, true, true,
                 "fdjskl",
                 "RR989dla",
                 "_222z",
                 "_")
-        testRE(MyCommands.RE_ID, 1, true, false,
+        testRE(RE_ID, 1, true, false,
                 " fdjskl",
                 "a b",
                 "9RR989dla",
@@ -86,7 +85,7 @@ class MyCommandsTest {
     @Throws(Exception::class)
     fun testRE_MULTI_ID() {
 
-        testRE(MyCommands.RE_MULTI_ID, 4, true, true,
+        testRE(RE_MULTI_ID, 4, true, true,
                 "fdjskl/fdjks",
                 "fdjskl.fdjks",
                 "RR989dla",
@@ -94,7 +93,7 @@ class MyCommandsTest {
                 ".RR989dla",
                 "_222z.a.a.a.b.d",
                 "._")
-        testRE(MyCommands.RE_MULTI_ID, 4, true, false,
+        testRE(RE_MULTI_ID, 4, true, false,
                 " fdjskl",
                 "aaa.",
                 "",
@@ -108,11 +107,11 @@ class MyCommandsTest {
     @Throws(Exception::class)
     fun testRE_EXTRA_TYPE() {
 
-        testRE(MyCommands.RE_EXTRA_TYPE, 1, true, true,
+        testRE(RE_EXTRA_TYPE, 1, true, true,
                 "string",
                 "integer",
                 "short")
-        testRE(MyCommands.RE_EXTRA_TYPE, 1, true, false,
+        testRE(RE_EXTRA_TYPE, 1, true, false,
                 "object",
                 "integer.string",
                 "")
@@ -122,11 +121,11 @@ class MyCommandsTest {
     @Throws(Exception::class)
     fun testRE_KEYWORD() {
 
-        testRE(MyCommands.RE_KEYWORD, 1, true, true,
+        testRE(RE_KEYWORD, 1, true, true,
                 "start",
                 "category",
                 "extra")
-        testRE(MyCommands.RE_KEYWORD, 1, true, false,
+        testRE(RE_KEYWORD, 1, true, false,
                 "object",
                 "action start",
                 " ",
@@ -139,7 +138,7 @@ class MyCommandsTest {
         // we will try to show that our RE_VALUE is not greedy..
         val txt = "yyyyRyyyyRyyyyRyyyyRyyyy"
         val gval = "(.*)"
-        val `val` = MyCommands.RE_VALUE
+        val `val` = RE_VALUE
         testRE(gval + "R" + gval + "R" + gval, 3, false, true, txt)
         testRE(`val` + "R" + `val` + "R" + `val`, 3, false, true, txt)
     }
@@ -154,7 +153,7 @@ class MyCommandsTest {
     @Throws(Exception::class)
     fun testRE_SEGMENT() {
 
-        testRE(MyCommands.RE_SEGMENT, 4, false, true,
+        testRE(RE_SEGMENT, 4, false, true,
                 "extra bla ble bleee",
                 "extra bla action x",
                 "extra bla acton x",
@@ -162,7 +161,7 @@ class MyCommandsTest {
                 "action xxx component a.b.c",
                 "component a/b.c.d bleee",
                 "component a/b.c.d start service")
-        testRE(MyCommands.RE_SEGMENT, 4, false, false,
+        testRE(RE_SEGMENT, 4, false, false,
                 "extrrra bla ble bleee",
                 "extra")
     }
@@ -171,12 +170,12 @@ class MyCommandsTest {
     @Throws(Exception::class)
     fun testRE_EXTRA_ELEM() {
 
-        testRE(MyCommands.RE_EXTRA_ELEM, 7, true, true,
+        testRE(RE_EXTRA_ELEM, 7, true, true,
                 "integer bla ble bleee",
                 "string action x",
                 "integer val 7",
                 "float f 222.333")
-        testRE(MyCommands.RE_EXTRA_ELEM, 7, true, false,
+        testRE(RE_EXTRA_ELEM, 7, true, false,
                 "extrrra bla ble bleee",
                 "extra integer val 7",
                 "integer 7",
@@ -187,12 +186,12 @@ class MyCommandsTest {
     @Throws(Exception::class)
     fun testRE_EXTRA_ELEM_TYPE_AND_KEY() {
 
-        testRE(MyCommands.RE_EXTRA_ELEM_TYPE_AND_KEY, 6, true, true,
+        testRE(RE_EXTRA_ELEM_TYPE_AND_KEY, 6, true, true,
                 "integer bla",
                 "string kkeeyy",
                 "integer val",
                 "float flf")
-        testRE(MyCommands.RE_EXTRA_ELEM_TYPE_AND_KEY, 6, true, false,
+        testRE(RE_EXTRA_ELEM_TYPE_AND_KEY, 6, true, false,
                 "integer bla ble",
                 "extrrra bla ble bleee",
                 "integer val 7",
@@ -215,7 +214,7 @@ class MyCommandsTest {
 
 
     fun testREGroupApplyAll(input: String, expected: String) {
-        val command = MyCommands.REGroup.applyAll(RE_RULES, input, log)
+        val command = RE_RULES.applyAllGroups(input, log)
         assertThat(command).isEqualTo(expected)
     }
 
@@ -311,7 +310,7 @@ class MyCommandsTest {
                 "action a.b.X.Y extra string bla blabla extra integer satan 666 task hell")
         for (command in commands) {
             map.clear()
-            MyCommands.parseCommand(command, map)
+            parseCommand(command, map)
             log.i(format("parseCommand: %s", command))
             log.i(format("result: %s", map.str))
         }
@@ -321,10 +320,10 @@ class MyCommandsTest {
     @Test
     @Throws(Exception::class)
     fun testParseCommandExtraSegment() {
-        log.w(MyCommands.RE_EXTRA_ELEM)
+        log.w(RE_EXTRA_ELEM)
         val extra = "integer android.intent.extra.alarm.LENGTH 5"
         val map = HashMap<String, String>(20)
-        MyCommands.parseCommandExtraSegment(extra, map)
+        parseCommandExtraSegment(extra, map)
         log.w(map.str)
 
     }
@@ -334,7 +333,7 @@ class MyCommandsTest {
     fun testParseCommandExtraSegmentException() {
         val extra = "untiger android.intent.extra.alarm.LENGTH 5"
         val map = HashMap<String, String>(20)
-        MyCommands.parseCommandExtraSegment(extra, map)
+        parseCommandExtraSegment(extra, map)
     }
 
     @Test

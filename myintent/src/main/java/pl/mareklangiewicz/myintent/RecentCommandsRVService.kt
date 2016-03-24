@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
-import pl.mareklangiewicz.myutils.MyCommands
+import pl.mareklangiewicz.myutils.EX_COMMAND
 import java.util.*
 
 /**
@@ -39,7 +39,7 @@ class RecentCommandsRVService : RemoteViewsService() {
             rv.setTextViewText(R.id.cmd_recent_app_widget_item, commands[position])
 
             val fillInIntent = Intent()
-            fillInIntent.putExtra(MyCommands.EX_COMMAND, commands[position])
+            fillInIntent.putExtra(EX_COMMAND, commands[position])
             rv.setOnClickFillInIntent(R.id.cmd_recent_app_widget_item, fillInIntent)
 
             return rv

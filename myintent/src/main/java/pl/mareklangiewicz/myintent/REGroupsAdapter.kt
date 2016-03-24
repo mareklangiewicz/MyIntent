@@ -10,7 +10,8 @@ import com.afollestad.materialdialogs.MaterialDialog
 import kotlinx.android.synthetic.main.mi_re_group_details.view.*
 import kotlinx.android.synthetic.main.mi_re_group_layout.view.*
 import pl.mareklangiewicz.myloggers.MY_DEFAULT_ANDRO_LOGGER
-import pl.mareklangiewicz.myutils.MyCommands
+import pl.mareklangiewicz.myutils.REGroup
+import pl.mareklangiewicz.myutils.RERule
 import pl.mareklangiewicz.myutils.str
 
 /**
@@ -22,7 +23,7 @@ class REGroupsAdapter() : RecyclerView.Adapter<REGroupsAdapter.ViewHolder>(), Vi
 
     protected val log = MY_DEFAULT_ANDRO_LOGGER
 
-    var groups: List<MyCommands.REGroup>? = null
+    var groups: List<REGroup>? = null
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -32,7 +33,7 @@ class REGroupsAdapter() : RecyclerView.Adapter<REGroupsAdapter.ViewHolder>(), Vi
         setHasStableIds(false)
     }
 
-    constructor(agroups: List<MyCommands.REGroup>) : this() {
+    constructor(agroups: List<REGroup>) : this() {
         groups = agroups
     }
 
@@ -98,7 +99,7 @@ class REGroupsAdapter() : RecyclerView.Adapter<REGroupsAdapter.ViewHolder>(), Vi
             itemView.group_rules_view.adapter = null
         }
 
-        fun setupRulesRecyclerView(rules: MutableList<MyCommands.RERule>) {
+        fun setupRulesRecyclerView(rules: MutableList<RERule>) {
 
             resetRulesRecyclerView()
 

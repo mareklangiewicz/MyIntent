@@ -8,7 +8,7 @@ import clear
 import getInt
 import getString
 import insert
-import pl.mareklangiewicz.myutils.MyCommands
+import pl.mareklangiewicz.myutils.RERule
 import pl.mareklangiewicz.myutils.str
 
 /**
@@ -131,7 +131,7 @@ object MIContract {
 
         fun clear(context: Context): Int = context.contentResolver.clear(URI)
 
-        fun insert(context: Context, position: Int, rule: MyCommands.RERule): Uri = context.contentResolver.insert(URI) {
+        fun insert(context: Context, position: Int, rule: RERule): Uri = context.contentResolver.insert(URI) {
             put(COL_POSITION, position)
             put(COL_EDITABLE, rule.editable)
             put(COL_NAME, rule.name)
@@ -140,18 +140,18 @@ object MIContract {
             put(COL_REPLACE, rule.replace)
         }
 
-        fun save(context: Context, rules: List<MyCommands.RERule>) {
+        fun save(context: Context, rules: List<RERule>) {
             for (i in rules.indices)
                 insert(context, i, rules[i])
         }
 
-        fun load(context: Context, rules: MutableList<MyCommands.RERule>): Boolean {
+        fun load(context: Context, rules: MutableList<RERule>): Boolean {
 
             val cursor = context.contentResolver.query(URI, null, null, null, " $COL_POSITION ASC ") ?: return false
             cursor.use {
                 if (!it.moveToFirst()) return true // empty.
                 do rules.add(
-                        MyCommands.RERule(
+                        RERule(
                                 it.getInt(COL_EDITABLE) > 0,
                                 it.getString(COL_NAME),
                                 it.getString(COL_DESCRIPTION),

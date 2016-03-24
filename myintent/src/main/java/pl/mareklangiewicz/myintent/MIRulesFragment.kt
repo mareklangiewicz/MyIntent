@@ -7,8 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.mi_rules_fragment.*
 import pl.mareklangiewicz.myfragments.MyFragment
-import pl.mareklangiewicz.myutils.MyCommands
-import pl.mareklangiewicz.myutils.MyCommands.RE_USER_GROUP
+import pl.mareklangiewicz.myutils.RERule
+import pl.mareklangiewicz.myutils.RE_RULES
+import pl.mareklangiewicz.myutils.RE_USER_GROUP
 import pl.mareklangiewicz.myviews.IMyUINavigation
 
 /**
@@ -16,7 +17,7 @@ import pl.mareklangiewicz.myviews.IMyUINavigation
  */
 class MIRulesFragment : MyFragment() {
 
-    private val adapter = REGroupsAdapter(MyCommands.RE_RULES)
+    private val adapter = REGroupsAdapter(RE_RULES)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -47,12 +48,12 @@ class MIRulesFragment : MyFragment() {
 
     override fun onItemSelected(nav: IMyUINavigation, item: MenuItem): Boolean = when (item.itemId) {
         R.id.new_user_rule -> {
-            MyCommands.RE_USER_GROUP.rules.add(MyCommands.RERule(true, "", "", "", ""))
+            RE_USER_GROUP.rules.add(RERule(true, "", "", "", ""))
             adapter.notifyItemChanged(1)
             true
         }
         R.id.clear_user_rules -> {
-            MyCommands.RE_USER_GROUP.rules.clear()
+            RE_USER_GROUP.rules.clear()
             adapter.notifyItemChanged(1)
             true
         }

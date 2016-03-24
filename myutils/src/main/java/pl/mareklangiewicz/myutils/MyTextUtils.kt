@@ -3,8 +3,8 @@ package pl.mareklangiewicz.myutils
 import android.os.Bundle
 import android.view.View
 
-val V = true
-val VV = false
+private val V = true
+private val VV = false
 
 /**
  * str extension functions are for humans only. returned string format can change any time..

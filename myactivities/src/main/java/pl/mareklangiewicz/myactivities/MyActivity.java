@@ -357,10 +357,9 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
 
 
     /**
-     * Override it if you want to manage commands by yourself
      * @param command A command to perform
      */
-    public void onCommand(@NonNull String command) {
+    protected void onCommand(@NonNull String command) {
 
         IMyUINavigation gnav = getGnav();
         if(gnav != null) {
@@ -412,11 +411,9 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
     }
 
     /**
-     * Override it if you want to manage all (parsed) commands by yourself
-     *
      * @param command A parsed command
      */
-    public void onCommand(@NonNull MyCommand command) {
+    protected void onCommand(@NonNull MyCommand command) {
 
         //TODO NOW: use constants from MyCommands in switch cases (after moving to Kotlin)
         switch(command.get("start")) {
@@ -527,6 +524,7 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
         log.e(String.format("Unsupported custom command: %s", getStr(command)));
     }
 
+    // TODO NOW: kotlin: default delay:0
     public void postRunnable(Runnable runnable, long delay) {
         if(mCoordinatorLayout == null) {
             log.a("User interface is not ready.");
@@ -554,7 +552,7 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
 
     }
 
-    @SuppressWarnings("unused")
+    // TODO NOW: kotlin: default delay:0
     public void postCommand(final String cmd, long delay) {
         postRunnable(new CmdRunnable(cmd, this), delay);
     }

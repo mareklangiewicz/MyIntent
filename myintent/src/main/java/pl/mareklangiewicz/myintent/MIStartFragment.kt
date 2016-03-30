@@ -25,6 +25,8 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
     lateinit var mPSButton: PlayStopButton
     lateinit var mCountdown: Countdown
 
+    var onResumePlayCmd = ""
+
 
     private val updateButtonsRunnable = Runnable {
         updateFAB()
@@ -62,7 +64,7 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
             if(isViewAvailable) {
                 mCountdown.cancel()
                 mi_lf_et_command.setText("")
-                (activity as MIActivity).onCommand("start custom action listen")
+                (activity as MyActivity).postCommand("start custom action listen", 0)
             }
         }
 
@@ -72,10 +74,14 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
             override fun afterTextChanged(s: Editable) { updatePS() }
         })
 
+        arguments?.getString("play")?.let { onResumePlayCmd = it }
     }
 
     override fun onResume() {
         super.onResume()
+        if(onResumePlayCmd.isNotEmpty())
+            play(onResumePlayCmd)
+        onResumePlayCmd = ""
         lazyUpdateButtons()
     }
 
@@ -192,6 +198,10 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
             mPSButton.state = HIDDEN
         else
             mPSButton.state = if (mCountdown.isRunning) STOP else PLAY
+        if(mCountdown.isRunning)
+            mi_lf_et_command.isFocusable = false // it also sets isFocusableInTouchMode property to false
+        else
+            mi_lf_et_command.isFocusableInTouchMode = true // it also sets isFocusable property to true
     }
 
     /**
@@ -202,9 +212,11 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
     fun play(cmd: String = "") {
 
         if(!isViewAvailable) {
-            log.e("UI not ready.")
+            onResumePlayCmd = cmd // if it is empty - nothing is scheduled.
             return
         }
+
+        if(!cmd.isEmpty()) mi_lf_et_command.setText(cmd)
 
         val acmd = if(!cmd.isEmpty()) cmd else mi_lf_et_command.text.toString()
 
@@ -215,7 +227,6 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
         }
 
         mSearchItem?.collapseActionView()
-        mi_lf_et_command.setText("")
         mCountdown.start(acmd)
         updatePS()
 
@@ -241,7 +252,7 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
         }
 
         try {
-            (activity as MyActivity).onCommand(cmd)
+            (activity as MyActivity).postCommand(cmd, 0)
             MIContract.CmdRecent.insert(activity, cmd)
         } catch (e: RuntimeException) {
             log.e(e.message, e)

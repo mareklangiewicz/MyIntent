@@ -8,6 +8,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
 import kotlinx.android.synthetic.main.mi_log_fragment.*
+import pl.mareklangiewicz.myactivities.MyActivity
 import pl.mareklangiewicz.myfragments.MyFragment
 import pl.mareklangiewicz.myintent.PlayStopButton.State.*
 import pl.mareklangiewicz.myutils.MyLogLevel
@@ -240,9 +241,8 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
         }
 
         try {
-            val ok = (activity as MIActivity).onCommand(cmd)
-            if (ok)
-                MIContract.CmdRecent.insert(activity, cmd)
+            (activity as MyActivity).onCommand(cmd)
+            MIContract.CmdRecent.insert(activity, cmd)
         } catch (e: RuntimeException) {
             log.e(e.message, e)
         }

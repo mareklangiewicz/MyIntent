@@ -29,8 +29,6 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import java.lang.ref.WeakReference;
-import java.util.HashMap;
-import java.util.Map;
 
 import pl.mareklangiewicz.mydrawables.MyArrowDrawable;
 import pl.mareklangiewicz.mydrawables.MyLivingDrawable;
@@ -40,12 +38,11 @@ import pl.mareklangiewicz.myloggers.MyAndroLoggerKt;
 import pl.mareklangiewicz.myutils.MyCommand;
 import pl.mareklangiewicz.myutils.MyCommandsKt;
 import pl.mareklangiewicz.myutils.MyMathUtilsKt;
-import pl.mareklangiewicz.myutils.REGroup;
 import pl.mareklangiewicz.myviews.IMyUIManager;
 import pl.mareklangiewicz.myviews.IMyUINavigation;
 import pl.mareklangiewicz.myviews.MyNavigationView;
 
-import static pl.mareklangiewicz.myutils.MyTextUtilsKt.*;
+import static pl.mareklangiewicz.myutils.MyTextUtilsKt.getStr;
 
 public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUINavigation.Listener, DrawerLayout.DrawerListener {
 
@@ -246,7 +243,9 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
         if(mLocalDrawerLayout != null)
             onDrawerSlide(mLocalNavigationView, mLocalDrawerLayout.isDrawerOpen(GravityCompat.END) ? 1f : 0f);
         // ensure that drawers and menu icons are updated:
+        //noinspection ConstantConditions
         onNavigationChanged(getGnav());
+        //noinspection ConstantConditions
         onNavigationChanged(getLnav());
         if(savedInstanceState == null)
             onIntent(getIntent());
@@ -359,16 +358,9 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
 
     /**
      * Override it if you want to manage commands by yourself
-     *
      * @param command A command to perform
-     * @return If command was executed successfully
      */
-    public boolean onCommand(@Nullable String command) {
-
-        if(command == null) {
-            log.d("null command received - ignoring");
-            return false;
-        }
+    public void onCommand(@NonNull String command) {
 
         IMyUINavigation gnav = getGnav();
         if(gnav != null) {
@@ -403,7 +395,7 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
             else if(cmd.get("start").equals(MyCommandsKt.getCMD_FRAGMENT())) {
                 if(component == null) {
                     log.e("Fragment component is null.");
-                    return false;
+                    return;
                 }
                 if(component.startsWith(".")) {
                     component = pkg + component;
@@ -411,11 +403,10 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
                 }
             }
 
-            return onCommand(cmd);
+            onCommand(cmd);
         }
         catch(RuntimeException e) {
             log.e(String.format("Invalid command: %s", command), e);
-            return false;
         }
 
     }
@@ -424,31 +415,34 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
      * Override it if you want to manage all (parsed) commands by yourself
      *
      * @param command A parsed command
-     * @return If command was executed successfully
      */
-    public boolean onCommand(@NonNull MyCommand command) {
+    public void onCommand(@NonNull MyCommand command) {
 
         //TODO NOW: use constants from MyCommands in switch cases (after moving to Kotlin)
         switch(command.get("start")) {
             case "activity":
-                return onCommandStartActivity(command);
+                onCommandStartActivity(command);
+                return;
             case "service":
-                return onCommandStartService(command);
+                onCommandStartService(command);
+                return;
             case "broadcast":
-                return onCommandStartBroadcast(command);
+                onCommandStartBroadcast(command);
+                return;
             case "fragment":
-                return onCommandStartFragment(command);
+                onCommandStartFragment(command);
+                return;
             case "custom":
-                return onCommandCustom(command);
+                onCommandCustom(command);
+                return;
             case "nothing":
-                return true; // just for dry testing purposes
+                return; // just for dry testing purposes
             default:
                 log.e(String.format("Unsupported command: %s", getStr(command)));
-                return false;
         }
     }
 
-    public boolean onCommandStartActivity(@NonNull MyCommand command) {
+    public void onCommandStartActivity(@NonNull MyCommand command) {
 
         try {
 
@@ -456,28 +450,23 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
 
             if(intent.resolveActivity(getPackageManager()) != null) {
                 startActivity(intent);
-                return true;
             }
             else {
                 log.e(String.format("No activity found for this intent: %s", getStr(intent)));
-                return false;
             }
         }
         catch(IllegalArgumentException e) {
             log.e("Illegal command: " + getStr(command), e);
-            return false;
         }
         catch(ActivityNotFoundException e) {
             log.e("Activity not found.", e);
-            return false;
         }
         catch(SecurityException e) {
             log.a("Security exception.", e);
-            return false;
         }
     }
 
-    public boolean onCommandStartService(@NonNull MyCommand command) {
+    public void onCommandStartService(@NonNull MyCommand command) {
 
         try {
 
@@ -485,39 +474,32 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
 
             if(startService(intent) == null) {
                 log.e(String.format("Service not found for this intent: %s", getStr(intent)));
-                return false;
             }
-            else
-                return true;
         }
         catch(IllegalArgumentException e) {
             log.e("Illegal command: " + getStr(command), e);
-            return false;
         }
         catch(SecurityException e) {
             log.a("Security exception.", e);
-            return false;
         }
     }
 
-    public boolean onCommandStartBroadcast(@NonNull MyCommand command) {
+    public void onCommandStartBroadcast(@NonNull MyCommand command) {
 
         try {
 
             Intent intent = MyCommandsKt.toIntent(command);
             sendBroadcast(intent);
-            return true;
         }
         catch(IllegalArgumentException e) {
             log.e("Illegal command: " + getStr(command), e);
-            return false;
         }
     }
 
     /**
      * Extras in fragment command are delivered as fragment arguments bundle.
      */
-    public boolean onCommandStartFragment(@NonNull MyCommand command) {
+    public void onCommandStartFragment(@NonNull MyCommand command) {
 
         FragmentManager fm = getFragmentManager();
         Fragment f;
@@ -532,22 +514,17 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
             FragmentTransaction ft = fm.beginTransaction().replace(R.id.ma_local_frame_layout, f, TAG_LOCAL_FRAGMENT);
             addAllSharedElementsToFragmentTransaction(findViewById(R.id.ma_local_frame_layout), ft);
             ft.commit();
-
-            return true;
         }
         catch(Fragment.InstantiationException e) {
             log.e(String.format("Fragment class: %s not found.", command.get("component")), e);
-            return false;
         }
         catch(IllegalArgumentException e) {
             log.e("Illegal command: " + getStr(command), e);
-            return false;
         }
     }
 
-    public boolean onCommandCustom(@NonNull MyCommand command) {
+    public void onCommandCustom(@NonNull MyCommand command) {
         log.e(String.format("Unsupported custom command: %s", getStr(command)));
-        return false;
     }
 
     public void postRunnable(Runnable runnable, long delay) {
@@ -577,6 +554,7 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
 
     }
 
+    @SuppressWarnings("unused")
     public void postCommand(final String cmd, long delay) {
         postRunnable(new CmdRunnable(cmd, this), delay);
     }
@@ -737,6 +715,7 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
         return dp * mDisplayMetrics.density;
     }
 
+    @SuppressWarnings("unused")
     public float px2dp(float px) {
         if(mDisplayMetrics == null)
             throw new IllegalStateException("display metrics not ready");

@@ -174,21 +174,15 @@ class MIActivity : MyActivity() {
         override fun run() {
 
             val activity = mMIActivityWR.get() ?: return
+            val fragment = activity.mLocalFragment
 
-            var ok = activity.mLocalFragment != null && (activity.mLocalFragment is MIStartFragment)
-
-            if (ok) {
-                (activity.mLocalFragment as MIStartFragment).play(mCommand)
-                return
+            if(fragment is MIStartFragment){
+                fragment.play(mCommand)
             }
-
-            ok = activity.onCommand("fragment .MIStartFragment")
-            ok = ok && activity.mLocalFragment != null && (activity.mLocalFragment is MIStartFragment)
-
-            if (ok)
+            else {
+                activity.onCommand("fragment .MIStartFragment")
                 activity.play(mCommand) // IMPORTANT: we have to be asynchrous here again to let fragment initialize fully first.
-            else
-                activity.log.a("Can not select the \"Start\" section")
+            }
         }
     }
 
@@ -198,21 +192,13 @@ class MIActivity : MyActivity() {
      * It will start the command if user doesn't press stop fast enough.
      * (it runs everything asynchronously - after closing drawers)
      */
-    fun play(command: String?) {
-
-        if (command == null) {
-            log.d("null command received - ignoring")
-            return
-        }
-
-        closeDrawersAndPostRunnable(PlayCmdRunnable(command, this))
-    }
+    fun play(command: String) = closeDrawersAndPostRunnable(PlayCmdRunnable(command, this))
 
 
     private fun onSearchIntent(intent: Intent) {
-        val command = intent.getStringExtra(SearchManager.QUERY).toLowerCase()
+        val command = intent.getStringExtra(SearchManager.QUERY)?.toLowerCase()
         log.v("search: $command")
-        play(command)
+        command?.let { play(it) }
     }
 
     internal fun startSpeechRecognizer() {
@@ -284,72 +270,44 @@ class MIActivity : MyActivity() {
     }
 
 
-    override fun onCommand(command: String?): Boolean {
-        val ok = super.onCommand(command)
-
-        if (ok) {
-            val action = Action.newAction(Action.TYPE_VIEW, command,
-                    Uri.parse("android-app://pl.mareklangiewicz.myintent/http/mareklangiewicz.pl/mi#" + command))
-            val result = AppIndex.AppIndexApi.start(gapi, action)
-            result.setResultCallback { status ->
-                if (!status.isSuccess)
-                    log.d("App Indexing API problem: ${status.str}")
-            }
-        }
-
-        return ok
+    // TODO NOW: invoke it for every successfully executed command
+    private fun indexCommand(command: String) {
+        val action = Action.newAction(Action.TYPE_VIEW, command, Uri.parse("android-app://pl.mareklangiewicz.myintent/http/mareklangiewicz.pl/mi#$command"))
+        val result = AppIndex.AppIndexApi.start(gapi, action)
+        result.setResultCallback { if (!it.isSuccess) log.d("App Indexing API problem: ${it.str}") }
     }
 
-    override fun onCommandCustom(command: MyCommand): Boolean {
-        if (command["action"] == "listen") {
-            startSpeechRecognizer()
-            return true
-        }
-        if (command["action"] == "say") {
-            babbler.say(command["data"])
-            return true
-        }
-        if (command["action"] == "orientation") {
-            when(command["data"]) {
-                "portrait" -> requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-                "landscape" -> requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                "unspecified" -> requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-                else -> return false
+    override fun onCommandCustom(command: MyCommand) {
+        when(command["action"]) {
+            "listen" -> startSpeechRecognizer()
+            "say" -> babbler.say(command["data"])
+            "orientation" -> when(command["data"]) {
+                    "portrait" -> requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                    "landscape" -> requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                    "unspecified" -> requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                }
+            "exit" -> finish()
+            "suicide" -> suicide()
+            "resurrection" -> resurrection()
+            "weather" -> {
+                val appid = command["extra string appid"];
+                if (appid == null) {
+                    log.e("No OpenWeatherMap Api Key provided.");
+                    return
+                }
+                val city = command["extra string city"];
+                if (city == null) {
+                    log.e("No city provided.");
+                    return
+                }
+                weather(
+                        appid,
+                        city,
+                        command["extra string units"] ?: "kelvins",
+                        command["extra integer day"] ?: "1")
             }
-            return true
+            else -> super.onCommandCustom(command)
         }
-        if (command["action"] == "exit") {
-            finish()
-            return true
-        }
-        if (command["action"] == "suicide") {
-            suicide()
-            return true
-        }
-        if (command["action"] == "resurrection") {
-            resurrection()
-            return true
-        }
-        if (command["action"] == "weather") {
-            val appid = command["extra string appid"];
-            if (appid == null) {
-                log.e("No OpenWeatherMap Api Key provided.");
-                return false
-            }
-            val city = command["extra string city"];
-            if (city == null) {
-                log.e("No city provided.");
-                return false
-            }
-            weather(
-                    appid,
-                    city,
-                    command["extra string units"] ?: "kelvins",
-                    command["extra integer day"] ?: "1")
-            return true
-        }
-
-        return super.onCommandCustom(command)
     }
 
     /**

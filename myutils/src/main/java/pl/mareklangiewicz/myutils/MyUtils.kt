@@ -1,3 +1,5 @@
+package pl.mareklangiewicz.myutils
+
 import android.content.ContentResolver
 import android.content.ContentValues
 import android.database.Cursor
@@ -33,14 +35,14 @@ operator fun ViewGroup.get(pos: Int): View = getChildAt(pos)
 val ViewGroup.views: List<View> get() = (0 until childCount).map { this[it] }
 
 
-fun Cursor.getString(columnName: String): String = getString(getColumnIndexOrThrow(columnName))
-fun Cursor.getInt(columnName: String): Int = getInt(getColumnIndexOrThrow(columnName))
+fun Cursor.kgetString(columnName: String): String = getString(getColumnIndexOrThrow(columnName))
+fun Cursor.kgetInt(columnName: String): Int = getInt(getColumnIndexOrThrow(columnName))
 
-fun Cursor.getStringOrNull(columnName: String): String? {
+fun Cursor.kgetStringOrNull(columnName: String): String? {
     val index = getColumnIndexOrThrow(columnName)
     return if (isNull(index)) null else getString(index)
 }
-fun Cursor.getIntOrNull(columnName: String): Int? {
+fun Cursor.kgetIntOrNull(columnName: String): Int? {
     val index = getColumnIndexOrThrow(columnName)
     return if (isNull(index)) null else getInt(index)
 }
@@ -48,9 +50,20 @@ fun Cursor.getIntOrNull(columnName: String): Int? {
 // TODO SOMEDAY: similar Cursor extensions for other data types
 
 
-fun ContentResolver.clear(uri: Uri): Int = delete(uri, null, null)
+fun ContentResolver.kclear(uri: Uri): Int = delete(uri, null, null)
 
-inline fun ContentResolver.insert(uri: Uri, cvbuilder: ContentValues.() -> Unit): Uri = insert(uri, ContentValues().apply(cvbuilder))
+inline fun ContentResolver.kinsert(uri: Uri, cvbuilder: ContentValues.() -> Unit): Uri = insert(uri, ContentValues().apply(cvbuilder))
+
+inline fun ContentResolver.kquery(
+        uri: Uri,
+        projection: Array<out String>? = null,
+        selection: String? = null,
+        selectionArgs: Array<out String>? = null,
+        sortOrder: String? = null,
+        usecursor: (Cursor) -> Boolean
+): Boolean
+        = query(uri, projection, selection, selectionArgs, sortOrder)?.use(usecursor) ?: false
+
 
 fun SQLiteDatabase.createTable(name: String, vararg columns: String) {
     val sql = StringBuilder("CREATE TABLE ")

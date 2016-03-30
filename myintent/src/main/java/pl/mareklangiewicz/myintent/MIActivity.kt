@@ -26,11 +26,8 @@ import hu.supercluster.paperwork.Paperwork
 import kotlinx.android.synthetic.main.mi_header.view.*
 import pl.mareklangiewicz.myactivities.MyActivity
 import pl.mareklangiewicz.myintent.MIContract.RuleUser
-import pl.mareklangiewicz.myutils.EX_COMMAND
-import pl.mareklangiewicz.myutils.MyBabbler
-import pl.mareklangiewicz.myutils.RE_USER_GROUP
+import pl.mareklangiewicz.myutils.*
 import pl.mareklangiewicz.myutils.myhttp.OpenWeatherMap
-import pl.mareklangiewicz.myutils.str
 import pl.mareklangiewicz.myviews.IMyUINavigation
 import retrofit2.Call
 import retrofit2.Callback
@@ -303,7 +300,7 @@ class MIActivity : MyActivity() {
         return ok
     }
 
-    override fun onCommandCustom(command: Map<String, String>): Boolean {
+    override fun onCommandCustom(command: MyCommand): Boolean {
         if (command["action"] == "listen") {
             startSpeechRecognizer()
             return true

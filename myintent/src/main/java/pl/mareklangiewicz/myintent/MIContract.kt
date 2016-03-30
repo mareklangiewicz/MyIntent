@@ -4,12 +4,13 @@ import android.app.SearchManager
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
-import clear
-import getInt
-import getString
-import insert
 import pl.mareklangiewicz.myutils.RERule
+import pl.mareklangiewicz.myutils.kclear
+import pl.mareklangiewicz.myutils.kinsert
+import pl.mareklangiewicz.myutils.kquery
 import pl.mareklangiewicz.myutils.str
+import pl.mareklangiewicz.myutils.kgetString
+import pl.mareklangiewicz.myutils.kgetInt
 
 /**
  * Created by Marek Langiewicz on 07.10.15.
@@ -33,9 +34,9 @@ object MIContract {
         val COL_COMMAND = "Command"
         val COL_TIME = "Time"
 
-        fun clear(context: Context): Int = context.contentResolver.clear(URI)
+        fun clear(context: Context): Int = context.contentResolver.kclear(URI)
 
-        fun insert(context: Context, command: String): Uri = context.contentResolver.insert(URI) {
+        fun insert(context: Context, command: String): Uri = context.contentResolver.kinsert(URI) {
             put(COL_COMMAND, command)
             put(COL_TIME, System.currentTimeMillis())
         }
@@ -44,18 +45,16 @@ object MIContract {
          * limit <= 0 means no limit (default is 0 - so by default there is no limit clause)
          * returns true if success
          */
-        fun load(context: Context, commands: MutableList<String>, limit: Int = 0): Boolean {
-
-            val slimit = if (limit <= 0) "" else " LIMIT ${limit.str} "
-            val cursor = context.contentResolver.query(URI, null, null, null, " $COL_TIME DESC $slimit") ?: return false
-            cursor.use {
-                if (!it.moveToFirst()) return true // empty.
-                do commands.add(it.getString(COL_COMMAND))
+        fun load(context: Context, commands: MutableList<String>, limit: Int = 0): Boolean
+                = context.contentResolver.kquery(
+                uri = URI,
+                sortOrder = " $COL_TIME DESC ${if (limit <= 0) "" else " LIMIT ${limit.str} "}"
+        ) {
+            if (it.moveToFirst())
+                do commands.add(it.kgetString(COL_COMMAND))
                 while (it.moveToNext())
-                return true
-            }
+            true
         }
-
     }
 
 
@@ -73,22 +72,20 @@ object MIContract {
         val COL_COMMAND = "Command"
         val COL_PRIORITY = "Priority"
 
-        fun clear(context: Context): Int = context.contentResolver.clear(URI)
+        fun clear(context: Context): Int = context.contentResolver.kclear(URI)
 
-        fun insert(context: Context, command: String, priority: Long): Uri = context.contentResolver.insert(URI) {
+        fun insert(context: Context, command: String, priority: Long): Uri = context.contentResolver.kinsert(URI) {
             put(COL_COMMAND, command)
             put(COL_PRIORITY, priority)
         }
 
-        fun load(context: Context, commands: MutableList<String>): Boolean {
-
-            val cursor = context.contentResolver.query(URI, null, null, null, " $COL_PRIORITY DESC ") ?: return false
-            cursor.use {
-                if (!it.moveToFirst()) return true // empty.
-                do commands.add(it.getString(COL_COMMAND))
-                while (it.moveToNext())
-                return true
-            }
+        fun load(context: Context, commands: MutableList<String>): Boolean = context.contentResolver.kquery(
+                uri = URI,
+                sortOrder = " $COL_PRIORITY DESC "
+        ) {
+            if (it.moveToFirst()) do commands.add(it.kgetString(COL_COMMAND))
+            while (it.moveToNext())
+            true
         }
     }
 
@@ -129,9 +126,9 @@ object MIContract {
         val COL_MATCH = "Match"
         val COL_REPLACE = "Replace"
 
-        fun clear(context: Context): Int = context.contentResolver.clear(URI)
+        fun clear(context: Context): Int = context.contentResolver.kclear(URI)
 
-        fun insert(context: Context, position: Int, rule: RERule): Uri = context.contentResolver.insert(URI) {
+        fun insert(context: Context, position: Int, rule: RERule): Uri = context.contentResolver.kinsert(URI) {
             put(COL_POSITION, position)
             put(COL_EDITABLE, rule.editable)
             put(COL_NAME, rule.name)
@@ -145,23 +142,21 @@ object MIContract {
                 insert(context, i, rules[i])
         }
 
-        fun load(context: Context, rules: MutableList<RERule>): Boolean {
-
-            val cursor = context.contentResolver.query(URI, null, null, null, " $COL_POSITION ASC ") ?: return false
-            cursor.use {
-                if (!it.moveToFirst()) return true // empty.
-                do rules.add(
-                        RERule(
-                                it.getInt(COL_EDITABLE) > 0,
-                                it.getString(COL_NAME),
-                                it.getString(COL_DESCRIPTION),
-                                it.getString(COL_MATCH),
-                                it.getString(COL_REPLACE)
-                        )
-                )
-                while (it.moveToNext())
-                return true
-            }
+        fun load(context: Context, rules: MutableList<RERule>): Boolean = context.contentResolver.kquery(
+                uri = URI,
+                sortOrder = " $COL_POSITION ASC "
+        ) {
+            if (it.moveToFirst()) do rules.add(
+                    RERule(
+                            it.kgetString(COL_MATCH),
+                            it.kgetString(COL_REPLACE),
+                            it.kgetString(COL_NAME),
+                            it.kgetString(COL_DESCRIPTION),
+                            it.kgetInt(COL_EDITABLE) > 0
+                    )
+            )
+            while (it.moveToNext())
+            true
         }
     }
 }

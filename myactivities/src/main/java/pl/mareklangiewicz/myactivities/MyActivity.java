@@ -37,6 +37,7 @@ import pl.mareklangiewicz.mydrawables.MyLivingDrawable;
 import pl.mareklangiewicz.myfragments.MyFragment;
 import pl.mareklangiewicz.myloggers.MyAndroLogger;
 import pl.mareklangiewicz.myloggers.MyAndroLoggerKt;
+import pl.mareklangiewicz.myutils.MyCommand;
 import pl.mareklangiewicz.myutils.MyCommandsKt;
 import pl.mareklangiewicz.myutils.MyMathUtilsKt;
 import pl.mareklangiewicz.myutils.REGroup;
@@ -376,51 +377,47 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
                 checkFirstCheckableItemWithCommand(menu, command);
         }
 
-        command = MyCommandsKt.applyAllGroups(MyCommandsKt.getRE_RULES(), command, log);
-
-        Map<String, String> map = new HashMap<>(20);
-
         try {
-            MyCommandsKt.parseCommand(command, map);
+            MyCommand cmd = new MyCommand(command, MyCommandsKt.getRE_RULES(), log);
+            String start = cmd.get("start");
+            String component = cmd.get("component");
+            String action = cmd.get("action");
+
+            String pkg = getPackageName();
+
+            if(start == null) {
+                start = DEFAULT_COMMAND_NAME;
+                cmd.put("start", start);
+            }
+
+            if(start.equals(MyCommandsKt.getCMD_ACTIVITY())) {
+                if(component == null && action == null) {
+                    action = DEFAULT_INTENT_ACTION;
+                    cmd.put("action", action);
+                }
+                if(component != null && !component.contains("/")) {
+                    component = pkg + "/" + component;
+                    cmd.put("component", component);
+                }
+            }
+            else if(cmd.get("start").equals(MyCommandsKt.getCMD_FRAGMENT())) {
+                if(component == null) {
+                    log.e("Fragment component is null.");
+                    return false;
+                }
+                if(component.startsWith(".")) {
+                    component = pkg + component;
+                    cmd.put("component", component);
+                }
+            }
+
+            return onCommand(cmd);
         }
         catch(RuntimeException e) {
-            log.e(String.format("Illegal command: %s", command), e);
+            log.e(String.format("Invalid command: %s", command), e);
             return false;
         }
 
-        String start = map.get("start");
-        String component = map.get("component");
-        String action = map.get("action");
-
-        String pkg = getPackageName();
-
-        if(start == null) {
-            start = DEFAULT_COMMAND_NAME;
-            map.put("start", start);
-        }
-
-        if(start.equals(MyCommandsKt.getCMD_ACTIVITY())) {
-            if(component == null && action == null) {
-                action = DEFAULT_INTENT_ACTION;
-                map.put("action", action);
-            }
-            if(component != null && !component.contains("/")) {
-                component = pkg + "/" + component;
-                map.put("component", component);
-            }
-        }
-        else if(map.get("start").equals(MyCommandsKt.getCMD_FRAGMENT())) {
-            if(component == null) {
-                log.e("Fragment component is null.");
-                return false;
-            }
-            if(component.startsWith(".")) {
-                component = pkg + component;
-                map.put("component", component);
-            }
-        }
-
-        return onCommand(map);
     }
 
     /**
@@ -429,7 +426,7 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
      * @param command A parsed command
      * @return If command was executed successfully
      */
-    public boolean onCommand(@NonNull Map<String, String> command) {
+    public boolean onCommand(@NonNull MyCommand command) {
 
         //TODO NOW: use constants from MyCommands in switch cases (after moving to Kotlin)
         switch(command.get("start")) {
@@ -451,93 +448,104 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
         }
     }
 
-    public boolean onCommandStartActivity(@NonNull Map<String, String> command) {
-
-        Intent intent = new Intent();
-
-        MyCommandsKt.setIntentFromCommand(intent, command, log);
-
-        if(intent.resolveActivity(getPackageManager()) != null) {
-            try {
-                startActivity(intent);
-            }
-            catch(ActivityNotFoundException e) {
-                log.e("Activity not found.", e);
-                return false;
-            }
-            catch(SecurityException e) {
-                log.a("Security exception.", e);
-                return false;
-            }
-        }
-        else {
-            log.e(String.format("No activity found for this intent: %s", getStr(intent)));
-            return false;
-        }
-        return true;
-    }
-
-    public boolean onCommandStartService(@NonNull Map<String, String> command) {
-
-        Intent intent = new Intent();
-
-        MyCommandsKt.setIntentFromCommand(intent, command, log);
+    public boolean onCommandStartActivity(@NonNull MyCommand command) {
 
         try {
-            if(startService(intent) == null) {
-                log.e(String.format("Service not found for this intent: %s", getStr(intent)));
+
+            Intent intent = MyCommandsKt.toIntent(command);
+
+            if(intent.resolveActivity(getPackageManager()) != null) {
+                startActivity(intent);
+                return true;
+            }
+            else {
+                log.e(String.format("No activity found for this intent: %s", getStr(intent)));
                 return false;
             }
+        }
+        catch(IllegalArgumentException e) {
+            log.e("Illegal command: " + getStr(command), e);
+            return false;
+        }
+        catch(ActivityNotFoundException e) {
+            log.e("Activity not found.", e);
+            return false;
         }
         catch(SecurityException e) {
             log.a("Security exception.", e);
             return false;
         }
-        return true;
     }
 
-    public boolean onCommandStartBroadcast(@NonNull Map<String, String> command) {
+    public boolean onCommandStartService(@NonNull MyCommand command) {
 
-        Intent intent = new Intent();
-        MyCommandsKt.setIntentFromCommand(intent, command, log);
-        sendBroadcast(intent);
-        return true;
+        try {
+
+            Intent intent = MyCommandsKt.toIntent(command);
+
+            if(startService(intent) == null) {
+                log.e(String.format("Service not found for this intent: %s", getStr(intent)));
+                return false;
+            }
+            else
+                return true;
+        }
+        catch(IllegalArgumentException e) {
+            log.e("Illegal command: " + getStr(command), e);
+            return false;
+        }
+        catch(SecurityException e) {
+            log.a("Security exception.", e);
+            return false;
+        }
+    }
+
+    public boolean onCommandStartBroadcast(@NonNull MyCommand command) {
+
+        try {
+
+            Intent intent = MyCommandsKt.toIntent(command);
+            sendBroadcast(intent);
+            return true;
+        }
+        catch(IllegalArgumentException e) {
+            log.e("Illegal command: " + getStr(command), e);
+            return false;
+        }
     }
 
     /**
      * Extras in fragment command are delivered as fragment arguments bundle.
      */
-    public boolean onCommandStartFragment(@NonNull Map<String, String> command) {
+    public boolean onCommandStartFragment(@NonNull MyCommand command) {
 
         FragmentManager fm = getFragmentManager();
         Fragment f;
 
         try {
             f = Fragment.instantiate(MyActivity.this, command.get("component"));
+            Bundle args = MyCommandsKt.toExtrasBundle(command);
+            if(args.size() > 0)
+                f.setArguments(args);
+            updateLocalFragment(f);
+            @SuppressLint("CommitTransaction")
+            FragmentTransaction ft = fm.beginTransaction().replace(R.id.ma_local_frame_layout, f, TAG_LOCAL_FRAGMENT);
+            addAllSharedElementsToFragmentTransaction(findViewById(R.id.ma_local_frame_layout), ft);
+            ft.commit();
+
+            return true;
         }
         catch(Fragment.InstantiationException e) {
             log.e(String.format("Fragment class: %s not found.", command.get("component")), e);
             return false;
         }
-
-        Bundle args = new Bundle();
-
-        MyCommandsKt.setBundleFromCommandExtras(args, command);
-
-        if(args.size() > 0)
-            f.setArguments(args);
-
-        updateLocalFragment(f);
-
-        @SuppressLint("CommitTransaction")
-        FragmentTransaction ft = fm.beginTransaction().replace(R.id.ma_local_frame_layout, f, TAG_LOCAL_FRAGMENT);
-        addAllSharedElementsToFragmentTransaction(findViewById(R.id.ma_local_frame_layout), ft);
-        ft.commit();
-
-        return true;
+        catch(IllegalArgumentException e) {
+            log.e("Illegal command: " + getStr(command), e);
+            return false;
+        }
     }
 
-    public boolean onCommandCustom(@NonNull Map<String, String> command) {
+    public boolean onCommandCustom(@NonNull MyCommand command) {
         log.e(String.format("Unsupported custom command: %s", getStr(command)));
         return false;
     }

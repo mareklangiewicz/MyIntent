@@ -15,9 +15,14 @@ import java.util.regex.Pattern
  */
 class MyCommandsTest {
 
-    @Before fun setUp() { sUT = true } // TODO: remove this sUT hack..
+    val log = MySystemLogger()
 
-    @After fun tearDown() { }
+    @Before fun setUp() {
+        sUT = true
+    } // TODO: remove this sUT hack..
+
+    @After fun tearDown() {
+    }
 
     @Ignore @Test fun testSomething() {
         val d1 = Date()
@@ -40,7 +45,7 @@ class MyCommandsTest {
         for (s in strings) {
             val matcher = pattern.matcher(s)
             val matches = if (matchWholeString) matcher.matches() else matcher.lookingAt()
-            log.d(format("RE:\"%s\" %s %s text: \"%s\"", re, if (matches) "matches" else "does not match", if (matchWholeString) "whole" else "looking at", s))
+            log.d("RE:\"$re\" ${if (matches) "matches" else "does not match"} ${if (matchWholeString) "whole" else "looking at"} text: \"$s\"")
             assertThat(matcher.groupCount()).isEqualTo(groupCount.toLong())
             assertThat(matches).isEqualTo(shouldMatch)
             if (matches) {
@@ -50,9 +55,7 @@ class MyCommandsTest {
         }
     }
 
-    @Test
-    @Throws(Exception::class)
-    fun testSimpleRE() {
+    @Test fun testSimpleRE() {
         val re = "^activity (?=\\S*\\.)([_\\./a-zA-Z0-9]*)"
         testRE(re, 1, true, true,
                 "activity .MyActivity",
@@ -62,13 +65,11 @@ class MyCommandsTest {
 
         val arule = RE_ACTIVITY_GROUP.rules[0]
         val result = arule.apply("activity .MyActivity", log)
-        log.w(format("Result: %s", result))
+        log.w("Result: $result")
 
     }
 
-    @Test
-    @Throws(Exception::class)
-    fun testRE_ID() {
+    @Test fun testRE_ID() {
         testRE(RE_ID, 1, true, true,
                 "fdjskl",
                 "RR989dla",
@@ -81,9 +82,7 @@ class MyCommandsTest {
                 "")
     }
 
-    @Test
-    @Throws(Exception::class)
-    fun testRE_MULTI_ID() {
+    @Test fun testRE_MULTI_ID() {
 
         testRE(RE_MULTI_ID, 4, true, true,
                 "fdjskl/fdjks",
@@ -103,9 +102,7 @@ class MyCommandsTest {
                 "")
     }
 
-    @Test
-    @Throws(Exception::class)
-    fun testRE_EXTRA_TYPE() {
+    @Test fun testRE_EXTRA_TYPE() {
 
         testRE(RE_EXTRA_TYPE, 1, true, true,
                 "string",
@@ -117,9 +114,7 @@ class MyCommandsTest {
                 "")
     }
 
-    @Test
-    @Throws(Exception::class)
-    fun testRE_KEYWORD() {
+    @Test fun testRE_KEYWORD() {
 
         testRE(RE_KEYWORD, 1, true, true,
                 "start",
@@ -132,26 +127,21 @@ class MyCommandsTest {
                 "")
     }
 
-    @Test
-    @Throws(Exception::class)
-    fun testRE_VALUE() {
+    @Test fun testRE_VALUE() {
         // we will try to show that our RE_VALUE is not greedy..
         val txt = "yyyyRyyyyRyyyyRyyyyRyyyy"
         val gval = "(.*)"
-        val `val` = RE_VALUE
+        val lval= RE_VALUE
         testRE(gval + "R" + gval + "R" + gval, 3, false, true, txt)
-        testRE(`val` + "R" + `val` + "R" + `val`, 3, false, true, txt)
+        testRE(lval + "R" + lval + "R" + lval, 3, false, true, txt)
     }
 
-    @Test
-    @Throws(Exception::class)
+    @Ignore @Test @Throws(Exception::class)
     fun testRE_END() {
         //TODO SOMEDAY
     }
 
-    @Test
-    @Throws(Exception::class)
-    fun testRE_SEGMENT() {
+    @Test fun testRE_SEGMENT() {
 
         testRE(RE_SEGMENT, 4, false, true,
                 "extra bla ble bleee",
@@ -166,9 +156,7 @@ class MyCommandsTest {
                 "extra")
     }
 
-    @Test
-    @Throws(Exception::class)
-    fun testRE_EXTRA_ELEM() {
+    @Test fun testRE_EXTRA_ELEM() {
 
         testRE(RE_EXTRA_ELEM, 7, true, true,
                 "integer bla ble bleee",
@@ -182,9 +170,7 @@ class MyCommandsTest {
                 "")
     }
 
-    @Test
-    @Throws(Exception::class)
-    fun testRE_EXTRA_ELEM_TYPE_AND_KEY() {
+    @Test fun testRE_EXTRA_ELEM_TYPE_AND_KEY() {
 
         testRE(RE_EXTRA_ELEM_TYPE_AND_KEY, 6, true, true,
                 "integer bla",
@@ -200,9 +186,7 @@ class MyCommandsTest {
     }
 
 
-    @Test
-    @Throws(Exception::class)
-    fun testRE_RULES() {
+    @Test fun testRE_RULES() {
         log.i(RE_RULES[0].str)
         log.i(RE_RULES[1].str)
         log.i(RE_RULES[2].str)
@@ -213,20 +197,18 @@ class MyCommandsTest {
     }
 
 
-    fun testREGroupApplyAll(input: String, expected: String) {
+    fun testApplyAllRERules(input: String, expected: String) {
         val command = RE_RULES.applyAllGroups(input, log)
         assertThat(command).isEqualTo(expected)
     }
 
-    fun multiTestREGroupApplyAll(inputs: List<String>, expected: String) {
+    fun multiTestApplyAllRERules(inputs: List<String>, expected: String) {
         for (input in inputs)
-            testREGroupApplyAll(input, expected)
+            testApplyAllRERules(input, expected)
     }
 
 
-    @Test
-    @Throws(Exception::class)
-    fun testAlarmRules() {
+    @Test fun testAlarmRules() {
 
         var expected = "action android.intent.action.SET_ALARM extra integer android.intent.extra.alarm.HOUR 1 extra integer android.intent.extra.alarm.MINUTES 0"
         var commands = Arrays.asList(
@@ -236,7 +218,7 @@ class MyCommandsTest {
                 "set alarm to 1:0",
                 "set;an;alarm;to;1;0")
 
-        multiTestREGroupApplyAll(commands, expected)
+        multiTestApplyAllRERules(commands, expected)
 
 
         expected = "action android.intent.action.SET_ALARM extra integer android.intent.extra.alarm.HOUR 2 extra integer android.intent.extra.alarm.MINUTES 59 extra boolean android.intent.extra.alarm.SKIP_UI true"
@@ -245,7 +227,7 @@ class MyCommandsTest {
                 "set an alarm;for 2;59 quickly",
                 "set;an;alarm;to;2;59;quickly")
 
-        multiTestREGroupApplyAll(commands, expected)
+        multiTestApplyAllRERules(commands, expected)
 
         expected = "action android.intent.action.SET_ALARM extra integer android.intent.extra.alarm.HOUR 2 extra integer android.intent.extra.alarm.MINUTES 59 extra string android.intent.extra.alarm.MESSAGE bla blee"
         commands = Arrays.asList(
@@ -253,13 +235,11 @@ class MyCommandsTest {
                 "set an alarm;for 2;59 with message bla blee",
                 "set;an;alarm;to;2;59; with;message;bla;blee")
 
-        multiTestREGroupApplyAll(commands, expected)
+        multiTestApplyAllRERules(commands, expected)
 
     }
 
-    @Test
-    @Throws(Exception::class)
-    fun testTimerRules() {
+    @Test fun testTimerRules() {
         val expected = "action android.intent.action.SET_TIMER extra integer android.intent.extra.alarm.LENGTH 30"
         val commands = Arrays.asList(
                 "set timer at 30",
@@ -267,41 +247,34 @@ class MyCommandsTest {
                 "set;a;timer;for;30",
                 "set timer to 30 seconds")
 
-        multiTestREGroupApplyAll(commands, expected)
+        multiTestApplyAllRERules(commands, expected)
 
     }
 
-    @Test
-    @Throws(Exception::class)
-    fun testActivityRules() {
+    @Test fun testActivityRules() {
 
-        testREGroupApplyAll("start activity component MyActivity", "start activity component MyActivity")
-        testREGroupApplyAll("start activity component bla.MyActivity", "start activity component bla.MyActivity")
-        testREGroupApplyAll("start activity component .MyActivity", "start activity component .MyActivity")
-        testREGroupApplyAll("start activity MyActivity", "start activity MyActivity") //WARNING: we do NOT recognize this kind of shortcut!
-        testREGroupApplyAll("activity component MyActivity", "start activity component MyActivity")
-        testREGroupApplyAll("activity data http://blabla", "start activity data http://blabla")
-        testREGroupApplyAll("activity .MyActivity", "start activity component .MyActivity")
-        testREGroupApplyAll("activity b.la action view", "start activity component b.la action android.intent.action.VIEW")
-        testREGroupApplyAll("activity action view", "start activity action android.intent.action.VIEW")
+        testApplyAllRERules("start activity component MyActivity", "start activity component MyActivity")
+        testApplyAllRERules("start activity component bla.MyActivity", "start activity component bla.MyActivity")
+        testApplyAllRERules("start activity component .MyActivity", "start activity component .MyActivity")
+        testApplyAllRERules("start activity MyActivity", "start activity MyActivity") //WARNING: we do NOT recognize this kind of shortcut!
+        testApplyAllRERules("activity component MyActivity", "start activity component MyActivity")
+        testApplyAllRERules("activity data http://blabla", "start activity data http://blabla")
+        testApplyAllRERules("activity .MyActivity", "start activity component .MyActivity")
+        testApplyAllRERules("activity b.la action view", "start activity component b.la action android.intent.action.VIEW")
+        testApplyAllRERules("activity action view", "start activity action android.intent.action.VIEW")
 
     }
 
 
-    @Test
-    @Throws(Exception::class)
-    fun testFragmentRules() {
+    @Test fun testFragmentRules() {
 
-        testREGroupApplyAll("start fragment component a.b.c.MyXFragment", "start fragment component a.b.c.MyXFragment")
-        testREGroupApplyAll("fragment a.b.c.MyXFragment", "start fragment component a.b.c.MyXFragment")
-        testREGroupApplyAll("fragment .bla action view", "start fragment component .bla action android.intent.action.VIEW")
+        testApplyAllRERules("start fragment component a.b.c.MyXFragment", "start fragment component a.b.c.MyXFragment")
+        testApplyAllRERules("fragment a.b.c.MyXFragment", "start fragment component a.b.c.MyXFragment")
+        testApplyAllRERules("fragment .bla action view", "start fragment component .bla action android.intent.action.VIEW")
 
     }
 
-    @Test
-    @Throws(Exception::class)
-    fun testParseCommand() {
-        val map = HashMap<String, String>(20)
+    @Test fun testMyCommandParsing() {
         val commands = Arrays.asList(
                 "action b data d;",
                 "action x.y.z",
@@ -309,42 +282,21 @@ class MyCommandsTest {
                 "action send data http://blabla.blabla.com/path/to/something extra boolean checked true",
                 "action a.b.X.Y extra string bla blabla extra integer satan 666 task hell")
         for (command in commands) {
-            map.clear()
-            parseCommand(command, map)
-            log.i(format("parseCommand: %s", command))
-            log.i(format("result: %s", map.str))
+            log.i("############### parsing command: $command")
+            val mycmd = MyCommand(command, RE_RULES, log)
+            log.i("############### result: ${mycmd.str}")
         }
 
     }
 
-    @Test
-    @Throws(Exception::class)
-    fun testParseCommandExtraSegment() {
-        log.w(RE_EXTRA_ELEM)
-        val extra = "integer android.intent.extra.alarm.LENGTH 5"
-        val map = HashMap<String, String>(20)
-        parseCommandExtraSegment(extra, map)
-        log.w(map.str)
 
-    }
 
-    @Test(expected = IllegalArgumentException::class)
-    @Throws(Exception::class)
-    fun testParseCommandExtraSegmentException() {
-        val extra = "untiger android.intent.extra.alarm.LENGTH 5"
-        val map = HashMap<String, String>(20)
-        parseCommandExtraSegment(extra, map)
-    }
+        @Test(expected = IllegalArgumentException::class)
+        fun testMyCommandParsingError() {
+            val extra = "extra untiger android.intent.extra.alarm.LENGTH 5"
+            val mycmd = MyCommand(extra, RE_RULES, log)
+            log.w(mycmd.str)
+        }
 
-    @Test
-    @Throws(Exception::class)
-    fun testSetIntentFromCommand() {
-        //TODO SOMEDAY
-    }
-
-    companion object {
-
-        private val log = MySystemLogger()
-    }
 
 }

@@ -6,7 +6,6 @@ import android.support.design.widget.Snackbar
 import android.util.Log
 import android.view.View
 import pl.mareklangiewicz.myutils.*
-import snack
 
 /**
  * Created by Marek Langiewicz on 19.02.16.

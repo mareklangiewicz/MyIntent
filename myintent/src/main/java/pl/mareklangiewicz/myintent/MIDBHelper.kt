@@ -5,8 +5,8 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.provider.BaseColumns
-import createTable
-import dropTable
+import pl.mareklangiewicz.myutils.createTable
+import pl.mareklangiewicz.myutils.dropTable
 import pl.mareklangiewicz.myintent.MIContract.CmdExample
 import pl.mareklangiewicz.myintent.MIContract.CmdRecent
 import pl.mareklangiewicz.myintent.MIContract.CmdSuggest
@@ -16,7 +16,7 @@ import pl.mareklangiewicz.myintent.MIContract.RuleUser
 /**
  * Created by Marek Langiewicz on 07.10.15.
  */
-internal class MIDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+class MIDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
 

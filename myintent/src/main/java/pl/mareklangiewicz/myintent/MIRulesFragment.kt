@@ -48,7 +48,7 @@ class MIRulesFragment : MyFragment() {
 
     override fun onItemSelected(nav: IMyUINavigation, item: MenuItem): Boolean = when (item.itemId) {
         R.id.new_user_rule -> {
-            RE_USER_GROUP.rules.add(RERule(true, "", "", "", ""))
+            RE_USER_GROUP.rules.add(RERule("", "", "", "", true))
             adapter.notifyItemChanged(1)
             true
         }

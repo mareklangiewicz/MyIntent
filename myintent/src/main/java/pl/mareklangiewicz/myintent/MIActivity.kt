@@ -168,14 +168,14 @@ class MIActivity : MyActivity() {
      * It will start the command if user doesn't press stop fast enough.
      * (it runs everything asynchronously - after closing drawers)
      */
-    fun play(command: String): Unit = closeDrawersAnd(Runnable {
+    fun play(command: String): Unit = closeDrawersAnd {
         val fragment = mLocalFragment
         if(fragment is MIStartFragment) fragment.play(command)
         else {
             execute("fragment .MIStartFragment")
             play(command) // IMPORTANT: we have to be asynchrous here again to let fragment initialize fully first.
         }
-    })
+    }
 
     private fun onSearchIntent(intent: Intent) {
         val command = intent.getStringExtra(SearchManager.QUERY)?.toLowerCase()
@@ -425,7 +425,7 @@ class MIActivity : MyActivity() {
 
     override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
         super.onDrawerSlide(drawerView, slideOffset)
-        if (drawerView !== mGlobalNavigationView)
+        if (drawerView !== gnav)
             return
         animations.onGlobalDrawerSlide(slideOffset)
     }
@@ -433,14 +433,14 @@ class MIActivity : MyActivity() {
 
     override fun onDrawerOpened(drawerView: View) {
         super.onDrawerOpened(drawerView)
-        if (drawerView !== mGlobalNavigationView)
+        if (drawerView !== gnav)
             return
         animations.onGlobalDrawerOpened()
     }
 
     override fun onDrawerClosed(drawerView: View) {
         super.onDrawerClosed(drawerView)
-        if (drawerView !== mGlobalNavigationView)
+        if (drawerView !== gnav)
             return
         animations.onGlobalDrawerClosed()
     }

@@ -7,8 +7,7 @@ import android.support.design.widget.FloatingActionButton
  * An object that manages ui navigation etc.. usually it's an activity
  */
 interface IMyUIManager {
-    // TODO NOW: zmienic na title zaraz po skotlinowaniu MyActivity (teraz sie nie da bo zle mapowani CharSequence (java.lang <-> kotlin)
-    var mytitle: CharSequence
+    var name: String
     val fab: FloatingActionButton?
     val gnav: IMyUINavigation?
     val lnav: IMyUINavigation?

@@ -77,19 +77,20 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, IMyUINavigation.Liste
 
     // TODO NOW: use lateinit where possible
 
-    protected lateinit var metrics: DisplayMetrics
-    protected var mGlobalDrawerLayout: DrawerLayout? = null
-    protected var mGlobalLinearLayout: LinearLayout? = null // either this or mGlobalDrawerLayout will remain null
-    protected var mLocalDrawerLayout: DrawerLayout? = null
-    protected var mLocalLinearLayout: LinearLayout? = null // either this or mLocalDrawerLayout will remain null
-    protected var mCoordinatorLayout: CoordinatorLayout? = null
-    protected var mAppBarLayout: AppBarLayout? = null
-    protected var mToolbar: Toolbar? = null
-    protected var mLocalFrameLayout: FrameLayout? = null
-    protected var mLocalNavigationView: MyNavigationView? = null
-    protected var mGlobalNavigationView: MyNavigationView? = null
+    private lateinit var metrics: DisplayMetrics
+    private var mGlobalDrawerLayout: DrawerLayout? = null
+    private var mGlobalLinearLayout: LinearLayout? = null // either this or mGlobalDrawerLayout will remain null
+    private var mLocalDrawerLayout: DrawerLayout? = null
+    private var mLocalLinearLayout: LinearLayout? = null // either this or mLocalDrawerLayout will remain null
+    private var mCoordinatorLayout: CoordinatorLayout? = null
+    private var mAppBarLayout: AppBarLayout? = null
+    private var mToolbar: Toolbar? = null
+    private var mLocalFrameLayout: FrameLayout? = null
+    private var mLocalNavigationView: MyNavigationView? = null
+    private var mGlobalNavigationView: MyNavigationView? = null
 
-    override val fab: FloatingActionButton? = if(isViewAvailable) ma_fab else null
+    override val gnav: IMyUINavigation? get() = mGlobalNavigationView
+    override val lnav: IMyUINavigation? get() = mLocalNavigationView
 
     protected var mLocalArrowView: View? = null
 
@@ -97,6 +98,12 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, IMyUINavigation.Liste
     protected var mMyLocalFragment: MyFragment? = null // the same as mLocalFragment - if mLocalFragment instanceof MyFragment - or null otherwise..
 
     lateinit var handler: Handler
+
+    override var name: String
+        get() = title.toString()
+        set(value) { title = value }
+
+    override val fab: FloatingActionButton? get() = if(isViewAvailable) ma_fab else null
 
     @CallSuper override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -184,10 +191,7 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, IMyUINavigation.Liste
     }
 
     private fun toggleGlobalNavigation() {
-        //TODO NOW: uncomment after kotlinize (and test it..) (and create extension function for it..)
-        //        val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        //        imm.hideSoftInputFromWindow(currentFocus.windowToken, 0)
-
+        hideKeyboard()
         if (mGlobalDrawerLayout != null)
             toggleDrawer(mGlobalDrawerLayout!!, GravityCompat.START)
         else if (mGlobalLinearLayout != null)
@@ -197,9 +201,7 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, IMyUINavigation.Liste
     }
 
     private fun toggleLocalNavigation() {
-        //TODO NOW: uncomment after kotlinize (and test it..) (and create extension function for it..)
-        //        val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        //        imm.hideSoftInputFromWindow(currentFocus.windowToken, 0)
+        hideKeyboard()
         if (mLocalDrawerLayout != null)
             toggleDrawer(mLocalDrawerLayout!!, GravityCompat.END)
         else if (mLocalLinearLayout != null)
@@ -425,16 +427,15 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, IMyUINavigation.Liste
             = (mGlobalDrawerLayout?.isDrawerVisible(GravityCompat.START) ?: false)
             || (mLocalDrawerLayout?.isDrawerVisible(GravityCompat.END) ?: false)
 
-    // TODO NOW: use lambdas instead of runnables
-    protected fun closeDrawersAnd(runnable: Runnable) {
+    inline protected fun closeDrawersAnd(crossinline task: () -> Unit) {
         if (areDrawersVisible()) {
             closeDrawers()
-            handler.postDelayed(runnable, 400)
+            handler.postDelayed({ task() }, 400)
         } else
-            handler.post(runnable)
+            handler.post { task() }
     }
 
-    fun execute(cmd: String) = closeDrawersAnd(Runnable { onCommand(cmd) })
+    fun execute(cmd: String) = closeDrawersAnd { onCommand(cmd) }
 
 
     /**
@@ -486,18 +487,6 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, IMyUINavigation.Liste
         }
     }
 
-    override var mytitle: CharSequence
-        get() = title
-        set(charSequence) {
-            title = charSequence
-        }
-
-    override val gnav: IMyUINavigation?
-        get() = mGlobalNavigationView
-
-    override val lnav: IMyUINavigation?
-        get() = mLocalNavigationView
-
     @CallSuper override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
         if (drawerView === mGlobalNavigationView) mGlobalArrowDrawable.level = scale0d(slideOffset, 1f, 10000f).toInt()
         else if (drawerView === mLocalNavigationView) mLocalArrowDrawable.level = scale0d(slideOffset, 1f, 10000f).toInt()
@@ -505,6 +494,7 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, IMyUINavigation.Liste
     }
 
     @CallSuper override fun onDrawerOpened(drawerView: View) {
+        hideKeyboard()
         mMyLocalFragment?.onDrawerOpened(drawerView)
     }
 

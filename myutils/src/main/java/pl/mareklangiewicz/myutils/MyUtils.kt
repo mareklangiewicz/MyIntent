@@ -1,5 +1,6 @@
 package pl.mareklangiewicz.myutils
 
+import android.app.Activity
 import android.content.ContentResolver
 import android.content.ContentValues
 import android.database.Cursor
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.support.design.widget.Snackbar
 import android.database.sqlite.SQLiteDatabase
+import android.view.inputmethod.InputMethodManager
 
 /**
  * Created by Marek Langiewicz on 29.01.16.
@@ -79,3 +81,9 @@ fun SQLiteDatabase.createTable(name: String, vararg columns: String) {
 }
 
 fun SQLiteDatabase.dropTable(name: String) = execSQL("DROP TABLE IF EXISTS " + name)
+
+fun Activity.getInputMethodService() = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+// TODO LATER: similar methods for other services
+
+
+fun Activity.hideKeyboard() = getInputMethodService().hideSoftInputFromWindow(currentFocus.windowToken, 0)

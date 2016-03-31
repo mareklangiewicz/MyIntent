@@ -13,6 +13,7 @@ import pl.mareklangiewicz.myloggers.MY_DEFAULT_ANDRO_LOGGER
 import pl.mareklangiewicz.myutils.REGroup
 import pl.mareklangiewicz.myutils.RERule
 import pl.mareklangiewicz.myutils.str
+import java.util.*
 
 /**
  * Created by Marek Langiewicz on 14.10.15.
@@ -33,8 +34,8 @@ class REGroupsAdapter() : RecyclerView.Adapter<REGroupsAdapter.ViewHolder>(), Vi
         setHasStableIds(false)
     }
 
-    constructor(agroups: List<REGroup>) : this() {
-        groups = agroups
+    constructor(groups: List<REGroup>) : this() {
+        this.groups = groups
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -58,7 +59,9 @@ class REGroupsAdapter() : RecyclerView.Adapter<REGroupsAdapter.ViewHolder>(), Vi
 
         holder.resetRulesRecyclerView()
 
-        holder.setupRulesRecyclerView(group.rules)
+        val rules = if(group.editable) group.rules else Collections.unmodifiableList(group.rules)
+
+        holder.setupRulesRecyclerView(rules)
 
     }
 

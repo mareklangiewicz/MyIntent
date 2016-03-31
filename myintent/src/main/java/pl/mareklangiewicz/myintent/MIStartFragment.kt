@@ -64,7 +64,7 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
             if(isViewAvailable) {
                 mCountdown.cancel()
                 mi_lf_et_command.setText("")
-                (activity as MyActivity).postCommand("start custom action listen", 0)
+                (activity as MyActivity).execute("start custom action listen")
             }
         }
 
@@ -241,19 +241,22 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
     }
 
     override fun onCountdownStarted(cmd: String?) {
-        log.w(cmd)
         updatePS()
     }
 
     override fun onCountdownFinished(cmd: String?) {
+
         if (cmd == null) {
             log.d("onCountdownFinished(null)")
             return
         }
 
+        log.w(cmd)
+
         try {
-            (activity as MyActivity).postCommand(cmd, 0)
+            (activity as MyActivity).execute(cmd)
             MIContract.CmdRecent.insert(activity, cmd)
+            mi_lf_et_command.setText("")
         } catch (e: RuntimeException) {
             log.e(e.message, e)
         }
@@ -262,7 +265,6 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
     }
 
     override fun onCountdownCancelled(cmd: String?) {
-        log.w("cancelled")
         updatePS()
     }
 }

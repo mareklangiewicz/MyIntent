@@ -8,6 +8,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -27,8 +28,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-
-import java.lang.ref.WeakReference;
 
 import pl.mareklangiewicz.mydrawables.MyArrowDrawable;
 import pl.mareklangiewicz.mydrawables.MyLivingDrawable;
@@ -88,7 +87,12 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
     protected @Nullable MyFragment mMyLocalFragment; // the same as mLocalFragment - if mLocalFragment instanceof MyFragment - or null
     // otherwise..
 
+    protected Handler handler;
+
     @CallSuper @Override protected void onCreate(Bundle savedInstanceState) {
+
+        handler = new Handler();
+
         mDisplayMetrics = getResources().getDisplayMetrics();
         if(V) {
             log.d(String.format("%s.%s state=%s", this.getClass().getSimpleName(), "onCreate", getStr(savedInstanceState)));
@@ -439,7 +443,7 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
         }
     }
 
-    public void onCommandStartActivity(@NonNull MyCommand command) {
+    protected void onCommandStartActivity(@NonNull MyCommand command) {
 
         try {
 
@@ -463,7 +467,7 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
         }
     }
 
-    public void onCommandStartService(@NonNull MyCommand command) {
+    protected void onCommandStartService(@NonNull MyCommand command) {
 
         try {
 
@@ -481,7 +485,7 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
         }
     }
 
-    public void onCommandStartBroadcast(@NonNull MyCommand command) {
+    protected void onCommandStartBroadcast(@NonNull MyCommand command) {
 
         try {
 
@@ -496,7 +500,7 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
     /**
      * Extras in fragment command are delivered as fragment arguments bundle.
      */
-    public void onCommandStartFragment(@NonNull MyCommand command) {
+    protected void onCommandStartFragment(@NonNull MyCommand command) {
 
         FragmentManager fm = getFragmentManager();
         Fragment f;
@@ -520,41 +524,8 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
         }
     }
 
-    public void onCommandCustom(@NonNull MyCommand command) {
+    protected void onCommandCustom(@NonNull MyCommand command) {
         log.e(String.format("Unsupported custom command: %s", getStr(command)));
-    }
-
-    // TODO NOW: kotlin: default delay:0
-    public void postRunnable(Runnable runnable, long delay) {
-        if(mCoordinatorLayout == null) {
-            log.a("User interface is not ready.");
-            return;
-        }
-        mCoordinatorLayout.postDelayed(runnable, delay);
-    }
-
-
-    private static class CmdRunnable implements Runnable {
-
-        private String mCommand;
-        private WeakReference<MyActivity> mMyActivityWR;
-
-        public CmdRunnable(@NonNull String command, @NonNull MyActivity activity) {
-            mCommand = command;
-            mMyActivityWR = new WeakReference<>(activity);
-        }
-
-        @Override public void run() {
-            MyActivity activity = mMyActivityWR.get();
-            if(activity != null)
-                activity.onCommand(mCommand);
-        }
-
-    }
-
-    // TODO NOW: kotlin: default delay:0
-    public void postCommand(final String cmd, long delay) {
-        postRunnable(new CmdRunnable(cmd, this), delay);
     }
 
     public void closeDrawers() {
@@ -570,17 +541,21 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
 
     }
 
-    public void closeDrawersAndPostRunnable(Runnable runnable) {
-        int delay = 0;
+    protected void closeDrawersAnd(Runnable runnable) {
         if(areDrawersVisible()) {
             closeDrawers();
-            delay = 400;
+            handler.postDelayed(runnable, 400);
         }
-        postRunnable(runnable, delay);
+        else
+            handler.post(runnable);
     }
 
-    public void closeDrawersAndPostCommand(final String cmd) {
-        closeDrawersAndPostRunnable(new CmdRunnable(cmd, this));
+    public void execute(final String cmd) {
+        closeDrawersAnd(new Runnable() {
+            @Override public void run() {
+                onCommand(cmd);
+            }
+        });
     }
 
 
@@ -591,7 +566,7 @@ public class MyActivity extends AppCompatActivity implements IMyUIManager, IMyUI
         final String ctitle = item.getTitleCondensed().toString();
         if(ctitle.startsWith(COMMAND_PREFIX)) {
             final String cmd = ctitle.substring(COMMAND_PREFIX.length());
-            closeDrawersAndPostCommand(cmd);
+            execute(cmd);
             return true;
         }
 

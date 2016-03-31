@@ -30,6 +30,6 @@ class MIApplication : Application() {
         FUNNY_QUOTES = resources.getStringArray(R.array.mr_funny_quotes)
         SMART_QUOTES = resources.getStringArray(R.array.mr_smart_quotes)
         super.onCreate()
-        //        LeakCanary.install(this);
+//        LeakCanary.install(this);
     }
 }

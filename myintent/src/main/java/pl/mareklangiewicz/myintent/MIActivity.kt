@@ -84,7 +84,7 @@ class MIActivity : MyActivity() {
                 lwidth = dp2px(4f)
         )
 
-        header.mi_gh_iv_logo!!.setOnClickListener { closeDrawersAndPostCommand("start custom action listen") }
+        header.mi_gh_iv_logo!!.setOnClickListener { execute("start custom action listen") }
 
         header.mi_gh_tv_home_page!!.setOnClickListener { play("data " + resources.getString(R.string.mr_my_homepage)) }
 
@@ -121,7 +121,7 @@ class MIActivity : MyActivity() {
 
             val cmd = intent.getStringExtra(EX_COMMAND)
             if (cmd != null) {
-                closeDrawersAndPostCommand(cmd)
+                execute(cmd)
                 return
             }
 
@@ -155,7 +155,7 @@ class MIActivity : MyActivity() {
         if (command == null) {
             log.d("URI with empty fragment received. Entering help..")
             log.v("uri: ${uri.str}")
-            closeDrawersAndPostCommand("fragment .MIHelpFragment")
+            execute("fragment .MIHelpFragment")
             return
 
         }
@@ -163,37 +163,19 @@ class MIActivity : MyActivity() {
         play(command)
     }
 
-
-    private class PlayCmdRunnable(private val mCommand: String, activity: MIActivity) : Runnable {
-        private val mMIActivityWR: WeakReference<MIActivity>
-
-        init {
-            mMIActivityWR = WeakReference(activity)
-        }
-
-        override fun run() {
-
-            val activity = mMIActivityWR.get() ?: return
-            val fragment = activity.mLocalFragment
-
-            if(fragment is MIStartFragment){
-                fragment.play(mCommand)
-            }
-            else {
-                activity.onCommand("fragment .MIStartFragment")
-                activity.play(mCommand) // IMPORTANT: we have to be asynchrous here again to let fragment initialize fully first.
-            }
-        }
-    }
-
-
     /**
      * Sets current fragment to MIStartFragment and plays given command.
      * It will start the command if user doesn't press stop fast enough.
      * (it runs everything asynchronously - after closing drawers)
      */
-    fun play(command: String) = closeDrawersAndPostRunnable(PlayCmdRunnable(command, this))
-
+    fun play(command: String): Unit = closeDrawersAnd {
+        val fragment = mLocalFragment
+        if(fragment is MIStartFragment) fragment.play(command)
+        else {
+            execute("fragment .MIStartFragment")
+            play(command) // IMPORTANT: we have to be asynchrous here again to let fragment initialize fully first.
+        }
+    }
 
     private fun onSearchIntent(intent: Intent) {
         val command = intent.getStringExtra(SearchManager.QUERY)?.toLowerCase()

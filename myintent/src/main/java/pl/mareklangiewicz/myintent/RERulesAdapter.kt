@@ -30,8 +30,8 @@ class RERulesAdapter() : RecyclerView.Adapter<RERulesAdapter.ViewHolder>(), View
         setHasStableIds(false)
     }
 
-    constructor(arules: MutableList<RERule>) : this() {
-        rules = arules
+    constructor(rules: MutableList<RERule>) : this() {
+        this.rules = rules
     }
 
     var rules: MutableList<RERule>? = null

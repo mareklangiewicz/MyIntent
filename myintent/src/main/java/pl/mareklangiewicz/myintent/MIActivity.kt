@@ -168,14 +168,14 @@ class MIActivity : MyActivity() {
      * It will start the command if user doesn't press stop fast enough.
      * (it runs everything asynchronously - after closing drawers)
      */
-    fun play(command: String): Unit = closeDrawersAnd {
+    fun play(command: String): Unit = closeDrawersAnd(Runnable {
         val fragment = mLocalFragment
         if(fragment is MIStartFragment) fragment.play(command)
         else {
             execute("fragment .MIStartFragment")
             play(command) // IMPORTANT: we have to be asynchrous here again to let fragment initialize fully first.
         }
-    }
+    })
 
     private fun onSearchIntent(intent: Intent) {
         val command = intent.getStringExtra(SearchManager.QUERY)?.toLowerCase()

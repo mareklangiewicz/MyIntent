@@ -98,7 +98,7 @@ class MyDrawableTestsFragment : MyFragment(), View.OnClickListener, SeekBar.OnSe
     override fun onStopTrackingTouch(seekBar: SeekBar) {
         if (seekBar === seek_bar_level)
             log.i(String.format("level = %d", seekBar.progress))
-        else if (seekBar === seek_bar_level)
+        else if (seekBar === seek_bar_stroke_width)
             log.i(String.format("stroke width = %d", seekBar.progress))
         else
             log.e("Unknown seek bar.")

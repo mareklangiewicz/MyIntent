@@ -17,7 +17,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import kotlinx.android.synthetic.main.mf_my_pie_tests_fragment.*
-import kotlinx.android.synthetic.main.mf_my_pie_tests_header.*
+import kotlinx.android.synthetic.main.mf_my_pie_tests_header.view.*
 import pl.mareklangiewicz.myutils.getRandomColor
 import pl.mareklangiewicz.myutils.getRandomFloat
 import pl.mareklangiewicz.myviews.IMyUINavigation
@@ -48,15 +48,14 @@ class MyPieTestsFragment : MyFragment(), View.OnClickListener {
         mf_mptf_pie3.setOnClickListener(this)
         mf_mptf_pie4.setOnClickListener(this)
 
-        val min = activity.mf_mpth_pie.minimum
-        val max = activity.mf_mpth_pie.maximum
-
-        val pvh1 = PropertyValuesHolder.ofFloat("to", min, max)
-        val pvh2 = PropertyValuesHolder.ofFloat("from", min, max - (max - min) / 2)
-
-        hanimator = ObjectAnimator.ofPropertyValuesHolder(activity.mf_mpth_pie, pvh1, pvh2)
-
-        hanimator.interpolator = AccelerateInterpolator()
+        manager?.lnav?.headerObj?.let {
+            val min = it.mf_mpth_pie.minimum
+            val max = it.mf_mpth_pie.maximum
+            val pvh1 = PropertyValuesHolder.ofFloat("to", min, max)
+            val pvh2 = PropertyValuesHolder.ofFloat("from", min, max - (max - min) / 2)
+            hanimator = ObjectAnimator.ofPropertyValuesHolder(it.mf_mpth_pie, pvh1, pvh2)
+            hanimator.interpolator = AccelerateInterpolator()
+        }
 
         if (savedInstanceState == null)
             manager?.lnav?.setCheckedItem(R.id.mpt_randomize_to, true)

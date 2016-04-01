@@ -745,7 +745,7 @@ fun <R, H> IPuller<R , H>.ldropWhile (pred: Function1<R, Boolean>) = Puller(lift
 @MainThread
 class Relay<T>(initcap: Int = 16) : IPusher<T, Function1<Unit, Unit>> {
 
-    private val pushees: MutableCollection<Function1<T, Unit>> = ArrayList(initcap)
+    private val pushees = ArrayList<Function1<T, Unit>>(initcap)
 
     val pushee: Function1<T, Unit> = { for(p in pushees) p(it) }
 

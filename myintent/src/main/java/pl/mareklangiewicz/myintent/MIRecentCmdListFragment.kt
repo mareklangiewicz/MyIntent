@@ -11,6 +11,7 @@ import java.util.ArrayList
 class MIRecentCmdListFragment : MICmdListFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        manager?.name = getString(R.string.mi_recent_commands)
         imageRes = R.drawable.mi_ic_recent_command_black_24dp
         var cmds = ArrayList<String>()
         MIContract.CmdRecent.load(activity, cmds, 128)

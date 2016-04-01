@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
 import kotlinx.android.synthetic.main.mf_my_stupid_tests_fragment.*
+import pl.mareklangiewicz.myutils.ToDo
 
 /**
  * Created by Marek Langiewicz on 10.09.15.
@@ -19,7 +20,7 @@ import kotlinx.android.synthetic.main.mf_my_stupid_tests_fragment.*
 
 class MyStupidTestsFragment : MyFragment(), DrawerLayout.DrawerListener {
 
-    internal var sub: Function1<Unit, Unit>? = null
+    private val todo = ToDo()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState) //just for logging
@@ -31,7 +32,8 @@ class MyStupidTestsFragment : MyFragment(), DrawerLayout.DrawerListener {
         super.onViewCreated(view, savedInstanceState)
 
         my_stupid_log_simple_view.array = log.history
-        sub = log.history.changes.invoke { my_stupid_log_simple_view.invalidate() }
+        val unsub = log.history.changes { my_stupid_log_simple_view.invalidate() }
+        todo(unsub)
 
         // I use here NavigationView directly (without my IMyUINavigation abstraction etc.) on purpose - just to test some stuff
         stupid_navigation_view.inflateMenu(R.menu.mf_my_stupid_tests)
@@ -56,8 +58,7 @@ class MyStupidTestsFragment : MyFragment(), DrawerLayout.DrawerListener {
     }
 
     override fun onDestroyView() {
-        sub?.invoke(Unit)
-        sub = null
+        todo.doItAll()
         super.onDestroyView()
     }
 }

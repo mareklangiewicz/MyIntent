@@ -74,7 +74,7 @@ open class MyRingBuffer<T>(val capacity: Int = 256) : IMyBuffer<T>, IClear {
 interface IToDo : IMyBuffer<Function1<Unit, Unit>> {
 
     /**
-     * invokes all accumulated tasks and clears to do buffer.
+     * invokes all accumulated tasks and clears the To Do buffer.
      */
     fun doItAll()
 }

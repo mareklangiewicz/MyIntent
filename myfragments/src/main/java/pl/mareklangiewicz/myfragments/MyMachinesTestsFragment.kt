@@ -17,7 +17,7 @@ class MyMachinesTestsFragment : MyFragment() {
 
     val adapter = MyAndroLogAdapter(log.history)
 
-    var sub: Function1<Unit, Unit>? = null
+    private val todo = ToDo()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState) //just for logging
@@ -28,9 +28,8 @@ class MyMachinesTestsFragment : MyFragment() {
 
         super.onViewCreated(view, savedInstanceState)
 
-        sub = log.history.changes {
-            adapter.notifyDataSetChanged()
-        }
+        val unsub = log.history.changes { adapter.notifyDataSetChanged() }
+        todo(unsub)
         adapter.notifyDataSetChanged()
 
         mf_mmt_rv_log.adapter = adapter
@@ -119,7 +118,7 @@ class MyMachinesTestsFragment : MyFragment() {
         ObjectAnimator.ofInt(obj, property, goal).start()
     }
     override fun onDestroyView() {
-        sub?.invoke(Unit)
+        todo.doItAll()
         super.onDestroyView()
     }
 }

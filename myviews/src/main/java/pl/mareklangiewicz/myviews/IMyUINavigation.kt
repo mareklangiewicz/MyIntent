@@ -27,6 +27,8 @@ interface IMyUINavigation {
     val empty: Boolean
     var listener: Listener?
 
+//    val changes: IPusher<Unit, (Unit) -> Unit>
+
     interface Listener {
         fun onItemSelected(nav: IMyUINavigation, item: MenuItem): Boolean  // TODO NOW: change to items: IPusher<Int>
         fun onNavigationChanged(nav: IMyUINavigation)

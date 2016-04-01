@@ -86,4 +86,4 @@ fun Activity.getInputMethodService() = getSystemService(Activity.INPUT_METHOD_SE
 // TODO LATER: similar methods for other services
 
 
-fun Activity.hideKeyboard() = currentFocus?.windowToken?.let { getInputMethodService().hideSoftInputFromWindow(it, 0) }
+fun Activity.hideKeyboard() = currentFocus?.windowToken?.let { getInputMethodService().hideSoftInputFromWindow(it, 0) } ?: false

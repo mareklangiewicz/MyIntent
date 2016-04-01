@@ -12,6 +12,7 @@ import pl.mareklangiewicz.myactivities.MyActivity
 import pl.mareklangiewicz.myfragments.MyFragment
 import pl.mareklangiewicz.myintent.PlayStopButton.State.*
 import pl.mareklangiewicz.myutils.MyLogLevel
+import pl.mareklangiewicz.myutils.ToDo
 import pl.mareklangiewicz.myutils.hideKeyboard
 import pl.mareklangiewicz.myviews.IMyUINavigation
 
@@ -21,7 +22,7 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
 
     private val adapter = MyMDAndroLogAdapter(log.history)
 
-    internal var sub: Function1<Unit, Unit>? = null
+    private val todo = ToDo()
 
     lateinit var mPSButton: PlayStopButton
     lateinit var mCountdown: Countdown
@@ -44,6 +45,8 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
 
         super.onViewCreated(view, savedInstanceState)
 
+        manager?.name = getString(R.string.mi_start)
+
         mCountdown = Countdown(mi_lf_pb_countdown)
         mCountdown.listener = this
 
@@ -52,7 +55,8 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
 
         mi_lf_rv_log.adapter = adapter
 
-        sub = log.history.changes { adapter.notifyDataSetChanged() }
+        val unsub = log.history.changes { adapter.notifyDataSetChanged() }
+        todo(unsub)
         adapter.notifyDataSetChanged() // to make sure we are up to date
 
         //TODO SOMEDAY: some nice simple header with fragment title
@@ -108,8 +112,7 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
         mCountdown.cancel()
         mCountdown.listener = null
 
-        sub?.invoke(Unit)
-        sub = null
+        todo.doItAll()
 
         mi_lf_rv_log.adapter = null
 

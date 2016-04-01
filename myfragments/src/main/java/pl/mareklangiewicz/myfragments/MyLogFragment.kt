@@ -1,22 +1,25 @@
 package pl.mareklangiewicz.myfragments
 
-import android.os.Build
 import android.os.Bundle
-import android.transition.Slide
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import kotlinx.android.synthetic.main.mf_my_log_fragment.*
 import pl.mareklangiewicz.myloggers.MyAndroLogAdapter
 import pl.mareklangiewicz.myutils.MyLogLevel
+import pl.mareklangiewicz.myutils.ToDo
 import pl.mareklangiewicz.myviews.IMyUINavigation
 
 /**
  * MyFragment showing MyAndroidLogger messages.
  */
+@Suppress("unused")
 class MyLogFragment : MyFragment() {
 
     private val adapter = MyAndroLogAdapter(log.history)
 
-    internal var sub: Function1<Unit, Unit>? = null
+    private val todo = ToDo()
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -29,7 +32,9 @@ class MyLogFragment : MyFragment() {
 
         my_log_recycler_view.adapter = adapter
 
-        sub = log.history.changes.invoke { adapter.notifyDataSetChanged() }
+        val unsub = log.history.changes { adapter.notifyDataSetChanged() }
+        todo(unsub)
+
         adapter.notifyDataSetChanged() // to make sure we are up to date
 
         //TODO SOMEDAY: some nice simple header with fragment title
@@ -43,8 +48,7 @@ class MyLogFragment : MyFragment() {
     }
 
     override fun onDestroyView() {
-        sub?.invoke(Unit)
-        sub = null
+        todo.doItAll()
         manager?.lnav?.menuId = -1
         super.onDestroyView()
     }

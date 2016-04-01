@@ -37,9 +37,9 @@ class MyLogFragment : MyFragment() {
 
         updateCheckedItem()
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            exitTransition = Slide(Gravity.START)
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            exitTransition = Slide(Gravity.START)
+//        }
     }
 
     override fun onDestroyView() {

@@ -8,8 +8,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.support.annotation.CallSuper
-import android.support.design.widget.AppBarLayout
-import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
@@ -22,9 +20,10 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.LinearLayout
+import kotlinx.android.synthetic.main.ma_app_bar_layout.*
 import kotlinx.android.synthetic.main.ma_fab.*
+import kotlinx.android.synthetic.main.ma_local_drawer_layout.*
+import kotlinx.android.synthetic.main.ma_my_activity.*
 import pl.mareklangiewicz.mydrawables.MyArrowDrawable
 import pl.mareklangiewicz.mydrawables.MyLivingDrawable
 import pl.mareklangiewicz.myfragments.MyFragment
@@ -58,13 +57,13 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, IMyUINavigation.Liste
     // kotlin extensions are working correctly when it is true.
     protected var isViewAvailable = false
 
-    protected val mGlobalArrowDrawable: MyLivingDrawable = MyArrowDrawable().apply {
+    protected val garrow: MyLivingDrawable = MyArrowDrawable().apply {
         strokeWidth = 5f
         rotateTo = 360f + 180f
         alpha = 0xa0
     }
 
-    protected val mLocalArrowDrawable: MyLivingDrawable = MyArrowDrawable().apply {
+    protected val larrow: MyLivingDrawable = MyArrowDrawable().apply {
         strokeWidth = 5f
         rotateFrom = 180f
         alpha = 0xa0
@@ -75,27 +74,12 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, IMyUINavigation.Liste
      */
     protected val log = MY_DEFAULT_ANDRO_LOGGER
 
-    // TODO NOW: use lateinit where possible
-
     private lateinit var metrics: DisplayMetrics
-    private var mGlobalDrawerLayout: DrawerLayout? = null
-    private var mGlobalLinearLayout: LinearLayout? = null // either this or mGlobalDrawerLayout will remain null
-    private var mLocalDrawerLayout: DrawerLayout? = null
-    private var mLocalLinearLayout: LinearLayout? = null // either this or mLocalDrawerLayout will remain null
-    private var mCoordinatorLayout: CoordinatorLayout? = null
-    private var mAppBarLayout: AppBarLayout? = null
-    private var mToolbar: Toolbar? = null
-    private var mLocalFrameLayout: FrameLayout? = null
-    private var mLocalNavigationView: MyNavigationView? = null
-    private var mGlobalNavigationView: MyNavigationView? = null
 
-    override val gnav: IMyUINavigation? get() = mGlobalNavigationView
-    override val lnav: IMyUINavigation? get() = mLocalNavigationView
+    override val gnav: IMyUINavigation? get() = if(isViewAvailable) ma_global_navigation_view else null
+    override val lnav: IMyUINavigation? get() = if(isViewAvailable) ma_local_navigation_view else null
 
-    protected var mLocalArrowView: View? = null
-
-    protected var mLocalFragment: Fragment? = null
-    protected var mMyLocalFragment: MyFragment? = null // the same as mLocalFragment - if mLocalFragment instanceof MyFragment - or null otherwise..
+    protected var fgmt: Fragment? = null
 
     lateinit var handler: Handler
 
@@ -104,6 +88,9 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, IMyUINavigation.Liste
         set(value) { title = value }
 
     override val fab: FloatingActionButton? get() = if(isViewAvailable) ma_fab else null
+
+    private var gdraw = false
+    private var ldraw = false
 
     @CallSuper override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -121,38 +108,27 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, IMyUINavigation.Liste
 
         isViewAvailable = true
 
+        gdraw = ma_coordinator_layout.tag != "w1120dp"
+        ldraw = ma_coordinator_layout.tag == ""
 
-        // TODO NOW: use lateinit and kotlin extensions where possible
+        if(gdraw) ma_global_drawer_layout.addDrawerListener(this)
+        if(ldraw) ma_local_drawer_layout.addDrawerListener(this)
 
-        mGlobalDrawerLayout = findViewById(R.id.ma_global_drawer_layout) as DrawerLayout?
-        mGlobalLinearLayout = findViewById(R.id.ma_global_linear_layout) as LinearLayout?
-        mCoordinatorLayout = findViewById(R.id.ma_coordinator_layout) as CoordinatorLayout?
-        mAppBarLayout = findViewById(R.id.ma_app_bar_layout) as AppBarLayout?
-        mToolbar = findViewById(R.id.ma_toolbar) as Toolbar?
-        mLocalDrawerLayout = findViewById(R.id.ma_local_drawer_layout) as DrawerLayout?
-        mLocalLinearLayout = findViewById(R.id.ma_local_linear_layout) as LinearLayout?
-        mLocalFrameLayout = findViewById(R.id.ma_local_frame_layout) as FrameLayout?
-        mGlobalNavigationView = findViewById(R.id.ma_global_navigation_view) as MyNavigationView?
-        mLocalNavigationView = findViewById(R.id.ma_local_navigation_view) as MyNavigationView?
+        ma_global_navigation_view.listener = this
+        ma_local_navigation_view.listener = this
 
-        mGlobalDrawerLayout?.let { it.addDrawerListener(this) }
-        mLocalDrawerLayout?.let { it.addDrawerListener(this) }
+        setSupportActionBar(ma_toolbar)
 
-        mGlobalNavigationView!!.listener = this
-        mLocalNavigationView!!.listener = this
-
-        setSupportActionBar(mToolbar)
-
-        mToolbar!!.navigationIcon = mGlobalArrowDrawable
-        mToolbar!!.setNavigationOnClickListener {
+        ma_toolbar.navigationIcon = garrow
+        ma_toolbar.setNavigationOnClickListener {
             if (!gnav!!.empty)
                 toggleGlobalNavigation()
             else
                 log.d("Global navigation is empty.")
         }
 
-        mLocalArrowView = View(this).apply {
-            background = mLocalArrowDrawable
+        val laview = View(this).apply {
+            background = larrow
             setOnClickListener {
                 if (!lnav!!.empty)
                     toggleLocalNavigation()
@@ -161,9 +137,9 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, IMyUINavigation.Liste
             }
         }
 
-        val h = mToolbar!!.minimumHeight * 3 / 4
-        mLocalArrowView!!.layoutParams = Toolbar.LayoutParams(h, h, GravityCompat.END)
-        mToolbar!!.addView(mLocalArrowView)
+        val h = ma_toolbar.minimumHeight * 3 / 4
+        laview.layoutParams = Toolbar.LayoutParams(h, h, GravityCompat.END)
+        ma_toolbar.addView(laview)
 
         if (savedInstanceState != null) {
             val fm = fragmentManager
@@ -192,22 +168,14 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, IMyUINavigation.Liste
 
     private fun toggleGlobalNavigation() {
         hideKeyboard()
-        if (mGlobalDrawerLayout != null)
-            toggleDrawer(mGlobalDrawerLayout!!, GravityCompat.START)
-        else if (mGlobalLinearLayout != null)
-            toggleMNVAndArrow(mGlobalNavigationView!!, mGlobalArrowDrawable)
-        else
-            log.a("No global drawer or linear layout with global navigation.")
+        if (gdraw) toggleDrawer(ma_global_drawer_layout, GravityCompat.START)
+        else toggleMNVAndArrow(ma_global_navigation_view, garrow)
     }
 
     private fun toggleLocalNavigation() {
         hideKeyboard()
-        if (mLocalDrawerLayout != null)
-            toggleDrawer(mLocalDrawerLayout!!, GravityCompat.END)
-        else if (mLocalLinearLayout != null)
-            toggleMNVAndArrow(mLocalNavigationView!!, mLocalArrowDrawable)
-        else
-            log.a("No local drawer or linear layout with local navigation.")
+        if (ldraw) toggleDrawer(ma_local_drawer_layout, GravityCompat.END)
+        else toggleMNVAndArrow(ma_local_navigation_view, larrow)
     }
 
     private fun toggleDrawer(drawerLayout: DrawerLayout, gravity: Int) {
@@ -223,19 +191,16 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, IMyUINavigation.Liste
     private fun toggleMNVAndArrow(mnv: MyNavigationView, arrow: MyLivingDrawable) = setMNVAndArrow(arrow.level < 10000, mnv, arrow)
 
     private fun setMNVAndArrow(open: Boolean, mnv: MyNavigationView, arrow: MyLivingDrawable) {
-        /*  Scene transitions disabled - flickering issue..
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    TransitionManager.beginDelayedTransition((ViewGroup)mnv.getParent(), new Fade());
-                }
-        */
+        // Scene transitions disabled - flickering issue..
+        // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) TransitionManager.beginDelayedTransition(mnv.parent as ViewGroup, Fade())
         mnv.visibility = if (open) View.VISIBLE else View.GONE
         arrow.level = if (open) 10000 else 0
     }
 
     @CallSuper override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        mGlobalDrawerLayout?.let { onDrawerSlide(mGlobalNavigationView!!, if (it.isDrawerOpen(GravityCompat.START)) 1f else 0f) }
-        mLocalDrawerLayout?.let { onDrawerSlide(mLocalNavigationView!!, if (it.isDrawerOpen(GravityCompat.END)) 1f else 0f) }
+        if(gdraw) onDrawerSlide(ma_global_navigation_view, if (ma_global_drawer_layout.isDrawerOpen(GravityCompat.START)) 1f else 0f)
+        if(ldraw) onDrawerSlide(ma_local_navigation_view, if (ma_local_drawer_layout.isDrawerOpen(GravityCompat.END)) 1f else 0f)
         // ensure that drawers and menu icons are updated:
         onNavigationChanged(gnav!!)
         onNavigationChanged(lnav!!)
@@ -256,25 +221,25 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, IMyUINavigation.Liste
 
     @CallSuper override fun onStart() {
         if (VV) log.v("${javaClass.simpleName}.onStart")
-        log.view = mCoordinatorLayout
+        log.view = ma_coordinator_layout
         super.onStart()
     }
 
     @CallSuper override fun onResume() {
         if (VV) log.v("${javaClass.simpleName}.onResume")
-        log.view = mCoordinatorLayout
+        log.view = ma_coordinator_layout
         super.onResume()
     }
 
     @CallSuper override fun onPause() {
         if (VV) log.v("${javaClass.simpleName}.onPause")
-        if (log.view === mCoordinatorLayout) log.view = null
+        if (log.view === ma_coordinator_layout) log.view = null
         super.onPause()
     }
 
     @CallSuper override fun onStop() {
         if (VV) log.v("${javaClass.simpleName}.onStop")
-        if (log.view === mCoordinatorLayout) log.view = null
+        if (log.view === ma_coordinator_layout) log.view = null
         super.onStop()
     }
 
@@ -282,22 +247,10 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, IMyUINavigation.Liste
 
         if (V) log.v("${javaClass.simpleName}.onDestroy")
 
-        if (log.view === mCoordinatorLayout) log.view = null
+        if (log.view === ma_coordinator_layout) log.view = null
 
-        mGlobalDrawerLayout?.removeDrawerListener(this)
-        mLocalDrawerLayout?.removeDrawerListener(this)
-
-        mGlobalDrawerLayout = null
-        mLocalDrawerLayout = null
-        mGlobalLinearLayout = null
-        mCoordinatorLayout = null
-        mAppBarLayout = null
-        mToolbar = null
-        mLocalLinearLayout = null
-        mLocalFrameLayout = null
-        mLocalNavigationView = null
-        mGlobalNavigationView = null
-        mLocalArrowView = null
+        if(gdraw) ma_global_drawer_layout.removeDrawerListener(this)
+        if(ldraw) ma_local_drawer_layout.removeDrawerListener(this)
 
         updateLocalFragment(null)
 
@@ -307,15 +260,13 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, IMyUINavigation.Liste
     }
 
 
-    protected fun updateLocalFragment(fragment: Fragment?) {
+    private fun updateLocalFragment(fragment: Fragment?) {
 
         if (VV) log.v("${javaClass.simpleName}.updateLocalFragment fragment=${fragment.str}")
 
-        mLocalFragment = fragment
-        mMyLocalFragment = null
+        fgmt = fragment
 
         fragment?.apply {
-            mMyLocalFragment = this as? MyFragment
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 enterTransition = Fade()
                 exitTransition = Fade()
@@ -402,13 +353,12 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, IMyUINavigation.Liste
      */
     protected open fun onCommandStartFragment(command: MyCommand) {
         try {
-            val fm = fragmentManager
             val f = Fragment.instantiate(this@MyActivity, command["component"])
             val args = command.toExtrasBundle()
             if (args.size() > 0) f.arguments = args
             updateLocalFragment(f)
-            val ft = fm.beginTransaction().replace(R.id.ma_local_frame_layout, f, TAG_LOCAL_FRAGMENT)
-            addAllSharedElementsToFragmentTransaction(findViewById(R.id.ma_local_frame_layout)!!, ft)
+            val ft = fragmentManager.beginTransaction().replace(R.id.ma_local_frame_layout, f, TAG_LOCAL_FRAGMENT)
+            addAllSharedElementsToFragmentTransaction(ma_local_frame_layout, ft)
             ft.commit()
         }
         catch (e: Fragment.InstantiationException) { log.e("Fragment class: ${command["component"]} not found.", e) }
@@ -419,13 +369,13 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, IMyUINavigation.Liste
     protected open fun onCommandCustom(command: MyCommand) = log.e("Unsupported custom command: ${command.str}")
 
     fun closeDrawers() {
-        mGlobalDrawerLayout?.closeDrawers()
-        mLocalDrawerLayout?.closeDrawers()
+        if(gdraw) ma_global_drawer_layout.closeDrawers()
+        if(ldraw) ma_local_drawer_layout.closeDrawers()
     }
 
     fun areDrawersVisible(): Boolean
-            = (mGlobalDrawerLayout?.isDrawerVisible(GravityCompat.START) ?: false)
-            || (mLocalDrawerLayout?.isDrawerVisible(GravityCompat.END) ?: false)
+            = (gdraw && ma_global_drawer_layout.isDrawerVisible(GravityCompat.START))
+            || (ldraw && ma_local_drawer_layout.isDrawerVisible(GravityCompat.END))
 
     inline protected fun closeDrawersAnd(crossinline task: () -> Unit) {
         if (areDrawersVisible()) {
@@ -451,7 +401,7 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, IMyUINavigation.Liste
 
         closeDrawers()
         // maybe our local fragment will handle this item:
-        return mMyLocalFragment?.run { onItemSelected(nav, item) } ?: false
+        return (fgmt as? MyFragment)?.run { onItemSelected(nav, item) } ?: false
     }
 
 
@@ -459,18 +409,18 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, IMyUINavigation.Liste
         val empty = nav.empty
         when (nav) {
             gnav -> {
-                mGlobalArrowDrawable.alpha = if (empty) 0 else 0xa0
-                mGlobalDrawerLayout?.setDrawerLockMode(if (empty) DrawerLayout.LOCK_MODE_LOCKED_CLOSED else DrawerLayout.LOCK_MODE_UNLOCKED)
-                if (mGlobalLinearLayout !== null) setMNVAndArrow(!empty, mGlobalNavigationView!!, mGlobalArrowDrawable)
+                garrow.alpha = if (empty) 0 else 0xa0
+                if(gdraw) ma_global_drawer_layout.setDrawerLockMode(if (empty) DrawerLayout.LOCK_MODE_LOCKED_CLOSED else DrawerLayout.LOCK_MODE_UNLOCKED)
+                else setMNVAndArrow(!empty, ma_global_navigation_view, garrow)
             }
             lnav -> {
-                mLocalArrowDrawable.alpha = if (empty) 0 else 0xa0
-                mLocalDrawerLayout?.setDrawerLockMode(if (empty) DrawerLayout.LOCK_MODE_LOCKED_CLOSED else DrawerLayout.LOCK_MODE_UNLOCKED)
-                if (mLocalLinearLayout !== null) setMNVAndArrow(!empty, mLocalNavigationView!!, mLocalArrowDrawable)
+                larrow.alpha = if (empty) 0 else 0xa0
+                if(ldraw) ma_local_drawer_layout.setDrawerLockMode(if (empty) DrawerLayout.LOCK_MODE_LOCKED_CLOSED else DrawerLayout.LOCK_MODE_UNLOCKED)
+                else setMNVAndArrow(!empty, ma_local_navigation_view, larrow)
             }
             else -> log.a("Unknown IMyUINavigation object.")
         }
-        mMyLocalFragment?.onNavigationChanged(nav)
+        (fgmt as? MyFragment)?.onNavigationChanged(nav)
     }
 
     private fun addAllSharedElementsToFragmentTransaction(root: View, ft: FragmentTransaction) {
@@ -488,29 +438,29 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, IMyUINavigation.Liste
     }
 
     @CallSuper override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
-        if (drawerView === mGlobalNavigationView) mGlobalArrowDrawable.level = scale0d(slideOffset, 1f, 10000f).toInt()
-        else if (drawerView === mLocalNavigationView) mLocalArrowDrawable.level = scale0d(slideOffset, 1f, 10000f).toInt()
-        mMyLocalFragment?.onDrawerSlide(drawerView, slideOffset)
+        if (drawerView === ma_global_navigation_view) garrow.level = scale0d(slideOffset, 1f, 10000f).toInt()
+        else if (drawerView === ma_local_navigation_view) larrow.level = scale0d(slideOffset, 1f, 10000f).toInt()
+        (fgmt as? MyFragment)?.onDrawerSlide(drawerView, slideOffset)
     }
 
     @CallSuper override fun onDrawerOpened(drawerView: View) {
         hideKeyboard()
-        mMyLocalFragment?.onDrawerOpened(drawerView)
+        (fgmt as? MyFragment)?.onDrawerOpened(drawerView)
     }
 
     @CallSuper override fun onDrawerClosed(drawerView: View) {
-        mMyLocalFragment?.onDrawerClosed(drawerView)
+        (fgmt as? MyFragment)?.onDrawerClosed(drawerView)
     }
 
     @CallSuper override fun onDrawerStateChanged(newState: Int) {
-        mMyLocalFragment?.onDrawerStateChanged(newState)
+        (fgmt as? MyFragment)?.onDrawerStateChanged(newState)
     }
 
 
     @CallSuper
     override fun onBackPressed() {
-        mGlobalDrawerLayout?.run { if(isDrawerOpen(GravityCompat.START)) { closeDrawer(GravityCompat.START); return } }
-        mLocalDrawerLayout?.run { if(isDrawerOpen(GravityCompat.END)) { closeDrawer(GravityCompat.END); return } }
+        if(gdraw) if(ma_global_drawer_layout.isDrawerOpen(GravityCompat.START)) { ma_global_drawer_layout.closeDrawer(GravityCompat.START); return }
+        if(ldraw) if(ma_local_drawer_layout.isDrawerOpen(GravityCompat.END)) { ma_local_drawer_layout.closeDrawer(GravityCompat.END); return }
         super.onBackPressed()
     }
 

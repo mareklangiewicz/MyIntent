@@ -12,6 +12,7 @@ import pl.mareklangiewicz.myactivities.MyActivity
 import pl.mareklangiewicz.myfragments.MyFragment
 import pl.mareklangiewicz.myintent.PlayStopButton.State.*
 import pl.mareklangiewicz.myutils.MyLogLevel
+import pl.mareklangiewicz.myutils.hideKeyboard
 import pl.mareklangiewicz.myviews.IMyUINavigation
 
 class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listener {
@@ -228,8 +229,6 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
 
         mSearchItem?.collapseActionView()
         mCountdown.start(acmd)
-        updatePS()
-
     }
 
     override fun onPlayStopClicked(oldState: PlayStopButton.State, newState: PlayStopButton.State) {
@@ -241,6 +240,7 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
     }
 
     override fun onCountdownStarted(cmd: String?) {
+        activity?.hideKeyboard()
         updatePS()
     }
 
@@ -264,7 +264,5 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
         updatePS()
     }
 
-    override fun onCountdownCancelled(cmd: String?) {
-        updatePS()
-    }
+    override fun onCountdownCancelled(cmd: String?) = updatePS()
 }

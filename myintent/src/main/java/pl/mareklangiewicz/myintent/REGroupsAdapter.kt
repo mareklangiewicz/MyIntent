@@ -111,6 +111,10 @@ class REGroupsAdapter() : RecyclerView.Adapter<REGroupsAdapter.ViewHolder>(), Vi
 
             itemView.group_rules_view.adapter = adapter
 
+            // TODO SOMEDAY: Maybe I should disable item animations on tablets (when linearlayout is used instead of drawer)
+            // because it has some layout issues, but.. maybe google will fix it soon...
+            // itemView.group_rules_view.itemAnimator = null
+
             ithelper = ItemTouchHelper(RERulesTouchHelperCallback(adapter)).apply { attachToRecyclerView(itemView.group_rules_view) }
         }
     }

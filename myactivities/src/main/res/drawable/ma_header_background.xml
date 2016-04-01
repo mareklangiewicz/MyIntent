@@ -2,12 +2,23 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle"
     >
+<!--
     <gradient
         android:angle="90"
         android:centerColor="?colorPrimary"
         android:centerX="30%"
         android:endColor="?colorPrimaryDark"
         android:startColor="?colorPrimary"
+        android:type="linear"
+        />
+    -->
+    <!-- we hardcode some colors because of problems on older devices -->
+    <gradient
+        android:angle="90"
+        android:centerColor="#ff00a0ff"
+        android:centerX="30%"
+        android:endColor="#ff0040a0"
+        android:startColor="#ff00a0ff"
         android:type="linear"
         />
 </shape>

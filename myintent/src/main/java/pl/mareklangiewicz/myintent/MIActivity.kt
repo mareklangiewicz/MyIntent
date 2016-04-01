@@ -169,8 +169,8 @@ class MIActivity : MyActivity() {
      * (it runs everything asynchronously - after closing drawers)
      */
     fun play(command: String): Unit = closeDrawersAnd {
-        val fragment = mLocalFragment
-        if(fragment is MIStartFragment) fragment.play(command)
+        val f = fgmt
+        if(f is MIStartFragment) f.play(command)
         else {
             execute("fragment .MIStartFragment")
             play(command) // IMPORTANT: we have to be asynchrous here again to let fragment initialize fully first.

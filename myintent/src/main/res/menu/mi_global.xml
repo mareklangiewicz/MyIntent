@@ -43,6 +43,11 @@
         >
         <menu>
             <item
+                android:id="@+id/clear_recent"
+                android:icon="@drawable/mi_ic_recent_command_black_24dp"
+                android:title='Clear recent commands'
+                />
+            <item
                 android:id="@+id/reset_all"
                 android:icon="@drawable/mr_ic_whatshot_black_24dp"
                 android:title="@string/mi_reset_all"

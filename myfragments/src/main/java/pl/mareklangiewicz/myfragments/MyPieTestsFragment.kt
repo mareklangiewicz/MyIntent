@@ -12,21 +12,22 @@ import android.os.Build.VERSION_CODES.LOLLIPOP
 import android.os.Bundle
 import android.support.annotation.ColorInt
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import kotlinx.android.synthetic.main.mf_my_pie_tests_fragment.*
 import kotlinx.android.synthetic.main.mf_my_pie_tests_header.view.*
+import pl.mareklangiewicz.myutils.ToDo
 import pl.mareklangiewicz.myutils.getRandomColor
 import pl.mareklangiewicz.myutils.getRandomFloat
-import pl.mareklangiewicz.myviews.IMyUINavigation
 import pl.mareklangiewicz.myviews.MyPie
 import java.lang.String.format
 
 //TODO SOMEDAY: create UI to change animation speed (in local menu header)
 
 class MyPieTestsFragment : MyFragment(), View.OnClickListener {
+
+    private val todo = ToDo()
 
     private var randomize = "to"
 
@@ -57,6 +58,11 @@ class MyPieTestsFragment : MyFragment(), View.OnClickListener {
             hanimator.interpolator = AccelerateInterpolator()
         }
 
+        val unsub = manager!!.lnav!!.items {
+            randomize = manager!!.lnav!!.menuObj!!.findItem(it)?.toString() ?: randomize
+        }
+        todo(unsub)
+
         if (savedInstanceState == null)
             manager?.lnav?.setCheckedItem(R.id.mpt_randomize_to, true)
     }
@@ -67,18 +73,10 @@ class MyPieTestsFragment : MyFragment(), View.OnClickListener {
     }
 
     override fun onDestroyView() {
+        todo.doItAll()
         manager?.lnav?.headerId = -1
         manager?.lnav?.menuId = -1
         super.onDestroyView()
-    }
-
-    override fun onItemSelected(nav: IMyUINavigation, item: MenuItem): Boolean {
-        if (nav !== manager?.lnav) {
-            log.v("This item is not from our local menu.")
-            return false
-        }
-        randomize = item.title.toString()
-        return true
     }
 
     override fun onClick(v: View) {

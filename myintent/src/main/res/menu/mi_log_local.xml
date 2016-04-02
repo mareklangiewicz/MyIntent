@@ -36,11 +36,6 @@
         >
         <menu>
             <item
-                android:id="@+id/clear_recent"
-                android:icon="@drawable/mi_ic_recent_command_black_24dp"
-                android:title='Clear recent commands'
-                />
-            <item
                 android:id="@+id/clear_log_history"
                 android:icon="@drawable/mr_ic_close_black_24dp"
                 android:title="@string/mi_clear_log_history"

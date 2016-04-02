@@ -32,5 +32,10 @@ open class MICmdListFragment : MyFragment() {
     var commands: List<String>
         get() = adapter.commands
         set(commands) { adapter.commands = commands }
+
+    override fun onDestroyView() {
+        mi_cmd_recycler_view.adapter = null
+        super.onDestroyView()
+    }
 }
 

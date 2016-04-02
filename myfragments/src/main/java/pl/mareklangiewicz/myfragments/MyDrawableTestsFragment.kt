@@ -76,6 +76,11 @@ class MyDrawableTestsFragment : MyFragment(), View.OnClickListener, SeekBar.OnSe
         super.onPause()
     }
 
+    override fun onDestroyView() {
+        grid_view.adapter = null
+        super.onDestroyView()
+    }
+
     override fun onClick(v: View) {
         val tag = v.getTag(R.id.mf_tag_animator)
         if (tag is ObjectAnimator)

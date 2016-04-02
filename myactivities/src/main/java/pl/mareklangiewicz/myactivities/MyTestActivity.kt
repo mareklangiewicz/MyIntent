@@ -6,12 +6,10 @@ import android.animation.ObjectAnimator.ofPropertyValuesHolder
 import android.animation.PropertyValuesHolder
 import android.os.Build
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
 import android.view.animation.LinearInterpolator
 import kotlinx.android.synthetic.main.ma_my_test_global_header.view.*
 import pl.mareklangiewicz.mydrawables.MyMagicLinesDrawable
-import pl.mareklangiewicz.myviews.IMyUINavigation
 
 /**
  * Test activity presenting most of My..... classes functionality
@@ -48,6 +46,14 @@ class MyTestActivity : MyActivity() {
                 PropertyValuesHolder.ofFloat(View.TRANSLATION_Y, -50f, -50f, 0f)
         ).apply { interpolator = LinearInterpolator() }
 
+        gnav!!.items { // we ignore returned subscription - navigation will live as long as activity
+            when(it) {
+                R.id.action_whats_up -> log.i("[SNACK][SHORT]What's up mate?")
+                R.id.action_settings -> log.w("[SNACK]TODO: some settings (or not)..")
+                R.id.action_destroy_something -> log.a("[SNACK]BUM!")
+            }
+        }
+
         if (savedInstanceState == null)
             gnav!!.setCheckedItem(R.id.section_my_pie_tests, true)
     }
@@ -72,12 +78,4 @@ class MyTestActivity : MyActivity() {
         }
     }
 
-    override fun onItemSelected(nav: IMyUINavigation, item: MenuItem): Boolean {
-        return super.onItemSelected(nav, item) || when (item.itemId) {
-            R.id.action_whats_up -> { log.i("[SNACK][SHORT]What's up mate?"); true }
-            R.id.action_settings -> { log.w("[SNACK]TODO: some settings (or not).."); true }
-            R.id.action_destroy_something -> { log.a("[SNACK]BUM!"); true }
-            else -> false
-        }
-    }
 }

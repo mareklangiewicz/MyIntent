@@ -4,6 +4,7 @@ import android.support.annotation.IdRes
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import pl.mareklangiewicz.myutils.Relay
 
 /**
  * Created by Marek Langiewicz on 02.09.15.
@@ -24,15 +25,12 @@ interface IMyUINavigation {
      * WARNING: see MyNavigationView.getFirstCheckedItem warning!
      */
     val firstCheckedItem: MenuItem?
+    // TODO NOW: combine with setCheckedItem - make it a property (carefully describe semantics) (can we loose callback:bool)
+    // TODO NOW: setting new property should NOT trigger "items" relay automatically - user can always do it himself
+
     val empty: Boolean
-    var listener: Listener?
 
-//    val changes: IPusher<Unit, (Unit) -> Unit>
+    val changes: Relay<Unit> // triggerd when navigation view content has changed
 
-    interface Listener {
-        fun onItemSelected(nav: IMyUINavigation, item: MenuItem): Boolean  // TODO NOW: change to items: IPusher<Int>
-        fun onNavigationChanged(nav: IMyUINavigation)
-        // TODO NOW: change to changes: IPusher<Unit> (we can later use map to attach nav; then merge? to merge global and local navigation if needed..
-    }
-
+    val items: Relay<Int> // emits ids of selected items
 }

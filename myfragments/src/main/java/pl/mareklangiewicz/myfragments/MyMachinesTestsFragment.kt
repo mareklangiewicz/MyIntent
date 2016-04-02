@@ -119,6 +119,7 @@ class MyMachinesTestsFragment : MyFragment() {
     }
     override fun onDestroyView() {
         todo.doItAll()
+        mf_mmt_rv_log.adapter = null
         super.onDestroyView()
     }
 }

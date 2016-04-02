@@ -14,8 +14,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.speech.RecognizerIntent
-import android.support.annotation.IdRes
-import android.view.MenuItem
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.gms.actions.SearchIntents
@@ -28,11 +26,9 @@ import pl.mareklangiewicz.myactivities.MyActivity
 import pl.mareklangiewicz.myintent.MIContract.RuleUser
 import pl.mareklangiewicz.myutils.*
 import pl.mareklangiewicz.myutils.myhttp.OpenWeatherMap
-import pl.mareklangiewicz.myviews.IMyUINavigation
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.lang.ref.WeakReference
 import java.util.*
 
 /**
@@ -87,6 +83,16 @@ class MIActivity : MyActivity() {
         header.mi_gh_iv_logo!!.setOnClickListener { execute("start custom action listen") }
 
         header.mi_gh_tv_home_page!!.setOnClickListener { play("data " + resources.getString(R.string.mr_my_homepage)) }
+
+        nav.items { // we ignore returned subscription - navigation will live as long as activity
+            when(it) {
+                R.id.clear_recent -> {
+                    MIContract.CmdRecent.clear(this)
+                    (fgmt as? MIRecentCmdListFragment)?.apply { refresh() }
+                }
+                R.id.reset_all -> resetAll()
+            }
+        }
 
         if (savedInstanceState == null) {
 
@@ -443,27 +449,6 @@ class MIActivity : MyActivity() {
         if (drawerView !== gnav)
             return
         animations.onGlobalDrawerClosed()
-    }
-
-    override fun onItemSelected(nav: IMyUINavigation, item: MenuItem): Boolean {
-
-        val done = super.onItemSelected(nav, item)
-
-        if (done)
-            return true
-
-        @IdRes val id = item.itemId
-
-        if (id == R.id.clear_recent) {
-            MIContract.CmdRecent.clear(this)
-            return true
-        }
-        if (id == R.id.reset_all) {
-            resetAll()
-            return true
-        }
-
-        return false
     }
 
     private fun updateWidgets() {

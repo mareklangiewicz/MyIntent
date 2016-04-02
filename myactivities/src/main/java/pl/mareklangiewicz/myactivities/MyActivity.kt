@@ -11,13 +11,14 @@ import android.support.annotation.CallSuper
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
+import android.support.v4.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+import android.support.v4.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.transition.AutoTransition
 import android.transition.Fade
 import android.util.DisplayMetrics
 import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.ma_app_bar_layout.*
@@ -33,7 +34,7 @@ import pl.mareklangiewicz.myviews.IMyUIManager
 import pl.mareklangiewicz.myviews.IMyUINavigation
 import pl.mareklangiewicz.myviews.MyNavigationView
 
-open class MyActivity : AppCompatActivity(), IMyUIManager, IMyUINavigation.Listener, DrawerLayout.DrawerListener {
+open class MyActivity : AppCompatActivity(), IMyUIManager, DrawerLayout.DrawerListener {
 
 
     val COMMAND_PREFIX = "cmd:"
@@ -114,8 +115,39 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, IMyUINavigation.Liste
         if(gdraw) ma_global_drawer_layout.addDrawerListener(this)
         if(ldraw) ma_local_drawer_layout.addDrawerListener(this)
 
-        ma_global_navigation_view.listener = this
-        ma_local_navigation_view.listener = this
+
+
+        gnav!!.changes { // we ignore returned subscription - navigation will live as long as activity
+            val empty = gnav!!.empty
+            garrow.alpha = if (empty) 0 else 0xa0
+            if(gdraw) ma_global_drawer_layout.setDrawerLockMode(if (empty) LOCK_MODE_LOCKED_CLOSED else LOCK_MODE_UNLOCKED)
+            else setMNVAndArrow(!empty, ma_global_navigation_view, garrow)
+        }
+        lnav!!.changes { // we ignore returned subscription - navigation will live as long as activity
+            val empty = lnav!!.empty
+            larrow.alpha = if (empty) 0 else 0xa0
+            if(ldraw) ma_local_drawer_layout.setDrawerLockMode(if (empty) LOCK_MODE_LOCKED_CLOSED else LOCK_MODE_UNLOCKED)
+            else setMNVAndArrow(!empty, ma_local_navigation_view, larrow)
+        }
+        // TODO SOMEDAY: we should merge these two "streams" and subscribe with one common lambda - I'll do it when MyMachines is more mature
+
+
+        gnav!!.items { // we ignore returned subscription - navigation will live as long as activity
+            val title = gnav?.menuObj?.findItem(it)?.titleCondensed?.toString()
+            if(title !== null && title.startsWith(COMMAND_PREFIX))
+                execute(title.substring(COMMAND_PREFIX.length))
+            else
+                closeDrawers()
+        }
+        lnav!!.items { // we ignore returned subscription - navigation will live as long as activity
+            val title = lnav?.menuObj?.findItem(it)?.titleCondensed?.toString()
+            if(title !== null && title.startsWith(COMMAND_PREFIX))
+                execute(title.substring(COMMAND_PREFIX.length))
+            else
+                closeDrawers()
+        }
+        // TODO SOMEDAY: we should merge these two "streams" and subscribe with one common lambda - I'll do it when MyMachines is more mature
+
 
         setSupportActionBar(ma_toolbar)
 
@@ -179,7 +211,7 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, IMyUINavigation.Liste
     }
 
     private fun toggleDrawer(drawerLayout: DrawerLayout, gravity: Int) {
-        if (drawerLayout.getDrawerLockMode(gravity) == DrawerLayout.LOCK_MODE_UNLOCKED) {
+        if (drawerLayout.getDrawerLockMode(gravity) == LOCK_MODE_UNLOCKED) {
             if (drawerLayout.isDrawerVisible(gravity))
                 drawerLayout.closeDrawer(gravity)
             else
@@ -202,8 +234,8 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, IMyUINavigation.Liste
         if(gdraw) onDrawerSlide(ma_global_navigation_view, if (ma_global_drawer_layout.isDrawerOpen(GravityCompat.START)) 1f else 0f)
         if(ldraw) onDrawerSlide(ma_local_navigation_view, if (ma_local_drawer_layout.isDrawerOpen(GravityCompat.END)) 1f else 0f)
         // ensure that drawers and menu icons are updated:
-        onNavigationChanged(gnav!!)
-        onNavigationChanged(lnav!!)
+        gnav!!.changes.pushee(Unit)
+        lnav!!.changes.pushee(Unit)
         if (savedInstanceState == null)
             onIntent(intent)
     }
@@ -387,41 +419,6 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, IMyUINavigation.Liste
 
     fun execute(cmd: String) = closeDrawersAnd { onCommand(cmd) }
 
-
-    /**
-     * You can override it, but you should call super version first and do your custom logic only if it returns false.
-     */
-    @CallSuper override fun onItemSelected(nav: IMyUINavigation, item: MenuItem): Boolean {
-        val ctitle = item.titleCondensed.toString()
-        if (ctitle.startsWith(COMMAND_PREFIX)) {
-            val cmd = ctitle.substring(COMMAND_PREFIX.length)
-            execute(cmd)
-            return true
-        }
-
-        closeDrawers()
-        // maybe our local fragment will handle this item:
-        return (fgmt as? MyFragment)?.run { onItemSelected(nav, item) } ?: false
-    }
-
-
-    @CallSuper override fun onNavigationChanged(nav: IMyUINavigation) {
-        val empty = nav.empty
-        when (nav) {
-            gnav -> {
-                garrow.alpha = if (empty) 0 else 0xa0
-                if(gdraw) ma_global_drawer_layout.setDrawerLockMode(if (empty) DrawerLayout.LOCK_MODE_LOCKED_CLOSED else DrawerLayout.LOCK_MODE_UNLOCKED)
-                else setMNVAndArrow(!empty, ma_global_navigation_view, garrow)
-            }
-            lnav -> {
-                larrow.alpha = if (empty) 0 else 0xa0
-                if(ldraw) ma_local_drawer_layout.setDrawerLockMode(if (empty) DrawerLayout.LOCK_MODE_LOCKED_CLOSED else DrawerLayout.LOCK_MODE_UNLOCKED)
-                else setMNVAndArrow(!empty, ma_local_navigation_view, larrow)
-            }
-            else -> log.a("Unknown IMyUINavigation object.")
-        }
-        (fgmt as? MyFragment)?.onNavigationChanged(nav)
-    }
 
     private fun addAllSharedElementsToFragmentTransaction(root: View, ft: FragmentTransaction) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {

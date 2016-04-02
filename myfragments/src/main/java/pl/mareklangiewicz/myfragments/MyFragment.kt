@@ -8,13 +8,11 @@ import android.support.annotation.CallSuper
 import android.support.v4.widget.DrawerLayout
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import pl.mareklangiewicz.myloggers.MY_DEFAULT_ANDRO_LOGGER
 import pl.mareklangiewicz.myutils.str
 import pl.mareklangiewicz.myviews.IMyUIManager
-import pl.mareklangiewicz.myviews.IMyUINavigation
 
 
 /**
@@ -27,7 +25,7 @@ import pl.mareklangiewicz.myviews.IMyUINavigation
  * - don't add this fragment transactions to back stack
  * or invoke setRetainInstance(false) after MyFragment.onCreate.
  */
-open class MyFragment : Fragment(), IMyUINavigation.Listener, DrawerLayout.DrawerListener {
+open class MyFragment : Fragment(), DrawerLayout.DrawerListener {
 
 
     private val V = true
@@ -52,16 +50,6 @@ open class MyFragment : Fragment(), IMyUINavigation.Listener, DrawerLayout.Drawe
     protected var isViewAvailable = false
 
     protected val manager: IMyUIManager? get() = activity as? IMyUIManager
-
-    /**
-     * Override it to your needs
-     * @param nav  Local or Global navigation.
-     * @param item Selected menu item from global or local menu.
-     * @return True if item was successfully selected.
-     */
-    override fun onItemSelected(nav: IMyUINavigation, item: MenuItem): Boolean = false
-
-    override fun onNavigationChanged(nav: IMyUINavigation) { } // will be called by MyActivity for both global and local drawer events...
 
     override fun onDrawerSlide(drawerView: View, slideOffset: Float) { }
     override fun onDrawerOpened(drawerView: View) { }

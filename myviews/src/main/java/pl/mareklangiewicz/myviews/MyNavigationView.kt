@@ -8,6 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import pl.mareklangiewicz.myloggers.MY_DEFAULT_ANDRO_LOGGER
+import pl.mareklangiewicz.myutils.Relay
 
 class MyNavigationView : NavigationView, IMyUINavigation, NavigationView.OnNavigationItemSelectedListener {
 
@@ -26,7 +27,7 @@ class MyNavigationView : NavigationView, IMyUINavigation, NavigationView.OnNavig
             if (field != -1) super.getMenu().clear()
             field = id
             if (id != -1) super.inflateMenu(id)
-            listener?.onNavigationChanged(this)
+            changes.pushee(Unit)
         }
 
     override val menuObj: Menu? get() = if (super.getMenu().size() == 0) null else super.getMenu()
@@ -38,13 +39,15 @@ class MyNavigationView : NavigationView, IMyUINavigation, NavigationView.OnNavig
             if (field != -1) removeHeaderView(getHeaderView(0))
             field = id
             if (id != -1) inflateHeaderView(id)
-            listener?.onNavigationChanged(this)
+            changes.pushee(Unit)
         }
 
     override val headerObj: View? get() = if (headerCount == 0) null else getHeaderView(0)
 
-    override var listener: IMyUINavigation.Listener? = null
+    override val empty: Boolean get() = menuId == -1 && headerId == -1
 
+    override val changes = Relay<Unit>()
+    override val items = Relay<Int>()
 
     override fun overlaps(view: View?) = MyViews.overlaps(this, view)
 
@@ -82,7 +85,7 @@ class MyNavigationView : NavigationView, IMyUINavigation, NavigationView.OnNavig
 
     /**
      * @param id The ID of checked item.
-     * @param callback - if true: it additionally calls listener.onItemSelected (if any listener is provided)
+     * @param callback - if true: it additionally pushes item id to "items" relay
      */
     override fun setCheckedItem(@IdRes id: Int, callback: Boolean) {
         val item: MenuItem? = super.getMenu().findItem(id)
@@ -95,12 +98,12 @@ class MyNavigationView : NavigationView, IMyUINavigation, NavigationView.OnNavig
             onNavigationItemSelected(item)
     }
 
-    override val empty: Boolean get() = menuId == -1 && headerId == -1
-
     override fun setNavigationItemSelectedListener(listener: NavigationView.OnNavigationItemSelectedListener) {
         throw IllegalAccessError("This method is blocked. Use setListener.")
     }
 
-    override fun onNavigationItemSelected(menuItem: MenuItem) = listener?.onItemSelected(this, menuItem) ?: false
-
+    override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
+        items.pushee(menuItem.itemId)
+        return true
+    }
 }

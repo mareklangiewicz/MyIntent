@@ -11,7 +11,7 @@ class MIHelpFragment : MyWebFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        manager?.name = getString(R.string.mi_help)
+        manager?.name = "MI${if(BuildConfig.DEBUG) " D " else " "}${getString(R.string.mi_help)}"
 
         if(url == "") url = "file:///android_asset/mi.html"
 

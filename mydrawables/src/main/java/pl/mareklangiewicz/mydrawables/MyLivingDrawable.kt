@@ -68,7 +68,6 @@ open class MyLivingDrawable : Drawable() {
             }
         }
 
-
     @IntRange(from = 0, to = 0xff) override fun getAlpha(): Int {
         return mPaint.alpha
     }
@@ -97,15 +96,10 @@ open class MyLivingDrawable : Drawable() {
      * similar to MyMathUtils.scale1d, but uses drawable level as input;
      * Also it keeps output between 'from' and 'to' even if level is not between 'lfrom' and 'lto'
      * See code for details.
-
      * @param lfrom start level
-     * *
      * @param lto   end level
-     * *
      * @param from  start returned value
-     * *
      * @param to    end returned value
-     * *
      * @return a value in range: from .. to corresponding to level in range lfrom..lto
      */
     protected fun lvl(@IntRange(from = 0, to = 10000) lfrom: Int, @IntRange(from = 0, to = 10000) lto: Int, from: Int, to: Int): Int {
@@ -118,19 +112,15 @@ open class MyLivingDrawable : Drawable() {
             value = max
         return value
     }
+
     protected fun lvl(from: Int, to: Int): Int = lvl(0, 10000, from, to)
 
     /**
      * Floating point version of the above
-
      * @param lfrom start level
-     * *
      * @param lto   end level
-     * *
      * @param from  start returned value
-     * *
      * @param to    end returned value
-     * *
      * @return a value in range: from .. to corresponding to level in range lfrom..lto
      */
     protected fun lvl(@IntRange(from = 0, to = 10000) lfrom: Int, @IntRange(from = 0, to = 10000) lto: Int, from: Float, to: Float): Float {
@@ -143,6 +133,7 @@ open class MyLivingDrawable : Drawable() {
             value = max
         return value
     }
+
     protected fun lvl(from: Float, to: Float): Float = lvl(0, 10000, from, to)
 
     protected fun lvlcolor(colorFrom: Int, colorTo: Int): Int {

@@ -25,8 +25,6 @@ interface IMyUINavigation {
      * WARNING: see MyNavigationView.getFirstCheckedItem warning!
      */
     val firstCheckedItem: MenuItem?
-    // TODO NOW: combine with setCheckedItem - make it a property (carefully describe semantics) (can we loose callback:bool)
-    // TODO NOW: setting new property should NOT trigger "items" relay automatically - user can always do it himself
 
     val empty: Boolean
 

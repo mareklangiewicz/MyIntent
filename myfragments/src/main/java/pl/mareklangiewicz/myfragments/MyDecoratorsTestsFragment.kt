@@ -32,7 +32,7 @@ class MyDecoratorsTestsFragment : MyFragment() {
                     log.e("The root view of this fragment is null.")
                     return false
                 }
-                MyViewDecorator.decorateTree(view, "decorate", R.layout.mv_example_decoration, null)
+                MyViewDecorator.decorateTree(view, "decorate", R.layout.mv_example_decoration)
                 return true
             }
         }

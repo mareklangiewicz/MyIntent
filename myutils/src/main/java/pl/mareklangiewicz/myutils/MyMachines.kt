@@ -297,8 +297,12 @@ class StepPusher( val step: Long = 1, val tick: Long = 1, val tock: Long = 1 ) :
 /**
  * Takes an IEPullee of intervals in ms. Interval 0 means immediately.
  * It should be subscribed only once.
- * It supports commands: Start; Cancel (the same as Stop and Pause); Step (the same as Tick and Tock)
- * It pushes a Long numbers counting from 0...
+ * It supports commands:
+ * - Start;
+ * - Stop (the same as Pause - stops but can be started again);
+ * - Cancel (unsubscribes);
+ * - Step (the same as Tick and Tock - just invokes function once)
+ * Timer pushes a Long numbers counting from 0...
  */
 @MainThread
 class Timer(private val handler: Handler, private val intervals: Function1<Unit, IEvent<Long>>) : IPusher<Long, Function1<ICommand, Unit>> {

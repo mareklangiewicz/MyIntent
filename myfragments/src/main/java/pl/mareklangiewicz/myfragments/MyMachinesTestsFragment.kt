@@ -46,7 +46,11 @@ class MyMachinesTestsFragment : MyFragment() {
                     .lfilter { it % 5L == 0L }
                     .lpeek { log.w("$it % 5 = 0") }
 
-            timer { } (Start)
+            val ctl = timer { } // we subscribe here with empty function (side effects are attached already) and we get a controller that accepts ICommands
+
+            ctl(Start)
+
+            todo { ctl(Cancel) }
 
         }
 
@@ -65,8 +69,11 @@ class MyMachinesTestsFragment : MyFragment() {
                     .lpeek { animTo(mf_mmt_mp3, "to", getRandomFloat(50f, 99f)) }
                     .lpeek { animTo(mf_mmt_mp3, "from", getRandomFloat(1f, mf_mmt_mp3.to)) }
 
-            timer { } (Start)
+            val ctl= timer { } // we subscribe here with empty function (side effects are attached already) and we get a controller that accepts ICommands
 
+            ctl(Start)
+
+            todo { ctl(Cancel) }
         }
 
         mf_mmt_b_test3.setOnClickListener {
@@ -92,8 +99,11 @@ class MyMachinesTestsFragment : MyFragment() {
                     }
                     .lmap { scale1d(it.toFloat(), 0f, 70f, 1f, 99f) }
 
-            timer(relay.pushee)(Start)
+            val ctl = timer(relay.pushee)
 
+            ctl(Start)
+
+            todo { ctl(Cancel) }
 
         }
 

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.support.design.widget.Snackbar
 import android.database.sqlite.SQLiteDatabase
+import android.graphics.Rect
 import android.view.inputmethod.InputMethodManager
 
 /**
@@ -36,6 +37,40 @@ operator fun ViewGroup.get(pos: Int): View = getChildAt(pos)
 
 val ViewGroup.views: List<View> get() = (0 until childCount).map { this[it] }
 
+fun View?.overlaps(that: View?): Boolean {
+
+    if (this === null || that === null)
+        return false
+
+    if (this.visibility != View.VISIBLE || that.visibility != View.VISIBLE)
+        return false
+
+    val w1 = this.measuredWidth
+    if (w1 < 1)
+        return false
+
+    val w2 = that.measuredWidth
+    if (w2 < 1)
+        return false
+
+    val h1 = this.measuredHeight
+    if (h1 < 1)
+        return false
+
+    val h2 = that.measuredHeight
+    if (h2 < 1)
+        return false
+
+    val pos1 = IntArray(2)
+    val pos2 = IntArray(2)
+    this.getLocationInWindow(pos1)
+    that.getLocationInWindow(pos2)
+
+    val r1 = Rect(pos1[0], pos1[1], pos1[0] + w1, pos1[1] + h1)
+    val r2 = Rect(pos2[0], pos2[1], pos2[0] + w2, pos2[1] + h2)
+
+    return Rect.intersects(r1, r2)
+}
 
 fun Cursor.kgetString(columnName: String): String = getString(getColumnIndexOrThrow(columnName))
 fun Cursor.kgetInt(columnName: String): Int = getInt(getColumnIndexOrThrow(columnName))

@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import pl.mareklangiewicz.myloggers.MY_DEFAULT_ANDRO_LOGGER
 import pl.mareklangiewicz.myutils.Relay
+import pl.mareklangiewicz.myutils.overlaps
 
 class MyNavigationView : NavigationView, IMyUINavigation, NavigationView.OnNavigationItemSelectedListener {
 
@@ -49,7 +50,7 @@ class MyNavigationView : NavigationView, IMyUINavigation, NavigationView.OnNavig
     override val changes = Relay<Unit>()
     override val items = Relay<Int>()
 
-    override fun overlaps(view: View?) = MyViews.overlaps(this, view)
+    override fun overlaps(view: View?) = (this as View).overlaps(view)
 
     /**
      * Finds (recursively: DFS) first checked item in navigation view menu.

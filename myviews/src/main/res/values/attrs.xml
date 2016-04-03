@@ -13,10 +13,6 @@
         <attr name="mv_ovalColor"
             format="color"/>
     </declare-styleable>
-    <declare-styleable name="mv_MyLLDecorator">
-        <attr name="mv_decoration"
-            format="reference"/>
-    </declare-styleable>
     <declare-styleable name="mv_MyScrollBehavior">
         <attr name="mv_behavior_property" format="string"/>
         <attr name="mv_behavior_scroll_min" format="integer"/>

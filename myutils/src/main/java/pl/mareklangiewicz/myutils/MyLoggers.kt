@@ -33,28 +33,14 @@ data class MyLogEntry(
 }
 
 
-
 // alias IMyLogger = IPushee<MyLogEntry> // SOMEDAY: do it when Kotlin have type aliases
 // for now our IMyLogger IS just: Function1<MyLogEntry, Unit> without alias name...
 
-interface IMyLogger : Function1<MyLogEntry, Unit> { // TODO NOW: remove this class and use Function1<MyLogEntry, Unit>
-    fun log(
-            message: Any?,
-            level: MyLogLevel = MyLogLevel.INFO,
-            tag: String = "ML",
-            throwable: Throwable? = null
-    ) = this(MyLogEntry(message.toString(), level, tag, throwable))
-
-    fun v(message: Any?) { log(message, MyLogLevel.VERBOSE) }
-    fun d(message: Any?) { log(message, MyLogLevel.DEBUG  ) }
-    fun i(message: Any?) { log(message, MyLogLevel.INFO   ) }
-    fun w(message: Any?) { log(message, MyLogLevel.WARN   ) }
-    fun e(message: Any?) { log(message, MyLogLevel.ERROR  ) }
-    fun a(message: Any?) { log(message, MyLogLevel.ASSERT ) }
-    fun e(message: Any?, throwable: Throwable?) { log(message, MyLogLevel.ERROR , throwable = throwable) }
-    fun a(message: Any?, throwable: Throwable?) { log(message, MyLogLevel.ASSERT, throwable = throwable) }
-}
-
+// those functions below should be inlined for performance, but then I loose correct StackTraceElement.lineNumber,
+// and I need those line numbers be able to find where in source the logging message was invoked
+// (by just clicking on the message in android studio in android monitor window)
+// TODO SOMEDAY: use inline versions in release mode, and leave as it is in debug mode.
+// (unless they will fix the line numbers returned from StackTraceElement)
 
 fun Function1<MyLogEntry, Unit>.log(
         message: Any?,
@@ -100,12 +86,6 @@ fun Function1<MyLogEntry, Unit>.trace(depth: Int): Function1<MyLogEntry, Unit>
 }
 
 
-@Deprecated( "Not really needed now. Just use empty function.", ReplaceWith(" { } "))
-class MyEmptyLogger : IMyLogger {
-    override fun invoke(le: MyLogEntry) { }
-}
-
-
 /**
  * Logs given entries on standard system out stream (or err).
  * Ignores the log entry if level < outlvl
@@ -113,7 +93,7 @@ class MyEmptyLogger : IMyLogger {
  * WARNING: system err can be flushed at strange moments,
  * so usually it is better to use only out stream to avoid message reordering.
  */
-class MySystemLogger(val outlvl: MyLogLevel = MyLogLevel.VERBOSE, val errlvl: MyLogLevel = MyLogLevel.ASSERT) : IMyLogger {
+class MySystemLogger(val outlvl: MyLogLevel = MyLogLevel.VERBOSE, val errlvl: MyLogLevel = MyLogLevel.ASSERT) : Function1<MyLogEntry, Unit> {
     override fun invoke(le: MyLogEntry) {
         if(le.level < outlvl)
             return
@@ -122,7 +102,7 @@ class MySystemLogger(val outlvl: MyLogLevel = MyLogLevel.VERBOSE, val errlvl: My
     }
 }
 
-class MyLogHistory : IMyLogger, IMyArray<MyLogEntry>, IClear {
+class MyLogHistory : Function1<MyLogEntry, Unit>, IMyArray<MyLogEntry>, IClear {
 
     private val fullBuffer = MyRingBuffer<MyLogEntry>()
 
@@ -165,6 +145,5 @@ class MyLogHistory : IMyLogger, IMyArray<MyLogEntry>, IClear {
         filteredBuffer.clear()
         relay.pushee(Unit)
     }
-
 }
 

@@ -11,7 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import pl.mareklangiewicz.myloggers.MY_DEFAULT_ANDRO_LOGGER
-import pl.mareklangiewicz.myutils.str
+import pl.mareklangiewicz.myutils.*
 import pl.mareklangiewicz.myviews.IMyUIManager
 
 

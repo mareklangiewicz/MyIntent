@@ -10,6 +10,7 @@ import android.view.View
 import android.view.animation.LinearInterpolator
 import kotlinx.android.synthetic.main.ma_my_test_global_header.view.*
 import pl.mareklangiewicz.mydrawables.MyMagicLinesDrawable
+import pl.mareklangiewicz.myutils.*
 
 /**
  * Test activity presenting most of My..... classes functionality

@@ -10,7 +10,6 @@ import pl.mareklangiewicz.myutils.MyLogLevel
 
 /**
  * Created by Marek Langiewicz on 20.10.15.
-
  */
 class MIApplication : Application() {
 

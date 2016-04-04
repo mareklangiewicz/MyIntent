@@ -11,6 +11,7 @@ import org.junit.runner.RunWith
 import android.support.test.runner.*
 import com.google.common.truth.Truth.assertThat
 import org.junit.After
+import pl.mareklangiewicz.myutils.*
 
 /**
  * Created by Marek Langiewicz on 09.10.15.

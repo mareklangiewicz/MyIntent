@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import kotlinx.android.synthetic.main.mf_my_basic_tests_fragment.*
+import pl.mareklangiewicz.myutils.*
 
 
 class MyBasicTestsFragment : MyFragment() {

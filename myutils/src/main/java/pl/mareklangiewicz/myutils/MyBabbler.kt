@@ -10,7 +10,7 @@ import java.util.*
  */
 class MyBabbler(
         context: Context,
-        val log: IMyLogger,
+        val log: Function1<MyLogEntry, Unit>,
         val funnyQuotes: Array<String> = arrayOf("No."),
         val smartQuotes: Array<String> = arrayOf("No.")
 ) : TextToSpeech.OnInitListener {

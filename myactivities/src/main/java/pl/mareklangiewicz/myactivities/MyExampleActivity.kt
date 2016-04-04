@@ -1,6 +1,7 @@
 package pl.mareklangiewicz.myactivities
 
 import android.os.Bundle
+import pl.mareklangiewicz.myutils.i
 
 /**
  * Created by Marek Langiewicz on 22.09.15.

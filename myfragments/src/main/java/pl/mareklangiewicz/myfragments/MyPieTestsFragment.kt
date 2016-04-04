@@ -17,9 +17,7 @@ import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import kotlinx.android.synthetic.main.mf_my_pie_tests_fragment.*
 import kotlinx.android.synthetic.main.mf_my_pie_tests_header.view.*
-import pl.mareklangiewicz.myutils.ToDo
-import pl.mareklangiewicz.myutils.getRandomColor
-import pl.mareklangiewicz.myutils.getRandomFloat
+import pl.mareklangiewicz.myutils.*
 import pl.mareklangiewicz.myviews.MyPie
 import java.lang.String.format
 

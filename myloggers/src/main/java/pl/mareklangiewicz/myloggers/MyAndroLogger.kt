@@ -13,7 +13,7 @@ import pl.mareklangiewicz.myutils.*
  * In release mode use: tosystem = false.
  */
 
-class MyAndroLogger(val tosystem: Boolean = true, val tomemory: Boolean = true) : IMyLogger {
+class MyAndroLogger(val tosystem: Boolean = true, val tomemory: Boolean = true) : Function1<MyLogEntry, Unit> {
 
 
     val history = MyLogHistory()
@@ -39,7 +39,7 @@ class MyAndroLogger(val tosystem: Boolean = true, val tomemory: Boolean = true) 
             val suffix = if(entry.throwable === null) "" else "\n${Log.getStackTraceString(entry.throwable)}"
             Log.println(entry.level.number, entry.tag, entry.message + suffix)
             Unit
-        }.trace(16)
+        }.trace(14)
 
         if(tomemory)
             return lconsole.apeek(history).snack(view)

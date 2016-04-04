@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
 import kotlinx.android.synthetic.main.mf_my_stupid_tests_fragment.*
-import pl.mareklangiewicz.myutils.ToDo
+import pl.mareklangiewicz.myutils.*
 
 /**
  * Created by Marek Langiewicz on 10.09.15.

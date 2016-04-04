@@ -10,8 +10,7 @@ import kotlinx.android.synthetic.main.mi_re_rule_layout.view.*
 import kotlinx.android.synthetic.main.mi_re_rule_ro_details.view.*
 import kotlinx.android.synthetic.main.mi_re_rule_rw_details.view.*
 import pl.mareklangiewicz.myloggers.MY_DEFAULT_ANDRO_LOGGER
-import pl.mareklangiewicz.myutils.RERule
-import pl.mareklangiewicz.myutils.str
+import pl.mareklangiewicz.myutils.*
 
 /**
  * Created by Marek Langiewicz on 15.10.15.

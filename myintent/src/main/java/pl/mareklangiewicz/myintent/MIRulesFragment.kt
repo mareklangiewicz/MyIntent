@@ -6,10 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.mi_rules_fragment.*
 import pl.mareklangiewicz.myfragments.MyFragment
-import pl.mareklangiewicz.myutils.RERule
-import pl.mareklangiewicz.myutils.RE_RULES
-import pl.mareklangiewicz.myutils.RE_USER_GROUP
-import pl.mareklangiewicz.myutils.ToDo
+import pl.mareklangiewicz.myutils.*
 
 /**
  * Created by Marek Langiewicz on 14.10.15.

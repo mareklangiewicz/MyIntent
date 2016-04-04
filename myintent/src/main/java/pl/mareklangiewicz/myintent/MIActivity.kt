@@ -139,7 +139,7 @@ class MIActivity : MyActivity() {
                 else -> log.e("Unknown intent received: ${intent.str}")
             }
         } catch (e: RuntimeException) {
-            log.a("Intent exception.", e)
+            log.a("Intent exception.", "ML", e)
         }
 
     }
@@ -203,9 +203,9 @@ class MIActivity : MyActivity() {
             try {
                 startActivityForResult(intent, SPEECH_REQUEST_CODE)
             } catch (e: ActivityNotFoundException) {
-                log.e("Speech recognizer not found.", e)
+                log.e("Speech recognizer not found.", "ML", e)
             } catch (e: SecurityException) {
-                log.a("Security exception.", e)
+                log.a("Security exception.", "ML", e)
             }
 
         } else {
@@ -311,7 +311,7 @@ class MIActivity : MyActivity() {
         try {
             d = Integer.parseInt(day)
         } catch (e: NumberFormatException) {
-            log.e("Bad day..", e)
+            log.e("Bad day..", "ML", e)
             return
         }
 
@@ -354,7 +354,7 @@ class MIActivity : MyActivity() {
                 }
 
                 override fun onFailure(call: Call<OpenWeatherMap.Forecast>?, t: Throwable?) {
-                    log.e("Fetching weather failed.", t)
+                    log.e("Fetching weather failed.", "ML", t)
                 }
             })
 
@@ -387,7 +387,7 @@ class MIActivity : MyActivity() {
                 }
 
                 override fun onFailure(call: Call<OpenWeatherMap.DailyForecasts>?, t: Throwable?) {
-                    log.e("Fetching forecast failed.", t)
+                    log.e("Fetching forecast failed.", "ML", t)
                 }
             })
 

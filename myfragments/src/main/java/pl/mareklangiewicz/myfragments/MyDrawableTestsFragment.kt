@@ -15,6 +15,7 @@ import android.widget.FrameLayout
 import android.widget.SeekBar
 import kotlinx.android.synthetic.main.mf_my_dawable_tests_fragment.*
 import pl.mareklangiewicz.mydrawables.*
+import pl.mareklangiewicz.myutils.*
 
 class MyDrawableTestsFragment : MyFragment(), View.OnClickListener, SeekBar.OnSeekBarChangeListener {
 

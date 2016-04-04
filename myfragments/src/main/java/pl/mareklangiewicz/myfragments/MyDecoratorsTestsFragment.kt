@@ -3,6 +3,7 @@ package pl.mareklangiewicz.myfragments
 
 import android.os.Bundle
 import android.view.*
+import pl.mareklangiewicz.myutils.e
 import pl.mareklangiewicz.myviews.MyViewDecorator
 
 

@@ -6,8 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.mf_my_log_fragment.*
 import pl.mareklangiewicz.myloggers.MyAndroLogAdapter
-import pl.mareklangiewicz.myutils.MyLogLevel
-import pl.mareklangiewicz.myutils.ToDo
+import pl.mareklangiewicz.myutils.*
 
 /**
  * MyFragment showing MyAndroidLogger messages.

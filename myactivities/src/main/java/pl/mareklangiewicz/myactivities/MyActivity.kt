@@ -337,7 +337,7 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, DrawerLayout.DrawerLi
             }
             onCommand(mycmd)
         } catch (e: RuntimeException) {
-            log.e("Invalid command: $cmd", e)
+            log.e("Invalid command: $cmd", "ML", e)
         }
     }
 
@@ -361,9 +361,9 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, DrawerLayout.DrawerLi
             if (intent.resolveActivity(packageManager) != null) startActivity(intent)
             else log.e("No activity found for this intent: ${intent.str}")
         }
-        catch (e: IllegalArgumentException) { log.e("Illegal command: ${command.str}", e) }
-        catch (e: ActivityNotFoundException) { log.e("Activity not found.", e) }
-        catch (e: SecurityException) { log.a("Security exception.", e) }
+        catch (e: IllegalArgumentException) { log.e("Illegal command: ${command.str}", "ML", e) }
+        catch (e: ActivityNotFoundException) { log.e("Activity not found.", "ML", e) }
+        catch (e: SecurityException) { log.a("Security exception.", "ML", e) }
     }
 
     protected open fun onCommandStartService(command: MyCommand) {
@@ -371,13 +371,13 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, DrawerLayout.DrawerLi
             val intent = command.toIntent()
             if (startService(intent) === null) log.e("Service not found for this intent: ${intent.str}")
         }
-        catch (e: IllegalArgumentException) { log.e("Illegal command: ${command.str}", e) }
-        catch (e: SecurityException) { log.a("Security exception.", e) }
+        catch (e: IllegalArgumentException) { log.e("Illegal command: ${command.str}", "ML", e) }
+        catch (e: SecurityException) { log.a("Security exception.", "ML", e) }
     }
 
     protected open fun onCommandStartBroadcast(command: MyCommand) {
         try { sendBroadcast(command.toIntent()) }
-        catch (e: IllegalArgumentException) { log.e("Illegal command: ${command.str}", e) }
+        catch (e: IllegalArgumentException) { log.e("Illegal command: ${command.str}", "ML", e) }
     }
 
     /**
@@ -393,8 +393,8 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, DrawerLayout.DrawerLi
             addAllSharedElementsToFragmentTransaction(ma_local_frame_layout, ft)
             ft.commit()
         }
-        catch (e: Fragment.InstantiationException) { log.e("Fragment class: ${command["component"]} not found.", e) }
-        catch (e: IllegalArgumentException) { log.e("Illegal command: " + (command).str, e) }
+        catch (e: Fragment.InstantiationException) { log.e("Fragment class: ${command["component"]} not found.", "ML", e) }
+        catch (e: IllegalArgumentException) { log.e("Illegal command: ${(command).str}", "ML", e) }
 
     }
 

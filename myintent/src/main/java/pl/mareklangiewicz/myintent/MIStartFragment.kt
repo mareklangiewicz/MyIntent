@@ -11,9 +11,7 @@ import kotlinx.android.synthetic.main.mi_log_fragment.*
 import pl.mareklangiewicz.myactivities.MyActivity
 import pl.mareklangiewicz.myfragments.MyFragment
 import pl.mareklangiewicz.myintent.PlayStopButton.State.*
-import pl.mareklangiewicz.myutils.MyLogLevel
-import pl.mareklangiewicz.myutils.ToDo
-import pl.mareklangiewicz.myutils.hideKeyboard
+import pl.mareklangiewicz.myutils.*
 
 class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listener {
 
@@ -259,7 +257,7 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
             MIContract.CmdRecent.insert(activity, cmd)
             mi_lf_et_command.setText("")
         } catch (e: RuntimeException) {
-            log.e(e.message, e)
+            log.e(e.message, "ML", e)
         }
 
         updatePS()

@@ -6,6 +6,7 @@ import android.widget.ImageView
 import pl.mareklangiewicz.mydrawables.MyPlayStopDrawable
 import pl.mareklangiewicz.myintent.PlayStopButton.State.*
 import pl.mareklangiewicz.myloggers.MY_DEFAULT_ANDRO_LOGGER
+import pl.mareklangiewicz.myutils.*
 
 /**
  * Created by Marek Langiewicz on 15.12.15.
@@ -73,7 +74,7 @@ class PlayStopButton(private val view: ImageView) {
                     } else if (oldState == PLAY && newState == STOP) {
                         animator.start()
                     } else
-                        log.a("Incorrect animated button state.", null)
+                        log.a("Incorrect animated button state.")
                 }
             }
         }

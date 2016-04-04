@@ -9,7 +9,7 @@ import android.support.v4.view.ViewCompat
 import android.util.AttributeSet
 import android.view.View
 import pl.mareklangiewicz.myloggers.MY_DEFAULT_ANDRO_LOGGER
-import pl.mareklangiewicz.myutils.scale1d
+import pl.mareklangiewicz.myutils.*
 
 /**
  * Created by Marek Langiewicz on 22.03.16.

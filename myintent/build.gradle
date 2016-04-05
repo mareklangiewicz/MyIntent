@@ -81,7 +81,7 @@ dependencies {
     compile project(':myutils')
     compile project(':myviews')
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile 'hu.supercluster:paperwork:1.2.2'
+    compile 'hu.supercluster:paperwork:1.2.7'
 }
 buildscript {
     ext.kotlin_version = '1.0.0'
@@ -91,7 +91,7 @@ buildscript {
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
-        classpath 'hu.supercluster:paperwork-plugin:1.2.2'
+        classpath 'hu.supercluster:paperwork-plugin:1.2.7'
     }
 }
 

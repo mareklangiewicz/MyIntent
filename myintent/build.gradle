@@ -17,11 +17,18 @@ android {
 
     signingConfigs {
         release {
-            storeFile file(System.getenv("MYINTENT_STORE_FILE"))
-            storePassword System.getenv("MYINTENT_STORE_PASSWORD")
-            keyAlias System.getenv("MYINTENT_KEY_ALIAS")
-            keyPassword System.getenv("MYINTENT_KEY_PASSWORD")
+            // TODO SOMEDAY: different config for release
+            storeFile file('keystore/open.keystore.jks')
+            keyAlias 'openkey'
+            storePassword 'openkey'
+            keyPassword 'openkey'
         }
+//        release {
+//            storeFile file(System.getenv("MYINTENT_STORE_FILE"))
+//            storePassword System.getenv("MYINTENT_STORE_PASSWORD")
+//            keyAlias System.getenv("MYINTENT_KEY_ALIAS")
+//            keyPassword System.getenv("MYINTENT_KEY_PASSWORD")
+//        }
     }
 
     buildTypes {

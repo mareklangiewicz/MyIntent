@@ -3,54 +3,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="pl.mareklangiewicz.myfragments.MyDecoratorsTestsFragment"
+    android:orientation="horizontal"
     >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+    <pl.mareklangiewicz.myviews.MyPie
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:orientation="horizontal"
+        android:tag="decorate"
+        app:mv_pieColor="?attr/colorPrimaryDark"
+        app:mv_from="70"
+        app:mv_to="95"
+        />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
         >
 
         <pl.mareklangiewicz.myviews.MyPie
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
             android:tag="decorate"
-            app:mv_pieColor="?attr/colorPrimaryDark"
-            app:mv_from="70"
-            app:mv_to="95"
+            app:mv_pieColor="?attr/colorAccent"
+            app:mv_from="20"
             tools:ignore="NestedWeights"
             />
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+        <pl.mareklangiewicz.myviews.MyPie
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:orientation="vertical"
-            >
-
-            <pl.mareklangiewicz.myviews.MyPie
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:tag="decorate"
-                app:mv_pieColor="?attr/colorAccent"
-                app:mv_from="20"
-                />
-
-            <pl.mareklangiewicz.myviews.MyPie
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:tag="decorate"
-                app:mv_to="80"
-                />
-
-        </LinearLayout>
+            android:tag="decorate"
+            app:mv_to="80"
+            />
 
     </LinearLayout>
 
 </LinearLayout>
+

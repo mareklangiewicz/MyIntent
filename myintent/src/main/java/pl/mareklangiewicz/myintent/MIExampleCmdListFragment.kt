@@ -17,7 +17,7 @@ class MIExampleCmdListFragment : MICmdListFragment() {
     }
 
     fun refresh() {
-        var cmds = ArrayList<String>()
+        val cmds = ArrayList<String>()
         MIContract.CmdExample.load(activity, cmds)
         commands = cmds
     }

@@ -58,8 +58,8 @@ import java.util.*
 /**
  * This is the heart of this library. It is an active side of communication.
  * It takes a function and calls it whenever it wants to :-)
- * It returns some other function that potentially can be used to control the behavior of the machine
- * regarding given function.
+ * Usually it returns some other function that potentially can be used to control the behavior of the machine
+ * regarding given function. (But I do not define any specific return type here yet. Concrete machines will.)
  * Usage: You give the machine your function, and from now on, you do not call your function manually,
  * but machine does it for you. And machine usually gives you some other function: the controller,
  * that can give you some control on how and when the machine call your original function.
@@ -76,14 +76,14 @@ interface IMachine<out T, in R, out H> : Function1<Function1<T, R>, H>
 /** passive producer (similar to iterator) */
 //alias IPullee<out R> = Function1<Unit, R> // SOMEDAY: use alias when Kotlin supports type aliases..
 
-/** passive producer (similar to rx: observer) */
+/** passive consumer (similar to rx: observer) */
 //alias IPushee<in T> = Function1<T, Unit> // SOMEDAY: use alias when Kotlin supports type aliases..
 
 
 /** active consumer (similar to java 8: collector) */
 interface IPuller<in R, out H> : IMachine<Unit, R, H> // SOMEDAY: use alias when Kotlin supports type aliases..
 
-class Puller<in R, out H>(private val m: IMachine<Unit, R, H>): IPuller<R, H> { // SOMEDAY: remove when we have type aliases
+class Puller<in R, out H>(private val m: IMachine<Unit, R, H>): IPuller<R, H> { // TODO SOMEDAY: remove this wrapper when we have type aliases
     override fun invoke(f: (Unit) -> R): H {
         return m(f)
     }
@@ -92,7 +92,7 @@ class Puller<in R, out H>(private val m: IMachine<Unit, R, H>): IPuller<R, H> { 
 /** active producer (similar to rx.observable) */
 interface IPusher<out T, out H> : IMachine<T, Unit, H> // SOMEDAY: use alias when Kotlin supports type aliases..
 
-class Pusher<out T, out H>(private val m: IMachine<T, Unit, H>): IPusher<T, H> { // SOMEDAY: remove when we have type aliases
+class Pusher<out T, out H>(private val m: IMachine<T, Unit, H>): IPusher<T, H> { // TODO SOMEDAY: remove this wrapper when we have type aliases
     override fun invoke(f: (T) -> Unit): H {
         return m(f)
     }
@@ -121,6 +121,21 @@ class Completed<out I> : IEvent<I>
 //    data class Error(val error: Throwable)
 //    object Completed
 //}
+
+
+
+// TODO LATER: change IEvent protocol to be compatibile with more general/basic "null-ends-stream" protocol:
+// Error event should NOT end communication automatically - always send a null value after error to end the stream.
+// Completed event should be removed (a null value without preceding error will be used instead)
+// This solution have flaws, but it is much better because we can use all code that just understand
+// nullable streams as it is. This way a lot of code doesn't have to know/care about IEvent type structure.
+// It will just work for any (nullable) type.
+// I guess the main disadventage of this solution is network related - what if we loose connection after
+// sending Error item. We will not have a chance to send terminating "null" value at all.
+// But: in such cases we can write simple wrappers/conwerters that box error and null values in one message
+// and unbox it on the oter side (back to two separate items).
+
+
 
 // A machine can return some IPushee<ICommand> you can use to control the way it works.
 interface ICommand
@@ -205,6 +220,15 @@ fun <R> Function1<Unit, R?>.niter() = object : Iterable<R> {
     }
 }
 
+/**
+ * makes sure we stop asking an upstream function for next elements after we get a null value once
+ * The U type parameter here will usually be just a Unit (then our function is just a pullee).
+ * But I leave U type unspecified here to be a little more generic.
+ */
+fun <U, R> Function1<U, R?>.nnn() = object : Function1<U, R?> {
+    var end = false
+    override fun invoke(u: U): R? = if(end) null else this@nnn(u) ?: null.apply { end = true }
+}
 
 
 //fun <R> Iterator<R>.asEPullee(): IEPullee<R> = { if(hasNext()) Item(next()) else Completed<R>() } // SOMEDAY: enable when we have aliases

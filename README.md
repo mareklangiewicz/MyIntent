@@ -1,5 +1,75 @@
 # My Intent
 
+This Android project written in Kotlin contains two parts: a library and an app.
+
+### My Intent Library
+
+An Android library: Collection of reusable views, fragments, activities, drawables, loggers, and other utilities.
+
+It is divided into nine modules:
+
+* myactivities (mostly: MyActivity - predefined base main activity / app ui manager)
+* myfragments (some reusable fragments; base fragment: MyFragment with predefined communication with MyActivity)
+* myviews (some custom reusable views like MyNavigationView or MyPie)
+* mydrawables (some animated drawables)
+* myrx (some kotlin extensions for rxjava)
+* myloggers (pretty logging ui on android)
+* myutils (a lot of different utility functions etc)
+* myres (collection of android resources ready to use)
+* myintent (the myintent app - see below)
+
+You can use any of these through JITPack:
+
+#### Gradle Dependencies
+
+Add following repository to your app build.gradle file:
+
+```gradle
+repositories {
+    maven { url "https://jitpack.io" }
+}
+```
+
+
+Then add dependencies to My Blocks modules you want:
+
+```gradle
+dependencies {
+    // ... other dependencies here
+    compile 'com.github.langara.MyIntent:myactivities:myintent-SNAPSHOT'
+    }
+}
+```
+
+Change `myactivities` to module you want.
+Usually including the `myactivities` module is enough because it depends on almost all others.
+
+#### Examples
+
+To see features of this library check out the My Intent App (described below)
+(especially the MyTestActivity embedded inside the app that just presents most of the features of this library)
+
+There is also very simple example aplication using MyIntent lib. here:
+[My Intent Sample](https://github.com/langara/MyIntentSample)
+
+Also some old Java versions of example apps using this library (its old Java version) are still available
+here:
+
+* [DEPRECATED: My Blocks Sample (on github)](https://github.com/langara/MyBlocksSample) - the simplest app using My Blocks lib.
+* [DEPRECATED: My Blocks Sample (on google play)](https://play.google.com/store/apps/details?id=pl.mareklangiewicz.myblockssample)
+* [DEPRECATED: My Blocks Sample (on youtube)](https://www.youtube.com/watch?v=R-bpq55UYGI)
+* [DEPRECATED: My Test App (on github)](https://github.com/langara/MyTestApp)
+* [DEPRECATED: My Test App (on google play)](https://play.google.com/store/apps/details?id=pl.mareklangiewicz.mytestapp)
+* [DEPRECATED: My Test App (on youtube)](https://www.youtube.com/watch?v=B9FPWpQYMuc)
+
+
+
+TODO: real documentation...
+
+
+
+### My Intent App
+
 An app that allows the user to start **any** android **intent** easily.
 
 Documentation is available here: http://mareklangiewicz.pl/mi
@@ -7,15 +77,15 @@ Documentation is available here: http://mareklangiewicz.pl/mi
 
 #### Google Play
 
-* [My Intent (on google play)](https://play.google.com/store/apps/details?id=pl.mareklangiewicz.myintent)
+* [Old version in Java: My Intent (on google play)](https://play.google.com/store/apps/details?id=pl.mareklangiewicz.myintent)
 
 #### Youtube
 
-* [My Intent (on youtube)](https://www.youtube.com/watch?v=-8N_B-Jpk8k)
+* [Old version in Java: My Intent (on youtube)](https://www.youtube.com/watch?v=-8N_B-Jpk8k)
 
 
 
-#### Screenshots
+#### Screenshots (Old version in Java)
 
 
 

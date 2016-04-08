@@ -56,21 +56,7 @@ class MIActivity : MyActivity() {
         nav.menuId = R.menu.mi_global
         nav.headerId = R.layout.mi_header
 
-        val menu = nav.menuObj!!
         val header = nav.headerObj!!
-
-        if (BuildConfig.DEBUG) {
-            val paperwork = Paperwork(this)
-            menu.findItem(R.id.ds_mode).title = "build type: ${BuildConfig.BUILD_TYPE}"
-            menu.findItem(R.id.ds_flavor).title = "build flavor: ${BuildConfig.FLAVOR}"
-            menu.findItem(R.id.ds_version_code).title = "version code: ${BuildConfig.VERSION_CODE}"
-            menu.findItem(R.id.ds_version_name).title = "version name: ${BuildConfig.VERSION_NAME}"
-            menu.findItem(R.id.ds_time_stamp).title = "build time: ${paperwork.get("buildTime")}"
-            menu.findItem(R.id.ds_git_sha).title = "git sha: ${paperwork.get("gitSha")}"
-            menu.findItem(R.id.ds_git_tag).title = "git tag: ${paperwork.get("gitTag")}"
-            menu.findItem(R.id.ds_git_info).title = "git info: ${paperwork.get("gitInfo")}"
-        }
-
 
         animations = MIActivityAnimations(
                 header.mi_gh_tv_logo,

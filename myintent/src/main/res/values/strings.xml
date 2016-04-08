@@ -35,4 +35,5 @@
     <string name="mi_orientation_portrait">Orientation: Portrait</string>
     <string name="mi_orientation_landscape">Orientation: Landscape</string>
     <string name="mi_orientation_unspecified">Orientation: Unspecified</string>
+    <string name="mi_about">About</string>
 </resources>

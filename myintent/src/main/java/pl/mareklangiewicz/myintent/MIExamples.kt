@@ -97,6 +97,7 @@ object MIExamples {
         add(RERule("^say the time", "say time", "", "", true))
         add(RERule("^what time is it", "say time", "", "", true))
         add(RERule("^say ", "start custom action say data ", "say", "", true))
+        add(RERule("^about$", "fragment .MIAboutFragment", "about", "", true))
         add(RERule("^(exit|quit|finish)\\b", "start custom action exit", "exit", "", true))
     }
 }

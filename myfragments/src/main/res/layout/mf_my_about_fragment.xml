@@ -9,12 +9,27 @@
     tools:ignore="UnusedAttribute"
     >
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text=""
+        android:id="@+id/mf_maf_tv_title"
+        android:gravity="center"
+        android:padding="16dp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:id="@+id/mf_maf_tv_description"
+        android:padding="8dp"
+        />
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/mi_cmd_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical"
+        android:id="@+id/mf_maf_rv_details"
         app:layoutManager="LinearLayoutManager"
+        android:scrollbars="vertical"
         />
-
 </LinearLayout>

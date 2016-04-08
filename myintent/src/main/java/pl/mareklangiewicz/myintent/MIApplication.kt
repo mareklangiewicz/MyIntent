@@ -8,10 +8,13 @@ import pl.mareklangiewicz.myutils.MyLogLevel
 
 //import com.squareup.leakcanary.LeakCanary;
 
+val APP_START_TIME = System.currentTimeMillis()
+
 /**
  * Created by Marek Langiewicz on 20.10.15.
  */
 class MIApplication : Application() {
+
 
     init {
 

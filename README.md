@@ -22,16 +22,19 @@ You can use any of these through JITPack:
 
 #### Gradle Dependencies
 
-Add following repository to your app build.gradle file:
+Add following repository at the end, to your root build.gradle file:
 
 ```gradle
-repositories {
-    maven { url "https://jitpack.io" }
+allprojects {
+    repositories {
+        // ... other repositories here
+        maven { url "https://jitpack.io" }
+    }
 }
 ```
 
 
-Then add dependencies to My Blocks modules you want:
+Then add dependencies to My Intent modules you want - in your app module build.gradle file:
 
 ```gradle
 dependencies {

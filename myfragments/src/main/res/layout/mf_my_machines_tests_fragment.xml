@@ -103,6 +103,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/mf_mmt_rv_log"
         android:layout_width="match_parent"
+        android:scrollbars="vertical"
         app:layoutManager="LinearLayoutManager"
         android:layout_height="match_parent"
         />

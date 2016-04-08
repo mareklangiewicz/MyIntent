@@ -35,6 +35,12 @@
             android:title="@string/mi_help"
             android:titleCondensed="cmd:fragment .MIHelpFragment"
             />
+        <item
+            android:id="@+id/mi_about"
+            android:icon="@drawable/mr_ic_whatshot_black_24dp"
+            android:title="@string/mi_about"
+            android:titleCondensed="cmd:fragment .MIAboutFragment"
+            />
     </group>
 
     <item
@@ -57,9 +63,14 @@
     <item
         android:id="@+id/item_debug_stuff"
         android:title="@string/mi_debug_stuff"
-        android:visible="@bool/mi_debug_mode"
         >
         <menu>
+            <item
+                android:id="@+id/start_my_test_activity"
+                android:icon="@drawable/mr_ic_whatshot_black_24dp"
+                android:title="@string/mi_start_my_test_activity"
+                android:titleCondensed="cmd:activity pl.mareklangiewicz.myactivities.MyTestActivity"
+                />
             <item
                 android:id="@+id/ds_orientation_portrait"
                 android:icon="@drawable/mr_ic_whatshot_black_24dp"
@@ -79,12 +90,6 @@
                 android:titleCondensed="cmd:start custom action orientation data unspecified"
                 />
             <item
-                android:id="@+id/start_my_test_activity"
-                android:icon="@drawable/mr_ic_whatshot_black_24dp"
-                android:title="@string/mi_start_my_test_activity"
-                android:titleCondensed="cmd:activity pl.mareklangiewicz.myactivities.MyTestActivity"
-                />
-            <item
                 android:id="@+id/set_timer_666"
                 android:icon="@drawable/mr_ic_whatshot_black_24dp"
                 android:title="set timer 666"
@@ -95,38 +100,6 @@
                 android:icon="@drawable/mr_ic_whatshot_black_24dp"
                 android:title="set alarm 10 45"
                 android:titleCondensed="cmd:set alarm 10 45"
-                />
-            <item
-                android:id="@+id/ds_mode"
-                android:title=""
-                />
-            <item
-                android:id="@+id/ds_flavor"
-                android:title=""
-                />
-            <item
-                android:id="@+id/ds_version_code"
-                android:title=""
-                />
-            <item
-                android:id="@+id/ds_version_name"
-                android:title=""
-                />
-            <item
-                android:id="@+id/ds_git_sha"
-                android:title=""
-                />
-            <item
-                android:id="@+id/ds_git_tag"
-                android:title=""
-                />
-            <item
-                android:id="@+id/ds_git_info"
-                android:title=""
-                />
-            <item
-                android:id="@+id/ds_time_stamp"
-                android:title=""
                 />
         </menu>
     </item>

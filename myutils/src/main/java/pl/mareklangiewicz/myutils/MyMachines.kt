@@ -285,7 +285,7 @@ fun <R> Function1<Unit, IEvent<R>>.eiter() = object : Iterable<R> {
  * It pushes a Long value that counts invocations in every step (starting from 0 for every step)
  * UPDATE: It supports Tick and Tock commands too (just like Step)
  */
-class StepPusher( val step: Long = 1, val tick: Long = 1, val tock: Long = 1 ) : IPusher<Long, Function1<ICommand, Unit>> {
+open class StepPusher( val step: Long = 1, val tick: Long = 1, val tock: Long = 1 ) : IPusher<Long, Function1<ICommand, Unit>> {
 
     protected class Pusher(
             private var function: Function1<Long, Unit>?,

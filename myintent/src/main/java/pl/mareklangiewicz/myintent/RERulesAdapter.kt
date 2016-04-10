@@ -19,7 +19,7 @@ class RERulesAdapter() : RecyclerView.Adapter<RERulesAdapter.ViewHolder>(), View
 
     val RE_RULE_VIEW_TAG_HOLDER = R.id.mi_re_rule_view_tag_holder
 
-    protected val log = MY_DEFAULT_ANDRO_LOGGER
+    val log = MY_DEFAULT_ANDRO_LOGGER
 
     private var explained: RERule? = null
     // if some rule can not be removed or moved it displays snackbar only once in a row.

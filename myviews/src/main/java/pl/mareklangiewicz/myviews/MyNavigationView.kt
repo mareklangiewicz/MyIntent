@@ -12,7 +12,7 @@ import pl.mareklangiewicz.myutils.*
 
 class MyNavigationView : NavigationView, IMyUINavigation, NavigationView.OnNavigationItemSelectedListener {
 
-    protected val log = MY_DEFAULT_ANDRO_LOGGER
+    val log = MY_DEFAULT_ANDRO_LOGGER
 
     constructor(context: Context) : super(context) { init(null, 0) }
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) { init(attrs, 0) }

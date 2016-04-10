@@ -22,7 +22,7 @@ class REGroupsAdapter() : RecyclerView.Adapter<REGroupsAdapter.ViewHolder>(), Vi
 
     val RE_GROUP_VIEW_TAG_HOLDER = R.id.mi_re_group_view_tag_holder
 
-    protected val log = MY_DEFAULT_ANDRO_LOGGER
+    val log = MY_DEFAULT_ANDRO_LOGGER
 
     var groups: List<REGroup>? = null
         set(value) {

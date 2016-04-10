@@ -16,7 +16,7 @@ import pl.mareklangiewicz.myutils.*
  */
 class MyScrollBehavior<V : View> : CoordinatorLayout.Behavior<V> {
 
-    protected val log = MY_DEFAULT_ANDRO_LOGGER
+    val log = MY_DEFAULT_ANDRO_LOGGER
 
     private var min = 0
     private var max = 100

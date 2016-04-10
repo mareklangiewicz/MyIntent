@@ -20,7 +20,6 @@ import com.google.android.gms.actions.SearchIntents
 import com.google.android.gms.appindexing.Action
 import com.google.android.gms.appindexing.AppIndex
 import com.google.android.gms.common.api.GoogleApiClient
-import hu.supercluster.paperwork.Paperwork
 import kotlinx.android.synthetic.main.mi_header.view.*
 import pl.mareklangiewicz.myactivities.MyActivity
 import pl.mareklangiewicz.myintent.MIContract.RuleUser
@@ -315,8 +314,12 @@ class MIActivity : MyActivity() {
             val call = OpenWeatherMap.service.getWeatherByCity(appid, city, units)
 
             call.enqueue(object : Callback<OpenWeatherMap.Forecast> {
-                override fun onResponse(call: Call<OpenWeatherMap.Forecast>?, response: Response<OpenWeatherMap.Forecast>?) {
-                    val forecast = response?.body()
+                override fun onResponse(call: Call<OpenWeatherMap.Forecast>?, response: Response<OpenWeatherMap.Forecast>) {
+                    if(!response.isSuccessful) {
+                        log.e("Fetching weather failed: code: ${response.code()}; message: ${response.message()}")
+                        return
+                    }
+                    val forecast = response.body()
                     if (forecast === null || forecast.weather === null) {
                         log.e("Fetching weather failed: empty response.")
                         return
@@ -350,8 +353,12 @@ class MIActivity : MyActivity() {
             val call = OpenWeatherMap.service.getDailyForecastByCity(appid, city, d.toLong(), units)
 
             call.enqueue(object : Callback<OpenWeatherMap.DailyForecasts> {
-                override fun onResponse(call: Call<OpenWeatherMap.DailyForecasts>?, response: Response<OpenWeatherMap.DailyForecasts>?) {
-                    val forecasts = response?.body()
+                override fun onResponse(call: Call<OpenWeatherMap.DailyForecasts>?, response: Response<OpenWeatherMap.DailyForecasts>) {
+                    if(!response.isSuccessful) {
+                        log.e("Fetching weather failed: code: ${response.code()}; message: ${response.message()}")
+                        return
+                    }
+                    val forecasts = response.body()
                     if (forecasts === null) {
                         log.e("Fetching weather failed: empty response.")
                         return
@@ -381,11 +388,11 @@ class MIActivity : MyActivity() {
 
     }
 
-    protected fun suicide() {
+    private fun suicide() {
         System.exit(0)
     }
 
-    protected fun resurrection() {
+    private fun resurrection() {
         val i = baseContext.packageManager.getLaunchIntentForPackage(baseContext.packageName)
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         val pi = PendingIntent.getActivity(this@MIActivity, 0, i, 0)

@@ -1,1 +1,1 @@
-include ':myactivities', ':myviews', ':myutils', ':myfragments', ':myloggers', ':myres', ':mydrawables', ':myintent', ':myrx'
+include ':myactivities', ':myviews', ':myutils', ':myfragments', ':myloggers', ':myres', ':mydrawables', ':myintent', ':myrx', ':mycorelib'

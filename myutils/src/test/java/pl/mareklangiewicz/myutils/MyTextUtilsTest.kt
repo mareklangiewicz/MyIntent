@@ -3,6 +3,7 @@ package pl.mareklangiewicz.myutils
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import pl.mareklangiewicz.mycorelib.MyClass
 
 import java.util.Arrays
 
@@ -25,5 +26,9 @@ class MyTextUtilsTest {
     @Test fun testToLongStr() { }
 
     @Test fun testToVeryLongStr() { }
+
+    @Test fun testMyCoreLibBuild() {
+        MyClass.bla()
+    }
 }
 

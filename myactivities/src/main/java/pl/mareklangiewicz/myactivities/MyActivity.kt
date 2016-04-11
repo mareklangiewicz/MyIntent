@@ -59,13 +59,13 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, DrawerLayout.DrawerLi
     protected var isViewAvailable = false
 
     protected val garrow: MyLivingDrawable = MyArrowDrawable().apply {
-        strokeWidth = 5f
+        strokeWidth = 4f
         rotateTo = 360f + 180f
         alpha = 0xa0
     }
 
     protected val larrow: MyLivingDrawable = MyArrowDrawable().apply {
-        strokeWidth = 5f
+        strokeWidth = 4f
         rotateFrom = 180f
         alpha = 0xa0
     }

@@ -23,7 +23,7 @@ class PlayStopButton(private val view: ImageView) {
     private val log = MY_DEFAULT_ANDRO_LOGGER
 
 
-    private val drawable = MyPlayStopDrawable().apply { colorFrom = 0xff0000c0.toInt(); colorTo = 0xffc00000.toInt(); rotateTo = 90f; strokeWidth = 6f }
+    private val drawable = MyPlayStopDrawable().apply { colorFrom = 0xff0000c0.toInt(); colorTo = 0xffc00000.toInt(); rotateTo = 90f; strokeWidth = 4f }
     private val animator = ObjectAnimator.ofInt(drawable, "level", 0, 10000).setDuration(ANIM_DURATION)
 
     var listener: Listener? = null

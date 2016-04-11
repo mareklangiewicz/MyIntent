@@ -23,3 +23,13 @@ repositories {
 sourceSets {
     main.java.srcDirs += 'src/main/kotlin'
 }
+
+// build a jar with source files
+task sourcesJar(type: Jar) {
+    from sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+artifacts {
+    archives sourcesJar
+}

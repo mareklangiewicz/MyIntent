@@ -1,9 +1,8 @@
 package pl.mareklangiewicz.myutils
 
-import org.junit.Before
+import android.support.test.runner.AndroidJUnit4
 import org.junit.Test
 import org.junit.runner.RunWith
-import android.support.test.runner.*
 
 /**
  * Created by Marek Langiewicz on 29.03.16.
@@ -13,10 +12,6 @@ import android.support.test.runner.*
 class MyCommandsAndroidTest {
 
     val log = MySystemLogger()
-
-    @Before fun setUp() {
-        sUT = true
-    } // TODO: remove this sUT hack..
 
     @Test fun testMyCommandToExtrasBundle() {
         log.w(RE_EXTRA_ELEM)

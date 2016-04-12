@@ -28,9 +28,6 @@ private val V = true
 private val VV = false
 
 
-var sUT = false // FIXME NOW: this is temporary hack to detect unit tests.. remove it.
-
-
 data class RERule private constructor(
         private var rmatch: Regex,
         var replace: String,

@@ -294,7 +294,7 @@ open class StepPusher( val step: Long = 1, val tick: Long = 1, val tock: Long = 
             val tock: Long = 1
     ) : Function1<ICommand, Unit> {
 
-        protected var started = false
+        var started = false
 
         override fun invoke(cmd: ICommand) {
             when(cmd) {

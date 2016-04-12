@@ -311,7 +311,7 @@ class MIActivity : MyActivity() {
         if (d == 1) {
             // we want current weather
 
-            val call = OpenWeatherMap.service.getWeatherByCity(appid, city, units)
+            val call = OpenWeatherMap.service.getWeatherByCityCall(appid, city, units)
 
             call.enqueue(object : Callback<OpenWeatherMap.Forecast> {
                 override fun onResponse(call: Call<OpenWeatherMap.Forecast>?, response: Response<OpenWeatherMap.Forecast>) {
@@ -350,7 +350,7 @@ class MIActivity : MyActivity() {
         } else {
             // we want forecast
 
-            val call = OpenWeatherMap.service.getDailyForecastByCity(appid, city, d.toLong(), units)
+            val call = OpenWeatherMap.service.getDailyForecastByCityCall(appid, city, d.toLong(), units)
 
             call.enqueue(object : Callback<OpenWeatherMap.DailyForecasts> {
                 override fun onResponse(call: Call<OpenWeatherMap.DailyForecasts>?, response: Response<OpenWeatherMap.DailyForecasts>) {

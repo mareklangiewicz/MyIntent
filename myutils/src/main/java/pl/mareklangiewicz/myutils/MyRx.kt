@@ -1,6 +1,5 @@
-package pl.mareklangiewicz.myrx
+package pl.mareklangiewicz.myutils
 
-import pl.mareklangiewicz.myutils.*
 import rx.Observable
 import rx.Observer
 import rx.Subscription

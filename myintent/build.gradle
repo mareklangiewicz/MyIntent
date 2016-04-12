@@ -14,8 +14,8 @@ android {
         applicationId "pl.mareklangiewicz.myintent"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 5
-        versionName "1.0.3-alpha"
+        versionCode 6
+        versionName "1.0.6-alpha"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 

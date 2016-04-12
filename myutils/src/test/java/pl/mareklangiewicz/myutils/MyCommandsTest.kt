@@ -1,8 +1,6 @@
 package pl.mareklangiewicz.myutils
 
 import com.google.common.truth.Truth.assertThat
-import org.junit.After
-import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
 import java.lang.String.format
@@ -16,13 +14,6 @@ import java.util.regex.Pattern
 class MyCommandsTest {
 
     val log = MySystemLogger()
-
-    @Before fun setUp() {
-        sUT = true
-    } // TODO: remove this sUT hack..
-
-    @After fun tearDown() {
-    }
 
     @Ignore @Test fun testSomething() {
         val d1 = Date()

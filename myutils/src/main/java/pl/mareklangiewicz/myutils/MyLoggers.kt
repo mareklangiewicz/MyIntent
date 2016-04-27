@@ -102,7 +102,7 @@ class MySystemLogger(val outlvl: MyLogLevel = MyLogLevel.VERBOSE, val errlvl: My
     }
 }
 
-class MyLogHistory : Function1<MyLogEntry, Unit>, IMyArray<MyLogEntry>, IClear {
+class MyLogHistory : IMyBuffer<MyLogEntry>, IClear {
 
     private val fullBuffer = MyRingBuffer<MyLogEntry>()
 

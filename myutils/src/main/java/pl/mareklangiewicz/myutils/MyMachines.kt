@@ -1,8 +1,12 @@
 package pl.mareklangiewicz.myutils
 
 import android.os.Handler
+import android.os.Looper
 import android.support.annotation.MainThread
 import java.util.*
+import java.util.concurrent.Executors
+import java.util.concurrent.ScheduledExecutorService
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by Marek Langiewicz on 20.02.16.
@@ -275,6 +279,38 @@ fun <R> Function1<Unit, IEvent<R>>.eiter() = object : Iterable<R> {
 }
 
 
+
+
+interface IWorker {
+    /**
+     * delay is in miliseconds; not positive value means: no delay.
+     * Returns the "cancel" function. Which cancels sheduled work when invoked.
+     */
+    fun schedule(delay: Long = 0, work: Function1<Unit, Unit>): Function1<Unit, Unit>
+}
+
+
+// TODO LATER: test it (this is just first fast attempt to implement somethig simple - it will be rewritten)
+class ExecutorWorker(private val ses: ScheduledExecutorService) : IWorker {
+    constructor(threads: Int = 16) : this(Executors.newScheduledThreadPool(threads))
+    override fun schedule(delay: Long, work: (Unit) -> Unit): (Unit) -> Unit {
+        val sf = ses.schedule({ work(Unit) }, delay, TimeUnit.MILLISECONDS)
+        return { sf.cancel(true) }
+    }
+}
+
+
+class HandlerWorker(private val handler: Handler = Handler(Looper.getMainLooper())) : IWorker {
+    override fun schedule(delay: Long, work: (Unit) -> Unit): (Unit) -> Unit {
+        throw UnsupportedOperationException()
+        // TODO NOW: implement it (see Timer class implementation)
+        // TODO NOW: use it in Timer class instead of using Handler directly
+        // TODO NOW: implement operator delegate(IWorker) that works like: rx: observeOn (synchronize pushing items downstream!)
+        // We have to obey this rule from Rx contract: Observables must issue notifications to observers serially (not in parallel).
+        // They may issue these notifications from different threads, but there must be a formal happens-before relationship
+        // between the notifications.
+    }
+}
 
 
 

@@ -5,6 +5,6 @@
     android:label="@string/mi_app_name"
     android:queryAfterZeroResults="true"
     android:searchSettingsDescription="@string/mi_search_settings_description"
-    android:searchSuggestAuthority="pl.mareklangiewicz.myintent.provider"
+    android:searchSuggestAuthority="@string/mi_authority"
     android:searchSuggestPath="cmd"
     />

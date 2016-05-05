@@ -34,7 +34,7 @@ class MIRulesFragment : MyFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        manager?.name = "MI${if(BuildConfig.DEBUG) " D " else " "}${getString(R.string.mi_rules)}"
+        manager?.name = BuildConfig.NAME_PREFIX + getString(R.string.mi_rules)
         mi_rules_recycler_view.setHasFixedSize(true)
         mi_rules_recycler_view.adapter = adapter
 

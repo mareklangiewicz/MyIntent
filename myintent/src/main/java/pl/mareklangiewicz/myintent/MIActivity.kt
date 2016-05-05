@@ -71,11 +71,11 @@ class MIActivity : MyActivity() {
 
         nav.items { // we ignore returned subscription - navigation will live as long as activity
             when(it) {
-                R.id.clear_recent -> {
+                R.id.mi_clear_recent -> {
                     MIContract.CmdRecent.clear(this)
                     (fgmt as? MIRecentCmdListFragment)?.apply { refresh() }
                 }
-                R.id.reset_all -> resetAll()
+                R.id.mi_reset_all -> resetAll()
             }
         }
 
@@ -112,7 +112,10 @@ class MIActivity : MyActivity() {
 
             val cmd = intent.getStringExtra(EX_COMMAND)
             if (cmd != null) {
-                execute(cmd)
+                if(cmd == "start custom action listen")
+                    execute(cmd)
+                else
+                    play(cmd)
                 return
             }
 
@@ -146,7 +149,7 @@ class MIActivity : MyActivity() {
         if (command == null) {
             log.d("URI with empty fragment received. Entering help..")
             log.v("uri: ${uri.str}")
-            execute("fragment .MIHelpFragment")
+            execute("fragment pl.mareklangiewicz.myintent.MIHelpFragment")
             return
 
         }
@@ -163,7 +166,7 @@ class MIActivity : MyActivity() {
         val f = fgmt
         if(f is MIStartFragment) f.play(command)
         else {
-            execute("fragment .MIStartFragment")
+            execute("fragment pl.mareklangiewicz.myintent.MIStartFragment")
             play(command) // IMPORTANT: we have to be asynchrous here again to let fragment initialize fully first.
         }
     }
@@ -452,5 +455,11 @@ class MIActivity : MyActivity() {
                 R.id.recent_commands_listview)
     }
 
+    override fun onCommandStartFragment(command: MyCommand) {
+        val f = fgmt
+        if(f !== null)
+            (application as? MIApplication)?.REF_WATCHER?.watch(f)
+        super.onCommandStartFragment(command)
+    }
 }
 

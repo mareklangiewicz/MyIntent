@@ -17,7 +17,7 @@ import pl.mareklangiewicz.myutils.kgetInt
  */
 object MIContract {
 
-    val AUTH = "pl.mareklangiewicz.myintent.provider"
+    val AUTH = BuildConfig.AUTHORITY
     val BASE_URI = Uri.parse("content://" + AUTH)
 
     object CmdRecent {

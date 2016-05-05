@@ -15,7 +15,7 @@ class MIAboutFragment : MyAboutFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        manager?.name = "MI${if(BuildConfig.DEBUG) " D " else " "}${getString(R.string.mi_about)}"
+        manager?.name = BuildConfig.NAME_PREFIX + getString(R.string.mi_about)
 
         val paperwork = Paperwork(activity)
 

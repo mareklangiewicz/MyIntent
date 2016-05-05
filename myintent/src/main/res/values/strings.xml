@@ -1,6 +1,6 @@
 <resources>
     <string name="mi_app_name">My Intent</string>
-    <string name="mi_title_mi_activity">@string/mi_app_name</string>
+    <string name="mi_activity">@string/mi_app_name</string>
     <string name="mi_start">Start</string>
     <string name="mi_actions">Actions</string>
     <string name="mi_ask_for_intent">What\'s your intent?</string>
@@ -28,7 +28,7 @@
     <string name="mi_search">Search</string>
     <string name="mi_recent_commands">Recent commands</string>
     <string name="mi_example_commands">Example commands</string>
-    <string name="mi_my_test_activity">My Test Activity</string>
+    <string name="mi_test_activity">MI Tests</string>
     <string name="mi_start_my_test_activity">Start MyTestActivity</string>
     <string name="mi_debug_stuff">Debug stuff</string>
     <string name="mi_clear_log_history">Clear log history</string>

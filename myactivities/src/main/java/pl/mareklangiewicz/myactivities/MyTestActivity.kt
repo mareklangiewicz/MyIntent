@@ -15,7 +15,7 @@ import pl.mareklangiewicz.myutils.*
 /**
  * Test activity presenting most of My..... classes functionality
  */
-class MyTestActivity : MyActivity() {
+open class MyTestActivity : MyActivity() {
 
     private val mldrawable = MyMagicLinesDrawable().apply {
         color = 0x30ffffff

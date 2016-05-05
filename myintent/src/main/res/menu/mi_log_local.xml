@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group
-        android:id="@+id/group_log_level"
+        android:id="@+id/mi_group_log_level"
         android:checkableBehavior="single"
         >
         <item
@@ -31,12 +31,12 @@
             />
     </group>
     <item
-        android:id="@+id/item_global_actions"
+        android:id="@+id/mi_item_global_actions"
         android:title="@string/mi_actions"
         >
         <menu>
             <item
-                android:id="@+id/clear_log_history"
+                android:id="@+id/mi_clear_log_history"
                 android:icon="@drawable/mr_ic_close_black_24dp"
                 android:title="@string/mi_clear_log_history"
                 />

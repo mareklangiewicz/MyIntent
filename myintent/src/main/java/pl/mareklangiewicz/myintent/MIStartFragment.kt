@@ -42,7 +42,7 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
 
         super.onViewCreated(view, savedInstanceState)
 
-        manager?.name = "MI${if(BuildConfig.DEBUG) " D " else " "}${getString(R.string.mi_start)}"
+        manager?.name = BuildConfig.NAME_PREFIX + getString(R.string.mi_start)
 
         mCountdown = Countdown(mi_lf_pb_countdown)
         mCountdown.listener = this
@@ -85,7 +85,7 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
                 R.id.mi_ll_i_info         -> log.history.level = MyLogLevel.INFO
                 R.id.mi_ll_i_debug        -> log.history.level = MyLogLevel.DEBUG
                 R.id.mi_ll_i_verbose      -> log.history.level = MyLogLevel.VERBOSE
-                R.id.clear_log_history    -> log.history.clear()
+                R.id.mi_clear_log_history    -> log.history.clear()
                 R.id.log_some_assert      -> log.a("some assert")
                 R.id.log_some_error       -> log.e("some error")
                 R.id.log_some_warning     -> log.w("some warning")

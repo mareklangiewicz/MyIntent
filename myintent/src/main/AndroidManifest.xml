@@ -14,7 +14,7 @@
         />
 
     <permission
-        android:name="pl.mareklangiewicz.myintent.permission.WRITE"
+        android:name="${applicationId}.provider.WRITE"
         android:label="Write My Intent rules and commands"
         />
     <!-- TODO SOMEDAY: automatic backup for user defined RE rules. (to synchronize between marshmallow devices) -->
@@ -34,7 +34,7 @@
 
         <activity
             android:name=".MIActivity"
-            android:label="@string/mi_title_mi_activity"
+            android:label="@string/mi_activity"
             android:launchMode="singleTask"
             android:windowSoftInputMode="stateAlwaysHidden"
             >
@@ -105,8 +105,8 @@
 
         <!--This activity is only for debugging -->
         <activity
-            android:name="pl.mareklangiewicz.myactivities.MyTestActivity"
-            android:label="@string/mi_my_test_activity"
+            android:name=".MITestActivity"
+            android:label="@string/mi_test_activity"
             android:enabled="@bool/mi_debug_mode"
             android:theme="@style/mi_BlueAppTheme"
             >
@@ -124,10 +124,10 @@
 
         <provider
             android:name=".MIContentProvider"
-            android:authorities="pl.mareklangiewicz.myintent.provider"
+            android:authorities="@string/mi_authority"
             android:enabled="true"
             android:exported="true"
-            android:writePermission="pl.mareklangiewicz.myintent.permission.WRITE"
+            android:writePermission="${applicationId}.provider.WRITE"
             >
             <path-permission
                 android:pathPrefix="/cmd/search_suggest_query"

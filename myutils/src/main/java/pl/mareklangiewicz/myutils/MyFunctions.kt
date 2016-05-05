@@ -10,7 +10,7 @@ fun <T> ident(t: T): T = t
 
 fun <T> const(t: T) = { u: Unit -> t }
 
-/** function compositions: (f * g)(x) = f(g(x)) (works also for objects with 'invoke' method */
+/** function compositions: (f * g)(x) = g(f(x)) (works also for objects with 'invoke' method */
 
 operator infix fun <A, B> Function0<A>.times(f: Function1<A, B>): Function0<B> = { f(this()) }
 

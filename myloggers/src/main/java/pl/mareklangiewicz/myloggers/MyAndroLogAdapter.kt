@@ -45,7 +45,9 @@ open class MyAndroLogAdapter(array: IMyArray<MyLogEntry>? = null) : RecyclerView
 //        var tag = ""
         var level = MyLogLevel.VERBOSE
         var message = ""
-        var elevation = 2f
+
+        val elevation = 2f
+//        var elevation = 2f
 
         array?.run {
             val e = get(position)

@@ -73,6 +73,7 @@ class MyDrawableTestsFragment : MyFragment(), View.OnClickListener, SeekBar.OnSe
     }
 
     override fun onPause() {
+        manager?.fab?.setOnClickListener(null)
         manager?.fab?.hide()
         super.onPause()
     }

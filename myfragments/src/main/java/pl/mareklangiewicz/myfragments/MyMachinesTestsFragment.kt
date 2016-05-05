@@ -2,12 +2,12 @@ package pl.mareklangiewicz.myfragments
 
 import android.animation.ObjectAnimator
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.mf_my_machines_tests_fragment.*
 import pl.mareklangiewicz.myloggers.MyAndroLogAdapter
+import pl.mareklangiewicz.myloggers.MyAndroSystemLogger
 import pl.mareklangiewicz.myutils.*
 
 /**
@@ -15,9 +15,15 @@ import pl.mareklangiewicz.myutils.*
  */
 class MyMachinesTestsFragment : MyFragment() {
 
+
     val adapter = MyAndroLogAdapter(log.history)
 
     private val todo = ToDo()
+
+    private val syslog = MyAndroSystemLogger() // this logger can be used from any thread.
+
+    private val uischeduler = HandlerScheduler()
+    private val exscheduler = ExecutorScheduler().logex(syslog)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState) //just for logging
@@ -38,19 +44,20 @@ class MyMachinesTestsFragment : MyFragment() {
 
             log.i("Test 1 - logging faster and faster")
 
-            val intervals = (1..20).asEPullee()
-                    .vemap { 2000L - it * 100L }
+            val intervals = (1..20).asNPullee()
+                    .vnmap { 2000L - it * 100L }
 
-            val timer = Timer(Handler(), intervals)
+            val timer = Timer(uischeduler, intervals)
                     .lpeek { log.i("item: $it") }
-                    .lfilter { it % 5L == 0L }
+                    .lfilter { it !== null && it % 5L == 0L }
                     .lpeek { log.w("$it % 5 = 0") }
 
-            val ctl = timer { } // we subscribe here with empty function (side effects are attached already) and we get a controller that accepts ICommands
-
-            ctl(Start)
+            val ctl = timer { } // we subscribe here with empty function (side effects are attached already)
+            // and we get a controller that accepts ICommands
 
             todo { ctl(Cancel) }
+
+            ctl(Start)
 
         }
 
@@ -58,22 +65,23 @@ class MyMachinesTestsFragment : MyFragment() {
 
             log.i("Test 2 - moving pies")
 
-            val intervals = (1..20).asEPullee().vemap { 500L }
+            val intervals = (1..20).asNPullee().vnmap { 500L }
 
-            val timer = Timer(Handler(), intervals)
-                    .lmap { it * 5f + 5f }
-                    .lpeek { animTo(mf_mmt_mp1, "to", it) }
-                    .lfilter { it % 10f == 0f }
-                    .lmap { it / 2f }
+            val timer = Timer(uischeduler, intervals)
+                    .lnmap { it * 5f + 5f }
+                    .lnpeek { animTo(mf_mmt_mp1, "to", it) }
+                    .lfilter { it !== null && it % 10f == 0f }
+                    .lmap { it as Float / 2f } // as Float tells compiler that we already filtered nulls out.
                     .lpeek { animTo(mf_mmt_mp2, "to", it) }
                     .lpeek { animTo(mf_mmt_mp3, "to", getRandomFloat(50f, 99f)) }
                     .lpeek { animTo(mf_mmt_mp3, "from", getRandomFloat(1f, mf_mmt_mp3.to)) }
 
             val ctl= timer { } // we subscribe here with empty function (side effects are attached already) and we get a controller that accepts ICommands
 
+            todo { ctl(Cancel) }
+
             ctl(Start)
 
-            todo { ctl(Cancel) }
         }
 
         mf_mmt_b_test3.setOnClickListener {
@@ -84,9 +92,9 @@ class MyMachinesTestsFragment : MyFragment() {
 
             val subscriptions = arrayOf<(Unit) -> Unit>( {}, {}, {} )
 
-            val intervals = (1..70).asEPullee().vemap { 300L }
+            val intervals = (1..70).asNPullee().vnmap { 300L }
 
-            val timer = Timer(Handler(), intervals)
+            val timer = Timer(uischeduler, intervals)
                     .lpeek {
                         when(it) {
                             10L -> subscriptions[0] = relay { animTo(mf_mmt_mp1, "to", it) }
@@ -97,19 +105,61 @@ class MyMachinesTestsFragment : MyFragment() {
                             60L -> subscriptions[2](Unit) // unsubscribe
                         }
                     }
-                    .lmap { scale1d(it.toFloat(), 0f, 70f, 1f, 99f) }
+                    .lnmap { scale1d(it.toFloat(), 0f, 70f, 1f, 99f) }
 
-            val ctl = timer(relay.pushee)
-
-            ctl(Start)
+            val ctl = timer { if(it !== null) relay.pushee(it) }
 
             todo { ctl(Cancel) }
+
+            ctl(Start)
 
         }
 
         mf_mmt_b_test4.setOnClickListener {
             log.i("Test 4")
-            log.i("TODO")
+            log.i("EXPERIMENT: set speed using red pie..") // TODO LATER: Clarify
+
+            animTo(mf_mmt_mp3, "from", 0f)
+            animTo(mf_mmt_mp3, "to", 80f)
+
+            mf_mmt_mp3.setOnClickListener {
+                val interval = getRandomFloat(10f, 90f)
+                log.w("new (random) interval: ${(interval*10).toInt()}ms")
+                animTo(mf_mmt_mp3, "to", interval)
+            }
+
+            todo { mf_mmt_mp3.setOnClickListener(null) }
+
+            val intervals = { u: Unit -> mf_mmt_mp3.to.toLong() * 10 }
+                    .vntake(64)
+                    .vpeek { if(it === null) syslog.w("All intervals pulled.") }
+
+            val timer = Timer(exscheduler, intervals)
+                    .lnmap { it.toFloat() * 3 }
+                    .lpeek { syslog.i("before reschedule: thread: ${Thread.currentThread()}")}
+                    .lreschedule(uischeduler)
+                    .lpeek { syslog.i("after  reschedule: thread: ${Thread.currentThread()}")}
+
+            // we will try to subscribe to our timer twice!
+            val ctl1 = timer {
+                if(it !== null) animTo(mf_mmt_mp1, "to", it)
+                else {
+                    syslog.i("SingleTimer 1 finished.")
+                    mf_mmt_mp3.setOnClickListener(null)
+                }
+            }
+            val ctl2 = timer {
+                if(it !== null) animTo(mf_mmt_mp2, "to", it)
+                else {
+                    syslog.i("SingleTimer 2 finished.")
+                }
+            }
+
+            todo { ctl1(Cancel) }
+            todo { ctl2(Cancel) }
+
+            ctl1(Start)
+            ctl2(Start)
 
         }
 
@@ -118,6 +168,7 @@ class MyMachinesTestsFragment : MyFragment() {
             log.i("TODO")
 
         }
+
     }
 
     fun animTo(obj: Any, property: String, goal: Float) {

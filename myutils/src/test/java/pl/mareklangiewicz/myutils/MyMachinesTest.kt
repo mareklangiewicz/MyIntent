@@ -13,7 +13,7 @@ fun db(x: Int) = x * 2
 class MyMachinesTest {
 
     val ps = { s: String ->
-        println(s)
+        println("ps $s")
     }
     val pi = { i: Int -> println(i) }
     val pni = { i: Int? -> println(i) }
@@ -46,11 +46,10 @@ class MyMachinesTest {
 
     @Test
     fun test1() {
-
         1 { println("start") }
         3 (const("START!") % ps)
-
     }
+
 
     @Test
     fun testCrazyBasics() {
@@ -62,24 +61,30 @@ class MyMachinesTest {
         2 (const(662) * obj % pi)
         2 (const(663) * obj % pi * ::db % pi)
 
+        1 { println("111111111111") }
+
         val f = len * ::db * { i: Int -> i * 3 } * obj * divide
 
         val g = nPulleeOf(1, 22, 555, 9999) * { i: Int? -> i.toString() } * f * pd
 
         3 (g)
 
-        1 { println("bla") }
+        2 { println("22222222222") }
 
-        1 { { -> println("ble") }() }
+        1 { { println("ble") }() }
 
         val e = ePulleeOf("aaa", "bbb", "ccc").vpeek { println(it) }
 
         5 (e)
 
-        val ee = ePulleeOf("aaa", "bbb", "ccc").vpeek { println(it) }
+        3 { println("333333333333333") }
 
-        for(i in ee.eiter())
-            println(i)
+        val ee = ePulleeOf("aaa", "bbb", "ccc").vpeek { println("vpeeeeek $it") }
+
+        for(i in ee.niter())
+            println("niter $i")
+        // NOTE: vpeek will print 2 items before for loop will start to print any. this is correct.
+        // it is because niter has to pull items in advance to now if iterator "hasNext"
     }
 
     @Test
@@ -93,26 +98,25 @@ class MyMachinesTest {
 
 
         val epullee = (1..10).asNPullee()
-                .vnmap { it * 2 }
-                .vmap { if(it === null) Completed<Int>() else Item(it) }
+                .vnmap { Item(it * 2) }
                 .vemap(divide)
 
-        for(i in epullee.eiter())
+        for(i in epullee.niter())
             println(i)
 
 
         val npullee2 = (1..30).asNPullee()
-                .vnfilter { it % 3 == 0 }
+                .vfilter { it === null || it % 3 == 0 }
 
         for(i in npullee2.niter())
-            println(i)
+            println("niter $i")
 
         val npullee3 = (1..30).asEPullee()
-                .vpeek { println(it) }
-                .vefilter { it % 3 == 0 }
+                .vpeek { println("vpeeeeek $it") }
+                .vfilter { it === null || it is Item && it.item % 3 == 0 }
 
-        for(i in npullee3.eiter())
-            println(i)
+        for(i in npullee3.niter())
+            println("niter $i")
 
     }
 
@@ -174,7 +178,9 @@ class MyMachinesTest {
                 .vnflat()
                 .vnmap { it * 2 }
 
-        val pp = pullee.vpeek(pni)
+        val pp = pullee
+//        val pp = pullee.vpeek(pni)
+
         for (x in pp.niter())
             println(x)
     }
@@ -187,7 +193,7 @@ class MyMachinesTest {
                 .ltake(5)
                 .lpeek { println("yyy $it") }
                 .lmap { it + 100 }
-                .invoke { println("zzz $it") }
+                .invoke { println("zzz $it") } // this is like subscribe in rxjava
 
         ctl(Start)
         ctl(Step)
@@ -195,7 +201,13 @@ class MyMachinesTest {
         ctl(Step)
         ctl(Step)
         ctl(Step)
+        ctl(Inject(666L))
         ctl(Tick)
+        ctl(Inject(667L))
+        ctl(Tick)
+        ctl(Inject(668L))
+        ctl(Tock)
+        ctl(Inject(669L))
         ctl(Stop)
         ctl(Cancel)
 

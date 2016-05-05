@@ -35,11 +35,7 @@ class MyAndroLogger(val tosystem: Boolean = true, val tomemory: Boolean = true) 
         if(!tosystem)
             return history.snack(view)
 
-        val lconsole = { entry: MyLogEntry ->
-            val suffix = if(entry.throwable === null) "" else "\n${Log.getStackTraceString(entry.throwable)}"
-            Log.println(entry.level.number, entry.tag, entry.message + suffix)
-            Unit
-        }.trace(14)
+        val lconsole = MyAndroSystemLogger().trace(14)
 
         if(tomemory)
             return lconsole.apeek(history).snack(view)
@@ -49,6 +45,17 @@ class MyAndroLogger(val tosystem: Boolean = true, val tomemory: Boolean = true) 
 
     override fun invoke(entry: MyLogEntry) = logger(entry)
 
+}
+
+/**
+ * Simple android logger that logs on console using android.util.Log class. It can be is a bit slow, so use it in debug only.
+ * This logger can be used from any thread.
+ */
+class MyAndroSystemLogger() : Function1<MyLogEntry, Unit> {
+    override fun invoke(entry: MyLogEntry) {
+        val suffix = if(entry.throwable === null) "" else "\n${Log.getStackTraceString(entry.throwable)}"
+        Log.println(entry.level.number, entry.tag, entry.message + suffix)
+    }
 }
 
 /**

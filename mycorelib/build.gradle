@@ -6,15 +6,14 @@ group='com.github.langara'
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$VER_KOTLIN"
 }
 buildscript {
-    ext.kotlin_version = '1.0.1-2'
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$VER_KOTLIN"
     }
 }
 repositories {

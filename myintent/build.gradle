@@ -2,22 +2,20 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
-def pkg = "pl.mareklangiewicz.myintent"
-
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion VER_SDK_COMPILE.toInteger()
+    buildToolsVersion VER_BUILD_TOOLS
 
     lintOptions {
         abortOnError false
     }
 
     defaultConfig {
-        applicationId pkg
-        minSdkVersion 16
-        targetSdkVersion 23
-        versionCode 6
-        versionName "1.0.6-alpha"
+        applicationId PKG
+        minSdkVersion VER_SDK_MIN.toInteger()
+        targetSdkVersion VER_SDK_TARGET.toInteger()
+        versionCode VER_CODE.toInteger()
+        versionName VER_NAME
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -43,7 +41,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             //noinspection GrUnresolvedAccess,GroovyAssignabilityCheck
             signingConfig signingConfigs.release
-            def auth = pkg + ".provider"
+            def auth = PKG + ".provider"
             resValue "string", "mi_authority", auth
             buildConfigField "String", "AUTHORITY", "\"$auth\""
             buildConfigField "String", "NAME_PREFIX", '"MI "'
@@ -53,7 +51,7 @@ android {
         debug {
             def suff = ".debug"
             applicationIdSuffix suff
-            def auth = pkg + suff + ".provider"
+            def auth = PKG + suff + ".provider"
             resValue "string", "mi_authority", auth
             buildConfigField "String", "AUTHORITY", "\"$auth\""
             buildConfigField "String", "NAME_PREFIX", '"MI D "'
@@ -64,7 +62,7 @@ android {
             initWith(buildTypes.debug)
             def suff = ".canary"
             applicationIdSuffix suff
-            def auth = pkg + suff + ".provider"
+            def auth = PKG + suff + ".provider"
             resValue "string", "mi_authority", auth
             buildConfigField "String", "AUTHORITY", "\"$auth\""
             buildConfigField "String", "NAME_PREFIX", '"MI C "'
@@ -87,45 +85,44 @@ repositories {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
-    testCompile 'com.google.truth:truth:0.28'
-    androidTestCompile 'junit:junit:4.12'
-    androidTestCompile 'com.google.truth:truth:0.28'
-    androidTestCompile 'com.android.support:support-annotations:23.3.0'
-    androidTestCompile 'com.android.support.test:runner:0.5'
-    androidTestCompile 'com.android.support.test:rules:0.5'
-    compile 'com.android.support:appcompat-v7:23.3.0'
-    compile 'com.android.support:support-annotations:23.3.0'
-    canaryCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
-    debugCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
-    compile('com.github.afollestad.material-dialogs:core:0.8.5.6@aar') {
+    testCompile "junit:junit:$VER_JUNIT"
+    testCompile "com.google.truth:truth:$VER_GTRUTH"
+    androidTestCompile "junit:junit:$VER_JUNIT"
+    androidTestCompile "com.google.truth:truth:$VER_GTRUTH"
+    androidTestCompile "com.android.support:support-annotations:$VER_ASUPPORT"
+    androidTestCompile "com.android.support.test:runner:$VER_ASUPPORT_TEST"
+    androidTestCompile "com.android.support.test:rules:$VER_ASUPPORT_TEST"
+    compile "com.android.support:appcompat-v7:$VER_ASUPPORT"
+    compile "com.android.support:support-annotations:$VER_ASUPPORT"
+    canaryCompile "com.squareup.leakcanary:leakcanary-android:$VER_LCANARY"
+    debugCompile "com.squareup.leakcanary:leakcanary-android-no-op:$VER_LCANARY"
+    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$VER_LCANARY"
+    testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$VER_LCANARY"
+    compile("com.github.afollestad.material-dialogs:core:$VER_MDIALOGS") {
         transitive = true
     }
-    compile('com.github.afollestad.material-dialogs:commons:0.8.5.6@aar') {
+    compile("com.github.afollestad.material-dialogs:commons:$VER_MDIALOGS") {
         transitive = true
     }
-    compile 'com.google.android.gms:play-services-base:8.4.0'
-    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
+    compile "com.google.android.gms:play-services-base:$VER_PSERVICES"
+    compile "com.google.android.gms:play-services-appindexing:$VER_PSERVICES"
     compile project(':myactivities')
     compile project(':myfragments')
     compile project(':myloggers')
     compile project(':myres')
     compile project(':myutils')
     compile project(':myviews')
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile 'hu.supercluster:paperwork:1.2.7'
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$VER_KOTLIN"
+    compile "hu.supercluster:paperwork:$VER_PAPERWORK"
 }
 buildscript {
-    ext.kotlin_version = '1.0.0'
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
-        classpath 'hu.supercluster:paperwork-plugin:1.2.7'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$VER_KOTLIN"
+        classpath "org.jetbrains.kotlin:kotlin-android-extensions:$VER_KOTLIN"
+        classpath "hu.supercluster:paperwork-plugin:$VER_PAPERWORK"
     }
 }
 

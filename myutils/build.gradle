@@ -6,18 +6,18 @@ apply plugin: 'com.github.dcendents.android-maven'
 group='com.github.langara'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '23.0.3'
+    compileSdkVersion VER_SDK_COMPILE.toInteger()
+    buildToolsVersion VER_BUILD_TOOLS
 
     lintOptions {
         abortOnError false
     }
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 23
-        versionCode 6
-        versionName "1.0.6-alpha"
+        minSdkVersion VER_SDK_MIN.toInteger()
+        targetSdkVersion VER_SDK_TARGET.toInteger()
+        versionCode VER_CODE.toInteger()
+        versionName VER_NAME
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -44,39 +44,35 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':mycorelib')
-    compile 'com.android.support:support-annotations:23.3.0'
-    compile 'com.android.support:support-v4:23.3.0'
-    compile 'com.android.support:appcompat-v7:23.3.0'
-    compile 'com.android.support:support-v13:23.3.0'
-    compile 'com.android.support:preference-v14:23.3.0'
-    compile 'com.android.support:design:23.3.0'
-    compile 'com.android.support:customtabs:23.3.0'
-    compile 'com.android.support:percent:23.3.0'
-    compile 'com.squareup.retrofit2:retrofit:2.0.0'
-    compile 'com.squareup.retrofit2:converter-moshi:2.0.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.0.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0'
-    compile 'com.squareup.okhttp:logging-interceptor:2.6.0'
-    //compile 'com.google.guava:guava:18.0'
-    //compile 'org.javatuples:javatuples:1.2'
-    testCompile 'junit:junit:4.12'
-    testCompile 'com.google.truth:truth:0.28'
-    //testCompile 'org.mockito:mockito-core:1.9.5'
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    androidTestCompile 'junit:junit:4.12'
-    androidTestCompile 'com.google.truth:truth:0.28'
-    androidTestCompile 'com.android.support.test:runner:0.5'
-    androidTestCompile 'com.android.support.test:rules:0.5'
+    compile "com.android.support:support-annotations:$VER_ASUPPORT"
+    compile "com.android.support:support-v4:$VER_ASUPPORT"
+    compile "com.android.support:appcompat-v7:$VER_ASUPPORT"
+    compile "com.android.support:support-v13:$VER_ASUPPORT"
+    compile "com.android.support:preference-v14:$VER_ASUPPORT"
+    compile "com.android.support:design:$VER_ASUPPORT"
+    compile "com.android.support:customtabs:$VER_ASUPPORT"
+    compile "com.android.support:percent:$VER_ASUPPORT"
+    compile "com.squareup.retrofit2:retrofit:$VER_RETROFIT"
+    compile "com.squareup.retrofit2:converter-moshi:$VER_RETROFIT"
+    compile "com.squareup.retrofit2:converter-gson:$VER_RETROFIT"
+    compile "com.squareup.retrofit2:adapter-rxjava:$VER_RETROFIT"
+    compile "com.squareup.okhttp:logging-interceptor:$VER_OKHTTP"
+    testCompile "junit:junit:$VER_JUNIT"
+    testCompile "com.google.truth:truth:$VER_GTRUTH"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$VER_KOTLIN"
+    compile "com.squareup.picasso:picasso:$VER_PICASSO"
+    androidTestCompile "junit:junit:$VER_JUNIT"
+    androidTestCompile "com.google.truth:truth:$VER_GTRUTH"
+    androidTestCompile "com.android.support.test:runner:$VER_ASUPPORT_TEST"
+    androidTestCompile "com.android.support.test:rules:$VER_ASUPPORT_TEST"
 }
 buildscript {
-    ext.kotlin_version = '1.0.0'
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$VER_KOTLIN"
+        classpath "org.jetbrains.kotlin:kotlin-android-extensions:$VER_KOTLIN"
     }
 }
 repositories {

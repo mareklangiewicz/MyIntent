@@ -29,6 +29,8 @@ class MIContentProviderTest {
 
     val context = InstrumentationRegistry.getContext()
 
+    val BASE = MIContract.BASE_URI
+
     @Before fun setUp() {
 
     }
@@ -37,18 +39,18 @@ class MIContentProviderTest {
     @Test fun testGetType() {
         val cr = context.contentResolver!!
         log.i(cr.getType(Uri.parse("content://blabla")))
-        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider")))
-        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/cmd")))
-        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/cmd/recent")))
-        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/cmd/recent/123")))
-        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/cmd/example")))
-        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/cmd/example/666")))
-        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/cmd/example/blabla")))
-        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/cmd/search_suggest_query")))
-        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/cmd/search_suggest_query/121")))
-        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/cmd/search_suggest_query/blabla")))
-        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/rule/user")))
-        log.i(cr.getType(Uri.parse("content://pl.mareklangiewicz.myintent.provider/rule/user/123")))
+        log.i(cr.getType(Uri.parse("$BASE")))
+        log.i(cr.getType(Uri.parse("$BASE/cmd")))
+        log.i(cr.getType(Uri.parse("$BASE/cmd/recent")))
+        log.i(cr.getType(Uri.parse("$BASE/cmd/recent/123")))
+        log.i(cr.getType(Uri.parse("$BASE/cmd/example")))
+        log.i(cr.getType(Uri.parse("$BASE/cmd/example/666")))
+        log.i(cr.getType(Uri.parse("$BASE/cmd/example/blabla")))
+        log.i(cr.getType(Uri.parse("$BASE/cmd/search_suggest_query")))
+        log.i(cr.getType(Uri.parse("$BASE/cmd/search_suggest_query/121")))
+        log.i(cr.getType(Uri.parse("$BASE/cmd/search_suggest_query/blabla")))
+        log.i(cr.getType(Uri.parse("$BASE/rule/user")))
+        log.i(cr.getType(Uri.parse("$BASE/rule/user/123")))
 
     }
 
@@ -72,7 +74,7 @@ class MIContentProviderTest {
     }
 
     @Test fun testQueryAllCmdExampleLimit5() {
-        testQueryUri("content://pl.mareklangiewicz.myintent.provider/cmd/example?fjdskljfal&limit=5")
+        testQueryUri("$BASE/cmd/example?fjdskljfal&limit=5")
     }
 
     @Test fun testQueryAllCmdSuggest() {
@@ -80,15 +82,15 @@ class MIContentProviderTest {
     }
 
     @Test fun testQueryAllCmdSuggestLike30() {
-        testQueryUri("content://pl.mareklangiewicz.myintent.provider/cmd/search_suggest_query/30")
+        testQueryUri("$BASE/cmd/search_suggest_query/30")
     }
 
     @Test fun testQueryAllCmdSuggestLike8_30() {
-        testQueryUri("content://pl.mareklangiewicz.myintent.provider/cmd/search_suggest_query/8%2030")
+        testQueryUri("$BASE/cmd/search_suggest_query/8%2030")
     }
 
     @Test fun testQueryAllCmdSuggestLimit3() {
-        testQueryUri("content://pl.mareklangiewicz.myintent.provider/cmd/search_suggest_query?limit=3")
+        testQueryUri("$BASE/cmd/search_suggest_query?limit=3")
     }
 
     @Test fun testQueryAllRuleUser() {
@@ -99,15 +101,15 @@ class MIContentProviderTest {
     @Test fun testQuery() {
 
         val uris = arrayOf(
-                "content://pl.mareklangiewicz.myintent.provider/cmd/recent",
-                "content://pl.mareklangiewicz.myintent.provider/cmd/example",
-                "content://pl.mareklangiewicz.myintent.provider/cmd/example/3",
-                "content://pl.mareklangiewicz.myintent.provider/cmd/search_suggest_query",
-                "content://pl.mareklangiewicz.myintent.provider/cmd/search_suggest_query/set",
-                "content://pl.mareklangiewicz.myintent.provider/cmd/search_suggest_query/alarm",
-                "content://pl.mareklangiewicz.myintent.provider/rule/user",
-                "content://pl.mareklangiewicz.myintent.provider/rule/user/0",
-                "content://pl.mareklangiewicz.myintent.provider/rule/user/868"
+                "$BASE/cmd/recent",
+                "$BASE/cmd/example",
+                "$BASE/cmd/example/3",
+                "$BASE/cmd/search_suggest_query",
+                "$BASE/cmd/search_suggest_query/set",
+                "$BASE/cmd/search_suggest_query/alarm",
+                "$BASE/rule/user",
+                "$BASE/rule/user/0",
+                "$BASE/rule/user/868"
         )
 
         for (uri in uris)
@@ -147,7 +149,7 @@ class MIContentProviderTest {
     @Test fun testInsert6RowsToCmdRecent() {
 
         val values = ContentValues()
-        val uri = "content://pl.mareklangiewicz.myintent.provider/cmd/recent"
+        val uri = "$BASE/cmd/recent"
 
         values.put(MIContract.CmdRecent.COL_COMMAND, "moja komenda..")
         values.put(MIContract.CmdRecent.COL_TIME, currentTimeMillis())
@@ -179,7 +181,7 @@ class MIContentProviderTest {
     @Test fun testInsert6RowsToRuleUser() {
 
         val values = ContentValues()
-        val uri = "content://pl.mareklangiewicz.myintent.provider/rule/user"
+        val uri = "$BASE/rule/user"
 
         values.put(MIContract.RuleUser.COL_POSITION, 666)
         values.put(MIContract.RuleUser.COL_EDITABLE, true)
@@ -230,7 +232,7 @@ class MIContentProviderTest {
         val cr = context.contentResolver!!
         val values = ContentValues()
         values.put(MIContract.CmdRecent.COL_COMMAND, "UPDATED blaaaaaa!!!!")
-        val uri = parse("content://pl.mareklangiewicz.myintent.provider/cmd/recent")
+        val uri = parse("$BASE/cmd/recent")
         log.i("update rows from cmd/recent where: Command LIKE '%%la%%'")
         val updated = cr.update(uri, values, " Command LIKE '%la%' ", null)
         log.i(String.format("%s rows updated.", updated))
@@ -241,7 +243,7 @@ class MIContentProviderTest {
         val cr = context.contentResolver!!
         val values = ContentValues()
         values.put(MIContract.CmdRecent.COL_TIME, currentTimeMillis())
-        val uri = parse("content://pl.mareklangiewicz.myintent.provider/cmd/recent")
+        val uri = parse("$BASE/cmd/recent")
         log.i("update time of all rows from cmd/recent:")
         val updated = cr.update(uri, values, null, null)
         log.i(String.format("%s rows updated.", updated))
@@ -252,7 +254,7 @@ class MIContentProviderTest {
         val cr = context.contentResolver!!
         val values = ContentValues()
         values.put(MIContract.RuleUser.COL_NAME, "UPDATED BLEEEEE!!!!")
-        val uri = parse("content://pl.mareklangiewicz.myintent.provider/rule/user")
+        val uri = parse("$BASE/rule/user")
         log.i("update rows from rule/user where: Name LIKE '%%la%%'")
         val updated = cr.update(uri, values, " Name LIKE '%la%' ", null)
         log.i(String.format("%s rows updated.", updated))
@@ -260,7 +262,7 @@ class MIContentProviderTest {
 
     @Test fun testDeleteRecentLikeLa() {
         val cr = context.contentResolver!!
-        val uri = parse("content://pl.mareklangiewicz.myintent.provider/cmd/recent")
+        val uri = parse("$BASE/cmd/recent")
         log.i("delete rows from cmd/recent where: Command LIKE '%%la%%'")
         val deleted = cr.delete(uri, " Command LIKE '%la%' ", null)
         log.i(String.format("%s rows deleted.", deleted))
@@ -268,7 +270,7 @@ class MIContentProviderTest {
 
     @Test fun testDeleteRuleUserLikeLa() {
         val cr = context.contentResolver!!
-        val uri = parse("content://pl.mareklangiewicz.myintent.provider/rule/user")
+        val uri = parse("$BASE/rule/user")
         log.i("delete rows from rule/user where: Name LIKE '%%la%%'")
         val deleted = cr.delete(uri, " Name LIKE '%la%' ", null)
         log.i(String.format("%s rows deleted.", deleted))
@@ -277,7 +279,7 @@ class MIContentProviderTest {
 
     @Test fun testDeleteAllRecentManually() {
         val cr = context.contentResolver!!
-        val uri = parse("content://pl.mareklangiewicz.myintent.provider/cmd/recent")
+        val uri = parse("$BASE/cmd/recent")
         log.i("delete all rows from cmd/recent:")
         val deleted = cr.delete(uri, null, null)
         log.i(String.format("%s rows deleted.", deleted))
@@ -285,7 +287,7 @@ class MIContentProviderTest {
 
     @Test fun testDeleteAllRuleUserManually() {
         val cr = context.contentResolver!!
-        val uri = parse("content://pl.mareklangiewicz.myintent.provider/rule/user")
+        val uri = parse("$BASE/rule/user")
         log.i("delete all rows from rule/user:")
         val deleted = cr.delete(uri, null, null)
         log.i(String.format("%s rows deleted.", deleted))

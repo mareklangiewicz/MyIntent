@@ -149,7 +149,7 @@ class MIActivity : MyActivity() {
         if (command == null) {
             log.d("URI with empty fragment received. Entering help..")
             log.v("uri: ${uri.str}")
-            execute("fragment pl.mareklangiewicz.myintent.MIHelpFragment")
+            execute("fragment .MIHelpFragment")
             return
 
         }
@@ -166,7 +166,7 @@ class MIActivity : MyActivity() {
         val f = fgmt
         if(f is MIStartFragment) f.play(command)
         else {
-            execute("fragment pl.mareklangiewicz.myintent.MIStartFragment")
+            execute("fragment .MIStartFragment")
             play(command) // IMPORTANT: we have to be asynchrous here again to let fragment initialize fully first.
         }
     }

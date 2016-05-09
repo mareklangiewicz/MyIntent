@@ -54,6 +54,9 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, DrawerLayout.DrawerLi
     private val DEFAULT_COMMAND_NAME = CMD_ACTIVITY
     private val DEFAULT_INTENT_ACTION = Intent.ACTION_VIEW
 
+    val SRC_PKG = this.javaClass.name.substringBeforeLast('.', "")
+    lateinit var APP_ID: String
+
     // it will be changed to true in onCreate (after invoking setContentView) and back to false in onDestroy
     // kotlin extensions are working correctly when it is true.
     protected var isViewAvailable = false
@@ -94,6 +97,8 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, DrawerLayout.DrawerLi
     private var ldraw = false
 
     @CallSuper override fun onCreate(savedInstanceState: Bundle?) {
+
+        APP_ID = packageName
 
         handler = Handler()
 
@@ -308,6 +313,8 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, DrawerLayout.DrawerLi
         }
     }
 
+    private fun String.addPkgIfAbsent() = if(startsWith(".")) SRC_PKG + this else this
+    private fun String.addAppIdIfAbsent() = if(!contains("/")) APP_ID + "/" + this else this
 
     /**
      * @param cmd A command to perform
@@ -320,19 +327,19 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, DrawerLayout.DrawerLi
             val mycmd = MyCommand(cmd, RE_RULES, log)
             mycmd["start"] = mycmd["start"] ?: DEFAULT_COMMAND_NAME
 
-            val pkg = packageName
-
             when(mycmd["start"]) {
                 CMD_ACTIVITY -> {
-                    if (mycmd["component"] === null) mycmd["action"] = mycmd["action"] ?: DEFAULT_INTENT_ACTION
-                    else if (!mycmd["component"]!!.contains("/")) mycmd["component"] = pkg + "/" + mycmd["component"]
+                    if (mycmd["component"] === null) // implicit intent
+                        mycmd["action"] = mycmd["action"] ?: DEFAULT_INTENT_ACTION
+                    else // explicit intent
+                        mycmd["component"] = mycmd["component"]!!.addPkgIfAbsent().addAppIdIfAbsent()
                 }
                 CMD_FRAGMENT -> {
                     if (mycmd["component"] === null) {
                         log.e("Fragment component is null.")
                         return
                     }
-                    if (mycmd["component"]!!.startsWith(".")) mycmd["component"] = pkg + mycmd["component"]!!
+                    mycmd["component"] = mycmd["component"]!!.addPkgIfAbsent()
                 }
             }
             onCommand(mycmd)

@@ -9,37 +9,37 @@
             android:id="@+id/mi_start"
             android:icon="@drawable/mr_ic_whatshot_black_24dp"
             android:title="@string/mi_start"
-            android:titleCondensed="cmd:fragment pl.mareklangiewicz.myintent.MIStartFragment"
+            android:titleCondensed="cmd:fragment .MIStartFragment"
             />
         <item
             android:id="@+id/mi_rules"
             android:icon="@drawable/mr_ic_whatshot_black_24dp"
             android:title="@string/mi_rules"
-            android:titleCondensed="cmd:fragment pl.mareklangiewicz.myintent.MIRulesFragment"
+            android:titleCondensed="cmd:fragment .MIRulesFragment"
             />
         <item
             android:id="@+id/mi_recent_commands"
             android:icon="@drawable/mi_ic_recent_command_black_24dp"
             android:title="@string/mi_recent_commands"
-            android:titleCondensed="cmd:fragment pl.mareklangiewicz.myintent.MIRecentCmdListFragment"
+            android:titleCondensed="cmd:fragment .MIRecentCmdListFragment"
             />
         <item
             android:id="@+id/mi_example_commands"
             android:icon="@drawable/mi_ic_example_command_black_24dp"
             android:title="@string/mi_example_commands"
-            android:titleCondensed="cmd:fragment pl.mareklangiewicz.myintent.MIExampleCmdListFragment"
+            android:titleCondensed="cmd:fragment .MIExampleCmdListFragment"
             />
         <item
             android:id="@+id/mi_help"
             android:icon="@drawable/mr_ic_whatshot_black_24dp"
             android:title="@string/mi_help"
-            android:titleCondensed="cmd:fragment pl.mareklangiewicz.myintent.MIHelpFragment"
+            android:titleCondensed="cmd:fragment .MIHelpFragment"
             />
         <item
             android:id="@+id/mi_about"
             android:icon="@drawable/mr_ic_whatshot_black_24dp"
             android:title="@string/mi_about"
-            android:titleCondensed="cmd:fragment pl.mareklangiewicz.myintent.MIAboutFragment"
+            android:titleCondensed="cmd:fragment .MIAboutFragment"
             />
     </group>
 
@@ -70,7 +70,7 @@
                 android:id="@+id/mi_ds_start_my_test_activity"
                 android:icon="@drawable/mr_ic_whatshot_black_24dp"
                 android:title="@string/mi_start_my_test_activity"
-                android:titleCondensed="cmd:activity pl.mareklangiewicz.myintent.MITestActivity"
+                android:titleCondensed="cmd:activity .MITestActivity"
                 />
             <item
                 android:id="@+id/mi_ds_orientation_portrait"

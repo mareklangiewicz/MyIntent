@@ -78,7 +78,7 @@ class Countdown internal constructor(private val bar: ProgressBar) {
 
     val isRunning: Boolean get() = command != null
 
-    interface Listener { // TODO SOMEDAY: use MyMachines.Relay to objects publish these events
+    interface Listener { // TODO SOMEDAY: use Pue.Relay to objects publish these events
         fun onCountdownStarted(cmd: String?)
         fun onCountdownFinished(cmd: String?)
         fun onCountdownCancelled(cmd: String?)

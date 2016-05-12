@@ -79,7 +79,7 @@ class PlayStopButton(private val view: ImageView) {
             }
         }
 
-    interface Listener { // TODO SOMEDAY: use MyMachines.Relay to publish changes
+    interface Listener { // TODO SOMEDAY: use Pue.Relay to publish changes
         fun onPlayStopClicked(oldState: State, newState: State)
     }
 

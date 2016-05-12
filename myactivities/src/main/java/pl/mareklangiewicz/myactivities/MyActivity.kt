@@ -134,7 +134,7 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, DrawerLayout.DrawerLi
             if(ldraw) ma_local_drawer_layout.setDrawerLockMode(if (empty) LOCK_MODE_LOCKED_CLOSED else LOCK_MODE_UNLOCKED)
             else setMNVAndArrow(!empty, ma_local_navigation_view, larrow)
         }
-        // TODO SOMEDAY: we should merge these two "streams" and subscribe with one common lambda - I'll do it when MyMachines is more mature
+        // TODO SOMEDAY: we should merge these two "streams" and subscribe with one common lambda - I'll do it when Pue is more mature
 
 
         gnav!!.items { // we ignore returned subscription - navigation will live as long as activity
@@ -151,7 +151,7 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, DrawerLayout.DrawerLi
             else
                 closeDrawers()
         }
-        // TODO SOMEDAY: we should merge these two "streams" and subscribe with one common lambda - I'll do it when MyMachines is more mature
+        // TODO SOMEDAY: we should merge these two "streams" and subscribe with one common lambda - I'll do it when Pue is more mature
 
 
         setSupportActionBar(ma_toolbar)

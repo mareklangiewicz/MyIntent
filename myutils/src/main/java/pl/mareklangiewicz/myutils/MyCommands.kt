@@ -157,7 +157,7 @@ val DEFAULT_EXAMPLE_COMMANDS = listOf(
         "dial 123456789",
         "call 123456789",
         "search king",
-        "web search rxkotlin",
+        "web search eagle",
         "wake me up at 7 30",
         "set alarm to 9 15",
         "set timer for 40",

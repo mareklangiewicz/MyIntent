@@ -10,7 +10,7 @@ import org.junit.Test
 
 fun db(x: Int) = x * 2
 
-class MyMachinesTest {
+class PueTest {
 
     val ps = { s: String ->
         println("ps $s")
@@ -213,7 +213,7 @@ class MyMachinesTest {
 
     }
 
-    // TODO SOMEDAY: more machine tests
+    // TODO SOMEDAY: more pue tests
 
 }
 

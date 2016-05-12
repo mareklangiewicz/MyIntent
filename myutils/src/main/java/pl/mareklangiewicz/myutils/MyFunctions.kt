@@ -3,7 +3,7 @@ package pl.mareklangiewicz.myutils
 /**
  * Created by Marek Langiewicz on 21.02.16.
  *
- * TODO LATER: consider making some functions inline (see MyMachines.kt:44 for details)
+ * TODO LATER: consider making some functions inline (see Pue.kt:44 for details)
  */
 
 fun <T> ident(t: T): T = t

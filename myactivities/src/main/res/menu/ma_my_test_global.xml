@@ -29,10 +29,10 @@
             android:titleCondensed="cmd:fragment pl.mareklangiewicz.myfragments.MyLogFragment"
             />
         <item
-            android:id="@+id/section_my_machines_tests_fragment"
+            android:id="@+id/section_pue_tests_fragment"
             android:icon="@drawable/mr_ic_whatshot_black_24dp"
-            android:title="@string/ma_my_machines_tests"
-            android:titleCondensed="cmd:fragment pl.mareklangiewicz.myfragments.MyMachinesTestsFragment"
+            android:title="@string/ma_pue_tests"
+            android:titleCondensed="cmd:fragment pl.mareklangiewicz.myfragments.PueTestsFragment"
         />
         <item
             android:id="@+id/section_my_example_fragment"

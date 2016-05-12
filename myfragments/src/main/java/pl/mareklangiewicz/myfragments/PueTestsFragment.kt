@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.mf_my_machines_tests_fragment.*
+import kotlinx.android.synthetic.main.mf_pue_tests_fragment.*
 import pl.mareklangiewicz.myloggers.MyAndroLogAdapter
 import pl.mareklangiewicz.myloggers.MyAndroSystemLogger
 import pl.mareklangiewicz.myutils.*
@@ -13,7 +13,7 @@ import pl.mareklangiewicz.myutils.*
 /**
  * Created by Marek Langiewicz on 05.03.16.
  */
-class MyMachinesTestsFragment : MyFragment() {
+class PueTestsFragment : MyFragment() {
 
 
     val adapter = MyAndroLogAdapter(log.history)
@@ -27,7 +27,7 @@ class MyMachinesTestsFragment : MyFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState) //just for logging
-        return inflater.inflate(R.layout.mf_my_machines_tests_fragment, container, false)
+        return inflater.inflate(R.layout.mf_pue_tests_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

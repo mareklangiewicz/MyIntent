@@ -28,16 +28,19 @@
         >
         <menu>
             <item
+                android:id="@+id/mi_rl_help_tutorial"
                 android:title='Jave RE Tutorial'
                 android:titleCondensed="cmd:data https://docs.oracle.com/javase/tutorial/essential/regex/"
                 android:icon="@drawable/mi_ic_open_in_browser_black_24dp"
                 />
             <item
+                android:id="@+id/mi_rl_help_constructs"
                 android:title='Summary of Java RE constructs'
                 android:titleCondensed="cmd:data https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html"
                 android:icon="@drawable/mi_ic_open_in_browser_black_24dp"
                 />
             <item
+                android:id="@+id/mi_rl_help_pattern"
                 android:title='developer.android.com:Pattern'
                 android:titleCondensed="cmd:data http://developer.android.com/reference/java/util/regex/Pattern.html"
                 android:icon="@drawable/mi_ic_open_in_browser_black_24dp"

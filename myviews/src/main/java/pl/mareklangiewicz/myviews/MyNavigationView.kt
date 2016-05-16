@@ -103,7 +103,11 @@ class MyNavigationView : NavigationView, IMyUINavigation, NavigationView.OnNavig
     }
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
-        items.pushee(menuItem.itemId)
+        val id = menuItem.itemId
+        if(id == 0)
+            log.d("Menu item without ID selected. Ignoring.")
+        else
+            items.pushee(id)
         return true
     }
 }

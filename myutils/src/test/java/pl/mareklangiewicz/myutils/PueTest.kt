@@ -81,10 +81,8 @@ class PueTest {
 
         val ee = ePulleeOf("aaa", "bbb", "ccc").vpeek { println("vpeeeeek $it") }
 
-        for(i in ee.niter())
-            println("niter $i")
-        // NOTE: vpeek will print 2 items before for loop will start to print any. this is correct.
-        // it is because niter has to pull items in advance to now if iterator "hasNext"
+        for(i in ee) // we call IPullee<R?>.iterator() extension function here.
+            println("next: $i")
     }
 
     @Test
@@ -93,30 +91,30 @@ class PueTest {
                 .vnmap { it * 2 }
                 .vnzip((1..10).asNPullee())
 
-        for(i in npullee.niter())
-            println(i)
+        for(i in npullee)
+            println(i) // we call IPullee<R?>.iterator() extension function here.
 
 
         val epullee = (1..10).asNPullee()
                 .vnmap { Item(it * 2) }
                 .vemap(divide)
 
-        for(i in epullee.niter())
+        for(i in epullee) // we call IPullee<R?>.iterator() extension function here.
             println(i)
 
 
         val npullee2 = (1..30).asNPullee()
                 .vfilter { it === null || it % 3 == 0 }
 
-        for(i in npullee2.niter())
-            println("niter $i")
+        for(i in npullee2) // we call IPullee<R?>.iterator() extension function here.
+            println("next: $i")
 
         val npullee3 = (1..30).asEPullee()
                 .vpeek { println("vpeeeeek $it") }
                 .vfilter { it === null || it is Item && it.item % 3 == 0 }
 
-        for(i in npullee3.niter())
-            println("niter $i")
+        for(i in npullee3) // we call IPullee.iterator() extension function here
+            println("next: $i")
 
     }
 
@@ -181,7 +179,7 @@ class PueTest {
         val pp = pullee
 //        val pp = pullee.vpeek(pni)
 
-        for (x in pp.niter())
+        for (x in pp) // we call IPullee.iterator() extension function here
             println(x)
     }
 

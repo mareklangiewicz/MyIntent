@@ -33,7 +33,7 @@ class MyStupidTestsFragment : MyFragment(), DrawerLayout.DrawerListener {
 
         my_stupid_log_simple_view.array = log.history
         val unsub = log.history.changes { my_stupid_log_simple_view.invalidate() }
-        todo(unsub)
+        todo.push(unsub)
 
         // I use here NavigationView directly (without my IMyUINavigation abstraction etc.) on purpose - just to test some stuff
         stupid_navigation_view.inflateMenu(R.menu.mf_my_stupid_tests)

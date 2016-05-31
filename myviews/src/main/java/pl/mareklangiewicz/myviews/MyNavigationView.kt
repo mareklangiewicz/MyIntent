@@ -27,7 +27,7 @@ class MyNavigationView : NavigationView, IMyUINavigation, NavigationView.OnNavig
             if (field != -1) super.getMenu().clear()
             field = id
             if (id != -1) super.inflateMenu(id)
-            changes.pushee(Unit)
+            changes.push(Unit)
         }
 
     override val menuObj: Menu? get() = if (super.getMenu().size() == 0) null else super.getMenu()
@@ -39,7 +39,7 @@ class MyNavigationView : NavigationView, IMyUINavigation, NavigationView.OnNavig
             if (field != -1) removeHeaderView(getHeaderView(0))
             field = id
             if (id != -1) inflateHeaderView(id)
-            changes.pushee(Unit)
+            changes.push(Unit)
         }
 
     override val headerObj: View? get() = if (headerCount == 0) null else getHeaderView(0)
@@ -107,7 +107,7 @@ class MyNavigationView : NavigationView, IMyUINavigation, NavigationView.OnNavig
         if(id == 0)
             log.d("Menu item without ID selected. Ignoring.")
         else
-            items.pushee(id)
+            items.push(id)
         return true
     }
 }

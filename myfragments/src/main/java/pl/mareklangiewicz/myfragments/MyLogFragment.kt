@@ -30,7 +30,7 @@ class MyLogFragment : MyFragment() {
         my_log_recycler_view.adapter = adapter
 
         var unsub = log.history.changes { adapter.notifyDataSetChanged() }
-        todo(unsub)
+        todo.push(unsub)
 
         adapter.notifyDataSetChanged() // to make sure we are up to date
 
@@ -53,7 +53,7 @@ class MyLogFragment : MyFragment() {
                 R.id.log_some_verbose ->  log.v("some verbose")
             }
         }
-        todo(unsub)
+        todo.push(unsub)
 
         updateCheckedItem()
 

@@ -45,7 +45,7 @@ class MIRulesFragment : MyFragment() {
             }
             adapter.notifyItemChanged(1)
         }
-        todo(unsub)
+        todo.push(unsub)
     }
 
     override fun onDestroyView() {

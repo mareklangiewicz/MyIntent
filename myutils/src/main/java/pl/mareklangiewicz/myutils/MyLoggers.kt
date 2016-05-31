@@ -117,7 +117,7 @@ class MyLogHistory : IMyBuffer<MyLogEntry>, IClear {
             if(value != field) {
                 field = value
                 refilter()
-                relay.pushee(Unit)
+                relay.push(Unit)
             }
         }
 
@@ -125,25 +125,26 @@ class MyLogHistory : IMyBuffer<MyLogEntry>, IClear {
 
     override val size: Int get() = filteredBuffer.size
 
-    override fun invoke(e: MyLogEntry) {
-        fullBuffer(e)
-        if(e.level >= level) {
-            filteredBuffer(e)
-            relay.pushee(Unit)
+    override val push: (MyLogEntry) -> Unit
+        get() =  {
+            fullBuffer.push(it)
+            if(it.level >= level) {
+                filteredBuffer.push(it)
+                relay.push(Unit)
+            }
         }
-    }
 
     fun refilter() {
         filteredBuffer.clear()
         for(e in fullBuffer)
             if(e.level >= level)
-                filteredBuffer(e)
+                filteredBuffer.push(e)
     }
 
     override fun clear() {
         fullBuffer.clear()
         filteredBuffer.clear()
-        relay.pushee(Unit)
+        relay.push(Unit)
     }
 }
 

@@ -15,11 +15,6 @@
                 android:title="@string/mi_clear_user_rules"
                 android:icon="@drawable/mr_ic_close_black_24dp"
                 />
-            <item
-                android:id="@+id/reset_all"
-                android:title="@string/mi_reset_all"
-                android:icon="@drawable/mr_ic_whatshot_black_24dp"
-                />
         </menu>
     </item>
 

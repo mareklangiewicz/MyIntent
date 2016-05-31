@@ -87,7 +87,7 @@ class MyBabbler(
     }
 
     private fun getRandomQuote(quotes: Array<String>): String {
-        return remAuthor(quotes[getRandomInt(0, quotes.size - 1)])
+        return remAuthor(quotes[RANDOM.nextInt(0, quotes.size - 1)])
     }
 
 

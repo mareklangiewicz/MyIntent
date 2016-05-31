@@ -28,8 +28,8 @@ class MyPie : View {
     private val mPieDrawable = ShapeDrawable(object : OvalShape() {
         override fun draw(canvas: Canvas, paint: Paint) {
             canvas.drawArc(rect(),
-                    scale1d(_from, _minimum, _maximum, 270f, (270 + 360).toFloat()),
-                    scale1d(_to - _from, _minimum, _maximum, 0f, 360f),
+                    _from.scale1d(_minimum, _maximum, 270f, (270 + 360).toFloat()),
+                    (_to - _from).scale1d(_minimum, _maximum, 0f, 360f),
                     true, paint)
         }
     })

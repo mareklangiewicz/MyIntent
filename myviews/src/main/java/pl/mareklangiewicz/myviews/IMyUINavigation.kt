@@ -4,13 +4,14 @@ import android.support.annotation.IdRes
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import pl.mareklangiewicz.myutils.IChanges
 import pl.mareklangiewicz.myutils.Relay
 
 /**
  * Created by Marek Langiewicz on 02.09.15.
  * An interface usually implemented by our navigation views and used by fragments.
  */
-interface IMyUINavigation {
+interface IMyUINavigation : IChanges<Unit> {
 
     var menuId: Int // inflates menu with given id; set to -1 to clear menu
     val menuObj: Menu? // returns null if menu is empty
@@ -28,7 +29,7 @@ interface IMyUINavigation {
 
     val empty: Boolean
 
-    val changes: Relay<Unit> // triggerd when navigation view content has changed
+    override val changes: Relay<Unit> // triggerd when navigation view content has changed
 
     val items: Relay<Int> // emits ids of selected items
 }

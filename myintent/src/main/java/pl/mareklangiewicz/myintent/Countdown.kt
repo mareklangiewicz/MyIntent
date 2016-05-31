@@ -27,7 +27,7 @@ class Countdown internal constructor(private val bar: ProgressBar) {
     init {
 
         bar.setOnTouchListener { view, event ->
-            boost = scale0d(event.x, bar.width.toFloat(), animator.duration.toFloat()).toLong()
+            boost = event.x.scale0d(bar.width.toFloat(), animator.duration.toFloat()).toLong()
             animator.currentPlayTime = boost
             true
         }

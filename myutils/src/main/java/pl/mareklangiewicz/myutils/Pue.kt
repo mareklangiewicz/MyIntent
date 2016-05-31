@@ -131,25 +131,39 @@ fun <R> nPulleeOf(vararg ts: R) = ts.iterator().asNPullee()
 
 
 /**
- * This allows to use for in loop to traverse through NPullee.
- * WARNING: iterating destroys INPullee so you can do it only once!
+ * This allows to use "for in" loop to traverse through NPullee.
  * TODO: tests and examples
  */
-//fun <R> IPullee<R?>.niter() = object : Iterable<R> { // SOMEDAY: enable when we have aliases
-fun <R> Function1<Unit, R?>.niter() = object : Iterable<R> {
-    override operator fun iterator() = object: Iterator<R> {
+//fun <R> IPullee<R?>.iterator() = object : Iterable<R> { // SOMEDAY: enable when we have aliases
+operator fun <R> Function1<Unit, R?>.iterator() = object : Iterator<R> {
 
-        var current = invoke(Unit)
+    var end = false
+    var current: R? = null
 
-        override fun hasNext(): Boolean {
-            return current !== null
+    override fun hasNext(): Boolean {
+        if(end) return false
+        if(current !== null) return true
+        current = invoke(Unit)
+        if(current === null) {
+            end = true
+            return false
         }
+        return true
+    }
 
-        override fun next(): R {
-            val r = current ?: throw IllegalStateException("No more items available.")
-            current = invoke(Unit)
+    override fun next(): R {
+        if(end) throw IllegalStateException("No more items available.")
+        val r = current
+        if(r !== null) {
+            current = null
             return r
         }
+        val rr = invoke(Unit)
+        if(rr === null) {
+            end = true
+            throw IllegalStateException("No more items available.")
+        }
+        return rr
     }
 }
 
@@ -269,6 +283,11 @@ class EPusher<out T>(private val p: IPusher<IEvent<T>?, Function1<ICommand, Unit
 //fun <R> Iterator<R>.asEPullee(): IEPullee<R> = { if(hasNext()) Item(next()) else null } // SOMEDAY: enable when we have aliases
 fun <R> Iterator<R>.asEPullee(): Function1<Unit, IEvent<R>?> = { if(hasNext()) Item(next()) else null }
 
+// We could also just use vnmap operator like this:
+//fun <R> Iterator<R>.asEPullee(): Function1<Unit, IEvent<R>?> = asNPullee().vnmap { Item(it) }
+// but it could be slower (unless inlined property)
+
+
 fun <R> Iterable<R>.asEPullee() = iterator().asEPullee()
 
 fun <R> Sequence<R>.asEPullee() = iterator().asEPullee()
@@ -298,11 +317,6 @@ fun <I> Function1<I?, Unit>.aitems() = anmap<I, Unit, IEvent<I>?> {
         else -> throw IllegalStateException("Unsupported event: $it")
     }
 }
-
-
-
-@Deprecated("Just use .vitems().niter() explicitly.", ReplaceWith("vitems().niter()"))
-fun <R> Function1<Unit, IEvent<R>?>.eiter() = vitems().niter()
 
 
 
@@ -827,31 +841,73 @@ fun <V, H> IPuller<V, H>.ldropWhile (pred: Function1<V, Boolean>) = Puller(lift<
  // TODO: tests, examples for all these take and drop versions..
 
 
+
+
+
+
+ interface IPush<T> {
+     val push: Function1<T, Unit> // typealias: Pushee
+ }
+
+interface IPull<T> {
+    val pull: Function1<Unit, T> // typealias: Pullee
+}
+
+
+class Remove<I>(private val i: I, private val items: MutableCollection<I>): Function1<Unit, Unit> {
+    override fun invoke(u: Unit) { items.remove(i) }
+}
+
+
 /**
  * This is something similar to rx: Subject (or to Jake Wharton library: RxRelay) - but as always: it is simpler ;-)
  * A relay is a pusher you can attach many pushees. Every time you get a Unit -> Unit function you can use to detach your pushee.
  * The relay itself has a "pushee" property that - when called - forwards given item to all currently attached pushees.
- * TODO SOMEDAY: thread-safe version
+ * TODO SOMEDAY: thread-safe version?
  */
-@MainThread
-class Relay<A>(initcap: Int = 16) : IPusher<A, Function1<Unit, Unit>> {
+class Relay<A>(initcap: Int = 16) : IPusher<A, Function1<Unit, Unit>>, IPush<A> {
 
     private val pushees = ArrayList<Function1<A, Unit>>(initcap)
 
-    val pushee: Function1<A, Unit> = { for(p in pushees) p(it) }
+    override val push: Function1<A, Unit> = { for(p in pushees) p(it) }
 
     override fun invoke(p: (A) -> Unit): (Unit) -> Unit {
         pushees.add(p)
         return Remove(p, pushees)
     }
+}
 
-    class Remove<F>(private val f: F, private val fs: MutableCollection<F>): Function1<Unit, Unit> {
-        override fun invoke(u: Unit) {
-            fs.remove(f)
-        }
 
+/**
+ * Small experiment: A kind of dual class for Relay, but for pull based communication.
+ * I don't know yet if it will be useful at all, or isn't it too confusing..
+ * IMPORTANT: when we pull from it: it does not pull from all attached pullees immediately
+ * instead it returns special NPullee, and user can iterate through it to get one item from each attached pullee.
+ * TODO LATER: test it!!
+ */
+class Yaler<R>(initcap: Int = 16) : IPuller<R, Function1<Unit, Unit>>, IPull<Function1<Unit, R?>> {
+
+    private val pullees = ArrayList<Function1<Unit, R>>(initcap)
+
+    override val pull: Function1<Unit, Function1<Unit, R?>> = { pullees.asNPullee().vnmap { it(Unit) } }
+
+    override fun invoke(p: (Unit) -> R): (Unit) -> Unit {
+        pullees.add(p)
+        return Remove(p, pullees)
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // TODO SOMEDAY: use type alias: Pushee<A>

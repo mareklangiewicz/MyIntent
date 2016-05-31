@@ -33,12 +33,12 @@ class MyAndroLogger(val tosystem: Boolean = true, val tomemory: Boolean = true) 
             return { }
 
         if(!tosystem)
-            return history.snack(view)
+            return history.push.snack(view)
 
         val lconsole = MyAndroSystemLogger().trace(14)
 
         if(tomemory)
-            return lconsole.apeek(history).snack(view)
+            return lconsole.apeek(history.push).snack(view)
         else
             return lconsole.snack(view)
     }

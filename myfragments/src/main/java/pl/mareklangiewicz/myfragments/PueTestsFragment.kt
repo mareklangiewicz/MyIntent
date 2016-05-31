@@ -35,7 +35,7 @@ class PueTestsFragment : MyFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val unsub = log.history.changes { adapter.notifyDataSetChanged() }
-        todo(unsub)
+        todo.push(unsub)
         adapter.notifyDataSetChanged()
 
         mf_mmt_rv_log.adapter = adapter
@@ -55,7 +55,7 @@ class PueTestsFragment : MyFragment() {
             val ctl = timer { } // we subscribe here with empty function (side effects are attached already)
             // and we get a controller that accepts ICommands
 
-            todo { ctl(Cancel) }
+            todo.push { ctl(Cancel) }
 
             ctl(Start)
 
@@ -73,12 +73,12 @@ class PueTestsFragment : MyFragment() {
                     .lfilter { it !== null && it % 10f == 0f }
                     .lmap { it as Float / 2f } // as Float tells compiler that we already filtered nulls out.
                     .lpeek { animTo(mf_mmt_mp2, "to", it) }
-                    .lpeek { animTo(mf_mmt_mp3, "to", getRandomFloat(50f, 99f)) }
-                    .lpeek { animTo(mf_mmt_mp3, "from", getRandomFloat(1f, mf_mmt_mp3.to)) }
+                    .lpeek { animTo(mf_mmt_mp3, "to", RANDOM.nextFloat(50f, 99f)) }
+                    .lpeek { animTo(mf_mmt_mp3, "from", RANDOM.nextFloat(1f, mf_mmt_mp3.to)) }
 
             val ctl= timer { } // we subscribe here with empty function (side effects are attached already) and we get a controller that accepts ICommands
 
-            todo { ctl(Cancel) }
+            todo.push { ctl(Cancel) }
 
             ctl(Start)
 
@@ -105,11 +105,11 @@ class PueTestsFragment : MyFragment() {
                             60L -> subscriptions[2](Unit) // unsubscribe
                         }
                     }
-                    .lnmap { scale1d(it.toFloat(), 0f, 70f, 1f, 99f) }
+                    .lnmap { it.toFloat().scale1d(0f, 70f, 1f, 99f) }
 
-            val ctl = timer { if(it !== null) relay.pushee(it) }
+            val ctl = timer { if(it !== null) relay.push(it) }
 
-            todo { ctl(Cancel) }
+            todo.push { ctl(Cancel) }
 
             ctl(Start)
 
@@ -123,12 +123,12 @@ class PueTestsFragment : MyFragment() {
             animTo(mf_mmt_mp3, "to", 80f)
 
             mf_mmt_mp3.setOnClickListener {
-                val interval = getRandomFloat(10f, 90f)
+                val interval = RANDOM.nextFloat(10f, 90f)
                 log.w("new (random) interval: ${(interval*10).toInt()}ms")
                 animTo(mf_mmt_mp3, "to", interval)
             }
 
-            todo { mf_mmt_mp3.setOnClickListener(null) }
+            todo.push { mf_mmt_mp3.setOnClickListener(null) }
 
             val intervals = { u: Unit -> mf_mmt_mp3.to.toLong() * 10 }
                     .vntake(64)
@@ -155,8 +155,8 @@ class PueTestsFragment : MyFragment() {
                 }
             }
 
-            todo { ctl1(Cancel) }
-            todo { ctl2(Cancel) }
+            todo.push { ctl1(Cancel) }
+            todo.push { ctl2(Cancel) }
 
             ctl1(Start)
             ctl2(Start)

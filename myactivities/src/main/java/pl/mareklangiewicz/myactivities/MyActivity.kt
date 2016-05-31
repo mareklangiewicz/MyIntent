@@ -239,8 +239,8 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, DrawerLayout.DrawerLi
         if(gdraw) onDrawerSlide(ma_global_navigation_view, if (ma_global_drawer_layout.isDrawerOpen(GravityCompat.START)) 1f else 0f)
         if(ldraw) onDrawerSlide(ma_local_navigation_view, if (ma_local_drawer_layout.isDrawerOpen(GravityCompat.END)) 1f else 0f)
         // ensure that drawers and menu icons are updated:
-        gnav!!.changes.pushee(Unit)
-        lnav!!.changes.pushee(Unit)
+        gnav!!.changes.push(Unit)
+        lnav!!.changes.push(Unit)
         if (savedInstanceState == null)
             onIntent(intent)
     }
@@ -442,8 +442,8 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, DrawerLayout.DrawerLi
     }
 
     @CallSuper override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
-        if (drawerView === ma_global_navigation_view) garrow.level = scale0d(slideOffset, 1f, 10000f).toInt()
-        else if (drawerView === ma_local_navigation_view) larrow.level = scale0d(slideOffset, 1f, 10000f).toInt()
+        if (drawerView === ma_global_navigation_view) garrow.level = slideOffset.scale0d(1f, 10000f).toInt()
+        else if (drawerView === ma_local_navigation_view) larrow.level = slideOffset.scale0d(1f, 10000f).toInt()
         (fgmt as? MyFragment)?.onDrawerSlide(drawerView, slideOffset)
     }
 

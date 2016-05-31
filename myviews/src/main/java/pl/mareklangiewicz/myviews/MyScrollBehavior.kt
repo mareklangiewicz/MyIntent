@@ -63,7 +63,7 @@ class MyScrollBehavior<V : View> : CoordinatorLayout.Behavior<V> {
         if (animator == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1)
             return
 
-        val progress = scale1d((dyConsumed+dyUnconsumed).toFloat(), scroll_min.toFloat(), scroll_max.toFloat(), 0f, 1f)
+        val progress = (dyConsumed+dyUnconsumed).toFloat().scale1d(scroll_min.toFloat(), scroll_max.toFloat(), 0f, 1f)
         animator!!.setCurrentFraction(progress)
     }
 }

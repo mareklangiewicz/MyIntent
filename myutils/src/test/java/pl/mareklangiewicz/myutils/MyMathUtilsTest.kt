@@ -26,13 +26,13 @@ class MyMathUtilsTest {
 
     @Test fun testGetRandomInt() {
         for (i in 0..29999) {
-            val r = getRandomInt(1, 5)
+            val r = RANDOM.nextInt(1, 5)
 //            log.v("getRandomInt(1, 5): ${r.str}");
             assertThat(r).isAtLeast(1)
             assertThat(r).isLessThan(5)
         }
         for (i in 0..29999) {
-            val r = getRandomInt(-10000, 0)
+            val r = RANDOM.nextInt(-10000, 0)
 //            log.v("getRandomInt(-10000, 0): ${r.str}");
             assertThat(r).isAtLeast(-10000)
             assertThat(r).isLessThan(0)

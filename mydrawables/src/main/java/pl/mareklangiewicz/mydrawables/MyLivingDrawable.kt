@@ -103,7 +103,7 @@ open class MyLivingDrawable : Drawable() {
      * @return a value in range: from .. to corresponding to level in range lfrom..lto
      */
     protected fun lvl(@IntRange(from = 0, to = 10000) lfrom: Int, @IntRange(from = 0, to = 10000) lto: Int, from: Int, to: Int): Int {
-        var value = scale1d(level, lfrom, lto, from, to)
+        var value = level.scale1d(lfrom, lto, from, to)
         val min = if (from < to) from else to
         val max = if (from < to) to else from
         if (value < min)
@@ -124,7 +124,7 @@ open class MyLivingDrawable : Drawable() {
      * @return a value in range: from .. to corresponding to level in range lfrom..lto
      */
     protected fun lvl(@IntRange(from = 0, to = 10000) lfrom: Int, @IntRange(from = 0, to = 10000) lto: Int, from: Float, to: Float): Float {
-        var value = scale1d(level.toFloat(), lfrom.toFloat(), lto.toFloat(), from, to)
+        var value = level.toFloat().scale1d(lfrom.toFloat(), lto.toFloat(), from, to)
         val min = if (from < to) from else to
         val max = if (from < to) to else from
         if (value < min)
@@ -137,7 +137,7 @@ open class MyLivingDrawable : Drawable() {
     protected fun lvl(from: Float, to: Float): Float = lvl(0, 10000, from, to)
 
     protected fun lvlcolor(colorFrom: Int, colorTo: Int): Int {
-        val fraction = scale0d(level.toFloat(), 10000f, 1f)
+        val fraction = level.toFloat().scale0d(10000f, 1f)
         val startA = colorFrom shr 24 and 0xff
         val startR = colorFrom shr 16 and 0xff
         val startG = colorFrom shr 8 and 0xff

@@ -59,7 +59,7 @@ class MyPieTestsFragment : MyFragment(), View.OnClickListener {
         val unsub = manager!!.lnav!!.items {
             randomize = manager!!.lnav!!.menuObj!!.findItem(it)?.toString() ?: randomize
         }
-        todo(unsub)
+        todo.push(unsub)
 
         if (savedInstanceState == null)
             manager?.lnav?.setCheckedItem(R.id.mpt_randomize_to, true)
@@ -82,7 +82,7 @@ class MyPieTestsFragment : MyFragment(), View.OnClickListener {
         if ( v !is MyPie) return
 
         if (randomize == "pieColor" || randomize == "ovalColor") {
-            @ColorInt val value = getRandomColor(Color.rgb(0, 0, 0), Color.rgb(255, 255, 255))
+            @ColorInt val value = RANDOM.nextColor(Color.rgb(0, 0, 0), Color.rgb(255, 255, 255))
             if (SDK_INT >= LOLLIPOP) {
                 ofArgb(v, randomize, value).start()
                 log.i(format("[SNACK]MyPie:%s: random color is ... %X %X %X", randomize, red(value), green(value), blue(value)))
@@ -104,7 +104,7 @@ class MyPieTestsFragment : MyFragment(), View.OnClickListener {
                 "maximum" -> min = v.to
             }
 
-            val value = getRandomFloat(min, max)
+            val value = RANDOM.nextFloat(min, max)
             ObjectAnimator.ofFloat(v, randomize, value).start()
             log.i(String.format("[SNACK]MyPie:%s: random %.2f..%.2f is ... %.2f", randomize, min, max, value))
         }

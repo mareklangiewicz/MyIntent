@@ -13,54 +13,81 @@ import java.util.Random
  * Created by Marek Langiewicz on 15.07.15.
  */
 
-val RANDOM = Random()
 
 
-fun scale0d(old: Int, oldMax: Int, newMax: Int): Int = (old.toLong() * newMax.toLong() / oldMax.toLong()).toInt()
+fun Int.scale0d(oldMax: Int, newMax: Int) = (toLong() * newMax.toLong() / oldMax.toLong()).toInt()
 
-fun scale1d(old: Int, oldMin: Int, oldMax: Int, newMin: Int, newMax: Int): Int = scale0d(old - oldMin, oldMax - oldMin, newMax - newMin) + newMin
+fun Float.scale0d(oldMax: Float, newMax: Float) = this * newMax / oldMax
 
-fun scale2d(old: Point, oldMin: Point, oldMax: Point, newMin: Point, newMax: Point): Point = Point(
-        scale1d(old.x, oldMin.x, oldMax.x, newMin.x, newMax.x),
-        scale1d(old.y, oldMin.y, oldMax.y, newMin.y, newMax.y))
+fun Double.scale0d(oldMax: Double, newMax: Double) = this * newMax / oldMax
 
-fun scale2d(old: Point, oldRange: Rect, newRange: Rect): Point = scale2d(
-        old,
+fun Int.scale1d(oldMin: Int, oldMax: Int, newMin: Int, newMax: Int) = (this - oldMin).scale0d(oldMax - oldMin, newMax - newMin) + newMin
+
+fun Float.scale1d(oldMin: Float, oldMax: Float, newMin: Float, newMax: Float) =
+        (this - oldMin).scale0d(oldMax - oldMin, newMax - newMin) + newMin
+
+fun Double.scale1d(oldMin: Double, oldMax: Double, newMin: Double, newMax: Double) =
+        (this - oldMin).scale0d(oldMax - oldMin, newMax - newMin) + newMin
+
+fun Point.scale2d(oldMin: Point, oldMax: Point, newMin: Point, newMax: Point) = Point(
+        x.scale1d(oldMin.x, oldMax.x, newMin.x, newMax.x),
+        y.scale1d(oldMin.y, oldMax.y, newMin.y, newMax.y))
+
+fun Point.scale2d(oldRange: Rect, newRange: Rect) = scale2d(
         Point(oldRange.left, oldRange.top),
         Point(oldRange.right, oldRange.bottom),
         Point(newRange.left, newRange.top),
         Point(newRange.right, newRange.bottom))
 
+fun PointF.scale2d(oldMin: PointF, oldMax: PointF, newMin: PointF, newMax: PointF) = PointF(
+        x.scale1d(oldMin.x, oldMax.x, newMin.x, newMax.x),
+        y.scale1d(oldMin.y, oldMax.y, newMin.y, newMax.y))
 
-fun getRandomInt(min: Int, max: Int): Int = scale1d(RANDOM.nextInt(Integer.MAX_VALUE shr 4), 0, Integer.MAX_VALUE shr 4, min, max)
-
-fun getRandomPoint(min: Point, max: Point): Point = Point(getRandomInt(min.x, max.x), getRandomInt(min.y, max.y))
-
-
-fun scale0d(old: Float, oldMax: Float, newMax: Float): Float = old * newMax / oldMax
-
-fun scale1d(old: Float, oldMin: Float, oldMax: Float, newMin: Float, newMax: Float): Float =
-        scale0d(old - oldMin, oldMax - oldMin, newMax - newMin) + newMin
-
-fun scale2d(old: PointF, oldMin: PointF, oldMax: PointF, newMin: PointF, newMax: PointF): PointF = PointF(
-        scale1d(old.x, oldMin.x, oldMax.x, newMin.x, newMax.x),
-        scale1d(old.y, oldMin.y, oldMax.y, newMin.y, newMax.y))
-
-fun scale2d(old: PointF, oldRange: RectF, newRange: RectF): PointF = scale2d(
-        old,
+fun PointF.scale2d(oldRange: RectF, newRange: RectF) = scale2d(
         PointF(oldRange.left, oldRange.top),
         PointF(oldRange.right, oldRange.bottom),
         PointF(newRange.left, newRange.top),
         PointF(newRange.right, newRange.bottom))
 
 
-fun getRandomFloat(min: Float, max: Float): Float = scale1d(RANDOM.nextFloat(), 0f, 1f, min, max)
 
-fun getRandomPointF(min: PointF, max: PointF): PointF = PointF(getRandomFloat(min.x, max.x), getRandomFloat(min.y, max.y))
+val RANDOM = Random()
 
-@ColorInt fun getRandomColor(@ColorInt colormin: Int, @ColorInt colormax: Int): Int = Color.argb(
-        getRandomInt(Color.alpha(colormin), Color.alpha(colormax)),
-        getRandomInt(Color.red(colormin), Color.red(colormax)),
-        getRandomInt(Color.green(colormin), Color.green(colormax)),
-        getRandomInt(Color.blue(colormin), Color.blue(colormax)))
+
+
+// result should be in the half-open range: [min, max)
+fun Random.nextInt(min: Int, max: Int) = nextInt(Int.MAX_VALUE).scale1d(0, Int.MAX_VALUE, min, max)
+
+// result should be in the half-open range: [min, max)
+fun Random.nextFloat(min: Float, max: Float) = nextFloat().scale1d(0f, 1f, min, max)
+
+// result should be in the half-open range: [min, max)
+fun Random.nextDouble(min: Double, max: Double) = nextDouble().scale1d(0.0, 1.0, min, max)
+
+// result should be in the half-open range: [min, max)
+fun Random.nextPoint(min: Point, max: Point) = Point(nextInt(min.x, max.x), nextInt(min.y, max.y))
+
+// result should be in the half-open range: [min, max)
+fun Random.nextPointF(min: PointF, max: PointF) = PointF(nextFloat(min.x, max.x), nextFloat(min.y, max.y))
+
+
+
+// result should be in the half-open range: [min, max)
+@ColorInt fun Random.nextColor(@ColorInt colormin: Int, @ColorInt colormax: Int): Int = Color.argb(
+        nextInt(Color.alpha(colormin), Color.alpha(colormax)),
+        nextInt(Color.red(colormin), Color.red(colormax)),
+        nextInt(Color.green(colormin), Color.green(colormax)),
+        nextInt(Color.blue(colormin), Color.blue(colormax)))
+
+
+
+
+// common random pullees:
+
+fun Random.ints(min: Int, max: Int): Function1<Unit, Int>  = { nextInt(min, max) }
+fun Random.floats(min: Float, max: Float): Function1<Unit, Float> = { nextFloat(min, max) }
+fun Random.doubles(min: Double, max: Double): Function1<Unit, Double> = { nextDouble(min, max) }
+fun Random.points(min: Point, max: Point): Function1<Unit, Point> = { nextPoint(min, max) }
+fun Random.pointfs(min: PointF, max: PointF): Function1<Unit, PointF> = { nextPointF(min, max) }
+fun Random.colors(@ColorInt min: Int,@ColorInt max: Int): Function1<Unit, Int> = { nextColor(min, max) }
 

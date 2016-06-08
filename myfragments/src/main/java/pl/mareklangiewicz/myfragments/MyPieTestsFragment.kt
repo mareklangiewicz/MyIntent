@@ -56,10 +56,10 @@ class MyPieTestsFragment : MyFragment(), View.OnClickListener {
             hanimator.interpolator = AccelerateInterpolator()
         }
 
-        val unsub = manager!!.lnav!!.items {
+        val ctl = manager!!.lnav!!.items {
             randomize = manager!!.lnav!!.menuObj!!.findItem(it)?.toString() ?: randomize
         }
-        todo.push(unsub)
+        todo.push { ctl(Cancel) }
 
         if (savedInstanceState == null)
             manager?.lnav?.setCheckedItem(R.id.mpt_randomize_to, true)

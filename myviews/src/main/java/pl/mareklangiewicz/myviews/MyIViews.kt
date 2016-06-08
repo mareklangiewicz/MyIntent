@@ -8,7 +8,7 @@ import pl.mareklangiewicz.myutils.*
 
 
 interface IClicks<T> {
-    val clicks: IPusher<T, (Unit) -> Unit>
+    val clicks: IPusher<T, Cancel>
         get() = throw UnsupportedOperationException()
 }
 
@@ -26,17 +26,26 @@ interface IButtonView : ITextView
 
 interface ICheckBoxView : IDataView<Boolean>
 
+
+
+interface ILabel : IView {
+    val label: ITextView
+}
+
+interface ILabDataView<T> : IDataView<T>, ILabel
+interface ILabTextView : ITextView, ILabDataView<String>
+interface ILabEditTextView : IEditTextView, ILabTextView
+interface ILabCheckBoxView : ICheckBoxView, ILabDataView<Boolean>
+
+
+
+
 interface IUrlImageView : IView {
     var url: String // displays image available at specified url
 }
 
-interface IItemListView<I> : IDataView<List<I>>, IChanges<List<I>> {
-    // TODO NOW: change this interface totally. use my own interfaces instead of kotlin.List; use special changes protocol and data type
 
 
-}
+interface ILstView<I> : IDataView<ILst<I>>, IChanges<ILst.IChange<I>>
 
-
-// TODO NOW: zdefiniowac jeszcze ostroznie jakis ogolny widok na kolekcje - tak zeby bylo ladnie i zeby latwo uzyc w MyHub (i w MyIntent tez)
-// TODO NOW: zaimplementowac androidowe implementacje tych interfejsow w pliku MyAViews
-// TODO NOW: uzyc tego w MyHub
+// TODO NOW: uzyc tego w MyIntent i MyHub

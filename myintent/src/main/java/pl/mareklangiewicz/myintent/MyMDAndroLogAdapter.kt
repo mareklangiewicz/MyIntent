@@ -5,7 +5,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import kotlinx.android.synthetic.main.mi_log_details.view.*
 import pl.mareklangiewicz.myloggers.LOG_ITEM_VIEW_TAG_HOLDER
 import pl.mareklangiewicz.myloggers.MyAndroLogAdapter
-import pl.mareklangiewicz.myutils.IMyArray
+import pl.mareklangiewicz.myutils.IArr
 import pl.mareklangiewicz.myutils.MyLogEntry
 import java.util.*
 
@@ -13,13 +13,13 @@ import java.util.*
  * Created by Marek Langiewicz on 23.10.15.
  * This class use material-dialogs library to present details of any log message when clicked.
  */
-class MyMDAndroLogAdapter(array: IMyArray<MyLogEntry>?) : MyAndroLogAdapter(array) {
+class MyMDAndroLogAdapter(arr: IArr<MyLogEntry>?) : MyAndroLogAdapter(arr) {
 
     override fun onClick(v: View) {
         val tag = v.getTag(LOG_ITEM_VIEW_TAG_HOLDER) ?: return
         val pos = (tag as MyAndroLogAdapter.ViewHolder).adapterPosition
 
-        array?.run {
+        arr?.run {
             val entry = get(pos)
             val dialog = MaterialDialog.Builder(v.context)
                     .title(entry.tag + " message " + entry.id)

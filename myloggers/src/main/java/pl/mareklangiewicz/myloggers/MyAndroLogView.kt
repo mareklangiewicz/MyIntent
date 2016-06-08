@@ -6,7 +6,7 @@ import android.graphics.Paint
 import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
-import pl.mareklangiewicz.myutils.IMyArray
+import pl.mareklangiewicz.myutils.IArr
 import pl.mareklangiewicz.myutils.MyLogEntry
 
 /**
@@ -25,7 +25,7 @@ class MyAndroLogView : View {
                 invalidate()
             }
 
-    var array: IMyArray<MyLogEntry>? = null
+    var arr: IArr<MyLogEntry>? = null
         set(value) {
             field = value
             invalidate()
@@ -47,7 +47,7 @@ class MyAndroLogView : View {
 
 
     override fun onDraw(canvas: Canvas) {
-        array?.run { draw(canvas, 4, canvas.height - 2, paint, lines) }
+        arr?.run { draw(canvas, 4, canvas.height - 2, paint, lines) }
         super.onDraw(canvas)
     }
 }

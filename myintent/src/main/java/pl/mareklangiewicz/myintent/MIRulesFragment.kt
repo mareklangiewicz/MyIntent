@@ -38,14 +38,14 @@ class MIRulesFragment : MyFragment() {
         mi_rules_recycler_view.setHasFixedSize(true)
         mi_rules_recycler_view.adapter = adapter
 
-        val unsub = manager!!.lnav!!.items {
+        val ctl = manager!!.lnav!!.items {
             when(it) {
                 R.id.new_user_rule -> RE_USER_GROUP.rules.add(RERule("", "", "", "", true))
                 R.id.clear_user_rules -> RE_USER_GROUP.rules.clear()
             }
             adapter.notifyItemChanged(1)
         }
-        todo.push(unsub)
+        todo.push { ctl(Cancel) }
     }
 
     override fun onDestroyView() {

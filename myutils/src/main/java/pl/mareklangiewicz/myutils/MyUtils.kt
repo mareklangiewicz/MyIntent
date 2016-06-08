@@ -12,15 +12,21 @@ import android.support.design.widget.Snackbar
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Rect
 import android.view.inputmethod.InputMethodManager
+import android.widget.CheckBox
 
 /**
  * Created by Marek Langiewicz on 29.01.16.
  * Some utilities
  */
 
+
 operator fun TextView.setValue(obj: Any?, property: Any?, arg: CharSequence) { text = arg }
 
 operator fun TextView.getValue(obj: Any?, property: Any?): String = text.toString()
+
+operator fun CheckBox.setValue(obj: Any?, property: Any?, arg: Boolean) { isChecked = arg }
+
+operator fun CheckBox.getValue(obj: Any?, property: Any?): Boolean = isChecked
 
 inline fun View.snack(message: String, length: Int = Snackbar.LENGTH_LONG, f: Snackbar.() -> Unit) {
     val snack = Snackbar.make(this, message, length)

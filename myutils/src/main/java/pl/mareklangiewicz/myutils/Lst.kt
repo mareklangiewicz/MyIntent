@@ -7,7 +7,7 @@ private val MIN_CAPACITY = 8 // Must be a power of 2
  * Created by Marek Langiewicz on 28.05.16.
  * Pretty versatile collection implementation.
  */
-class MyList<T>(initcap: Int = MIN_CAPACITY) : IMyList<T> {
+class Lst<T>(initcap: Int = MIN_CAPACITY) : ILst<T> {
 
     private var arr: Array<Any?>
     private var beg: Int = 0
@@ -64,48 +64,33 @@ class MyList<T>(initcap: Int = MIN_CAPACITY) : IMyList<T> {
 
     // negative indices are translated like in python: idx = size + idx
     override fun get(idx: Int): T {
-        val i = if(idx < 0) size+idx else idx
-        if (i < 0 || i >= size) throw IndexOutOfBoundsException()
+        val i = idx.pos(size).chk(0, size-1)
         @Suppress("UNCHECKED_CAST")
         return arr[beg + i and arr.size - 1] as T
     }
 
     // negative indices are translated like in python: idx = size + idx
-    override fun set(idx: Int, t: T) {
-        val i = if(idx < 0) size+idx else idx
-        if (i < 0 || i >= size)
-            throw IndexOutOfBoundsException()
-        arr[beg + i and arr.size - 1] = t
+    override fun set(idx: Int, item: T) {
+        val i = idx.pos(size).chk(0, size-1)
+        arr[beg + i and arr.size - 1] = item
     }
 
     override val size: Int
         get() = end - beg and arr.size - 1
 
 
-    override val head = object : IMyStack<T> {
-        override val push: (T) -> Unit = { ins(0, it) }
-        override val pull: (Unit) -> T? = { if(beg == end) null else del(0) }
-    }
-
-    override val tail = object : IMyStack<T> {
-        override val push: (T) -> Unit = { ins(size, it) }
-        override val pull: (Unit) -> T? = { if(beg == end) null else del(size-1) }
-    }
-
+    override val head = ILst.Head(this)
+    override val tail = ILst.Tail(this)
 
     // negative indices are translated like in python: idx = size + idx
-    override fun ins(idx: Int, t: T) {
-        val i = if(idx < 0) size+idx else idx
-        if (i < 0 || i > size)
-            throw IndexOutOfBoundsException()
-        insert(beg + i and arr.size - 1, t)
+    override fun ins(idx: Int, item: T) {
+        val i = idx.pos(size).chk(0, size)
+        insert(beg + i and arr.size - 1, item)
     }
 
     // negative indices are translated like in python: idx = size + idx
     override fun del(idx: Int): T {
-        val i = if(idx < 0) size+idx else idx
-        if (i < 0 || i >= size)
-            throw IndexOutOfBoundsException()
+        val i = idx.pos(size).chk(0, size-1)
         return delete(beg + i and arr.size - 1)
     }
 
@@ -178,4 +163,13 @@ class MyList<T>(initcap: Int = MIN_CAPACITY) : IMyList<T> {
         return result
     }
 
+    companion object {
+        fun <T> of(vararg items: T): Lst<T> {
+            val lst = Lst<T>(items.size + 1)
+            lst.end = items.size
+            for(i in 0..items.size-1)
+                lst.arr[i] = items[i]
+            return lst
+        }
+    }
 }

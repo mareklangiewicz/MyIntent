@@ -19,7 +19,7 @@ interface IData<T> {
 }
 
 interface IChanges<T> {
-    val changes: IPusher<T, (Unit) -> Unit>
+    val changes: IPusher<T, Cancel>
         get() = throw UnsupportedOperationException()
 }
 
@@ -39,3 +39,6 @@ interface IProgress : IData<Int> {
 }
 
 
+
+
+val Boolean.yesno: String get() = if(this) "YES" else "NO"

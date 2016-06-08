@@ -102,7 +102,7 @@ class MySystemLogger(val outlvl: MyLogLevel = MyLogLevel.VERBOSE, val errlvl: My
     }
 }
 
-class MyLogHistory : IMyBuffer<MyLogEntry>, IClear {
+class MyLogHistory : IBuf<MyLogEntry>, IClear {
 
     private val fullBuffer = MyRingBuffer<MyLogEntry>()
 
@@ -110,7 +110,7 @@ class MyLogHistory : IMyBuffer<MyLogEntry>, IClear {
 
     private val relay = Relay<Unit>()
 
-    val changes: IPusher<Unit, (Unit) -> Unit> = relay
+    val changes: IPusher<Unit, Cancel> = relay
 
     var level = MyLogLevel.VERBOSE // minimum level of returned history
         set(value) {

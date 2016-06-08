@@ -34,8 +34,8 @@ class PueTestsFragment : MyFragment() {
 
         super.onViewCreated(view, savedInstanceState)
 
-        val unsub = log.history.changes { adapter.notifyDataSetChanged() }
-        todo.push(unsub)
+        val ctl = log.history.changes { adapter.notifyDataSetChanged() }
+        todo.push { ctl(Cancel) }
         adapter.notifyDataSetChanged()
 
         mf_mmt_rv_log.adapter = adapter
@@ -90,7 +90,7 @@ class PueTestsFragment : MyFragment() {
 
             val relay = Relay<Float>()
 
-            val subscriptions = arrayOf<(Unit) -> Unit>( {}, {}, {} )
+            val subscriptions = arrayOf<(Cancel) -> Unit>( {}, {}, {} )
 
             val intervals = (1..70).asNPullee().vnmap { 300L }
 
@@ -100,9 +100,9 @@ class PueTestsFragment : MyFragment() {
                             10L -> subscriptions[0] = relay { animTo(mf_mmt_mp1, "to", it) }
                             20L -> subscriptions[1] = relay { animTo(mf_mmt_mp2, "to", it) }
                             30L -> subscriptions[2] = relay { animTo(mf_mmt_mp3, "to", it) }
-                            40L -> subscriptions[0](Unit) // unsubscribe
-                            50L -> subscriptions[1](Unit) // unsubscribe
-                            60L -> subscriptions[2](Unit) // unsubscribe
+                            40L -> subscriptions[0](Cancel) // unsubscribe
+                            50L -> subscriptions[1](Cancel) // unsubscribe
+                            60L -> subscriptions[2](Cancel) // unsubscribe
                         }
                     }
                     .lnmap { it.toFloat().scale1d(0f, 70f, 1f, 99f) }

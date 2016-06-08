@@ -29,15 +29,15 @@ class MyLogFragment : MyFragment() {
 
         my_log_recycler_view.adapter = adapter
 
-        var unsub = log.history.changes { adapter.notifyDataSetChanged() }
-        todo.push(unsub)
+        var ctl = log.history.changes { adapter.notifyDataSetChanged() }
+        todo.push { ctl(Cancel) }
 
         adapter.notifyDataSetChanged() // to make sure we are up to date
 
         //TODO SOMEDAY: some nice simple header with fragment title
         manager?.lnav?.menuId = R.menu.mf_my_log
 
-        unsub = manager!!.lnav!!.items {
+        ctl = manager!!.lnav!!.items {
             when (it) {
                 R.id.log_level_error ->   log.history.level = MyLogLevel.ERROR
                 R.id.log_level_warning -> log.history.level = MyLogLevel.WARN
@@ -53,7 +53,7 @@ class MyLogFragment : MyFragment() {
                 R.id.log_some_verbose ->  log.v("some verbose")
             }
         }
-        todo.push(unsub)
+        todo.push { ctl(Cancel) }
 
         updateCheckedItem()
 

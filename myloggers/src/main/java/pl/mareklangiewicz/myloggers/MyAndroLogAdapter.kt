@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.ml_log_item.view.*
-import pl.mareklangiewicz.myutils.IMyArray
+import pl.mareklangiewicz.myutils.IArr
 import pl.mareklangiewicz.myutils.MyLogEntry
 import pl.mareklangiewicz.myutils.MyLogLevel
 import java.util.*
@@ -16,13 +16,13 @@ import java.util.*
 
 val LOG_ITEM_VIEW_TAG_HOLDER = R.id.ml_log_item_view_tag_holder
 
-open class MyAndroLogAdapter(array: IMyArray<MyLogEntry>? = null) : RecyclerView.Adapter<MyAndroLogAdapter.ViewHolder>(), View.OnClickListener {
+open class MyAndroLogAdapter(arr: IArr<MyLogEntry>? = null) : RecyclerView.Adapter<MyAndroLogAdapter.ViewHolder>(), View.OnClickListener {
 
     init {
         setHasStableIds(true)
     }
 
-    var array: IMyArray<MyLogEntry>? = array
+    var arr: IArr<MyLogEntry>? = arr
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -49,7 +49,7 @@ open class MyAndroLogAdapter(array: IMyArray<MyLogEntry>? = null) : RecyclerView
         val elevation = 2f
 //        var elevation = 2f
 
-        array?.run {
+        arr?.run {
             val e = get(position)
             nr = e.id
 //            time = e.time
@@ -71,9 +71,9 @@ open class MyAndroLogAdapter(array: IMyArray<MyLogEntry>? = null) : RecyclerView
 
     }
 
-    override fun getItemCount(): Int = array?.size ?: 0
+    override fun getItemCount(): Int = arr?.size ?: 0
 
-    override fun getItemId(position: Int): Long = array?.get(position)?.id ?: RecyclerView.NO_ID
+    override fun getItemId(position: Int): Long = arr?.get(position)?.id ?: RecyclerView.NO_ID
 
     override fun onClick(v: View) { }
 

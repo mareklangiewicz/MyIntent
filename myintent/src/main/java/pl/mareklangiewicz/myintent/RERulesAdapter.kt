@@ -41,7 +41,7 @@ class RERulesAdapter() : RecyclerView.Adapter<RERulesAdapter.ViewHolder>(), View
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.mi_re_rule_layout, parent, false)
+        val v = parent.inflate<View>(R.layout.mi_re_rule_layout)!!
         v.setOnClickListener(this)
         val holder = ViewHolder(v)
         v.setTag(RE_RULE_VIEW_TAG_HOLDER, holder)

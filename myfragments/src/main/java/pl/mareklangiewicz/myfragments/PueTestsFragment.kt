@@ -52,12 +52,12 @@ class PueTestsFragment : MyFragment() {
                     .lfilter { it !== null && it % 5L == 0L }
                     .lpeek { log.w("$it % 5 = 0") }
 
-            val ctl = timer { } // we subscribe here with empty function (side effects are attached already)
+            val actl = timer { } // we subscribe here with empty function (side effects are attached already)
             // and we get a controller that accepts ICommands
 
-            todo.push { ctl(Cancel) }
+            todo.push { actl(Cancel) }
 
-            ctl(Start)
+            actl(Start)
 
         }
 
@@ -76,11 +76,11 @@ class PueTestsFragment : MyFragment() {
                     .lpeek { animTo(mf_mmt_mp3, "to", RANDOM.nextFloat(50f, 99f)) }
                     .lpeek { animTo(mf_mmt_mp3, "from", RANDOM.nextFloat(1f, mf_mmt_mp3.to)) }
 
-            val ctl= timer { } // we subscribe here with empty function (side effects are attached already) and we get a controller that accepts ICommands
+            val actl = timer { } // we subscribe here with empty function (side effects are attached already) and we get a controller that accepts ICommands
 
-            todo.push { ctl(Cancel) }
+            todo.push { actl(Cancel) }
 
-            ctl(Start)
+            actl(Start)
 
         }
 
@@ -107,11 +107,11 @@ class PueTestsFragment : MyFragment() {
                     }
                     .lnmap { it.toFloat().scale1d(0f, 70f, 1f, 99f) }
 
-            val ctl = timer { if(it !== null) relay.push(it) }
+            val actl = timer { if(it !== null) relay.push(it) }
 
-            todo.push { ctl(Cancel) }
+            todo.push { actl(Cancel) }
 
-            ctl(Start)
+            actl(Start)
 
         }
 

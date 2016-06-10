@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.mi_re_group_layout.view.*
 import pl.mareklangiewicz.myloggers.MY_DEFAULT_ANDRO_LOGGER
 import pl.mareklangiewicz.myutils.REGroup
 import pl.mareklangiewicz.myutils.RERule
+import pl.mareklangiewicz.myutils.inflate
 import pl.mareklangiewicz.myutils.str
 import java.util.*
 
@@ -40,7 +41,7 @@ class REGroupsAdapter() : RecyclerView.Adapter<REGroupsAdapter.ViewHolder>(), Vi
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.mi_re_group_layout, parent, false)
+        val v = parent.inflate<View>(R.layout.mi_re_group_layout)!!
         v.setOnClickListener(this)
         val holder = ViewHolder(v)
         v.setTag(RE_GROUP_VIEW_TAG_HOLDER, holder)

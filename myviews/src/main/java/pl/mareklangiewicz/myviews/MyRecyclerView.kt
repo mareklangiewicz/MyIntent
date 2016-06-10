@@ -10,11 +10,11 @@ import pl.mareklangiewicz.myutils.*
  * Simple wrapper on android RecyclerView
  */
 
-open class MyRecyclerView<I, V: AView<*>>(rview: RecyclerView,
-        protected val create: () -> V,
-        protected val bind: V.(I) -> Unit,
-        protected var lst: ILst<I> = Lst<I>()
-) : AView<RecyclerView>(rview), ILstView<I> {
+abstract class MyRecyclerView<I, V: AView<*>>(rview: RecyclerView, protected var lst: ILst<I> = Lst<I>())
+: AView<RecyclerView>(rview), ILstView<I> {
+
+    abstract fun create(): V
+    abstract fun bind(view: V, item: I)
 
     protected val adapter = Adapter()
 
@@ -56,7 +56,6 @@ open class MyRecyclerView<I, V: AView<*>>(rview: RecyclerView,
             adapter.notifyDataSetChanged()
         }
 
-
     override val changes = Relay<ILst.IChange<I>>()
 
     inner class VH(val aview: V) : RecyclerView.ViewHolder(aview.view)
@@ -64,7 +63,7 @@ open class MyRecyclerView<I, V: AView<*>>(rview: RecyclerView,
     inner class Adapter() : RecyclerView.Adapter<VH>()  {
         override fun getItemCount() = lst.size
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = VH(create())
-        override fun onBindViewHolder(holder: VH, position: Int) = holder.aview.bind(lst[position])
+        override fun onBindViewHolder(holder: VH, position: Int) = bind(holder.aview, lst[position])
     }
 
 }

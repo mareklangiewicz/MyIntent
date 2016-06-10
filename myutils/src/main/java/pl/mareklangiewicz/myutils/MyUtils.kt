@@ -11,6 +11,8 @@ import android.widget.TextView
 import android.support.design.widget.Snackbar
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Rect
+import android.support.annotation.LayoutRes
+import android.view.LayoutInflater.from
 import android.view.inputmethod.InputMethodManager
 import android.widget.CheckBox
 
@@ -27,6 +29,9 @@ operator fun TextView.getValue(obj: Any?, property: Any?): String = text.toStrin
 operator fun CheckBox.setValue(obj: Any?, property: Any?, arg: Boolean) { isChecked = arg }
 
 operator fun CheckBox.getValue(obj: Any?, property: Any?): Boolean = isChecked
+
+@Suppress("UNCHECKED_CAST")
+fun <V : View> ViewGroup.inflate(@LayoutRes res: Int, attach: Boolean = false) = from(context).inflate(res, this, attach) as? V
 
 inline fun View.snack(message: String, length: Int = Snackbar.LENGTH_LONG, f: Snackbar.() -> Unit) {
     val snack = Snackbar.make(this, message, length)

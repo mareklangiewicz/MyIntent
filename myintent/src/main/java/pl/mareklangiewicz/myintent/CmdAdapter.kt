@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.mi_command.view.*
 import pl.mareklangiewicz.myloggers.MY_DEFAULT_ANDRO_LOGGER
+import pl.mareklangiewicz.myutils.inflate
 
 /**
  * Created by Marek Langiewicz on 12.11.15.
@@ -29,7 +30,7 @@ class CmdAdapter(commands: List<String> = emptyList()) : RecyclerView.Adapter<Cm
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CmdAdapter.ViewHolder {
 
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.mi_command, parent, false)
+        val v = parent.inflate<View>(R.layout.mi_command)!!
         v.setOnClickListener(this)
         val holder = ViewHolder(v)
         v.setTag(RE_COMMAND_VIEW_TAG_HOLDER, holder)

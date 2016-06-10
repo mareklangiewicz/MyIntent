@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.mf_maf_detail.view.*
 import kotlinx.android.synthetic.main.mf_my_about_fragment.*
+import pl.mareklangiewicz.myutils.inflate
 import pl.mareklangiewicz.myutils.str
 
 /**
@@ -72,8 +73,7 @@ open class MyAboutFragment : MyFragment() {
 
         override fun getItemCount() = details.size
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int)
-                = DetailViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.mf_maf_detail, parent, false))
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = DetailViewHolder(parent.inflate<View>(R.layout.mf_maf_detail)!!)
 
         override fun onBindViewHolder(holder: DetailViewHolder, position: Int) {
             val (label, value) = details[position]

@@ -8,6 +8,7 @@ import kotlinx.android.synthetic.main.ml_log_item.view.*
 import pl.mareklangiewicz.myutils.IArr
 import pl.mareklangiewicz.myutils.MyLogEntry
 import pl.mareklangiewicz.myutils.MyLogLevel
+import pl.mareklangiewicz.myutils.inflate
 import java.util.*
 
 /**
@@ -30,7 +31,7 @@ open class MyAndroLogAdapter(arr: IArr<MyLogEntry>? = null) : RecyclerView.Adapt
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.ml_log_item, parent, false)
+        val v = parent.inflate<View>(R.layout.ml_log_item)!!
         v.setOnClickListener(this)
         val holder = ViewHolder(v)
         v.setTag(LOG_ITEM_VIEW_TAG_HOLDER, holder)

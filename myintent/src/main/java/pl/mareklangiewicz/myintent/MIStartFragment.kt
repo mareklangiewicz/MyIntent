@@ -52,8 +52,8 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
 
         mi_lf_rv_log.adapter = adapter
 
-        var ctl = log.history.changes { adapter.notifyDataSetChanged() }
-        todo.push { ctl(Cancel) }
+        val ctl1 = log.history.changes { adapter.notifyDataSetChanged() }
+        todo.push { ctl1(Cancel) }
         adapter.notifyDataSetChanged() // to make sure we are up to date
 
         //TODO SOMEDAY: some nice simple header with fragment title
@@ -78,7 +78,7 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
 
         arguments?.getString("play")?.let { onResumePlayCmd = it }
 
-        ctl = manager!!.lnav!!.items {
+        val ctl2 = manager!!.lnav!!.items {
             when (it) {
                 R.id.mi_ll_i_error        -> log.history.level = MyLogLevel.ERROR
                 R.id.mi_ll_i_warning      -> log.history.level = MyLogLevel.WARN
@@ -94,7 +94,7 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
                 R.id.log_some_verbose     -> log.v("some verbose")
             }
         }
-        todo.push { ctl(Cancel) }
+        todo.push { ctl2(Cancel) }
     }
 
     override fun onResume() {

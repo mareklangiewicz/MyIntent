@@ -18,18 +18,18 @@ import pl.mareklangiewicz.myutils.kgetInt
 object MIContract {
 
     val AUTH = BuildConfig.AUTHORITY
-    val BASE_URI = Uri.parse("content://" + AUTH)
+    val BASE_URI = Uri.parse("content://$AUTH")!!
 
     object CmdRecent {
 
         val PATH = "cmd/recent"
 
-        val URI = BASE_URI.buildUpon().appendEncodedPath(PATH).build()
+        val URI = BASE_URI.buildUpon().appendEncodedPath(PATH).build()!!
 
-        val TYPE_DIR = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + AUTH + "/" + PATH
-        val TYPE_ITEM = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + AUTH + "/" + PATH
+        val TYPE_DIR = "${ContentResolver.CURSOR_DIR_BASE_TYPE}/$AUTH/$PATH"
+        val TYPE_ITEM = "${ContentResolver.CURSOR_ITEM_BASE_TYPE}/$AUTH/$PATH"
 
-        val TABLE_NAME = CmdRecent::class.java.simpleName
+        val TABLE_NAME = CmdRecent::class.java.simpleName!!
 
         val COL_COMMAND = "Command"
         val COL_TIME = "Time"
@@ -62,12 +62,12 @@ object MIContract {
 
         val PATH = "cmd/example"
 
-        val URI = BASE_URI.buildUpon().appendEncodedPath(PATH).build()
+        val URI = BASE_URI.buildUpon().appendEncodedPath(PATH).build()!!
 
-        val TYPE_DIR = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + AUTH + "/" + PATH
-        val TYPE_ITEM = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + AUTH + "/" + PATH
+        val TYPE_DIR = "${ContentResolver.CURSOR_DIR_BASE_TYPE}/$AUTH/$PATH"
+        val TYPE_ITEM = "${ContentResolver.CURSOR_ITEM_BASE_TYPE}/$AUTH/$PATH"
 
-        val TABLE_NAME = CmdExample::class.java.simpleName
+        val TABLE_NAME = CmdExample::class.java.simpleName!!
 
         val COL_COMMAND = "Command"
         val COL_PRIORITY = "Priority"
@@ -92,13 +92,13 @@ object MIContract {
 
     object CmdSuggest {
 
-        val PATH = "cmd/" + SearchManager.SUGGEST_URI_PATH_QUERY
+        val PATH = "cmd/${SearchManager.SUGGEST_URI_PATH_QUERY}"
 
-        val URI = BASE_URI.buildUpon().appendEncodedPath(PATH).build()
+        val URI = BASE_URI.buildUpon().appendEncodedPath(PATH).build()!!
 
-        val TYPE_DIR = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + AUTH + "/" + PATH
+        val TYPE_DIR = "${ContentResolver.CURSOR_DIR_BASE_TYPE}/$AUTH/$PATH"
 
-        val TABLE_NAME = CmdSuggest::class.java.simpleName
+        val TABLE_NAME = CmdSuggest::class.java.simpleName!!
 
         val COL_QUERY = SearchManager.SUGGEST_COLUMN_QUERY
         val COL_TEXT = SearchManager.SUGGEST_COLUMN_TEXT_1
@@ -112,12 +112,12 @@ object MIContract {
 
         val PATH = "rule/user"
 
-        val URI = BASE_URI.buildUpon().appendEncodedPath(PATH).build()
+        val URI = BASE_URI.buildUpon().appendEncodedPath(PATH).build()!!
 
-        val TYPE_DIR = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + AUTH + "/" + PATH
-        val TYPE_ITEM = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + AUTH + "/" + PATH
+        val TYPE_DIR = "${ContentResolver.CURSOR_DIR_BASE_TYPE}/$AUTH/$PATH"
+        val TYPE_ITEM = "${ContentResolver.CURSOR_ITEM_BASE_TYPE}/$AUTH/$PATH"
 
-        val TABLE_NAME = RuleUser::class.java.simpleName
+        val TABLE_NAME = RuleUser::class.java.simpleName!!
 
         val COL_POSITION = "Position"
         val COL_EDITABLE = "Editable"

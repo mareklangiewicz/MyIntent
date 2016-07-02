@@ -4,17 +4,14 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.net.Uri
 import android.net.Uri.parse
-import android.support.test.InstrumentationRegistry
-import pl.mareklangiewicz.myloggers.MY_DEFAULT_ANDRO_LOGGER
-import java.lang.System.currentTimeMillis
-import java.util.*
+import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import android.support.test.runner.*
+import pl.mareklangiewicz.myloggers.MY_DEFAULT_ANDRO_LOGGER
 import pl.mareklangiewicz.myutils.*
-import pl.mareklangiewicz.myutils.kquery
-import com.google.common.truth.Truth.assertThat
+import java.lang.System.currentTimeMillis
+import java.util.*
 
 /**
  * Created by Marek Langiewicz on 10.10.15.

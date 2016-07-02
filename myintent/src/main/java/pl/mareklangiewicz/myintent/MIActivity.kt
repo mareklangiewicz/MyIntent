@@ -266,14 +266,14 @@ class MIActivity : MyActivity() {
             "suicide" -> suicide()
             "resurrection" -> resurrection()
             "weather" -> {
-                val appid = command["extra string appid"];
+                val appid = command["extra string appid"]
                 if (appid == null) {
-                    log.e("No OpenWeatherMap Api Key provided.");
+                    log.e("No OpenWeatherMap Api Key provided.")
                     return
                 }
-                val city = command["extra string city"];
+                val city = command["extra string city"]
                 if (city == null) {
-                    log.e("No city provided.");
+                    log.e("No city provided.")
                     return
                 }
                 weather(

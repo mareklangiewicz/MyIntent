@@ -21,7 +21,7 @@ interface IDeq<T> {
 }
 
 
-interface ICol<T> : Iterable<T>, ISize, IClear
+interface ICol<out T> : Iterable<T>, ISize, IClear
 
 
 // IMPORTANT: methods behavior for indicies: idx < 0 || idx >= size   is UNDEFINED here!
@@ -37,7 +37,7 @@ interface IArr<T> : ICol<T> {
 
     override operator fun iterator(): Iterator<T> = Itor(this)
 
-    private class Itor<T>(private val arr: IArr<T>, private var idx: Int = 0) : Iterator<T> {
+    private class Itor<out T>(private val arr: IArr<T>, private var idx: Int = 0) : Iterator<T> {
         override fun hasNext(): Boolean = idx < arr.size
         override fun next(): T = arr[idx++]
     }
@@ -180,7 +180,7 @@ interface IBuf<T> : IArr<T>, IPush<T>
 
 
 // TODO LATER: remove this - just use Lst
-open class MyALBuffer<T>(val capacity: Int = 16) : IBuf<T> {
+open class MyALBuffer<T>(capacity: Int = 16) : IBuf<T> {
 
     private val array: ArrayList<T> = ArrayList(capacity)
 

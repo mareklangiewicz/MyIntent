@@ -234,7 +234,7 @@ data class Request(val count: Long) : ICommand // for future backpressure implem
 // Puer should keep track how many items are requested so far and how many has been emited already - and NOT emit more than requested.
 
 // user can add more special case commands for his special puers. For example:
-data class Inject<T>(val item: T) : ICommand // Commanding puer to push additional item provided "by hand" immediately.
+data class Inject<out T>(val item: T) : ICommand // Commanding puer to push additional item provided "by hand" immediately.
 
 
 
@@ -443,12 +443,12 @@ class Timer(private val scheduler: IScheduler, private val intervals: Function1<
                 Step, Tick, Tock -> pushee?.invoke(counter++)
 
                 Stop, Pause -> {
-                    unschedule?.invoke(Cancel);
+                    unschedule?.invoke(Cancel)
                     unschedule = null
                 }
 
                 Cancel -> {
-                    unschedule?.invoke(Cancel);
+                    unschedule?.invoke(Cancel)
                     unschedule = null
                     pushee = null
                 }
@@ -834,15 +834,15 @@ fun <V, C> IPuller<V, C>.ldropWhile (pred: Function1<V, Boolean>) = Puller(lift<
 
 
 
- interface IPush<T> {
+ interface IPush<in T> {
      val push: Function1<T, Unit> // typealias: Pushee
  }
 
-interface IPull<T> {
+interface IPull<out T> {
     val pull: Function1<Unit, T> // typealias: Pullee
 }
 
-interface IPeek<T> {
+interface IPeek<out T> {
     val peek: Function1<Unit, T> // typealias: Pullee
         get() = throw UnsupportedOperationException() // it usually is "an optional operation" so by default it throws.
 }

@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.mf_my_example_fragment.*
 import pl.mareklangiewicz.myutils.str
 
 
-class MyExampleFragment : Fragment() {
+open class MyExampleFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 

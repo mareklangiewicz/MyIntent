@@ -1,5 +1,7 @@
 package pl.mareklangiewicz.myutils.myhttp
 
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -169,27 +171,16 @@ object OpenWeatherMap {
                 @Query("units") units: String?): Call<DailyForecasts>
     }
 
-    private val retrofit = Retrofit.Builder().baseUrl(URL).addConverterFactory(MoshiConverterFactory.create()).build()
+//    private val interceptor = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
 
-    val service = retrofit.create(Service::class.java)
+//    private val logclient = OkHttpClient.Builder().addInterceptor(interceptor).build()
 
+    private val retrofit = Retrofit.Builder()
+            .baseUrl(URL)
+//            .client(logclient)
+            .addConverterFactory(MoshiConverterFactory.create()).build()
 
-        //            THIS IS OLD JAVA WAY TO INJECT SOME REQUEST/RESPONSE LOGGING
-        //            if(VV) {
-        //                OkHttpClient client = new OkHttpClient();
-        //                HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        //                interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        //                client.interceptors().add(interceptor);
-        //
-        //                Retrofit loggingretrofit = new Retrofit.Builder()
-        //                        .baseUrl(URL)
-        //                        .client(client)
-        //                        .addConverterFactory(MoshiConverterFactory.create())
-        //                        .build();
-        //
-        //                return loggingretrofit.create(Service.class);
-        //            }
-
+    val service = retrofit.create(Service::class.java)!!
 
 
 }

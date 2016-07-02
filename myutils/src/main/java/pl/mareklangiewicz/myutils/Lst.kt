@@ -7,7 +7,7 @@ private val MIN_CAPACITY = 8 // Must be a power of 2
  * Created by Marek Langiewicz on 28.05.16.
  * Pretty versatile collection implementation.
  */
-class Lst<T>(initcap: Int = MIN_CAPACITY) : ILst<T> {
+open class Lst<T>(initcap: Int = MIN_CAPACITY) : ILst<T> {
 
     private var arr: Array<Any?>
     private var beg: Int = 0
@@ -164,11 +164,13 @@ class Lst<T>(initcap: Int = MIN_CAPACITY) : ILst<T> {
     }
 
     companion object {
-        fun <T> of(vararg items: T): Lst<T> {
+
+        fun <T> of(vararg items: T): Lst<T> = from(items.asArr())
+
+        fun <T> from(items: ICol<T>): Lst<T> {
             val lst = Lst<T>(items.size + 1)
             lst.end = items.size
-            for(i in 0..items.size-1)
-                lst.arr[i] = items[i]
+            for((i, item) in items.withIndex()) lst.arr[i] = item
             return lst
         }
     }

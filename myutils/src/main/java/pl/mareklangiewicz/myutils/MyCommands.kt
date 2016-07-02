@@ -466,7 +466,7 @@ class MyCommand(cmd: String = "") : HashMap<String, String>(20) {
 
 fun MyCommand.toIntent(): Intent {
 
-    val intent = Intent();
+    val intent = Intent()
     val bundle = Bundle()
 
     for ((key, value) in this) {

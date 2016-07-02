@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.mf_my_basic_tests_fragment.*
 import pl.mareklangiewicz.myutils.*
 
 
-class MyBasicTestsFragment : MyFragment() {
+open class MyBasicTestsFragment : MyFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState) //just for logging

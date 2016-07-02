@@ -1,8 +1,6 @@
 package pl.mareklangiewicz.myintent
 
 import android.support.v7.widget.RecyclerView
-import android.text.Html
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.afollestad.materialdialogs.MaterialDialog
@@ -54,7 +52,7 @@ class RERulesAdapter() : RecyclerView.Adapter<RERulesAdapter.ViewHolder>(), View
         }
         else {
             val rule = rules!![position]
-            holder.itemView.rule_name_view.text = Html.fromHtml("<b>rule:</b> ${rule.name}")
+            holder.itemView.rule_name_view.text = "rule: ${rule.name}"
             holder.itemView.rule_content_view.text = "match: \"${rule.match}\"\nreplace: \"${rule.replace}\""
         }
     }

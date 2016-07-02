@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator
 import android.animation.ObjectAnimator.ofInt
 import android.animation.ObjectAnimator.ofPropertyValuesHolder
 import android.animation.PropertyValuesHolder
+import android.annotation.TargetApi
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -59,6 +60,7 @@ open class MyTestActivity : MyActivity() {
             gnav!!.setCheckedItem(R.id.section_my_pie_tests, true)
     }
 
+    @TargetApi(22)
     override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
         super.onDrawerSlide(drawerView, slideOffset)
         if (drawerView === gnav && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)

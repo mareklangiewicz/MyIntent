@@ -7,7 +7,7 @@ import pl.mareklangiewicz.myutils.e
 import pl.mareklangiewicz.myviews.MyViewDecorator
 
 
-class MyDecoratorsTestsFragment : MyFragment() {
+open class MyDecoratorsTestsFragment : MyFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 

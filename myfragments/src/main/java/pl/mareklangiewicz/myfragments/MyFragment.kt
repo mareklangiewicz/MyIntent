@@ -1,6 +1,7 @@
 package pl.mareklangiewicz.myfragments
 
 
+import android.annotation.TargetApi
 import android.app.Fragment
 import android.content.Context
 import android.os.Bundle
@@ -56,6 +57,7 @@ open class MyFragment : Fragment(), DrawerLayout.DrawerListener {
     override fun onDrawerClosed(drawerView: View) { }
     override fun onDrawerStateChanged(newState: Int) { }
 
+    @TargetApi(23)
     @CallSuper override fun onInflate(context: Context, attrs: AttributeSet, savedInstanceState: Bundle?) {
         if (VV) log.v("${javaClass.simpleName}.onInflate context=${context.str} attrs=${attrs.str}  state=${savedInstanceState.str}")
         super.onInflate(context, attrs, savedInstanceState)
@@ -67,6 +69,7 @@ open class MyFragment : Fragment(), DrawerLayout.DrawerListener {
         retainInstance = true
     }
 
+    @TargetApi(23)
     @CallSuper override fun onAttach(ctx: Context) {
         if (VV) log.v("${javaClass.simpleName}.onAttach context=${ctx.str}")
         super.onAttach(ctx)
@@ -88,6 +91,7 @@ open class MyFragment : Fragment(), DrawerLayout.DrawerListener {
         super.onViewCreated(view, savedInstanceState)
     }
 
+    @TargetApi(17)
     @CallSuper override fun onViewStateRestored(savedInstanceState: Bundle?) {
         if (VV) log.v("${javaClass.simpleName}.onViewStateRestored state=${savedInstanceState.str}")
         super.onViewStateRestored(savedInstanceState)

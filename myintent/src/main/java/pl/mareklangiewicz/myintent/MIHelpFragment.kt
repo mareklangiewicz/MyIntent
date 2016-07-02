@@ -1,5 +1,6 @@
 package pl.mareklangiewicz.myintent
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import pl.mareklangiewicz.myfragments.MyWebFragment
@@ -9,6 +10,7 @@ import pl.mareklangiewicz.myfragments.MyWebFragment
  */
 class MIHelpFragment : MyWebFragment() {
 
+    @SuppressLint("setJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         manager?.name = BuildConfig.NAME_PREFIX + getString(R.string.mi_help)

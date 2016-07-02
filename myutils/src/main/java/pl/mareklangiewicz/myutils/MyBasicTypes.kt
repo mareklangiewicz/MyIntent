@@ -26,7 +26,7 @@ interface IData<T> {
         set(value) = throw UnsupportedOperationException()
 }
 
-interface IChanges<T> {
+interface IChanges<out T> {
     val changes: IPusher<T, Cancel>
         get() = throw UnsupportedOperationException()
 }

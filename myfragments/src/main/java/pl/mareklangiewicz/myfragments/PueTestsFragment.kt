@@ -13,7 +13,7 @@ import pl.mareklangiewicz.myutils.*
 /**
  * Created by Marek Langiewicz on 05.03.16.
  */
-class PueTestsFragment : MyFragment() {
+open class PueTestsFragment : MyFragment() {
 
 
     val adapter = MyAndroLogAdapter(log.history)

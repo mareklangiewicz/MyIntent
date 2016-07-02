@@ -6,7 +6,7 @@ import pl.mareklangiewicz.myloggers.MyAndroLogger
 import pl.mareklangiewicz.myloggers.*
 import pl.mareklangiewicz.myutils.MyLogLevel
 
-import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.LeakCanary
 import com.squareup.leakcanary.RefWatcher
 
 val APP_START_TIME = System.currentTimeMillis()
@@ -34,6 +34,6 @@ class MIApplication : Application() {
         FUNNY_QUOTES = resources.getStringArray(R.array.mr_funny_quotes)
         SMART_QUOTES = resources.getStringArray(R.array.mr_smart_quotes)
         super.onCreate()
-        REF_WATCHER = LeakCanary.install(this);
+        REF_WATCHER = LeakCanary.install(this)
     }
 }

@@ -11,10 +11,10 @@ import pl.mareklangiewicz.myutils.loadUrl
 import pl.mareklangiewicz.myutils.setValue
 
 /**
- * Android implementation of basic IViews
+ * Android implementation of basic IXiews
  * TODO NOW: test it all!
  */
-open class AView<V: View>(val view: V) : IView {
+open class AXiew<V: View>(val view: V) : IXiew {
     override var visible: Boolean
         get() = view.visibility == View.VISIBLE
         set(value) {
@@ -27,7 +27,7 @@ open class AView<V: View>(val view: V) : IView {
             view.isEnabled = value
         }
 
-    override val clicks = Relay<AView<V>>()
+    override val clicks = Relay<AXiew<V>>()
         get() {
             if(!view.hasOnClickListeners())
                 view.setOnClickListener { field.push(this) }
@@ -35,11 +35,13 @@ open class AView<V: View>(val view: V) : IView {
         }
 }
 
-open class ATextView<V: TextView>(tview: V) : AView<V>(tview), ITextView {
+abstract class ADiew<V: View, T>(view: V) : AXiew<V>(view), IDiew<T>
+
+open class ATiew<V: TextView>(tview: V) : ADiew<V, String>(tview), ITiew {
     override var data by view
 }
 
-open class AEditTextView(etview: EditText) : ATextView<EditText>(etview), IEditTextView {
+open class AEditTiew(etview: EditText) : ATiew<EditText>(etview), IEditTiew {
 
     override val changes = Relay<String>()
 
@@ -52,22 +54,22 @@ open class AEditTextView(etview: EditText) : ATextView<EditText>(etview), IEditT
     init { view.addTextChangedListener(watcher) }
 }
 
-open class AButtonView(button: Button) : ATextView<Button>(button), IButtonView
+open class AButtonTiew(button: Button) : ATiew<Button>(button), IButtonTiew
 
 // here we ignore that CheckBox in Android extends TextView.
-open class ACheckBoxView(cbox: CheckBox) : AView<CheckBox>(cbox), ICheckBoxView {
+open class ACheckBoxDiew(cbox: CheckBox) : ADiew<CheckBox, Boolean>(cbox), ICheckBoxDiew {
     override var data by view
 }
 
 // and here we expose the text as a "label" property (the "data" property is still a Boolean)
-open class ALabCheckBoxView(cbox: CheckBox) : ACheckBoxView(cbox), ILabCheckBoxView {
-    override val label = ATextView(cbox)
+open class ALabCheckBoxDiew(cbox: CheckBox) : ACheckBoxDiew(cbox), ILabCheckBoxDiew {
+    override val label = ATiew(cbox)
 }
 
 
-open class ALabTextView(view: ViewGroup, tvlabel: TextView, tvtext: TextView) : AView<ViewGroup>(view), ILabTextView {
-    override val label = ATextView(tvlabel)
-    val text = ATextView(tvtext) // text.data will be the same as data
+open class ALabTiew(view: ViewGroup, tvlabel: TextView, tvtext: TextView) : AXiew<ViewGroup>(view), ILabTiew {
+    override val label = ATiew(tvlabel)
+    val text = ATiew(tvtext) // text.data will be the same as data
     override var data by tvtext
 }
 
@@ -77,7 +79,7 @@ open class ALabTextView(view: ViewGroup, tvlabel: TextView, tvtext: TextView) : 
 
 
 
-open class AUrlImageView(iview: ImageView) : AView<ImageView>(iview), IUrlImageView {
+open class AUrlImageXiew(iview: ImageView) : AXiew<ImageView>(iview), IUrlImageXiew {
     override var url = ""
         set(value) { //TODO LATER: handle invalid urls
             field = value
@@ -85,7 +87,7 @@ open class AUrlImageView(iview: ImageView) : AView<ImageView>(iview), IUrlImageV
         }
 }
 
-open class AProgressView(bar: ProgressBar) : AView<ProgressBar>(bar), IProgressView {
+open class AProgressDiew(bar: ProgressBar) : ADiew<ProgressBar, Int>(bar), IProgressDiew {
     override var data          = 0    ; set(value) { field = value; view.progress        = value + minimum }
     override var maximum       = 10000; set(value) { field = value; view.max             = value - minimum }
     override var minimum       = 0    ; set(value) { field = value; view.max             = maximum - value }

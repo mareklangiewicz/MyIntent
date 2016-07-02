@@ -12,7 +12,7 @@ import pl.mareklangiewicz.myutils.*
  * MyFragment showing MyAndroidLogger messages.
  */
 @Suppress("unused")
-class MyLogFragment : MyFragment() {
+open class MyLogFragment : MyFragment() {
 
     private val adapter = MyAndroLogAdapter(log.history)
 

@@ -10,12 +10,12 @@ import pl.mareklangiewicz.myutils.*
  * Simple wrapper on android RecyclerView
  */
 
-abstract class MyRecyclerView<I, V: AView<*>>(rview: RecyclerView, protected var lst: ILst<I> = Lst<I>())
-: AView<RecyclerView>(rview), ILstView<I> {
+abstract class RecyclerDiew<I, V: AXiew<*>>(rview: RecyclerView) : ADiew<RecyclerView, ILst<I>>(rview), ILstDiew<I> {
 
     abstract fun create(): V
     abstract fun bind(view: V, item: I)
 
+    protected var lst: ILst<I> = Lst()
     protected val adapter = Adapter()
 
     init {
@@ -52,7 +52,7 @@ abstract class MyRecyclerView<I, V: AView<*>>(rview: RecyclerView, protected var
         }
     }
         set(value) {
-            lst = value
+            lst = Lst.from(value)
             adapter.notifyDataSetChanged()
         }
 

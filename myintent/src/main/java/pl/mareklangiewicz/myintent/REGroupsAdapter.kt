@@ -2,8 +2,6 @@ package pl.mareklangiewicz.myintent
 
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.text.Html
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.afollestad.materialdialogs.MaterialDialog
@@ -56,7 +54,7 @@ class REGroupsAdapter() : RecyclerView.Adapter<REGroupsAdapter.ViewHolder>(), Vi
 
         val group = groups?.get(position) ?: throw IllegalStateException()
 
-        holder.itemView.group_header_view.text = Html.fromHtml("<b>group</b> ${group.name}:<br/>\"${group.match}\"")
+        holder.itemView.group_header_view.text = "group ${group.name}:\n\"${group.match}\""
 
         holder.resetRulesRecyclerView()
 

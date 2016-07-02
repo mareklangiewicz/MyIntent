@@ -18,7 +18,7 @@ import pl.mareklangiewicz.myutils.*
  */
 
 
-class MyStupidTestsFragment : MyFragment(), DrawerLayout.DrawerListener {
+open class MyStupidTestsFragment : MyFragment(), DrawerLayout.DrawerListener {
 
     private val todo = ToDo()
 

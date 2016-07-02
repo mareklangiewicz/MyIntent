@@ -114,7 +114,7 @@ class LstTest {
             for(j in 0..r.size-1)
                 assertThat(lst[j]).isEqualTo(r[j])
             val idx = inserts.pop()
-            var t = if(idx % 7 == 0) // special case: pull head (we were pushing head before)
+            val t = if(idx % 7 == 0) // special case: pull head (we were pushing head before)
                 lst.head.pull(Unit)
             else if(idx % 7 == 1) // special case: pull tail (we were pushing tail before)
                 lst.tail.pull(Unit)

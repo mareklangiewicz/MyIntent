@@ -1,5 +1,7 @@
 package pl.mareklangiewicz.myutils.myhttp
 
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
@@ -212,30 +214,17 @@ object GitHub {
         fun getUserReposTFAObservable(@Header("Authorization") auth: String, @Header("X-GitHub-OTP") code: String): Observable<List<Repository>>
     }
 
+//    private val interceptor = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
+
+//    private val logclient = OkHttpClient.Builder().addInterceptor(interceptor).build()
+
     private val retrofit = Retrofit.Builder()
             .baseUrl(URL)
+//            .client(logclient)
             .addConverterFactory(MoshiConverterFactory.create())
             .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
             .build()
 
-    val service = retrofit.create(Service::class.java)
-
-
-        // THIS IS OLD JAVA WAY TO INJECT SOME REQUEST/RESPONSE LOGGING
-        //            if(VV) {
-        //                OkHttpClient client = new OkHttpClient();
-        //                HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        //                interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        //                client.interceptors().add(interceptor);
-        //
-        //                Retrofit loggingretrofit = new Retrofit.Builder()
-        //                        .baseUrl(URL)
-        //                        .client(client)
-        //                        .addConverterFactory(MoshiConverterFactory.create())
-        //                        .build();
-        //
-        //                return loggingretrofit.create(Service.class);
-        //            }
-
+    val service = retrofit.create(Service::class.java)!!
 
 }

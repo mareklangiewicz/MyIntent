@@ -23,7 +23,7 @@ import java.lang.String.format
 
 //TODO SOMEDAY: create UI to change animation speed (in local menu header)
 
-class MyPieTestsFragment : MyFragment(), View.OnClickListener {
+open class MyPieTestsFragment : MyFragment(), View.OnClickListener {
 
     private val todo = ToDo()
 

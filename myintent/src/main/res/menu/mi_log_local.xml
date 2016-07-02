@@ -31,7 +31,7 @@
             />
     </group>
     <item
-        android:id="@+id/mi_item_global_actions"
+        android:id="@+id/mi_ll_actions"
         android:title="@string/mi_actions"
         >
         <menu>

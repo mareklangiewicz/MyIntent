@@ -4,6 +4,8 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.net.Uri
 import android.net.Uri.parse
+import android.support.test.InstrumentationRegistry
+import android.support.test.runner.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Test

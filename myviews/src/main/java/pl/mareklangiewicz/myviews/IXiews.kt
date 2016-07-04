@@ -36,16 +36,8 @@ interface IButtonTiew : ITiew
 interface ICheckBoxDiew : IDiew<Boolean>
 
 
-
-interface ILabel : IXiew {
-    val label: ITiew
-}
-
-interface ILabDiew<T> : IDiew<T>, ILabel
-interface ILabTiew : ITiew, ILabDiew<String>
-interface ILabEditTiew : IEditTiew, ILabTiew
-interface ILabCheckBoxDiew : ICheckBoxDiew, ILabDiew<Boolean>
-
+interface ITextToTextDiew : IDiew<Pair<String, String>>
+interface ITextToBoolDiew : IDiew<Pair<String, Boolean>>
 
 
 

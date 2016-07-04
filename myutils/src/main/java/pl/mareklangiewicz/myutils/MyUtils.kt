@@ -26,10 +26,6 @@ operator fun TextView.setValue(obj: Any?, property: Any?, arg: CharSequence) { t
 
 operator fun TextView.getValue(obj: Any?, property: Any?): String = text.toString()
 
-operator fun CheckBox.setValue(obj: Any?, property: Any?, arg: Boolean) { isChecked = arg }
-
-operator fun CheckBox.getValue(obj: Any?, property: Any?): Boolean = isChecked
-
 @Suppress("UNCHECKED_CAST")
 fun <V : View> ViewGroup.inflate(@LayoutRes res: Int, attach: Boolean = false) = from(context).inflate(res, this, attach) as? V
 

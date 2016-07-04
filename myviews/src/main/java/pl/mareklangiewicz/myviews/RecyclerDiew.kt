@@ -10,7 +10,7 @@ import pl.mareklangiewicz.myutils.*
  * Simple wrapper on android RecyclerView
  */
 
-abstract class RecyclerDiew<I, V: AXiew<*>>(rview: RecyclerView) : ADiew<RecyclerView, ILst<I>>(rview), ILstDiew<I> {
+abstract class RecyclerDiew<I, V: AXiew<*>>(val rview: RecyclerView) : ADiew<RecyclerView, ILst<I>>(rview), ILstDiew<I>, IArr<V> {
 
     abstract fun create(): V
     abstract fun bind(view: V, item: I)
@@ -66,4 +66,7 @@ abstract class RecyclerDiew<I, V: AXiew<*>>(rview: RecyclerView) : ADiew<Recycle
         override fun onBindViewHolder(holder: VH, position: Int) = bind(holder.aview, lst[position])
     }
 
+    /** Warning: It can throw NPE in certain cases e.g. when RecyclerView is changing. See findViewHolderForAdapterPosition docs. */
+    @Suppress("UNCHECKED_CAST")
+    override fun get(idx: Int): V = (rview.findViewHolderForAdapterPosition(idx) as RecyclerDiew<I, V>.VH).aview
 }

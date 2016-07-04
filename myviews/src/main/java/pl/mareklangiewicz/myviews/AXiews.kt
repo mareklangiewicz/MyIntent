@@ -56,23 +56,48 @@ open class AEditTiew(etview: EditText) : ATiew<EditText>(etview), IEditTiew {
 
 open class AButtonTiew(button: Button) : ATiew<Button>(button), IButtonTiew
 
-// here we ignore that CheckBox in Android extends TextView.
-open class ACheckBoxDiew(cbox: CheckBox) : ADiew<CheckBox, Boolean>(cbox), ICheckBoxDiew {
-    override var data by view
+open class ASimpleCheckBoxDiew(cbox: CheckBox) : ADiew<CheckBox, Boolean>(cbox), ICheckBoxDiew {
+
+    var label by view
+
+    override var data: Boolean
+        get() = view.isChecked
+        set(value) {view.isChecked = value}
 }
 
-// and here we expose the text as a "label" property (the "data" property is still a Boolean)
-open class ALabCheckBoxDiew(cbox: CheckBox) : ACheckBoxDiew(cbox), ILabCheckBoxDiew {
-    override val label = ATiew(cbox)
+
+open class ATextToTextDiew(view: ViewGroup, tvfirst: TextView, tvsecond: TextView) : AXiew<ViewGroup>(view), ITextToTextDiew {
+
+    private val atlabel = ATiew(tvfirst)
+    private val atcontent = ATiew(tvsecond)
+
+    var label by tvfirst
+    var content by tvsecond
+
+    override var data: Pair<String, String>
+        get() = atlabel.data to atcontent.data
+        set(value) {
+            atlabel.data = value.first
+            atcontent.data = value.second
+        }
 }
 
 
-open class ALabTiew(view: ViewGroup, tvlabel: TextView, tvtext: TextView) : AXiew<ViewGroup>(view), ILabTiew {
-    override val label = ATiew(tvlabel)
-    val text = ATiew(tvtext) // text.data will be the same as data
-    override var data by tvtext
-}
+open class ATextToBoolCheckBoxDiew(cbox: CheckBox) : ADiew<CheckBox, Pair<String, Boolean>>(cbox), ITextToBoolDiew {
 
+    var label by view
+
+    var checked: Boolean
+        get() = view.isChecked
+        set(value) {view.isChecked = value}
+
+    override var data: Pair<String, Boolean>
+        get() = label to checked
+        set(value) {
+            label = value.first
+            checked = value.second
+        }
+}
 
 
 

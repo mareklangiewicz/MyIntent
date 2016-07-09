@@ -71,7 +71,7 @@ open class MyAndroLogAdapter(arr: IArr<MyLogEntry>? = null) : RecyclerView.Adapt
 
     }
 
-    override fun getItemCount(): Int = arr?.size ?: 0
+    override fun getItemCount(): Int = arr?.len ?: 0
 
     override fun getItemId(position: Int): Long = arr?.get(position)?.id ?: RecyclerView.NO_ID
 

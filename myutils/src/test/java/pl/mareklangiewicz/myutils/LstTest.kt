@@ -73,7 +73,7 @@ class LstTest {
         lst.tail.push("bbb")
 
         for(i in 1..COUNT) {
-            val idx = rnd.nextInt(0, lst.size+1)
+            val idx = rnd.nextInt(0, lst.len+1)
             lst.ins(idx, i.hex)
             inserts.push(idx)
             val r = ArrayList<String>()
@@ -94,7 +94,7 @@ class LstTest {
 
         // Again with some pushes and pulls..
         for(i in 1..COUNT) {
-            val idx = rnd.nextInt(0, lst.size+1)
+            val idx = rnd.nextInt(0, lst.len+1)
             val t = i.hex
             if(idx % 7 == 0) // special case: push head
                 lst.head.push(t)

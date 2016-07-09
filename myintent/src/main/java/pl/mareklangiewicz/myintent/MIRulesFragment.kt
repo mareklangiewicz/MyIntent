@@ -13,7 +13,7 @@ import pl.mareklangiewicz.myutils.*
  */
 class MIRulesFragment : MyFragment() {
 
-    private val todo = ToDo()
+    private val tocancel = Lst<(Cancel) -> Unit>()
 
     private val adapter = REGroupsAdapter(RE_RULES)
 
@@ -45,11 +45,12 @@ class MIRulesFragment : MyFragment() {
             }
             adapter.notifyItemChanged(1)
         }
-        todo.push { ctl(Cancel) }
+        tocancel.add(ctl)
     }
 
     override fun onDestroyView() {
-        todo.doItAll()
+        tocancel.forEach { it(Cancel) }
+        tocancel.clr()
         mi_rules_recycler_view.adapter = null
         manager?.lnav?.menuId = -1
         manager?.lnav?.headerId = -1

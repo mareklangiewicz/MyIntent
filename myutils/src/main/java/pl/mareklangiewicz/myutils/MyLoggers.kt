@@ -49,12 +49,12 @@ fun Function1<MyLogEntry, Unit>.log(
         throwable: Throwable? = null
 ) = this(MyLogEntry(message.toString(), level, tag, throwable))
 
-fun Function1<MyLogEntry, Unit>.v(message: Any?, tag: String = "ML", throwable: Throwable? = null) { log(message, MyLogLevel.VERBOSE, tag, throwable) }
-fun Function1<MyLogEntry, Unit>.d(message: Any?, tag: String = "ML", throwable: Throwable? = null) { log(message, MyLogLevel.DEBUG  , tag, throwable) }
-fun Function1<MyLogEntry, Unit>.i(message: Any?, tag: String = "ML", throwable: Throwable? = null) { log(message, MyLogLevel.INFO   , tag, throwable) }
-fun Function1<MyLogEntry, Unit>.w(message: Any?, tag: String = "ML", throwable: Throwable? = null) { log(message, MyLogLevel.WARN   , tag, throwable) }
-fun Function1<MyLogEntry, Unit>.e(message: Any?, tag: String = "ML", throwable: Throwable? = null) { log(message, MyLogLevel.ERROR  , tag, throwable) }
-fun Function1<MyLogEntry, Unit>.a(message: Any?, tag: String = "ML", throwable: Throwable? = null) { log(message, MyLogLevel.ASSERT , tag, throwable) }
+fun Function1<MyLogEntry, Unit>.v(message: Any?, tag: String = "ML", throwable: Throwable? = null) = log(message, MyLogLevel.VERBOSE, tag, throwable)
+fun Function1<MyLogEntry, Unit>.d(message: Any?, tag: String = "ML", throwable: Throwable? = null) = log(message, MyLogLevel.DEBUG  , tag, throwable)
+fun Function1<MyLogEntry, Unit>.i(message: Any?, tag: String = "ML", throwable: Throwable? = null) = log(message, MyLogLevel.INFO   , tag, throwable)
+fun Function1<MyLogEntry, Unit>.w(message: Any?, tag: String = "ML", throwable: Throwable? = null) = log(message, MyLogLevel.WARN   , tag, throwable)
+fun Function1<MyLogEntry, Unit>.e(message: Any?, tag: String = "ML", throwable: Throwable? = null) = log(message, MyLogLevel.ERROR  , tag, throwable)
+fun Function1<MyLogEntry, Unit>.a(message: Any?, tag: String = "ML", throwable: Throwable? = null) = log(message, MyLogLevel.ASSERT , tag, throwable)
 
 @Suppress("UNUSED_PARAMETER", "unused")
 fun Function1<MyLogEntry, Unit>.q(message: Any?, tag: String = "", throwable: Throwable? = null) { }
@@ -77,12 +77,9 @@ fun findStackTraceElement(depth: Int): StackTraceElement? {
  * until it starts to log correctly.
  * Warning: this can be slow - use it only in debug mode
  */
-fun Function1<MyLogEntry, Unit>.trace(depth: Int): Function1<MyLogEntry, Unit>
-        = this.amap {
-    entry: MyLogEntry ->
+fun Function1<MyLogEntry, Unit>.trace(depth: Int): Function1<MyLogEntry, Unit> = amap {
     val st = findStackTraceElement(depth)
-    if(st === null) entry else
-    entry.copy(message = "(${st.fileName}:${st.lineNumber}) ${entry.message}")
+    if(st === null) it else it.copy(message = "(${st.fileName}:${st.lineNumber}) ${it.message}")
 }
 
 
@@ -102,49 +99,28 @@ class MySystemLogger(val outlvl: MyLogLevel = MyLogLevel.VERBOSE, val errlvl: My
     }
 }
 
-class MyLogHistory : IBuf<MyLogEntry>, IClear {
+// TODO NOW: do I even need MyLogHistory class now?
+class MyLogHistory : IArr<MyLogEntry>, IPush<MyLogEntry>, IChanges<LstChg<MyLogEntry>> {
 
-    private val fullBuffer = MyRingBuffer<MyLogEntry>()
+    private val buf = Lst<MyLogEntry>(256)
+    private val buff = buf.withFilter()
+    private val bufl = buff.withLimit(256)
 
-    private val filteredBuffer = MyRingBuffer<MyLogEntry>()
+    override fun get(idx: Int) = buff.out[len - 1 - idx]
+    override fun set(idx: Int, item: MyLogEntry) { throw UnsupportedOperationException() }
 
-    private val relay = Relay<Unit>()
+    override val len: Int get() = buff.out.len
 
-    val changes: IPusher<Unit, Cancel> = relay
+    override val changes = buff.out.changes
+
+    override val push = bufl.tail.push
 
     var level = MyLogLevel.VERBOSE // minimum level of returned history
         set(value) {
             if(value != field) {
                 field = value
-                refilter()
-                relay.push(Unit)
+                buff.filter = { it.level >= value }
             }
         }
-
-    override fun get(idx: Int) = filteredBuffer[size - 1 - idx]
-
-    override val size: Int get() = filteredBuffer.size
-
-    override val push: (MyLogEntry) -> Unit
-        get() =  {
-            fullBuffer.push(it)
-            if(it.level >= level) {
-                filteredBuffer.push(it)
-                relay.push(Unit)
-            }
-        }
-
-    fun refilter() {
-        filteredBuffer.clear()
-        for(e in fullBuffer)
-            if(e.level >= level)
-                filteredBuffer.push(e)
-    }
-
-    override fun clear() {
-        fullBuffer.clear()
-        filteredBuffer.clear()
-        relay.push(Unit)
-    }
 }
 

@@ -849,7 +849,7 @@ interface IPeek<out T> {
 
 
 class Remove<I>(private val i: I, private val items: MutableCollection<I>): Function1<Cancel, Unit> {
-    override fun invoke(c: Cancel) { items.remove(i) }
+    override fun invoke(c: Cancel) { items.remove(i) } // it does nothing if i is already removed
 }
 
 

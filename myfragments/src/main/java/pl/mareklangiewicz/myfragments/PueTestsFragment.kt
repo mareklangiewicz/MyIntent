@@ -18,7 +18,7 @@ open class PueTestsFragment : MyFragment() {
 
     val adapter = MyAndroLogAdapter(log.history)
 
-    private val todo = ToDo()
+    private val todo = Lst<(Unit) -> Unit>()
 
     private val syslog = MyAndroSystemLogger() // this logger can be used from any thread.
 
@@ -35,7 +35,7 @@ open class PueTestsFragment : MyFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val ctl = log.history.changes { adapter.notifyDataSetChanged() }
-        todo.push { ctl(Cancel) }
+        todo.add { ctl(Cancel) }
         adapter.notifyDataSetChanged()
 
         mf_mmt_rv_log.adapter = adapter
@@ -55,7 +55,7 @@ open class PueTestsFragment : MyFragment() {
             val actl = timer { } // we subscribe here with empty function (side effects are attached already)
             // and we get a controller that accepts ICommands
 
-            todo.push { actl(Cancel) }
+            todo.add { actl(Cancel) }
 
             actl(Start)
 
@@ -78,7 +78,7 @@ open class PueTestsFragment : MyFragment() {
 
             val actl = timer { } // we subscribe here with empty function (side effects are attached already) and we get a controller that accepts ICommands
 
-            todo.push { actl(Cancel) }
+            todo.add { actl(Cancel) }
 
             actl(Start)
 
@@ -109,7 +109,7 @@ open class PueTestsFragment : MyFragment() {
 
             val actl = timer { if(it !== null) relay.push(it) }
 
-            todo.push { actl(Cancel) }
+            todo.add { actl(Cancel) }
 
             actl(Start)
 
@@ -128,7 +128,7 @@ open class PueTestsFragment : MyFragment() {
                 animTo(mf_mmt_mp3, "to", interval)
             }
 
-            todo.push { mf_mmt_mp3.setOnClickListener(null) }
+            todo.add { mf_mmt_mp3.setOnClickListener(null) }
 
             val intervals = { u: Unit -> mf_mmt_mp3.to.toLong() * 10 }
                     .vntake(64)
@@ -155,8 +155,8 @@ open class PueTestsFragment : MyFragment() {
                 }
             }
 
-            todo.push { ctl1(Cancel) }
-            todo.push { ctl2(Cancel) }
+            todo.add { ctl1(Cancel) }
+            todo.add { ctl2(Cancel) }
 
             ctl1(Start)
             ctl2(Start)
@@ -179,7 +179,8 @@ open class PueTestsFragment : MyFragment() {
         ObjectAnimator.ofInt(obj, property, goal).start()
     }
     override fun onDestroyView() {
-        todo.doItAll()
+        todo.forEach { it(Unit) }
+        todo.clr()
         mf_mmt_rv_log.adapter = null
         super.onDestroyView()
     }

@@ -21,23 +21,42 @@ interface IClicks<out T> {
         get() = throw UnsupportedOperationException()
 }
 
+/** Some "moving" data - like progress bar etc. */
+interface IMovData : IData<Int> {
+
+    var min: Int
+        get() = 0
+        set(value) = throw UnsupportedOperationException()
+
+    var max: Int
+        get() = 10000
+        set(value) = throw UnsupportedOperationException()
+
+    var fuzzy: Boolean // true means it should display something indicating that it is working and we don't know how far are we
+        get() = false
+        set(value) = throw UnsupportedOperationException()
+
+}
+
+
+
 interface IXiew : IEnabled, IVisible, IClicks<IXiew>
 
 interface IDiew<T> : IData<T>, IXiew
 
-interface IProgressDiew : IProgress, IDiew<Int>
-
 interface ITiew : IDiew<String>
 
-interface IEditTiew : ITiew, IChanges<String>
+interface IMovDiew : IDiew<Int>, IMovData
 
-interface IButtonTiew : ITiew
+interface IEdtTiew : ITiew, IChanges<String>
 
-interface ICheckBoxDiew : IDiew<Boolean>
+interface IBtnTiew : ITiew
+
+interface IChkDiew : IDiew<Boolean>
 
 
-interface ITextToTextDiew : IDiew<Pair<String, String>>
-interface ITextToBoolDiew : IDiew<Pair<String, Boolean>>
+interface Txt2TxtDiew : IDiew<Pair<String, String>>
+interface Txt2ChkDiew : IDiew<Pair<String, Boolean>>
 
 
 
@@ -47,6 +66,5 @@ interface IUrlImageXiew : IXiew {
 
 
 
-interface ILstDiew<I> : IDiew<ILst<I>>, IChanges<ILst.IChange<I>>
-
 // TODO NOW: uzyc tego w MyIntent i MyHub
+interface ILstDiew<I> : IDiew<ILst<I>>

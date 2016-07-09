@@ -19,7 +19,7 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
 
     private val adapter = MyMDAndroLogAdapter(log.history)
 
-    private val todo = ToDo()
+    private val tocancel = Lst<(Cancel) -> Unit>()
 
     lateinit var mPSButton: PlayStopButton
     lateinit var mCountdown: Countdown
@@ -53,7 +53,7 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
         mi_lf_rv_log.adapter = adapter
 
         val ctl1 = log.history.changes { adapter.notifyDataSetChanged() }
-        todo.push { ctl1(Cancel) }
+        tocancel.add(ctl1)
         adapter.notifyDataSetChanged() // to make sure we are up to date
 
         //TODO SOMEDAY: some nice simple header with fragment title
@@ -85,10 +85,10 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
                 R.id.mi_ll_i_info         -> log.history.level = MyLogLevel.INFO
                 R.id.mi_ll_i_debug        -> log.history.level = MyLogLevel.DEBUG
                 R.id.mi_ll_i_verbose      -> log.history.level = MyLogLevel.VERBOSE
-                R.id.mi_clear_log_history    -> log.history.clear()
+                R.id.mi_clear_log_history -> log.history.clr()
             }
         }
-        todo.push { ctl2(Cancel) }
+        tocancel.add(ctl2)
     }
 
     override fun onResume() {
@@ -121,7 +121,8 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
         mCountdown.cancel()
         mCountdown.listener = null
 
-        todo.doItAll()
+        tocancel.forEach { it(Cancel) }
+        tocancel.clr()
 
         mi_lf_rv_log.adapter = null
 

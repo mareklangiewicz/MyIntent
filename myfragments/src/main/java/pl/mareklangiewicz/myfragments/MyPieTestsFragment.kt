@@ -25,7 +25,7 @@ import java.lang.String.format
 
 open class MyPieTestsFragment : MyFragment(), View.OnClickListener {
 
-    private val todo = ToDo()
+    private val tocancel = Lst<(Cancel) -> Unit>()
 
     private var randomize = "to"
 
@@ -59,7 +59,7 @@ open class MyPieTestsFragment : MyFragment(), View.OnClickListener {
         val ctl = manager!!.lnav!!.items {
             randomize = manager!!.lnav!!.menuObj!!.findItem(it)?.toString() ?: randomize
         }
-        todo.push { ctl(Cancel) }
+        tocancel.add(ctl)
 
         if (savedInstanceState == null)
             manager?.lnav?.setCheckedItem(R.id.mpt_randomize_to, true)
@@ -71,7 +71,8 @@ open class MyPieTestsFragment : MyFragment(), View.OnClickListener {
     }
 
     override fun onDestroyView() {
-        todo.doItAll()
+        tocancel.forEach { it(Cancel) }
+        tocancel.clr()
         manager?.lnav?.headerId = -1
         manager?.lnav?.menuId = -1
         super.onDestroyView()

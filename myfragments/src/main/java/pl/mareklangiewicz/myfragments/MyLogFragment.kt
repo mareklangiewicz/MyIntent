@@ -16,7 +16,7 @@ open class MyLogFragment : MyFragment() {
 
     private val adapter = MyAndroLogAdapter(log.history)
 
-    private val todo = ToDo()
+    private val tocancel = Lst<(Cancel) -> Unit>()
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -30,7 +30,7 @@ open class MyLogFragment : MyFragment() {
         my_log_recycler_view.adapter = adapter
 
         val ctl1 = log.history.changes { adapter.notifyDataSetChanged() }
-        todo.push { ctl1(Cancel) }
+        tocancel.add(ctl1)
 
         adapter.notifyDataSetChanged() // to make sure we are up to date
 
@@ -44,7 +44,7 @@ open class MyLogFragment : MyFragment() {
                 R.id.log_level_info ->    log.history.level = MyLogLevel.INFO
                 R.id.log_level_debug ->   log.history.level = MyLogLevel.DEBUG
                 R.id.log_level_verbose -> log.history.level = MyLogLevel.VERBOSE
-                R.id.clear_log_history -> log.history.clear()
+                R.id.clear_log_history -> log.history.clr()
                 R.id.log_some_assert ->   log.a("some assert")
                 R.id.log_some_error ->    log.e("some error")
                 R.id.log_some_warning ->  log.w("some warning")
@@ -53,7 +53,7 @@ open class MyLogFragment : MyFragment() {
                 R.id.log_some_verbose ->  log.v("some verbose")
             }
         }
-        todo.push { ctl2(Cancel) }
+        tocancel.add(ctl2)
 
         updateCheckedItem()
 
@@ -63,7 +63,8 @@ open class MyLogFragment : MyFragment() {
     }
 
     override fun onDestroyView() {
-        todo.doItAll()
+        tocancel.forEach { it(Cancel) }
+        tocancel.clr()
         my_log_recycler_view.adapter = null
         manager?.lnav?.menuId = -1
         super.onDestroyView()

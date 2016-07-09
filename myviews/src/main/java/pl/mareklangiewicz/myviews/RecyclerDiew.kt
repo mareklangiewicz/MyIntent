@@ -10,63 +10,48 @@ import pl.mareklangiewicz.myutils.*
  * Simple wrapper on android RecyclerView
  */
 
-abstract class RecyclerDiew<I, V: AXiew<*>>(val rview: RecyclerView) : ADiew<RecyclerView, ILst<I>>(rview), ILstDiew<I>, IArr<V> {
+// TODO NOW: test it!!
+abstract class RecyclerDiew<I, V: AXiew<*>>( rview: RecyclerView, data: ILst<I> ) : ADiew<RecyclerView, ILst<I>>(rview), ILstDiew<I>, IArr<V?> {
+
+    constructor(rview: RecyclerView) : this(rview, LstWithChgPusher<I>()) {
+        (data as LstWithChgPusher<I>).changes { notify(it) }
+    }
 
     abstract fun create(): V
     abstract fun bind(view: V, item: I)
 
-    protected var lst: ILst<I> = Lst()
+    override var data: ILst<I> = data
+        /** User should notify RecyclerDiew after any change inside provided data through "notify" method */
+        set(value) {
+            field = value
+            notify(LstOth())
+        }
+
     protected val adapter = Adapter()
 
     init {
-        rview.adapter = adapter
-        if(rview.layoutManager == null)
-            rview.layoutManager = LinearLayoutManager(rview.context)
+        view.adapter = adapter
+        if(view.layoutManager == null)
+            view.layoutManager = LinearLayoutManager(view.context)
     }
 
-    override var data: ILst<I> = object : ILst<I> by lst {
-        override fun set(idx: Int, item: I) {
-            super.set(idx, item)
-            adapter.notifyItemChanged(idx)
-            changes.push(ILst.Modify(idx, item))
-        }
-
-        override fun ins(idx: Int, item: I) {
-            super.ins(idx, item)
-            adapter.notifyItemInserted(idx)
-            changes.push(ILst.Insert(idx, item))
-        }
-
-        override fun del(idx: Int): I {
-            val item = super.del(idx)
-            adapter.notifyItemRemoved(idx)
-            changes.push(ILst.Delete(idx))
-            return item
-        }
-
-        override fun mov(src: Int, dst: Int) {
-            // override to avoid notifying adapter about insertion and deletion separately
-            lst.mov(src, dst)
-            adapter.notifyItemMoved(src, dst)
-            changes.push(ILst.Move(src, dst))
-        }
-    }
-        set(value) {
-            lst = Lst.from(value)
-            adapter.notifyDataSetChanged()
-        }
-
-    override val changes = Relay<ILst.IChange<I>>()
+    fun notify(chg: LstChg<I>) = view.notify(chg)
 
     inner class VH(val aview: V) : RecyclerView.ViewHolder(aview.view)
 
     inner class Adapter() : RecyclerView.Adapter<VH>()  {
-        override fun getItemCount() = lst.size
+        override fun getItemCount() = data.len
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = VH(create())
-        override fun onBindViewHolder(holder: VH, position: Int) = bind(holder.aview, lst[position])
+        override fun onBindViewHolder(holder: VH, position: Int) = bind(holder.aview, data[position])
     }
 
-    /** Warning: It can throw NPE in certain cases e.g. when RecyclerView is changing. See findViewHolderForAdapterPosition docs. */
+    /** Warning: It can return null in different cases e.g. when RecyclerView is changing. See findViewHolderForAdapterPosition docs. */
     @Suppress("UNCHECKED_CAST")
-    override fun get(idx: Int): V = (rview.findViewHolderForAdapterPosition(idx) as RecyclerDiew<I, V>.VH).aview
+    override fun get(idx: Int): V? = (view.findViewHolderForAdapterPosition(idx) as? RecyclerDiew<I, V>.VH)?.aview
+    override fun set(idx: Int, item: V?) { throw UnsupportedOperationException() }
+
+    override fun clr() = data.clr()
+    override val len: Int get() = data.len
 }
+
+

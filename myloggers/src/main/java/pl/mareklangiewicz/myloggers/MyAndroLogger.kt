@@ -71,10 +71,10 @@ fun MyLogEntry.draw(canvas: Canvas, x: Int, y: Int, paint: Paint) {
     canvas.drawText(toString(), x.toFloat(), y.toFloat(), paint)
 }
 
-fun IArr<MyLogEntry>.draw(canvas: Canvas, x: Int, y: Int, paint: Paint, lines: Int = size, fade: Boolean = true) {
+fun IArr<MyLogEntry>.draw(canvas: Canvas, x: Int, y: Int, paint: Paint, lines: Int = len, fade: Boolean = true) {
     var ay = y
     val minY = canvas.clipBounds.top
-    val N = lines.coerceAtMost(size)
+    val N = lines.coerceAtMost(len)
     for (i in 0..N - 1) {
 
         this[i].draw(canvas, x, ay, paint)

@@ -5,10 +5,7 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import pl.mareklangiewicz.myutils.Relay
-import pl.mareklangiewicz.myutils.getValue
-import pl.mareklangiewicz.myutils.loadUrl
-import pl.mareklangiewicz.myutils.setValue
+import pl.mareklangiewicz.myutils.*
 
 /**
  * Android implementation of basic IXiews
@@ -41,7 +38,7 @@ open class ATiew<V: TextView>(tview: V) : ADiew<V, String>(tview), ITiew {
     override var data by view
 }
 
-open class AEditTiew(etview: EditText) : ATiew<EditText>(etview), IEditTiew {
+open class AEdtTiew(etview: EditText) : ATiew<EditText>(etview), IEdtTiew {
 
     override val changes = Relay<String>()
 
@@ -54,9 +51,9 @@ open class AEditTiew(etview: EditText) : ATiew<EditText>(etview), IEditTiew {
     init { view.addTextChangedListener(watcher) }
 }
 
-open class AButtonTiew(button: Button) : ATiew<Button>(button), IButtonTiew
+open class ABtnTiew(button: Button) : ATiew<Button>(button), IBtnTiew
 
-open class ASimpleCheckBoxDiew(cbox: CheckBox) : ADiew<CheckBox, Boolean>(cbox), ICheckBoxDiew {
+open class AChkDiew(cbox: CheckBox) : ADiew<CheckBox, Boolean>(cbox), IChkDiew {
 
     var label by view
 
@@ -66,7 +63,7 @@ open class ASimpleCheckBoxDiew(cbox: CheckBox) : ADiew<CheckBox, Boolean>(cbox),
 }
 
 
-open class ATextToTextDiew(view: ViewGroup, tvfirst: TextView, tvsecond: TextView) : AXiew<ViewGroup>(view), ITextToTextDiew {
+open class ATxt2TxtDiew(view: ViewGroup, tvfirst: TextView, tvsecond: TextView) : AXiew<ViewGroup>(view), Txt2TxtDiew {
 
     private val atlabel = ATiew(tvfirst)
     private val atcontent = ATiew(tvsecond)
@@ -83,7 +80,7 @@ open class ATextToTextDiew(view: ViewGroup, tvfirst: TextView, tvsecond: TextVie
 }
 
 
-open class ATextToBoolCheckBoxDiew(cbox: CheckBox) : ADiew<CheckBox, Pair<String, Boolean>>(cbox), ITextToBoolDiew {
+open class ATxt2ChkDiew(cbox: CheckBox) : ADiew<CheckBox, Pair<String, Boolean>>(cbox), Txt2ChkDiew {
 
     var label by view
 
@@ -112,15 +109,42 @@ open class AUrlImageXiew(iview: ImageView) : AXiew<ImageView>(iview), IUrlImageX
         }
 }
 
-open class AProgressDiew(bar: ProgressBar) : ADiew<ProgressBar, Int>(bar), IProgressDiew {
-    override var data          = 0    ; set(value) { field = value; view.progress        = value + minimum }
-    override var maximum       = 10000; set(value) { field = value; view.max             = value - minimum }
-    override var minimum       = 0    ; set(value) { field = value; view.max             = maximum - value }
-    override var indeterminate = false; set(value) { field = value; view.isIndeterminate = value           }
+
+open class AMovDiew(bar: ProgressBar) : ADiew<ProgressBar, Int>(bar), IMovDiew {
+    override var data  = 0    ; set(value) { field = value; view.progress        = value + min }
+    override var max   = 10000; set(value) { field = value; view.max             = value - min }
+    override var min   = 0    ; set(value) { field = value; view.max             = max - value }
+    override var fuzzy = false; set(value) { field = value; view.isIndeterminate = value       }
     init {
-        maximum = maximum // just to invoke setter to sync underlying ProgressBar
+        max = max // just to invoke setter to sync underlying ProgressBar
         data = data // just to invoke setter to sync underlying ProgressBar
-        indeterminate = indeterminate // just to invoke setter to sync underlying ProgressBar
+        fuzzy = fuzzy // just to invoke setter to sync underlying ProgressBar
     }
+}
+
+
+fun ViewGroup.asLst() = object : ILst<View> {
+
+    override val len: Int get() = childCount
+
+    override fun clr() = removeAllViews()
+
+    override fun get(idx: Int): View = getChildAt(idx)
+
+    override fun set(idx: Int, item: View) {
+        del(idx)
+        ins(idx, item)
+    }
+
+    override fun ins(idx: Int, item: View) = addView(item, idx)
+
+    override fun del(idx: Int): View {
+        val v = getChildAt(idx)
+        removeViewAt(idx)
+        return v
+    }
+
+    override val head = LstHead(this)
+    override val tail = LstTail(this)
 }
 

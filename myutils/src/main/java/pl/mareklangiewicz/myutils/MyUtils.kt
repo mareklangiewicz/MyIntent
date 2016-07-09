@@ -4,17 +4,17 @@ import android.app.Activity
 import android.content.ContentResolver
 import android.content.ContentValues
 import android.database.Cursor
-import android.net.Uri
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
-import android.support.design.widget.Snackbar
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Rect
+import android.net.Uri
 import android.support.annotation.LayoutRes
+import android.support.design.widget.Snackbar
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater.from
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.CheckBox
+import android.widget.TextView
 
 /**
  * Created by Marek Langiewicz on 29.01.16.
@@ -127,5 +127,15 @@ fun SQLiteDatabase.dropTable(name: String) = execSQL("DROP TABLE IF EXISTS " + n
 fun Activity.getInputMethodService() = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
 // TODO LATER: similar methods for other services
 
-
 fun Activity.hideKeyboard() = currentFocus?.windowToken?.let { getInputMethodService().hideSoftInputFromWindow(it, 0) } ?: false
+
+fun <I> RecyclerView.notify(chg: LstChg<I>) = adapter?.run {
+    when(chg) {
+        is LstSet -> notifyItemChanged(chg.idx)
+        is LstIns -> notifyItemInserted(chg.idx)
+        is LstDel -> notifyItemRemoved(chg.idx)
+        is LstAdd -> notifyItemInserted(itemCount - 1) // itemCount is already increased
+        is LstMov -> notifyItemMoved(chg.src, chg.dst)
+        else -> notifyDataSetChanged()
+    }
+}

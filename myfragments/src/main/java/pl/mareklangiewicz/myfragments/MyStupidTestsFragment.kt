@@ -20,7 +20,7 @@ import pl.mareklangiewicz.myutils.*
 
 open class MyStupidTestsFragment : MyFragment(), DrawerLayout.DrawerListener {
 
-    private val todo = ToDo()
+    private val tocancel = Lst<(Cancel) -> Unit>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState) //just for logging
@@ -33,7 +33,7 @@ open class MyStupidTestsFragment : MyFragment(), DrawerLayout.DrawerListener {
 
         my_stupid_log_simple_view.arr = log.history
         val ctl = log.history.changes { my_stupid_log_simple_view.invalidate() }
-        todo.push { ctl(Cancel) }
+        tocancel.add(ctl)
 
         // I use here NavigationView directly (without my IMyUINavigation abstraction etc.) on purpose - just to test some stuff
         stupid_navigation_view.inflateMenu(R.menu.mf_my_stupid_tests)
@@ -58,7 +58,8 @@ open class MyStupidTestsFragment : MyFragment(), DrawerLayout.DrawerListener {
     }
 
     override fun onDestroyView() {
-        todo.doItAll()
+        tocancel.forEach { it(Cancel) }
+        tocancel.clr()
         super.onDestroyView()
     }
 }

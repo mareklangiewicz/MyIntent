@@ -313,7 +313,7 @@ fun <I> Function1<I?, Unit>.aitems() = anmap<I, Unit, IEvent<I>?> {
 
 interface IScheduler {
     /**
-     * delay is in milliseconds; not positive value means: no delay.
+     * delay is in milliseconds; non-positive value means: no delay.
      * Returns the "cancel" function. Which cancels scheduled action when invoked.
      * (If some implementation does not support delays - it can throw UnsupportedOperationException if delay is > 0)
      * No delay does not have to mean: immediately - actual execution time is implementation specific.

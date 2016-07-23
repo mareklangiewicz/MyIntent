@@ -5,12 +5,21 @@ package pl.mareklangiewicz.myutils
  * My collection names are abbreviations to differ from standard Java and Kotlin collection names.
  */
 
+interface IGet<out T> { operator fun get(idx: Int): T }
+
+interface ISet<in T> { operator fun set(idx: Int, item: T) }
+
+interface IContains<in T> { operator fun contains(item: T): Boolean }
+
 interface ILen { val len: Int }
 
-interface IClr { fun clr(): Unit = throw UnsupportedOperationException() }
+interface IClr { fun clr() }
 
 
+/** minimalist stack. pushes and pulls elements from the same side */
 interface ISak<T> : IPush<T>, IPull<T?>, IPeek<T?> // I don't require the "len" property in all stacks intentionally.
+
+/** minimalist queue. pushes elements to one side and pulls from the other */
 interface IQue<T> : IPush<T>, IPull<T?>, IPeek<T?> // I don't require the "len" property in all queues intentionally.
 
 interface IDeq<T> {
@@ -29,24 +38,25 @@ fun <T> IDeq<T>.asQue(): IQue<T> = object : IQue<T> {
 }
 
 
-interface ICol<out T> : Iterable<T>, ILen, IClr
+interface ICol<T> : Iterable<T>, ILen, IContains<T>, IClr {
+    override fun contains(item: T) = find { it == item } !== null
+    override fun clr(): Unit = throw UnsupportedOperationException()
+}
 
 
 // IMPORTANT: methods behavior for indicies: idx < 0 || idx >= size   is UNDEFINED here!
 // Subclasses may define for example negative indicies count backwards from the end,
 // but we do NOT promise anything like that here in IArr.
 // Any contract enchantments should be documented in particular implementation.
-interface IArr<T> : ICol<T> {
-
-    operator fun get(idx: Int): T
-    operator fun set(idx: Int, item: T) // optional: some implementations can just throw UnsupportedOperationException
+interface IArr<T> : ICol<T>, IGet<T>, ISet<T> {
 
     override operator fun iterator(): Iterator<T> = Itor(this)
 
-    private class Itor<out T>(private val arr: IArr<T>, private var idx: Int = 0) : Iterator<T> {
+    class Itor<out T>(private val arr: IArr<T>, private var idx: Int = 0) : Iterator<T> {
         override fun hasNext(): Boolean = idx < arr.len
         override fun next(): T = arr[idx++]
     }
+
 }
 
 /**
@@ -64,6 +74,9 @@ class ArrCut<T>(val arr: IArr<T>, astart: Int, astop: Int) : IArr<T> by arr {
 
     override fun get(idx: Int         ) = arr.get(start + idx.pos(len).chk(0, len-1)      )
     override fun set(idx: Int, item: T) = arr.set(start + idx.pos(len).chk(0, len-1), item)
+    override operator fun iterator(): Iterator<T> = IArr.Itor(this) // overridden so it iterates only from start to stop
+    override fun contains(item: T) = find { it == item } !== null // overridden so it searches only from start to stop
+    override fun clr(): Unit = throw UnsupportedOperationException() // we make sure we do not clear whole backing arr
 }
 
 operator fun <T> IArr<T>.get(start: Int, stop: Int) = ArrCut(this, start, stop) // TODO LATER: test it
@@ -81,6 +94,11 @@ interface ILst<T> : IArr<T>, IDeq<T> {
         val item = del(src)
         ins(if(dst > src) dst-1 else dst, item)
     }
+
+    override fun clr() { // almost always this implementation should be overridden
+        for(i in len-1 downTo 0)
+            del(i)
+    }
 }
 
 
@@ -92,6 +110,7 @@ interface ILst<T> : IArr<T>, IDeq<T> {
 fun <T> Collection<T>.asCol() = object : ICol<T> {
     override val len: Int get() = this@asCol.size
     override fun iterator() = this@asCol.iterator()
+    override fun contains(item: T) = this@asCol.contains(item)
 }
 
 fun <T> List<T>.asArr() = object : IArr<T> {
@@ -99,6 +118,7 @@ fun <T> List<T>.asArr() = object : IArr<T> {
     override fun set(idx: Int, item: T) { throw UnsupportedOperationException() }
     override val len: Int get() = this@asArr.size
     override fun iterator() = this@asArr.iterator()
+    override fun contains(item: T) = this@asArr.contains(item)
 }
 
 fun <T> Array<T>.asArr() = object : IArr<T> {
@@ -115,6 +135,7 @@ fun <T> List<T>.asLst() = object : ILst<T> {
     override fun del(idx: Int): T { throw UnsupportedOperationException() }
     override val len: Int get() = this@asLst.size
     override fun iterator() = this@asLst.iterator()
+    override fun contains(item: T) = this@asLst.contains(item)
 
     override val head = LstHead(this)
     override val tail = LstTail(this)
@@ -124,6 +145,7 @@ fun <T> List<T>.asLst() = object : ILst<T> {
 fun <T> MutableCollection<T>.asMCol() = object : ICol<T> {
     override val len: Int get() = this@asMCol.size
     override fun iterator() = this@asMCol.iterator()
+    override fun contains(item: T) = this@asMCol.contains(item)
     override fun clr() = this@asMCol.clear()
 }
 
@@ -134,6 +156,7 @@ fun <T> MutableList<T>.asMArr() = object : IArr<T> {
 
     override val len: Int get() = this@asMArr.size
     override fun iterator() = this@asMArr.iterator()
+    override fun contains(item: T) = this@asMArr.contains(item)
     override fun clr() = this@asMArr.clear()
 }
 
@@ -146,6 +169,7 @@ fun <T> MutableList<T>.asMLst() = object : ILst<T> {
 
     override val len: Int get() = this@asMLst.size
     override fun iterator() = this@asMLst.iterator()
+    override fun contains(item: T) = this@asMLst.contains(item)
     override fun clr() = this@asMLst.clear()
 
     override val head = LstHead(this)

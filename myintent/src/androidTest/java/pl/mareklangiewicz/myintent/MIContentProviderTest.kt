@@ -26,7 +26,7 @@ class MIContentProviderTest {
 
     val log = MY_DEFAULT_ANDRO_LOGGER
 
-    val context = InstrumentationRegistry.getContext()
+    val context = InstrumentationRegistry.getContext()!!
 
     val BASE = MIContract.BASE_URI
 

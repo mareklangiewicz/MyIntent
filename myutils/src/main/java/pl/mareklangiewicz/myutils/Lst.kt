@@ -165,7 +165,7 @@ open class Lst<T>(initcap: Int = MIN_CAPACITY) : ILst<T> {
 
     companion object {
 
-        fun <T> of(vararg items: T): Lst<T> = from(items.asArr())
+        fun <T> of(vararg items: T) = from(items.asArr())
 
         fun <T> from(items: ICol<T>): Lst<T> {
             val lst = Lst<T>(items.len + 1)

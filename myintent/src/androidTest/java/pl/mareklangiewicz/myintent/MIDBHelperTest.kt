@@ -4,14 +4,14 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.support.test.InstrumentationRegistry
-import pl.mareklangiewicz.myloggers.MY_DEFAULT_ANDRO_LOGGER
+import android.support.test.runner.AndroidJUnit4
+import com.google.common.truth.Truth.assertThat
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import android.support.test.runner.*
-import com.google.common.truth.Truth.assertThat
-import org.junit.After
-import pl.mareklangiewicz.myutils.*
+import pl.mareklangiewicz.myloggers.MY_DEFAULT_ANDRO_LOGGER
+import pl.mareklangiewicz.myutils.i
 
 /**
  * Created by Marek Langiewicz on 09.10.15.
@@ -21,7 +21,7 @@ class MIDBHelperTest {
 
     val log = MY_DEFAULT_ANDRO_LOGGER
 
-    val context = InstrumentationRegistry.getTargetContext()
+    val context = InstrumentationRegistry.getTargetContext()!!
 
     private var mMIDBHelper: MIDBHelper? = null
 

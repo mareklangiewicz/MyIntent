@@ -11,6 +11,37 @@ class LstTest {
 
     private val log = MySystemLogger()
 
+    @Test fun testConstr() {
+
+        val lst1: ILst<String> = Lst<String>()
+        lst1.add("bla")
+        lst1.add("ble")
+
+        val lst2: ILst<String> = Lst.of("bla", "ble")
+
+        val lst3: ILst<String> = Lst.from(listOf("bla", "ble"))
+
+        val lst4: ILst<String> = Lst.from(listOf("bla", "ble") as Iterable<String>)
+
+        assertThat(lst1).isEqualTo(lst2)
+        assertThat(lst2).isEqualTo(lst1)
+
+        assertThat(lst2).isEqualTo(lst3)
+        assertThat(lst3).isEqualTo(lst2)
+
+        assertThat(lst3).isEqualTo(lst4)
+        assertThat(lst4).isEqualTo(lst3)
+
+        assertThat(lst1).isEqualTo(lst4)
+        assertThat(lst4).isEqualTo(lst1)
+
+        lst1[1] = "blu"
+
+        assertThat(lst1).isNotEqualTo(lst2)
+        assertThat(lst1).isNotEqualTo(lst3)
+        assertThat(lst1).isNotEqualTo(lst4)
+    }
+
     @Test fun testBasics() {
         val lst = Lst<String>()
         lst.head.push("aaa")

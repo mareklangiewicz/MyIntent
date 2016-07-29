@@ -1,15 +1,22 @@
 package pl.mareklangiewicz.myutils
 
 /**
+ * Mini collections library
+ *
  * Created by Marek Langiewicz on 18.02.16.
- * My collection names are abbreviations to differ from standard Java and Kotlin collection names.
+ *
+ * Collection names are abbreviations to differ from standard Java and Kotlin collection names.
  */
 
-interface IGet<out T> { operator fun get(idx: Int): T }
+// NOTE: I had some strange compilation problems related to type variance
+// TODO SOMEDAY: read more about mixed site variance:
+// http://www.cs.cornell.edu/~ross/publications/mixedsite/mixedsite-tate-fool13.pdf
 
-interface ISet<in T> { operator fun set(idx: Int, item: T) }
+interface IGet<T> { operator fun get(idx: Int): T }
 
-interface IContains<in T> { operator fun contains(item: T): Boolean }
+interface ISet<T> { operator fun set(idx: Int, item: T) }
+
+interface IContains<T> { operator fun contains(item: T): Boolean }
 
 interface ILen { val len: Int }
 
@@ -121,7 +128,7 @@ fun <T> List<T>.asArr() = object : IArr<T> {
     override fun contains(item: T) = this@asArr.contains(item)
 }
 
-fun <T> Array<T>.asArr() = object : IArr<T> {
+fun <T> Array<T>.asArr(): IArr<T> = object : IArr<T> {
     override fun get(idx: Int) = this@asArr.get(idx)
     override fun set(idx: Int, item: T) { this@asArr.set(idx, item) }
     override val len: Int get() = this@asArr.size

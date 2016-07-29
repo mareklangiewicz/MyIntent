@@ -164,8 +164,17 @@ open class Lst<T>(initcap: Int = MIN_CAPACITY) : ILst<T> {
     }
 
     companion object {
+        // TODO SOMEDAY: why do I need to cast to get Lst<T> result type - read more about mixed-site variance
+        // http://www.cs.cornell.edu/~ross/publications/mixedsite/mixedsite-tate-fool13.pdf
+        @Suppress("UNCHECKED_CAST")
+        fun <T> of(vararg items: T): Lst<T> = from(items as Array<T>)
 
-        fun <T> of(vararg items: T) = from(items.asArr())
+        fun <T> from(items: Array<T>): Lst<T> {
+            val lst = Lst<T>(items.size + 1)
+            lst.end = items.size
+            for((i, item) in items.withIndex()) lst.arr[i] = item
+            return lst
+        }
 
         fun <T> from(items: ICol<T>): Lst<T> {
             val lst = Lst<T>(items.len + 1)
@@ -173,6 +182,39 @@ open class Lst<T>(initcap: Int = MIN_CAPACITY) : ILst<T> {
             for((i, item) in items.withIndex()) lst.arr[i] = item
             return lst
         }
+
+        fun <T> from(items: List<T>): Lst<T> {
+            val lst = Lst<T>(items.size + 1)
+            lst.end = items.size
+            for((i, item) in items.withIndex()) lst.arr[i] = item
+            return lst
+        }
+
+        // more general version - but slower
+        fun <T> from(items: Iterable<T>): Lst<T> {
+            val lst = Lst<T>()
+            for(item in items)
+                lst.add(item)
+            return lst
+        }
+    }
+
+    // NOTE: Kotlin does not allow me to define it in IArr interface..
+    override fun equals(other: Any?): Boolean {
+        if(other === this) return true
+        if(other === null || other !is Lst<*> || other.len != len) return false
+        val it1 = iterator()
+        val it2 = other.iterator()
+        while(it1.hasNext() && it2.hasNext())
+            if(it1.next() != it2.next()) return false
+        return !(it1.hasNext() && it2.hasNext())
+    }
+
+    // NOTE: Kotlin does not allow me to define it in IArr interface..
+    override fun hashCode(): Int {
+        var hash = 1
+        for(item in this) hash = 31 * hash + (item?.hashCode() ?: 0)
+        return hash
     }
 }
 

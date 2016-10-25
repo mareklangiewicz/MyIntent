@@ -98,7 +98,7 @@ class MyNavigationView : NavigationView, IMyUINavigation, NavigationView.OnNavig
             onNavigationItemSelected(item)
     }
 
-    override fun setNavigationItemSelectedListener(listener: NavigationView.OnNavigationItemSelectedListener) {
+    override fun setNavigationItemSelectedListener(listener: OnNavigationItemSelectedListener?) {
         throw IllegalAccessError("This method is blocked. Use setListener.")
     }
 

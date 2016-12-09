@@ -99,15 +99,15 @@ dependencies {
     releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$VER_LCANARY"
     testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$VER_LCANARY"
 
-    compile("com.github.afollestad.material-dialogs:core:$VER_MDIALOGS") {
+    compile("com.afollestad.material-dialogs:core:$VER_MDIALOGS") {
         transitive = true
     }
-    compile("com.github.afollestad.material-dialogs:commons:$VER_MDIALOGS") {
+    compile("com.afollestad.material-dialogs:commons:$VER_MDIALOGS") {
         transitive = true
     }
 
     compile "com.google.android.gms:play-services-base:$VER_PSERVICES"
-    compile "com.google.android.gms:play-services-appindexing:$VER_PSERVICES"
+    compile "com.google.firebase:firebase-appindexing:$VER_PSERVICES"
     compile project(':myactivities')
     compile project(':myfragments')
     compile project(':myloggers')

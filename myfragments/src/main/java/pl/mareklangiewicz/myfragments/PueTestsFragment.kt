@@ -48,9 +48,9 @@ open class PueTestsFragment : MyFragment() {
                     .vnmap { 2000L - it * 100L }
 
             val timer = Timer(uischeduler, intervals)
-                    .lpeek { log.i("item: $it") }
-                    .lfilter { it !== null && it % 5L == 0L }
-                    .lpeek { log.w("$it % 5 = 0") }
+                    .lapeek { log.i("item: $it") }
+                    .lafilter { it !== null && it % 5L == 0L }
+                    .lapeek { log.w("$it % 5 = 0") }
 
             val actl = timer { } // we subscribe here with empty function (side effects are attached already)
             // and we get a controller that accepts ICommands
@@ -68,13 +68,13 @@ open class PueTestsFragment : MyFragment() {
             val intervals = (1..20).asNPullee().vnmap { 500L }
 
             val timer = Timer(uischeduler, intervals)
-                    .lnmap { it * 5f + 5f }
-                    .lnpeek { animTo(mf_mmt_mp1, "to", it) }
-                    .lfilter { it !== null && it % 10f == 0f }
-                    .lmap { it as Float / 2f } // as Float tells compiler that we already filtered nulls out.
-                    .lpeek { animTo(mf_mmt_mp2, "to", it) }
-                    .lpeek { animTo(mf_mmt_mp3, "to", RANDOM.nextFloat(50f, 99f)) }
-                    .lpeek { animTo(mf_mmt_mp3, "from", RANDOM.nextFloat(1f, mf_mmt_mp3.to)) }
+                    .lanmap { it * 5f + 5f }
+                    .lanpeek { animTo(mf_mmt_mp1, "to", it) }
+                    .lafilter { it !== null && it % 10f == 0f }
+                    .lamap { it as Float / 2f } // as Float tells compiler that we already filtered nulls out.
+                    .lapeek { animTo(mf_mmt_mp2, "to", it) }
+                    .lapeek { animTo(mf_mmt_mp3, "to", RANDOM.nextFloat(50f, 99f)) }
+                    .lapeek { animTo(mf_mmt_mp3, "from", RANDOM.nextFloat(1f, mf_mmt_mp3.to)) }
 
             val actl = timer { } // we subscribe here with empty function (side effects are attached already) and we get a controller that accepts ICommands
 
@@ -95,7 +95,7 @@ open class PueTestsFragment : MyFragment() {
             val intervals = (1..70).asNPullee().vnmap { 300L }
 
             val timer = Timer(uischeduler, intervals)
-                    .lpeek {
+                    .lapeek {
                         when(it) {
                             10L -> subscriptions[0] = relay { animTo(mf_mmt_mp1, "to", it) }
                             20L -> subscriptions[1] = relay { animTo(mf_mmt_mp2, "to", it) }
@@ -105,7 +105,7 @@ open class PueTestsFragment : MyFragment() {
                             60L -> subscriptions[2](Cancel) // unsubscribe
                         }
                     }
-                    .lnmap { it.toFloat().scale1d(0f, 70f, 1f, 99f) }
+                    .lanmap { it.toFloat().scale1d(0f, 70f, 1f, 99f) }
 
             val actl = timer { if(it !== null) relay.push(it) }
 
@@ -135,10 +135,10 @@ open class PueTestsFragment : MyFragment() {
                     .vpeek { if(it === null) syslog.w("All intervals pulled.") }
 
             val timer = Timer(exscheduler, intervals)
-                    .lnmap { it.toFloat() * 3 }
-                    .lpeek { syslog.i("before reschedule: thread: ${Thread.currentThread()}")}
+                    .lanmap { it.toFloat() * 3 }
+                    .lapeek { syslog.i("before reschedule: thread: ${Thread.currentThread()}")}
                     .lreschedule(uischeduler)
-                    .lpeek { syslog.i("after  reschedule: thread: ${Thread.currentThread()}")}
+                    .lapeek { syslog.i("after  reschedule: thread: ${Thread.currentThread()}")}
 
             // we will try to subscribe to our timer twice!
             val ctl1 = timer {

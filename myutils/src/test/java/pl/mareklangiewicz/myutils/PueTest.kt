@@ -187,10 +187,10 @@ class PueTest {
     fun testStepPusher() {
 
         val ctl = StepPusher(3)
-                .lpeek { println("xxx $it")}
-                .ltake(5)
-                .lpeek { println("yyy $it") }
-                .lmap { it + 100 }
+                .lapeek { println("xxx $it")}
+                .latake(5)
+                .lapeek { println("yyy $it") }
+                .lamap { it + 100 }
                 .invoke { println("zzz $it") } // this is like subscribe in rxjava
 
         ctl(Start)

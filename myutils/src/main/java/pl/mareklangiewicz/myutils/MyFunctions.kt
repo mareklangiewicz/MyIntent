@@ -22,16 +22,16 @@ operator infix fun <A, B, C, D, E> Function3<A, B, C, D>.times(f: Function1<D, E
 
 
 /** It just perform additionnal given action on any function result. Here U is usually Unit. It is ignored anyway */
-operator infix fun <A, U> Function0<A>.mod(f: Function1<A, U>): Function0<A>
+operator infix fun <A, U> Function0<A>.rem(f: Function1<A, U>): Function0<A>
         = { val a = this(); f(a); a }
 
-operator infix fun <A, B, U> Function1<A, B>.mod(f: Function1<B, U>): Function1<A, B>
+operator infix fun <A, B, U> Function1<A, B>.rem(f: Function1<B, U>): Function1<A, B>
         = { val b = this(it); f(b); b }
 
-operator infix fun <A, B, C, U> Function2<A, B, C>.mod(f: Function1<C, U>): Function2<A, B, C>
+operator infix fun <A, B, C, U> Function2<A, B, C>.rem(f: Function1<C, U>): Function2<A, B, C>
         = { a, b -> val c = this(a, b); f(c); c }
 
-operator infix fun <A, B, C, D, U> Function3<A, B, C, D>.mod(f: Function1<D, U>): Function3<A, B, C, D>
+operator infix fun <A, B, C, D, U> Function3<A, B, C, D>.rem(f: Function1<D, U>): Function3<A, B, C, D>
         = { a, b, c -> val d = this(a, b, c); f(d); d }
 
 

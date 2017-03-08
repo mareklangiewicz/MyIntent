@@ -12,7 +12,7 @@ import rx.subscriptions.CompositeSubscription
 operator fun CompositeSubscription.plusAssign(subscription: Subscription) = add(subscription)
 
 fun <T> Observable<T>.lsubscribe(
-        log: Function1<MyLogEntry, Unit>,
+        log: IPushee<MyLogEntry>,
         logOnError: String? = "error %s",
         logOnCompleted: String? = "completed",
         onNext: (T) -> Unit
@@ -27,7 +27,7 @@ fun <T> Observable<T>.lsubscribe(
 }
 
 fun <T> Observable<T>.lsubscribe(
-        log: Function1<MyLogEntry, Unit>,
+        log: IPushee<MyLogEntry>,
         logOnError: String? = "error %s",
         logOnCompleted: String? = "completed",
         logOnNext: String? = "next %s"

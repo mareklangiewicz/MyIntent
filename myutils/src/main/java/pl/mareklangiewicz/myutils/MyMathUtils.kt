@@ -84,10 +84,10 @@ fun Random.nextPointF(min: PointF, max: PointF) = PointF(nextFloat(min.x, max.x)
 
 // common random pullees:
 
-fun Random.ints(min: Int, max: Int): Function1<Unit, Int>  = { nextInt(min, max) }
-fun Random.floats(min: Float, max: Float): Function1<Unit, Float> = { nextFloat(min, max) }
-fun Random.doubles(min: Double, max: Double): Function1<Unit, Double> = { nextDouble(min, max) }
-fun Random.points(min: Point, max: Point): Function1<Unit, Point> = { nextPoint(min, max) }
-fun Random.pointfs(min: PointF, max: PointF): Function1<Unit, PointF> = { nextPointF(min, max) }
-fun Random.colors(@ColorInt min: Int,@ColorInt max: Int): Function1<Unit, Int> = { nextColor(min, max) }
+fun Random.ints(min: Int, max: Int): IPullee<Int>  = { nextInt(min, max) }
+fun Random.floats(min: Float, max: Float): IPullee<Float> = { nextFloat(min, max) }
+fun Random.doubles(min: Double, max: Double): IPullee<Double> = { nextDouble(min, max) }
+fun Random.points(min: Point, max: Point): IPullee<Point> = { nextPoint(min, max) }
+fun Random.pointfs(min: PointF, max: PointF): IPullee<PointF> = { nextPointF(min, max) }
+fun Random.colors(@ColorInt min: Int,@ColorInt max: Int): IPullee<Int> = { nextColor(min, max) }
 

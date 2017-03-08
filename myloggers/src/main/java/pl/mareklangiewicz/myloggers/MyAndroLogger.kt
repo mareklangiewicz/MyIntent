@@ -13,7 +13,7 @@ import pl.mareklangiewicz.myutils.*
  * In release mode use: tosystem = false.
  */
 
-class MyAndroLogger(val tosystem: Boolean = true, val tomemory: Boolean = true) : Function1<MyLogEntry, Unit> {
+class MyAndroLogger(val tosystem: Boolean = true, val tomemory: Boolean = true) : IPushee<MyLogEntry> {
 
 
     val history = MyLogHistory()
@@ -27,7 +27,7 @@ class MyAndroLogger(val tosystem: Boolean = true, val tomemory: Boolean = true) 
         }
 
 
-    private fun compose(view: View?): Function1<MyLogEntry, Unit> {
+    private fun compose(view: View?): IPushee<MyLogEntry> {
 
         if(!tosystem && !tomemory)
             return { }
@@ -51,7 +51,7 @@ class MyAndroLogger(val tosystem: Boolean = true, val tomemory: Boolean = true) 
  * Simple android logger that logs on console using android.util.Log class. It can be is a bit slow, so use it in debug only.
  * This logger can be used from any thread.
  */
-class MyAndroSystemLogger() : Function1<MyLogEntry, Unit> {
+class MyAndroSystemLogger : IPushee<MyLogEntry> {
     override fun invoke(entry: MyLogEntry) {
         val suffix = if(entry.throwable === null) "" else "\n${Log.getStackTraceString(entry.throwable)}"
         Log.println(entry.level.number, entry.tag, entry.message + suffix)
@@ -100,7 +100,7 @@ const val SNACK_TAG = "[SNACK]"
 const val SHORT_TAG = "[SHORT]"
 const val INDEF_TAG = "[INDEF]"
 
-fun Function1<MyLogEntry, Unit>.snack(view: View?): Function1<MyLogEntry, Unit> = {
+fun IPushee<MyLogEntry>.snack(view: View?): IPushee<MyLogEntry> = {
     var msg = it.message.removePrefix(SNACK_TAG)
     if(msg !== it.message) {
         var length = Snackbar.LENGTH_LONG

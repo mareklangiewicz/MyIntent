@@ -52,7 +52,7 @@ data class RERule private constructor(
     /**
      * Applying a rule means matching and replacing ALL occurrences of re match with replace
      */
-    fun apply(cmd: String, log: Function1<MyLogEntry, Unit>): String {
+    fun apply(cmd: String, log: IPushee<MyLogEntry>): String {
         var vcmd = cmd
         if(test(vcmd)) {
             vcmd = rmatch.replace(vcmd, replace)
@@ -75,7 +75,7 @@ data class RERule private constructor(
     }
 }
 
-fun Iterable<RERule>.applyAllRules(cmd: String, log: Function1<MyLogEntry, Unit>) = this.fold(cmd) { c, rule -> rule.apply(c, log) }
+fun Iterable<RERule>.applyAllRules(cmd: String, log: IPushee<MyLogEntry>) = this.fold(cmd) { c, rule -> rule.apply(c, log) }
 
 
 data class REGroup private constructor(
@@ -107,7 +107,7 @@ data class REGroup private constructor(
      * It applies all rules in this group one by one in order to given command.
      * Otherwise it just returns given command.
      */
-    fun apply(cmd: String, log: Function1<MyLogEntry, Unit>): String {
+    fun apply(cmd: String, log: IPushee<MyLogEntry>): String {
         if (!test(cmd)) {
             if (VV) {
                 log.v("group NOT matched:")
@@ -123,7 +123,7 @@ data class REGroup private constructor(
     }
 }
 
-fun Iterable<REGroup>.applyAllGroups(cmd: String, log: Function1<MyLogEntry, Unit>): String {
+fun Iterable<REGroup>.applyAllGroups(cmd: String, log: IPushee<MyLogEntry>): String {
 
     if (V) {
         log.v("Applying all matching RE rules to:")
@@ -433,7 +433,7 @@ class MyCommand(cmd: String = "") : HashMap<String, String>(20) {
             parse(cmd)
     }
 
-    constructor(cmd: String, rules: Iterable<REGroup>, log: Function1<MyLogEntry, Unit>) : this(rules.applyAllGroups(cmd, log))
+    constructor(cmd: String, rules: Iterable<REGroup>, log: IPushee<MyLogEntry>) : this(rules.applyAllGroups(cmd, log))
 
     fun parse(cmd: String) {
 

@@ -34,7 +34,7 @@ data class MyLogEntry(
 
 
 // alias IMyLogger = IPushee<MyLogEntry> // SOMEDAY: do it when Kotlin have type aliases
-// for now our IMyLogger IS just: Function1<MyLogEntry, Unit> without alias name...
+// for now our IMyLogger IS just: IPushee<MyLogEntry> without alias name...
 
 // those functions below should be inlined for performance, but then I loose correct StackTraceElement.lineNumber,
 // and I need those line numbers be able to find where in source the logging message was invoked
@@ -42,22 +42,22 @@ data class MyLogEntry(
 // TODO SOMEDAY: use inline versions in release mode, and leave as it is in debug mode.
 // (unless they will fix the line numbers returned from StackTraceElement)
 
-fun Function1<MyLogEntry, Unit>.log(
+fun IPushee<MyLogEntry>.log(
         message: Any?,
         level: MyLogLevel = MyLogLevel.INFO,
         tag: String = "",
         throwable: Throwable? = null
 ) = this(MyLogEntry(message.toString(), level, tag, throwable))
 
-fun Function1<MyLogEntry, Unit>.v(message: Any?, tag: String = "ML", throwable: Throwable? = null) = log(message, MyLogLevel.VERBOSE, tag, throwable)
-fun Function1<MyLogEntry, Unit>.d(message: Any?, tag: String = "ML", throwable: Throwable? = null) = log(message, MyLogLevel.DEBUG  , tag, throwable)
-fun Function1<MyLogEntry, Unit>.i(message: Any?, tag: String = "ML", throwable: Throwable? = null) = log(message, MyLogLevel.INFO   , tag, throwable)
-fun Function1<MyLogEntry, Unit>.w(message: Any?, tag: String = "ML", throwable: Throwable? = null) = log(message, MyLogLevel.WARN   , tag, throwable)
-fun Function1<MyLogEntry, Unit>.e(message: Any?, tag: String = "ML", throwable: Throwable? = null) = log(message, MyLogLevel.ERROR  , tag, throwable)
-fun Function1<MyLogEntry, Unit>.a(message: Any?, tag: String = "ML", throwable: Throwable? = null) = log(message, MyLogLevel.ASSERT , tag, throwable)
+fun IPushee<MyLogEntry>.v(message: Any?, tag: String = "ML", throwable: Throwable? = null) = log(message, MyLogLevel.VERBOSE, tag, throwable)
+fun IPushee<MyLogEntry>.d(message: Any?, tag: String = "ML", throwable: Throwable? = null) = log(message, MyLogLevel.DEBUG  , tag, throwable)
+fun IPushee<MyLogEntry>.i(message: Any?, tag: String = "ML", throwable: Throwable? = null) = log(message, MyLogLevel.INFO   , tag, throwable)
+fun IPushee<MyLogEntry>.w(message: Any?, tag: String = "ML", throwable: Throwable? = null) = log(message, MyLogLevel.WARN   , tag, throwable)
+fun IPushee<MyLogEntry>.e(message: Any?, tag: String = "ML", throwable: Throwable? = null) = log(message, MyLogLevel.ERROR  , tag, throwable)
+fun IPushee<MyLogEntry>.a(message: Any?, tag: String = "ML", throwable: Throwable? = null) = log(message, MyLogLevel.ASSERT , tag, throwable)
 
 @Suppress("UNUSED_PARAMETER", "unused")
-fun Function1<MyLogEntry, Unit>.q(message: Any?, tag: String = "", throwable: Throwable? = null) { }
+fun IPushee<MyLogEntry>.q(message: Any?, tag: String = "", throwable: Throwable? = null) { }
 
 
 
@@ -77,7 +77,7 @@ fun findStackTraceElement(depth: Int): StackTraceElement? {
  * until it starts to log correctly.
  * Warning: this can be slow - use it only in debug mode
  */
-fun Function1<MyLogEntry, Unit>.trace(depth: Int): Function1<MyLogEntry, Unit> = amap {
+fun IPushee<MyLogEntry>.trace(depth: Int): IPushee<MyLogEntry> = amap {
     val st = findStackTraceElement(depth)
     if(st === null) it else it.copy(message = "(${st.fileName}:${st.lineNumber}) ${it.message}")
 }
@@ -90,7 +90,7 @@ fun Function1<MyLogEntry, Unit>.trace(depth: Int): Function1<MyLogEntry, Unit> =
  * WARNING: system err can be flushed at strange moments,
  * so usually it is better to use only out stream to avoid message reordering.
  */
-class MySystemLogger(val outlvl: MyLogLevel = MyLogLevel.VERBOSE, val errlvl: MyLogLevel = MyLogLevel.ASSERT) : Function1<MyLogEntry, Unit> {
+class MySystemLogger(val outlvl: MyLogLevel = MyLogLevel.VERBOSE, val errlvl: MyLogLevel = MyLogLevel.ASSERT) : IPushee<MyLogEntry> {
     override fun invoke(le: MyLogEntry) {
         if(le.level < outlvl)
             return

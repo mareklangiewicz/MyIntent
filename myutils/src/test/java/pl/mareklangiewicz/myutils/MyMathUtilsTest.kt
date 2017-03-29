@@ -1,58 +1,55 @@
 package pl.mareklangiewicz.myutils
 
-import org.junit.After
-import org.junit.Before
 import org.junit.Test
-
-import com.google.common.truth.Truth.assertThat
+import pl.mareklangiewicz.mytests.assert
+import pl.mareklangiewicz.mytests.isAtLeast
+import pl.mareklangiewicz.mytests.isLessThan
+import pl.mareklangiewicz.mytests.that
 
 /**
  * Created by Marek Langiewicz on 04.11.15.
  */
 class MyMathUtilsTest {
 
-    private val log = MySystemLogger()
-
-    @Before fun setUp() { }
-    @After fun tearDown() { }
-
-    @Test fun testScale0d() { }
-
-    @Test fun testScale1d() { }
-
-    @Test fun testScale2d() { }
-
-    @Test fun testScale2d1() { }
-
     @Test fun testGetRandomInt() {
         for (i in 0..29999) {
             val r = RANDOM.nextInt(1, 5)
-//            log.v("getRandomInt(1, 5): ${r.str}");
-            assertThat(r).isAtLeast(1)
-            assertThat(r).isLessThan(5)
+            assert that r isAtLeast 1
+            assert that r isLessThan 5
         }
         for (i in 0..29999) {
             val r = RANDOM.nextInt(-10000, 0)
-//            log.v("getRandomInt(-10000, 0): ${r.str}");
-            assertThat(r).isAtLeast(-10000)
-            assertThat(r).isLessThan(0)
+            assert that r isAtLeast -10000
+            assert that r isLessThan 0
         }
     }
 
-    @Test fun testGetRandomPoint() { }
+    @Test fun testRandomAsInts() {
+        val ints = RANDOM.asInts(1, 5)
+        for (i in 0..29999) {
+            val r = ints(Unit)
+            assert that r isAtLeast 1
+            assert that r isLessThan 5
+        }
+    }
 
-    @Test fun testScale0d1() { }
+    @Test fun testRandomAsFloats() {
+        val floats = RANDOM.asFloats(1.1f, 5.5f)
+        for (i in 0..29999) {
+            val r = floats(Unit)
+            assert that r isAtLeast 1.1f
+            assert that r isLessThan 5.5f
+        }
+    }
 
-    @Test fun testScale1d1() { }
+    @Test fun testRandomAsDoubles() {
+        val floats = RANDOM.asDoubles(1.1, 5.5)
+        for (i in 0..29999) {
+            val r = floats(Unit)
+            assert that r isAtLeast 1.1
+            assert that r isLessThan 5.5
+        }
+    }
 
-    @Test fun testScale2d2() { }
-
-    @Test fun testScale2d3() { }
-
-    @Test fun testGetRandomFloat() { }
-
-    @Test fun testGetRandomPointF() { }
-
-    @Test fun testGetRandomColor() { }
-
+    // can not test random points and colors here - it is android stuff...
 }

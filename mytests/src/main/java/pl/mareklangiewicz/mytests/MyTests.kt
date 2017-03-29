@@ -1,5 +1,6 @@
 package pl.mareklangiewicz.mytests
 
+import com.google.common.collect.Range
 import com.google.common.truth.*
 import com.google.common.truth.Truth.assert_
 import java.math.BigDecimal
@@ -32,4 +33,12 @@ infix fun <S: Subject<S, T>, T> Subject<S, T>.isInstanceOf(clazz: Class<*>) = is
 infix fun <S: Subject<S, T>, T> Subject<S, T>.isNotInstanceOf(clazz: Class<*>) = isNotInstanceOf(clazz)
 infix fun <S: Subject<S, T>, T> Subject<S, T>.isIn(iterable: Iterable<*>) = isIn(iterable)
 infix fun <S: Subject<S, T>, T> Subject<S, T>.isNotIn(iterable: Iterable<*>) = isNotIn(iterable)
-// TODO SOMEDAY: rest
+// TODO SOMEDAY: rest from truth.Subject
+
+infix fun <S: ComparableSubject<S, T>, T: Comparable<*>> ComparableSubject<S, T>.isIn(range: Range<T>) = isIn(range)
+infix fun <S: ComparableSubject<S, T>, T: Comparable<*>> ComparableSubject<S, T>.isNotIn(range: Range<T>) = isNotIn(range)
+infix fun <S: ComparableSubject<S, T>, T: Comparable<*>> ComparableSubject<S, T>.isGreaterThan(other: T) = isGreaterThan(other)
+infix fun <S: ComparableSubject<S, T>, T: Comparable<*>> ComparableSubject<S, T>.isLessThan(other: T) = isLessThan(other)
+infix fun <S: ComparableSubject<S, T>, T: Comparable<*>> ComparableSubject<S, T>.isAtMost(other: T) = isAtMost(other)
+infix fun <S: ComparableSubject<S, T>, T: Comparable<*>> ComparableSubject<S, T>.isAtLeast(other: T) = isAtLeast(other)
+// TODO SOMEDAY: rest from truth.ComparableSubject

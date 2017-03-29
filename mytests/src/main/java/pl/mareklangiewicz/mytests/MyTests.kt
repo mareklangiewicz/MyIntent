@@ -1,6 +1,4 @@
-package pl.mareklangiewicz.myutils
-
-// TODO LATER: move this file to separate module and use it only in testCompile configuration
+package pl.mareklangiewicz.mytests
 
 import com.google.common.truth.*
 import com.google.common.truth.Truth.assert_

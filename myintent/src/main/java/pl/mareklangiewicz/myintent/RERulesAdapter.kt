@@ -109,7 +109,7 @@ class RERulesAdapter() : RecyclerView.Adapter<RERulesAdapter.ViewHolder>(), View
 
         if(rule.editable) {
 
-            val onApply = MaterialDialog.SingleButtonCallback { dialog, dialogAction ->
+            val onApply = MaterialDialog.SingleButtonCallback { dialog, _ ->
                 val cv = dialog.customView!!
                 rule.name = cv.re_rule_rw_name.text.toString()
                 rule.description = cv.re_rule_rw_description.text.toString()

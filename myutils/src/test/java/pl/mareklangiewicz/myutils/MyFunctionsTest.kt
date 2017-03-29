@@ -5,6 +5,7 @@ import org.junit.Test
 
 class MyFunctionsTest {
 
+    @Suppress("DEPRECATION")
     @Test
     fun testConfusingTernaryOperator() {
         assert that ((1 < 2) % 7 ?: 8) isEqualTo 7

@@ -411,7 +411,7 @@ class MIActivity : MyActivity() {
                 .positiveText(R.string.mi_reset)
                 .negativeText(R.string.mi_cancel)
                 .onPositive(
-                        { dialog, action ->
+                        { _, _ ->
                             deleteDatabase(MIDBHelper.DATABASE_NAME)
                             dbsave = false
                             resurrection()

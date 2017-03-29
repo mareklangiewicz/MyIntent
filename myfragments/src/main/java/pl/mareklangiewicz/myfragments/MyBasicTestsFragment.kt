@@ -21,7 +21,7 @@ open class MyBasicTestsFragment : MyFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mf_mbtf_et_name.setOnEditorActionListener(TextView.OnEditorActionListener { textView, actionId, event ->
+        mf_mbtf_et_name.setOnEditorActionListener(TextView.OnEditorActionListener { textView, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEND) {
                 if (textView.text.toString().equals("Marek", ignoreCase = true)) {
                     textView.error = "You are not Marek! I am Marek!!"

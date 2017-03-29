@@ -135,7 +135,7 @@ class PueTest {
         pushee("aaaaaaaa")
 
 
-        val pushee2 = { s: String -> Unit }
+        val pushee2 = { _: String -> Unit }
                 .apeek(pushee)
                 .apeek(pushee)
 

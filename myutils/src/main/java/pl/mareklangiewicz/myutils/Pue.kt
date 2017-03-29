@@ -399,7 +399,7 @@ class Timer(private val scheduler: IScheduler, private val intervals: IPullee<Lo
 
         private var unschedule: IPushee<Cancel>? = null
 
-        private val action = { u: Unit ->
+        private val action = { _: Unit ->
             pushee?.invoke(counter++)
             invoke(Start)
         }

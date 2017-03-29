@@ -24,7 +24,9 @@ infix fun <T> TestVerb.that(target: Array<T>?): ObjectArraySubject<T> = this.tha
 
 infix fun <S: Subject<S, T>, T> Subject<S, T>.isEqualTo(other: Any?) = isEqualTo(other)
 infix fun <S: Subject<S, T>, T> Subject<S, T>.isNotEqualTo(other: Any?) = isNotEqualTo(other)
+@Suppress("UNUSED_PARAMETER")
 infix fun <S: Subject<S, T>, T> Subject<S, T>.isNull(u: Unit) = isNull()
+@Suppress("UNUSED_PARAMETER")
 infix fun <S: Subject<S, T>, T> Subject<S, T>.isNotNull(u: Unit) = isNotNull()
 infix fun <S: Subject<S, T>, T> Subject<S, T>.isSameAs(other: Any?) = isSameAs(other)
 infix fun <S: Subject<S, T>, T> Subject<S, T>.isNotSameAs(other: Any?) = isNotSameAs(other)

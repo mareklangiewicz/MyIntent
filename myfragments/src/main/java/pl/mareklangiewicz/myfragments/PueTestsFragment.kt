@@ -130,7 +130,7 @@ open class PueTestsFragment : MyFragment() {
 
             todo.add { mf_mmt_mp3.setOnClickListener(null) }
 
-            val intervals = { u: Unit -> mf_mmt_mp3.to.toLong() * 10 }
+            val intervals = { _: Unit -> mf_mmt_mp3.to.toLong() * 10 }
                     .vntake(64)
                     .vpeek { if(it === null) syslog.w("All intervals pulled.") }
 

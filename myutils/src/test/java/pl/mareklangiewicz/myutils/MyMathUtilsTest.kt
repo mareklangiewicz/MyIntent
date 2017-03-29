@@ -1,10 +1,7 @@
 package pl.mareklangiewicz.myutils
 
 import org.junit.Test
-import pl.mareklangiewicz.mytests.assert
-import pl.mareklangiewicz.mytests.isAtLeast
-import pl.mareklangiewicz.mytests.isLessThan
-import pl.mareklangiewicz.mytests.that
+import pl.mareklangiewicz.mytests.*
 
 /**
  * Created by Marek Langiewicz on 04.11.15.
@@ -14,13 +11,13 @@ class MyMathUtilsTest {
     @Test fun testGetRandomInt() {
         for (i in 0..29999) {
             val r = RANDOM.nextInt(1, 5)
-            assert that r isAtLeast 1
-            assert that r isLessThan 5
+            Assert That r IsAtLeast 1
+            Assert That r IsLessThan 5
         }
         for (i in 0..29999) {
             val r = RANDOM.nextInt(-10000, 0)
-            assert that r isAtLeast -10000
-            assert that r isLessThan 0
+            Assert That r IsAtLeast -10000
+            Assert That r IsLessThan 0
         }
     }
 
@@ -28,8 +25,8 @@ class MyMathUtilsTest {
         val ints = RANDOM.asInts(1, 5)
         for (i in 0..29999) {
             val r = ints(Unit)
-            assert that r isAtLeast 1
-            assert that r isLessThan 5
+            Assert That r IsAtLeast 1
+            Assert That r IsLessThan 5
         }
     }
 
@@ -37,8 +34,8 @@ class MyMathUtilsTest {
         val floats = RANDOM.asFloats(1.1f, 5.5f)
         for (i in 0..29999) {
             val r = floats(Unit)
-            assert that r isAtLeast 1.1f
-            assert that r isLessThan 5.5f
+            Assert That r IsAtLeast 1.1f
+            Assert That r IsLessThan 5.5f
         }
     }
 
@@ -46,8 +43,8 @@ class MyMathUtilsTest {
         val floats = RANDOM.asDoubles(1.1, 5.5)
         for (i in 0..29999) {
             val r = floats(Unit)
-            assert that r isAtLeast 1.1
-            assert that r isLessThan 5.5
+            Assert That r IsAtLeast 1.1
+            Assert That r IsLessThan 5.5
         }
     }
 

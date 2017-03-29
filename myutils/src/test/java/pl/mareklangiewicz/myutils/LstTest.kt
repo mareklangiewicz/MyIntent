@@ -2,7 +2,7 @@ package pl.mareklangiewicz.myutils
 
 import org.junit.Test
 import java.util.*
-import com.google.common.truth.Truth.assertThat
+import pl.mareklangiewicz.mytests.*
 
 /**
  * Created by Marek Langiewicz on 30.05.16.
@@ -23,23 +23,23 @@ class LstTest {
 
         val lst4: ILst<String> = Lst.from(listOf("bla", "ble") as Iterable<String>)
 
-        assertThat(lst1).isEqualTo(lst2)
-        assertThat(lst2).isEqualTo(lst1)
+        Assert That lst1 IsEqualTo lst2
+        Assert That lst2 IsEqualTo lst1
 
-        assertThat(lst2).isEqualTo(lst3)
-        assertThat(lst3).isEqualTo(lst2)
+        Assert That lst2 IsEqualTo lst3
+        Assert That lst3 IsEqualTo lst2
 
-        assertThat(lst3).isEqualTo(lst4)
-        assertThat(lst4).isEqualTo(lst3)
+        Assert That lst3 IsEqualTo lst4
+        Assert That lst4 IsEqualTo lst3
 
-        assertThat(lst1).isEqualTo(lst4)
-        assertThat(lst4).isEqualTo(lst1)
+        Assert That lst1 IsEqualTo lst4
+        Assert That lst4 IsEqualTo lst1
 
         lst1[1] = "blu"
 
-        assertThat(lst1).isNotEqualTo(lst2)
-        assertThat(lst1).isNotEqualTo(lst3)
-        assertThat(lst1).isNotEqualTo(lst4)
+        Assert That lst1 IsNotEqualTo lst2
+        Assert That lst1 IsNotEqualTo lst3
+        Assert That lst1 IsNotEqualTo lst4
     }
 
     @Test fun testBasics() {
@@ -55,10 +55,10 @@ class LstTest {
         lst[5] = "zzzzzzzzz"
 
         // negative indicies should count from the end
-        assertThat(lst[0]).isEqualTo(lst[-6])
-        assertThat(lst[1]).isEqualTo(lst[-5])
-        assertThat(lst[2]).isEqualTo(lst[-4])
-        assertThat(lst[3]).isEqualTo(lst[-3])
+        Assert That lst[0] IsEqualTo lst[-6]
+        Assert That lst[1] IsEqualTo lst[-5]
+        Assert That lst[2] IsEqualTo lst[-4]
+        Assert That lst[3] IsEqualTo lst[-3]
 
         log.i("Lst iteration:")
 
@@ -116,9 +116,9 @@ class LstTest {
         for(i in COUNT downTo 1) {
             val r = results.pop()
             for(j in 0..r.size-1)
-                assertThat(lst[j]).isEqualTo(r[j])
+                Assert That lst[j] IsEqualTo r[j]
             val idx = inserts.pop()
-            assertThat(lst[idx]).isEqualTo(i.hex)
+            Assert That lst[idx] IsEqualTo i.hex
             lst.del(idx)
         }
 
@@ -143,7 +143,7 @@ class LstTest {
         for(i in COUNT downTo 1) {
             val r = results.pop()
             for(j in 0..r.size-1)
-                assertThat(lst[j]).isEqualTo(r[j])
+                Assert That lst[j] IsEqualTo r[j]
             val idx = inserts.pop()
             val t = if(idx % 7 == 0) // special case: pull head (we were pushing head before)
                 lst.head.pull(Unit)
@@ -151,7 +151,7 @@ class LstTest {
                 lst.tail.pull(Unit)
             else
                 lst.del(idx)
-            assertThat(t).isEqualTo(i.hex)
+            Assert That t IsEqualTo i.hex
         }
 
     }

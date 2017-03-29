@@ -72,7 +72,6 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$VER_KOTLIN"
     compile "com.squareup.picasso:picasso:$VER_PICASSO"
     testCompile "junit:junit:$VER_JUNIT"
-    testCompile "com.google.truth:truth:$VER_GTRUTH"
     testCompile project(':mytests')
     androidTestCompile "com.android.support.test:runner:$VER_ASUPPORT_TEST"
     androidTestCompile "com.android.support.test:rules:$VER_ASUPPORT_TEST"

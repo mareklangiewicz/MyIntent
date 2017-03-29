@@ -11,7 +11,7 @@ class MyFunctionsTest {
     fun testConfusingTernaryOperator() {
         val i = true  % 7 ?: 8
         val j = false % 7 ?: 8
-        assert that i isEqualTo 7
-        assert that j isEqualTo 8
+        Assert That i IsEqualTo 7
+        Assert That j IsEqualTo 8
     }
 }

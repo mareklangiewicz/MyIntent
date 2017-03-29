@@ -1,8 +1,10 @@
 package pl.mareklangiewicz.myutils
 
-import com.google.common.truth.Truth.assertThat
 import org.junit.Ignore
 import org.junit.Test
+import pl.mareklangiewicz.mytests.Assert
+import pl.mareklangiewicz.mytests.IsEqualTo
+import pl.mareklangiewicz.mytests.That
 import java.lang.String.format
 import java.lang.System.currentTimeMillis
 import java.util.*
@@ -27,7 +29,7 @@ class MyCommandsTest {
         log.i(format("%d", l1))
         log.i(format("%d", l2))
         log.i(format("%b", l1 == l2))
-        assertThat(l1).isEqualTo(l2)
+        Assert That l1 IsEqualTo l2
     }
 
 
@@ -37,8 +39,8 @@ class MyCommandsTest {
             val matcher = pattern.matcher(s)
             val matches = if (matchWholeString) matcher.matches() else matcher.lookingAt()
             log.d("RE:\"$re\" ${if (matches) "matches" else "does not match"} ${if (matchWholeString) "whole" else "looking at"} text: \"$s\"")
-            assertThat(matcher.groupCount()).isEqualTo(groupCount.toLong())
-            assertThat(matches).isEqualTo(shouldMatch)
+            Assert That matcher.groupCount() IsEqualTo groupCount.toLong()
+            Assert That matches IsEqualTo shouldMatch
             if (matches) {
                 for (i in 0..groupCount)
                     log.d(format("   group %d: \"%s\"", i, matcher.group(i)))
@@ -190,7 +192,7 @@ class MyCommandsTest {
 
     fun testApplyAllRERules(input: String, expected: String) {
         val command = RE_RULES.applyAllGroups(input, log)
-        assertThat(command).isEqualTo(expected)
+        Assert That command IsEqualTo expected
     }
 
     fun multiTestApplyAllRERules(inputs: List<String>, expected: String) {

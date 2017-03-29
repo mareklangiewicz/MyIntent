@@ -8,7 +8,7 @@ package pl.mareklangiewicz.myutils
 
 fun <T> ident(t: T): T = t
 
-fun <T> const(t: T) = { u: Unit -> t }
+fun <T> const(t: T) = { _: Unit -> t }
 
 /** function compositions: (f * g)(x) = g(f(x)) (works also for objects with 'invoke' method */
 
@@ -55,6 +55,6 @@ operator fun <U> Int.invoke(f: Function1<Unit, U>) = (1..this).forEach { f(Unit)
  * You can also do just:
  * someBoolean % doSomethingIfTrue()
  */
-@Deprecated( "It always computes its argument (and it is confusing).", ReplaceWith("if (this === true) yes else null"))
-operator fun <T> Boolean?.mod(yes: T): T? = if(this === true) yes else null
+@Deprecated( "It always computes its argument (and it is confusing).", ReplaceWith("if (this == true) yes else null"))
+operator fun <T> Boolean?.rem(yes: T): T? = if(this == true) yes else null
 

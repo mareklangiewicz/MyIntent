@@ -12,18 +12,17 @@ import android.util.AttributeSet
 import android.view.View
 import pl.mareklangiewicz.myutils.scale1d
 
-class MyPie : View {
+class MyPie @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
+    : View(context, attrs, defStyle) {
 
     private var _minimum: Float = 0f
     private var _maximum: Float = 100f
     private var _from: Float = 0f
     private var _to: Float = 75f
-
     var minimum: Float get() = _minimum; set(value) { _minimum = value; invalidate() }
     var maximum: Float get() = _maximum; set(value) { _maximum = value; invalidate() }
     var from:    Float get() = _from;    set(value) { _from = value; invalidate() }
     var to:      Float get() = _to;      set(value) { _to = value; invalidate() }
-
     private val mOvalDrawable = ShapeDrawable(OvalShape())
     private val mPieDrawable = ShapeDrawable(object : OvalShape() {
         override fun draw(canvas: Canvas, paint: Paint) {
@@ -33,7 +32,6 @@ class MyPie : View {
                     true, paint)
         }
     })
-
     var pieColor: Int
         get() = mPieDrawable.paint.color
         set(value) {
@@ -48,13 +46,7 @@ class MyPie : View {
             invalidate()
         }
 
-
-    constructor(context: Context) : super(context) { init(context, null, 0) }
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) { init(context, attrs, 0) }
-    constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle) { init(context, attrs, defStyle) }
-
-    private fun init(context: Context, attrs: AttributeSet?, defStyle: Int) {
-
+    init {
         background = mOvalDrawable
 
         // Load attributes

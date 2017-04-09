@@ -10,16 +10,12 @@ import android.view.View
 import pl.mareklangiewicz.myloggers.MY_DEFAULT_ANDRO_LOGGER
 import pl.mareklangiewicz.myutils.*
 
-class MyNavigationView : NavigationView, IMyUINavigation, NavigationView.OnNavigationItemSelectedListener {
+class MyNavigationView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
+    : NavigationView(context, attrs, defStyle), IMyUINavigation, NavigationView.OnNavigationItemSelectedListener {
+
+    init { super.setNavigationItemSelectedListener(this) }
 
     val log = MY_DEFAULT_ANDRO_LOGGER
-
-    constructor(context: Context) : super(context) { init(null, 0) }
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) { init(attrs, 0) }
-    constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle) { init(attrs, defStyle) }
-
-    @Suppress("UNUSED_PARAMETER")
-    private fun init(attrs: AttributeSet?, defStyle: Int) = super.setNavigationItemSelectedListener(this)
 
     override var menuId = -1
         set(id) {

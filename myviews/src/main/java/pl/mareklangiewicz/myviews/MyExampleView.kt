@@ -8,7 +8,8 @@ import android.graphics.Rect
 import android.util.AttributeSet
 import android.widget.TextView
 
-class MyExampleView : TextView {
+class MyExampleView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
+    : TextView(context, attrs, defStyleAttr) {
 
     private val paint: Paint = Paint().apply {
         color = Color.BLACK
@@ -16,10 +17,6 @@ class MyExampleView : TextView {
     }
 
     private val area = Rect()
-
-    constructor(context: Context) : super(context) { }
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) { }
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) { }
 
     override fun onDraw(canvas: Canvas) {
         canvas.getClipBounds(area)

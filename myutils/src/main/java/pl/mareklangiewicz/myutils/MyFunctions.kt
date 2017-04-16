@@ -39,6 +39,17 @@ fun <A, B, R>       Function2<A, B, R>      .curry() = { a: A -> { b: B ->      
 fun <A, B, C, R>    Function3<A, B, C, R>   .curry() = { a: A -> { b: B -> { c: C -> {           this(a, b, c)      } } } }
 fun <A, B, C, D, R> Function4<A, B, C, D, R>.curry() = { a: A -> { b: B -> { c: C -> { d: D -> { this(a, b, c, d) } } } } }
 
+fun <T> lazy(initializer: (Unit) -> T) = kotlin.lazy { initializer(Unit) }
+
+fun <R> memoize(function: () -> R): () -> R {
+    val r by lazy(function)
+    return { r }
+}
+
+fun <R> memoize(function: (Unit) -> R): (Unit) -> R {
+    val r by lazy(function)
+    return { r }
+}
 
 // TODO LATER: przejrzec funkcyjne biblioteki kotlinowe w necie na szybko i moze cos tu jeszcze wrzucic
 // ale jestesmy minimalistyczni i nie chcemy za duzo - jak cos mozna latwo recznie

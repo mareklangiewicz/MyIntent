@@ -21,7 +21,7 @@ operator infix fun <A, B, C, D> Function2<A, B, C>.times(f: Function1<C, D>): Fu
 operator infix fun <A, B, C, D, E> Function3<A, B, C, D>.times(f: Function1<D, E>): Function3<A, B, C, E> = { a, b, c -> f(this(a, b, c)) }
 
 
-/** It just perform additionnal given action on any function result. Here U is usually Unit. It is ignored anyway */
+/** It just perform additional given action on any function result. Here U is usually Unit. It is ignored anyway */
 operator infix fun <A, U> Function0<A>.rem(f: Function1<A, U>): Function0<A>
         = { val a = this(); f(a); a }
 

@@ -7,6 +7,8 @@ import java.math.BigDecimal
 
 val Assert: TestVerb by lazy { assert_() }
 
+// TODO NOW: investigate project Kluent (https://github.com/MarkusAmshove/Kluent)
+// (but be careful about polluting too broad namespaces..)
 
 // TODO LATER: not sure about all those generic types below - analyze/test it all later..
 

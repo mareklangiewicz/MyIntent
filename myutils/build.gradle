@@ -18,6 +18,12 @@ apply plugin: 'com.github.dcendents.android-maven'
 
 group='com.github.langara'
 
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
+}
+
 android {
     compileSdkVersion VER_SDK_COMPILE.toInteger()
     buildToolsVersion VER_BUILD_TOOLS
@@ -100,9 +106,4 @@ task sourcesJar(type: Jar) {
 artifacts {
     archives sourcesJar
 //    archives javadocJar
-}
-kotlin {
-    experimental {
-        coroutines "enable"
-    }
 }

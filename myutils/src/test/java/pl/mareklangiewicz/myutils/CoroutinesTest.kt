@@ -33,9 +33,13 @@ class CoroutinesTest {
     @Test
     fun testAwaitForOnePush() {
         launch(CommonPool) {
-            println(timer.awaitForOnePush())
+            println("inside: before await")
+            val value = timer.awaitForOnePush()
+            println("inside: after await: value = $value")
         }
+        println("outside: before sleeping")
         Thread.sleep(2000L)
+        println("outside: after sleeping")
     }
 }
 
@@ -45,4 +49,5 @@ fun <T> IPusher<T, ICommand>.autoStart() = object : IPusher<T, ICommand> {
 }
 
 // experiment - no idea if it makes any sense.. (yet)
+// note: this only waits for one push - the second one would call cont.resume again and it should crash
 suspend fun <T> IPusher<T, Nothing>.awaitForOnePush(): T = suspendCoroutine { cont -> this { cont.resume(it) } }

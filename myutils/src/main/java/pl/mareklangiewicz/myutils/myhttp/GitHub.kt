@@ -1,16 +1,14 @@
 package pl.mareklangiewicz.myutils.myhttp
 
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
+import io.reactivex.Observable
 import retrofit2.Call
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.Path
-import rx.Observable
 
 object GitHub {
 
@@ -222,7 +220,7 @@ object GitHub {
             .baseUrl(URL)
 //            .client(logclient)
             .addConverterFactory(MoshiConverterFactory.create())
-            .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
 
     val service = retrofit.create(Service::class.java)!!

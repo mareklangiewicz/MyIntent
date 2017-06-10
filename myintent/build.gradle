@@ -70,6 +70,9 @@ android {
             resValue "string", "mi_permission_write", perm
         }
     }
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
+    }
     testOptions {
         unitTests.returnDefaultValues = true
     }

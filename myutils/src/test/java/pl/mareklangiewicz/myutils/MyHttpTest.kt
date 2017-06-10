@@ -1,12 +1,12 @@
 package pl.mareklangiewicz.myutils
 
 import com.squareup.moshi.Moshi
+import io.reactivex.Observable
 import org.junit.Test
 import pl.mareklangiewicz.myutils.myhttp.GitHub
 import pl.mareklangiewicz.myutils.myhttp.OpenWeatherMap
 import retrofit2.Call
 import retrofit2.Response
-import rx.Observable
 
 
 /**
@@ -20,11 +20,11 @@ class MyHttpTest {
         val service = GitHub.service
         var call: Call<GitHub.User> = service.getUserCall("langara")
         var response: Response<GitHub.User> = call.execute()
-        var body: GitHub.User = response.body()
+        var body: GitHub.User = response.body()!!
         log.w(body.str) // set breakpoint here to see properties
         call = service.getUserCall("JakeWharton")
         response = call.execute()
-        body = response.body()
+        body = response.body()!!
         log.w(body.str) // set breakpoint here to see properties
     }
 
@@ -55,11 +55,11 @@ class MyHttpTest {
         val service = GitHub.service
         var call: Call<List<GitHub.Repository>> = service.getUserReposCall("langara")
         var response: Response<List<GitHub.Repository>> = call.execute()
-        var body: List<GitHub.Repository> = response.body()
+        var body: List<GitHub.Repository> = response.body()!!
         log.w(body.str) // set breakpoint here to see properties
         call = service.getUserReposCall("JakeWharton")
         response = call.execute()
-        body = response.body()
+        body = response.body()!!
         log.w(body.str) // set breakpoint here to see properties
     }
 

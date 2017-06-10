@@ -73,7 +73,7 @@ dependencies {
     compile "com.android.support:percent:$VER_ASUPPORT"
     compile "com.squareup.retrofit2:retrofit:$VER_RETROFIT"
     compile "com.squareup.retrofit2:converter-moshi:$VER_RETROFIT"
-    compile "com.squareup.retrofit2:adapter-rxjava:$VER_RETROFIT"
+    compile "com.squareup.retrofit2:adapter-rxjava2:$VER_RETROFIT"
     compile "com.squareup.okhttp3:logging-interceptor:$VER_OKHTTP"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$VER_KOTLIN"
     compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$VER_XCOROUTINES"

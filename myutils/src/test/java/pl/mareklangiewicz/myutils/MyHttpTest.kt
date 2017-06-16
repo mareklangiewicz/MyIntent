@@ -200,7 +200,7 @@ class MyHttpTest {
 
         val service = OpenWeatherMap.service
 
-        var call: Call<OpenWeatherMap.Forecasts> = service.getForecastByLocationCall("8932d2a1192be84707c381df649a2925", 50.5f, 50.5f, 3, "metric")
+        var call: Call<OpenWeatherMap.Forecasts> = service.getForecastByLocationCall("8932d2a1192be84707c381df649a2925", 50.5f, 50.5f, null, "metric")
         var response: Response<OpenWeatherMap.Forecasts> = call.execute()
         var body: OpenWeatherMap.Forecasts? = response.body()
 
@@ -233,13 +233,13 @@ class MyHttpTest {
 
         val service = OpenWeatherMap.service
 
-        var call: Call<OpenWeatherMap.DailyForecasts> = service.getDailyForecastByLocationCall("8932d2a1192be84707c381df649a2925", 50.5f, 50.5f, 3, "metric")
+        var call: Call<OpenWeatherMap.DailyForecasts> = service.getDailyForecastByLocationCall("8932d2a1192be84707c381df649a2925", 50.5f, 50.5f, null, "metric")
         var response: Response<OpenWeatherMap.DailyForecasts> = call.execute()
         var body: OpenWeatherMap.DailyForecasts? = response.body()
 
         log.w(adapter.toJson(body))
 
-        call = service.getDailyForecastByCityCall("8932d2a1192be84707c381df649a2925", "London", 3, "metric")
+        call = service.getDailyForecastByCityCall("8932d2a1192be84707c381df649a2925", "London", 16, "metric")
         response = call.execute()
         body = response.body()
 

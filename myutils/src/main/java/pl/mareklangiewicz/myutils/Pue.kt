@@ -40,7 +40,7 @@ import java.util.concurrent.TimeUnit
  *
  * Two active interfaces: IPusher and IPuller are in fact just special examples of IPuer interface.
  * IPuller<T> = IPuer<Unit, T>; IPusher<T> = IPuer<T, Unit>
- * And the IPuer<T, R> is just a class that calls attached Function1<T, R> (alias: Puee) when it wants to.
+ * And the IPuer<T, R> is just an impure function that calls provided Function1<T, R> (alias: Puee) when it wants to.
  * The puer (as an active side of composition) decides when and how many times to call attached function (puee).
  *
  * Note: we will sometimes add more restrictions about how our IPullee, IPushee, IPuller, IPusher
@@ -59,6 +59,15 @@ import java.util.concurrent.TimeUnit
  */
 
 
+typealias IPuee<T, R> = (T) -> R
+
+/** passive producer (similar to iterator) */
+typealias IPullee<R> = IPuee<Unit, R>
+
+/** passive consumer (similar to rx: observer) */
+typealias IPushee<T> = IPuee<T, Unit>
+
+
 /**
  * IPuer interface is the core of this library. It is an active side of communication.
  * It takes a function and calls it whenever it wants to :-)
@@ -73,15 +82,12 @@ import java.util.concurrent.TimeUnit
  * Function1<ICommand, Unit> where the Command can be: Start, Stop, Pause, Cancel, etc...
  *
  */
-typealias IPuee<T, R> = (T) -> R
-
-/** passive producer (similar to iterator) */
-typealias IPullee<R> = IPuee<Unit, R>
-
-/** passive consumer (similar to rx: observer) */
-typealias IPushee<T> = IPuee<T, Unit>
-
 typealias IPuer<T, R, Cmd> = (IPuee<T, R>) -> IPushee<Cmd>
+
+/* Do not read next line if you don't want to be confused:
+ * A puer is actually also type of puee: typealias IPuer<T, R, Cmd> = IPuee<IPuee<T, R>,IPushee<Cmd>>
+ * (more about this kind of duality: http://csl.stanford.edu/~christos/pldi2010.fit/meijer.duality.pdf)
+ */
 
 /** active consumer (similar to java 8: collector) */
 typealias IPuller<R, Cmd> = IPuer<Unit, R, Cmd>

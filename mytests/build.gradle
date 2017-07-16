@@ -5,10 +5,10 @@ apply plugin: 'maven'
 group='com.github.langara'
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$VER_KOTLIN"
-    compile "junit:junit:$VER_JUNIT"
-    compile "com.google.truth:truth:$VER_GTRUTH"
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$VER_KOTLIN"
+    implementation "junit:junit:$VER_JUNIT"
+    implementation "com.google.truth:truth:$VER_GTRUTH"
 }
 buildscript {
     repositories {

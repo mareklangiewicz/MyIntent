@@ -22,7 +22,7 @@ object MyViewDecorator {
             parent.removeViewAt(idx)
             val decorated = inflater.inflate(decoration, null)
             parent.addView(decorated, idx, params)
-            val content = decorated.findViewById(android.R.id.content) as ViewGroup
+            val content = decorated.findViewById<ViewGroup>(android.R.id.content)
             content.addView(view, MATCH_PARENT, MATCH_PARENT)
         }
 

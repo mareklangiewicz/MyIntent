@@ -61,27 +61,29 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile project(':mycorelib')
-    compile "com.android.support:support-annotations:$VER_ASUPPORT"
-    compile "com.android.support:support-v4:$VER_ASUPPORT"
-    compile "com.android.support:appcompat-v7:$VER_ASUPPORT"
-    compile "com.android.support:support-v13:$VER_ASUPPORT"
-    compile "com.android.support:preference-v14:$VER_ASUPPORT"
-    compile "com.android.support:design:$VER_ASUPPORT"
-    compile "com.android.support:customtabs:$VER_ASUPPORT"
-    compile "com.android.support:percent:$VER_ASUPPORT"
-    compile "com.squareup.retrofit2:retrofit:$VER_RETROFIT"
-    compile "com.squareup.retrofit2:converter-moshi:$VER_RETROFIT"
-    compile "com.squareup.retrofit2:adapter-rxjava2:$VER_RETROFIT"
-    compile "com.squareup.okhttp3:logging-interceptor:$VER_OKHTTP"
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$VER_KOTLIN"
-    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$VER_XCOROUTINES"
-    compile "com.squareup.picasso:picasso:$VER_PICASSO"
-    testCompile "junit:junit:$VER_JUNIT"
-    testCompile project(':mytests')
-    androidTestCompile "com.android.support.test:runner:$VER_ASUPPORT_TEST"
-    androidTestCompile "com.android.support.test:rules:$VER_ASUPPORT_TEST"
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(':mycorelib')
+    implementation project(':mytests')
+    implementation "com.android.support:support-annotations:$VER_ASUPPORT"
+    implementation "com.android.support:support-v4:$VER_ASUPPORT"
+    implementation "com.android.support:appcompat-v7:$VER_ASUPPORT"
+    implementation "com.android.support:support-v13:$VER_ASUPPORT"
+    implementation "com.android.support:preference-v14:$VER_ASUPPORT"
+    implementation "com.android.support:design:$VER_ASUPPORT"
+    implementation "com.android.support:customtabs:$VER_ASUPPORT"
+    implementation "com.android.support:percent:$VER_ASUPPORT"
+    implementation "com.squareup.retrofit2:retrofit:$VER_RETROFIT"
+    implementation "com.squareup.retrofit2:converter-moshi:$VER_RETROFIT"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$VER_RETROFIT"
+    implementation "com.squareup.okhttp3:logging-interceptor:$VER_OKHTTP"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$VER_KOTLIN"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$VER_XCOROUTINES"
+    implementation "com.squareup.picasso:picasso:$VER_PICASSO"
+    testImplementation project(':mytests')
+    testImplementation "junit:junit:$VER_JUNIT"
+    testImplementation "com.google.truth:truth:$VER_GTRUTH"
+    androidTestImplementation "com.android.support.test:runner:$VER_ASUPPORT_TEST"
+    androidTestImplementation "com.android.support.test:rules:$VER_ASUPPORT_TEST"
 }
 
 

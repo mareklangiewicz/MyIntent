@@ -285,6 +285,9 @@ fun <I> IPushee<I?>.aitems() = anmap<I, Unit, IEvent<I>?> {
 
 
 
+typealias Millis = Long // TODO SOMEDAY: use newtype when kotlin has it
+
+typealias CurrentTime = IPullee<Millis> // TODO SOMEDAY: use newtype when kotlin has it
 
 interface IScheduler {
     /**
@@ -294,21 +297,28 @@ interface IScheduler {
      * No delay does not have to mean: immediately - actual execution time is implementation specific.
      */
     fun schedule(delay: Long = 0, action: (Unit) -> Unit): IPushee<Cancel>
+
+    val now: CurrentTime
 }
 // Some schedulers may ensure happens-before relationship between scheduled actions - it should be documented in particular scheduler.
 
 
 // TODO LATER: test it (this is just first fast attempt to implement something simple - it will probably be rewritten)
 class ExecutorScheduler(private val ses: ScheduledExecutorService) : IScheduler {
+
     constructor(threads: Int = Runtime.getRuntime().availableProcessors() * 2) : this(Executors.newScheduledThreadPool(threads))
+
     override fun schedule(delay: Long, action: (Unit) -> Unit): (Cancel) -> Unit {
         val sf = ses.schedule({ action(Unit) }, delay, TimeUnit.MILLISECONDS)
         return { sf.cancel(true) }
     }
+
+    override val now = { _: Unit -> System.currentTimeMillis() }
 }
 
 
 class HandlerScheduler(private val handler: Handler = Handler(Looper.getMainLooper())) : IScheduler {
+
     override fun schedule(delay: Long, action: (Unit) -> Unit): (Cancel) -> Unit {
         val runnable = Runnable { action(Unit) }
         if(delay > 0)
@@ -317,15 +327,18 @@ class HandlerScheduler(private val handler: Handler = Handler(Looper.getMainLoop
             handler.post(runnable)
         return { handler.removeCallbacks(runnable) }
     }
+
+    override val now = { _: Unit -> System.currentTimeMillis() }
 }
 
 /**
- * Wraps a scheduler adding additional delay to every schedule.
+ * Wraps a scheduler adding additional delay to every schedule and current time.
  */
-fun IScheduler.delay(add: Long): IScheduler = object : IScheduler {
-    override fun schedule(delay: Long, action: (Unit) -> Unit): (Cancel) -> Unit {
-        return this@delay.schedule(delay + add, action)
-    }
+class FutureScheduler(val scheduler: IScheduler, val future: Millis): IScheduler {
+
+    override fun schedule(delay: Long, action: (Unit) -> Unit) = scheduler.schedule(delay + future, action)
+
+    override val now = { u: Unit -> scheduler.now(u) + future }
 }
 // TODO LATER: test it
 
@@ -333,9 +346,9 @@ fun IScheduler.delay(add: Long): IScheduler = object : IScheduler {
 /**
  * Wraps a scheduler and adds catching exceptions and logging them using provided logger
  */
-fun IScheduler.logex(log: IPushee<MyLogEntry>): IScheduler = object : IScheduler {
-    override fun schedule(delay: Long, action: (Unit) -> Unit): (Cancel) -> Unit {
-        return this@logex.schedule(delay) { try { action(Unit) } catch(e: Throwable) { log.e(e, throwable = e) } }
+fun IScheduler.logex(log: IPushee<MyLogEntry>): IScheduler = object : IScheduler by this@logex {
+    override fun schedule(delay: Long, action: (Unit) -> Unit) = this@logex.schedule(delay) {
+        try { action(Unit) } catch(e: Throwable) { log.e(e, throwable = e) }
     }
 }
 

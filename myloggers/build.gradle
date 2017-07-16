@@ -36,19 +36,20 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile project(':myutils')
-    compile "com.android.support:recyclerview-v7:$VER_ASUPPORT"
-    compile "com.android.support:cardview-v7:$VER_ASUPPORT"
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$VER_KOTLIN"
-    testCompile project(':myutils')
-    testCompile "junit:junit:$VER_JUNIT"
-    testCompile "com.google.truth:truth:$VER_GTRUTH"
-    androidTestCompile "com.android.support:support-annotations:$VER_ASUPPORT"
-    androidTestCompile "com.android.support.test:runner:$VER_ASUPPORT_TEST"
-    androidTestCompile "com.android.support.test:rules:$VER_ASUPPORT_TEST"
-    androidTestCompile "com.google.truth:truth:$VER_GTRUTH"
-    testCompile "junit:junit:$VER_JUNIT"
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(':myutils')
+    implementation "com.android.support:design:$VER_ASUPPORT"
+    implementation "com.android.support:recyclerview-v7:$VER_ASUPPORT"
+    implementation "com.android.support:cardview-v7:$VER_ASUPPORT"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$VER_KOTLIN"
+    testImplementation project(':myutils')
+    testImplementation "junit:junit:$VER_JUNIT"
+    testImplementation "com.google.truth:truth:$VER_GTRUTH"
+    androidTestImplementation "com.android.support:support-annotations:$VER_ASUPPORT"
+    androidTestImplementation "com.android.support.test:runner:$VER_ASUPPORT_TEST"
+    androidTestImplementation "com.android.support.test:rules:$VER_ASUPPORT_TEST"
+    androidTestImplementation "com.google.truth:truth:$VER_GTRUTH"
+    testImplementation "junit:junit:$VER_JUNIT"
 }
 
 buildscript {

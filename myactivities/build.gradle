@@ -35,16 +35,19 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile "com.android.support:recyclerview-v7:$VER_ASUPPORT"
-    compile "com.android.support:cardview-v7:$VER_ASUPPORT"
-    compile "com.android.support:appcompat-v7:$VER_ASUPPORT"
-    compile "com.android.support:design:$VER_ASUPPORT"
-    compile "com.android.support:support-annotations:$VER_ASUPPORT"
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$VER_KOTLIN"
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "com.android.support:recyclerview-v7:$VER_ASUPPORT"
+    implementation "com.android.support:cardview-v7:$VER_ASUPPORT"
+    implementation "com.android.support:appcompat-v7:$VER_ASUPPORT"
+    implementation "com.android.support:design:$VER_ASUPPORT"
+    implementation "com.android.support:support-annotations:$VER_ASUPPORT"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$VER_KOTLIN"
 
-    compile project(':myviews')
-    compile project(':myfragments')
+    implementation project(':myviews')
+    implementation project(':myfragments')
+    implementation project(':mydrawables')
+    implementation project(':myloggers')
+    implementation project(':myutils')
 
 }
 

@@ -39,7 +39,7 @@ Then add dependencies to My Intent modules you want - in your app module build.g
 ```gradle
 dependencies {
     // ... other dependencies here
-    compile 'com.github.langara.MyIntent:myactivities:1.0.6-alpha'
+    implementation'com.github.langara.MyIntent:myactivities:1.0.6-alpha'
     }
 }
 ```

@@ -32,12 +32,12 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile "junit:junit:$VER_JUNIT"
-    compile "com.android.support:appcompat-v7:$VER_ASUPPORT"
-    compile "com.android.support:support-annotations:$VER_ASUPPORT"
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$VER_KOTLIN"
-    compile project(':myutils')
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation "junit:junit:$VER_JUNIT"
+    implementation "com.android.support:appcompat-v7:$VER_ASUPPORT"
+    implementation "com.android.support:support-annotations:$VER_ASUPPORT"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$VER_KOTLIN"
+    implementation project(':myutils')
 }
 
 buildscript {

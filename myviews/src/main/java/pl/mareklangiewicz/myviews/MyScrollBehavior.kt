@@ -39,8 +39,7 @@ class MyScrollBehavior<V : View> : CoordinatorLayout.Behavior<V> {
         a.recycle()
     }
 
-    override fun onStartNestedScroll(coordinatorLayout: CoordinatorLayout?,
-                                     child: V?, directTargetChild: View?, target: View?, nestedScrollAxes: Int): Boolean {
+    override fun onStartNestedScroll(coordinatorLayout: CoordinatorLayout, child: V, directTargetChild: View, target: View, axes: Int, type: Int): Boolean {
         if (property == null) {
             log.d("No property to scroll provided.")
             return false
@@ -50,16 +49,14 @@ class MyScrollBehavior<V : View> : CoordinatorLayout.Behavior<V> {
             return false
         }
 
-        if(nestedScrollAxes and ViewCompat.SCROLL_AXIS_VERTICAL == 0) return false
+        if(axes and ViewCompat.SCROLL_AXIS_VERTICAL == 0) return false
 
         if (animator == null) animator = ObjectAnimator.ofInt(child, property, min, max)
 
         return true
     }
 
-    @SuppressLint("NewApi")
-    override fun onNestedScroll(coordinatorLayout: CoordinatorLayout?,
-                                child: V?, target: View?, dxConsumed: Int, dyConsumed: Int, dxUnconsumed: Int, dyUnconsumed: Int) {
+    override fun onNestedScroll(coordinatorLayout: CoordinatorLayout, child: V, target: View, dxConsumed: Int, dyConsumed: Int, dxUnconsumed: Int, dyUnconsumed: Int, type: Int) {
         if (animator == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1)
             return
 

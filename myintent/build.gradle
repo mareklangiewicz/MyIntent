@@ -17,6 +17,7 @@ android {
         versionCode VER_CODE.toInteger()
         versionName VER_NAME
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
 
     signingConfigs {
@@ -58,17 +59,17 @@ android {
             def perm = auth + ".WRITE"
             resValue "string", "mi_permission_write", perm
         }
-        canary {
-            initWith(buildTypes.debug)
-            def suff = ".canary"
-            applicationIdSuffix suff
-            def auth = PKG + suff + ".provider"
-            resValue "string", "mi_authority", auth
-            buildConfigField "String", "AUTHORITY", "\"$auth\""
-            buildConfigField "String", "NAME_PREFIX", '"MI C "'
-            def perm = auth + ".WRITE"
-            resValue "string", "mi_permission_write", perm
-        }
+//        canary {
+//            initWith(buildTypes.debug)
+//            def suff = ".canary"
+//            applicationIdSuffix suff
+//            def auth = PKG + suff + ".provider"
+//            resValue "string", "mi_authority", auth
+//            buildConfigField "String", "AUTHORITY", "\"$auth\""
+//            buildConfigField "String", "NAME_PREFIX", '"MI C "'
+//            def perm = auth + ".WRITE"
+//            resValue "string", "mi_permission_write", perm
+//        }
     }
     packagingOptions {
         exclude 'META-INF/rxjava.properties'
@@ -87,38 +88,43 @@ repositories {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile "junit:junit:$VER_JUNIT"
-    testCompile "com.google.truth:truth:$VER_GTRUTH"
-    androidTestCompile "junit:junit:$VER_JUNIT"
-    androidTestCompile "com.google.truth:truth:$VER_GTRUTH"
-    androidTestCompile "com.android.support:support-annotations:$VER_ASUPPORT"
-    androidTestCompile "com.android.support.test:runner:$VER_ASUPPORT_TEST"
-    androidTestCompile "com.android.support.test:rules:$VER_ASUPPORT_TEST"
-    compile "com.android.support:appcompat-v7:$VER_ASUPPORT"
-    compile "com.android.support:support-annotations:$VER_ASUPPORT"
-    canaryCompile "com.squareup.leakcanary:leakcanary-android:$VER_LCANARY"
-    debugCompile "com.squareup.leakcanary:leakcanary-android-no-op:$VER_LCANARY"
-    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$VER_LCANARY"
-    testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$VER_LCANARY"
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation "junit:junit:$VER_JUNIT"
+    testImplementation "com.google.truth:truth:$VER_GTRUTH"
+    androidTestImplementation "junit:junit:$VER_JUNIT"
+    androidTestImplementation "com.google.truth:truth:$VER_GTRUTH"
+    androidTestImplementation "com.android.support:support-annotations:$VER_ASUPPORT"
+    androidTestImplementation "com.android.support.test:runner:$VER_ASUPPORT_TEST"
+    androidTestImplementation "com.android.support.test:rules:$VER_ASUPPORT_TEST"
+    implementation "com.android.support:appcompat-v7:$VER_ASUPPORT"
+    implementation "com.android.support:support-v13:$VER_ASUPPORT"
+    implementation "com.android.support:recyclerview-v7:$VER_ASUPPORT"
+    implementation "com.android.support:design:$VER_ASUPPORT"
+    implementation "com.android.support:support-annotations:$VER_ASUPPORT"
+    implementation "com.squareup.retrofit2:retrofit:$VER_RETROFIT"
+//    canaryImplementation "com.squareup.leakcanary:leakcanary-android:$VER_LCANARY"
+    debugImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$VER_LCANARY"
+    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$VER_LCANARY"
+    testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$VER_LCANARY"
 
-    compile("com.afollestad.material-dialogs:core:$VER_MDIALOGS") {
+    implementation("com.afollestad.material-dialogs:core:$VER_MDIALOGS") {
         transitive = true
     }
-    compile("com.afollestad.material-dialogs:commons:$VER_MDIALOGS") {
+    implementation("com.afollestad.material-dialogs:commons:$VER_MDIALOGS") {
         transitive = true
     }
 
-    compile "com.google.android.gms:play-services-base:$VER_PSERVICES"
-    compile "com.google.firebase:firebase-appindexing:$VER_PSERVICES"
-    compile project(':myactivities')
-    compile project(':myfragments')
-    compile project(':myloggers')
-    compile project(':myres')
-    compile project(':myutils')
-    compile project(':myviews')
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$VER_KOTLIN"
-    compile "hu.supercluster:paperwork:$VER_PAPERWORK"
+    implementation "com.google.android.gms:play-services-base:$VER_PSERVICES"
+    implementation "com.google.firebase:firebase-appindexing:$VER_PSERVICES"
+    implementation project(':myactivities')
+    implementation project(':myfragments')
+    implementation project(':myloggers')
+    implementation project(':myres')
+    implementation project(':myutils')
+    implementation project(':myviews')
+    implementation project(':mydrawables')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$VER_KOTLIN"
+    implementation "hu.supercluster:paperwork:$VER_PAPERWORK"
 }
 buildscript {
     repositories {

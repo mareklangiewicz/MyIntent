@@ -2,6 +2,7 @@ package pl.mareklangiewicz.myutils
 
 import com.squareup.moshi.Moshi
 import io.reactivex.Observable
+import org.junit.Ignore
 import org.junit.Test
 import pl.mareklangiewicz.myutils.myhttp.GitHub
 import pl.mareklangiewicz.myutils.myhttp.OpenWeatherMap
@@ -16,6 +17,7 @@ class MyHttpTest {
 
     private val log = MySystemLogger()
 
+    @Ignore
     @Test fun testGitHubGetUserCall() {
         val service = GitHub.service
         var call: Call<GitHub.User> = service.getUserCall("langara")
@@ -51,6 +53,7 @@ class MyHttpTest {
         log.w(body.str) // set breakpoint here to see properties
     }
 
+    @Ignore
     @Test fun testGitHubGetUserReposCall() {
         val service = GitHub.service
         var call: Call<List<GitHub.Repository>> = service.getUserReposCall("langara")

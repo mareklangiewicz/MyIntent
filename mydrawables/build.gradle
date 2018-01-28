@@ -6,18 +6,18 @@ apply plugin: 'com.github.dcendents.android-maven'
 group='com.github.langara'
 
 android {
-    compileSdkVersion VER_SDK_COMPILE.toInteger()
-    buildToolsVersion VER_BUILD_TOOLS
+    compileSdkVersion vers.androidCompileSdk
+    buildToolsVersion vers.androidBuildTools
 
     lintOptions {
         abortOnError false
     }
 
     defaultConfig {
-        minSdkVersion VER_SDK_MIN.toInteger()
-        targetSdkVersion VER_SDK_TARGET.toInteger()
-        versionCode VER_CODE.toInteger()
-        versionName VER_NAME
+        minSdkVersion vers.androidMinSdk
+        targetSdkVersion vers.androidTargetSdk
+        versionCode vers.code
+        versionName vers.name
     }
     buildTypes {
         release {
@@ -33,27 +33,12 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    testImplementation "junit:junit:$VER_JUNIT"
-    implementation "com.android.support:appcompat-v7:$VER_ASUPPORT"
-    implementation "com.android.support:support-annotations:$VER_ASUPPORT"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$VER_KOTLIN"
     implementation project(':myutils')
+    implementation deps.androidSupportAppcompat
+    implementation deps.androidSupportAnnotations
+    implementation deps.kotlinStdlib
+    testImplementation deps.junit
 }
-
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$VER_KOTLIN"
-        classpath "org.jetbrains.kotlin:kotlin-android-extensions:$VER_KOTLIN"
-    }
-}
-
-repositories {
-    mavenCentral()
-}
-
 
 // build a jar with source files
 task sourcesJar(type: Jar) {

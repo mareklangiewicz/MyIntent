@@ -1,19 +1,31 @@
 buildscript {
+
+    apply from: 'deps.gradle'
+
+    vers.pkg = "pl.mareklangiewicz.myintent"
+    vers.name = "1.0.9-alpha"
+    vers.code = 9
+
     repositories {
         google()
         jcenter()
+        mavenCentral()
     }
+
     dependencies {
-        classpath "com.android.tools.build:gradle:$VER_ANDROGRADLE"
-        classpath "com.github.dcendents:android-maven-gradle-plugin:$VER_ANDROMAVEN"
+        classpath deps.kotlinGradlePlugin
+        classpath deps.androidGradlePlugin
+        classpath deps.androidMavenGradlePlugin
     }
 }
 
 allprojects {
+
     repositories {
         google()
         jcenter()
         maven { url "https://jitpack.io" }
+        mavenCentral()
     }
 }
 

@@ -6,19 +6,19 @@ apply plugin: 'com.github.dcendents.android-maven'
 group='com.github.langara'
 
 android {
-    compileSdkVersion VER_SDK_COMPILE.toInteger()
-    buildToolsVersion VER_BUILD_TOOLS
+    compileSdkVersion vers.androidCompileSdk
+    buildToolsVersion vers.androidBuildTools
 
     lintOptions {
         abortOnError false
     }
 
     defaultConfig {
-        minSdkVersion VER_SDK_MIN.toInteger()
-        targetSdkVersion VER_SDK_TARGET.toInteger()
-        versionCode VER_CODE.toInteger()
-        versionName VER_NAME
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        minSdkVersion vers.androidMinSdk
+        targetSdkVersion vers.androidTargetSdk
+        versionCode vers.code
+        versionName vers.name
+        testInstrumentationRunner vers.androidTestRunnerClass
     }
     buildTypes {
         release {
@@ -38,32 +38,17 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':myutils')
-    implementation "com.android.support:design:$VER_ASUPPORT"
-    implementation "com.android.support:recyclerview-v7:$VER_ASUPPORT"
-    implementation "com.android.support:cardview-v7:$VER_ASUPPORT"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$VER_KOTLIN"
     testImplementation project(':myutils')
-    testImplementation "junit:junit:$VER_JUNIT"
-    testImplementation "com.google.truth:truth:$VER_GTRUTH"
-    androidTestImplementation "com.android.support:support-annotations:$VER_ASUPPORT"
-    androidTestImplementation "com.android.support.test:runner:$VER_ASUPPORT_TEST"
-    androidTestImplementation "com.android.support.test:rules:$VER_ASUPPORT_TEST"
-    androidTestImplementation "com.google.truth:truth:$VER_GTRUTH"
-    testImplementation "junit:junit:$VER_JUNIT"
-}
-
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$VER_KOTLIN"
-        classpath "org.jetbrains.kotlin:kotlin-android-extensions:$VER_KOTLIN"
-    }
-}
-
-repositories {
-    mavenCentral()
+    implementation deps.androidSupportDesign
+    implementation deps.androidSupportRecyclerview
+    implementation deps.androidSupportCardview
+    implementation deps.kotlinStdlib
+    testImplementation deps.junit
+    testImplementation deps.googleTruth
+    androidTestImplementation deps.androidSupportAnnotations
+    androidTestImplementation deps.androidTestRunner
+    androidTestImplementation deps.androidTestRules
+    androidTestImplementation deps.googleTruth
 }
 
 // build a jar with source files

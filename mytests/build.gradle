@@ -6,21 +6,11 @@ group='com.github.langara'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$VER_KOTLIN"
-    implementation "junit:junit:$VER_JUNIT"
-    implementation "com.google.truth:truth:$VER_GTRUTH"
+    implementation deps.kotlinStdlib
+    implementation deps.junit
+    implementation deps.googleTruth
 }
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$VER_KOTLIN"
-    }
-}
-repositories {
-    mavenCentral()
-}
+
 sourceSets {
     main.java.srcDirs += 'src/main/kotlin'
 }

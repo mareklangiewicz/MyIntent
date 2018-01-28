@@ -1,17 +1,3 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$VER_KOTLIN"
-        classpath "org.jetbrains.kotlin:kotlin-android-extensions:$VER_KOTLIN"
-    }
-}
-
-repositories {
-    mavenCentral()
-}
-
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
@@ -20,18 +6,18 @@ apply plugin: 'com.github.dcendents.android-maven'
 group='com.github.langara'
 
 android {
-    compileSdkVersion VER_SDK_COMPILE.toInteger()
-    buildToolsVersion VER_BUILD_TOOLS
+    compileSdkVersion vers.androidCompileSdk
+    buildToolsVersion vers.androidBuildTools
 
     lintOptions {
         abortOnError false
     }
 
     defaultConfig {
-        minSdkVersion VER_SDK_MIN.toInteger()
-        targetSdkVersion VER_SDK_TARGET.toInteger()
-        versionCode VER_CODE.toInteger()
-        versionName VER_NAME
+        minSdkVersion vers.androidMinSdk
+        targetSdkVersion vers.androidTargetSdk
+        versionCode vers.code
+        versionName vers.name
     }
     buildTypes {
         release {
@@ -44,16 +30,16 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation "com.android.support:recyclerview-v7:$VER_ASUPPORT"
-    implementation "com.android.support:design:$VER_ASUPPORT"
-    implementation "com.android.support:support-annotations:$VER_ASUPPORT"
-    testImplementation "junit:junit:$VER_JUNIT"
-    testImplementation "com.google.truth:truth:$VER_GTRUTH"
+    implementation deps.kotlinStdlib
+    implementation deps.androidSupportRecyclerview
+    implementation deps.androidSupportDesign
+    implementation deps.androidSupportAnnotations
+    testImplementation deps.junit
+    testImplementation deps.googleTruth
     implementation project(':mydrawables')
     implementation project(':myutils')
     implementation project(':myloggers')
     implementation project(':myres')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$VER_KOTLIN"
 }
 
 // build a jar with source files

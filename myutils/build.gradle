@@ -1,22 +1,9 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$VER_KOTLIN"
-        classpath "org.jetbrains.kotlin:kotlin-android-extensions:$VER_KOTLIN"
-    }
-}
-repositories {
-    mavenCentral()
-}
-
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.github.dcendents.android-maven'
 
-group='com.github.langara'
+group = 'com.github.langara'
 
 kotlin {
     experimental {
@@ -25,19 +12,19 @@ kotlin {
 }
 
 android {
-    compileSdkVersion VER_SDK_COMPILE.toInteger()
-    buildToolsVersion VER_BUILD_TOOLS
+    compileSdkVersion vers.androidCompileSdk
+    buildToolsVersion vers.androidBuildTools
 
     lintOptions {
         abortOnError false
     }
 
     defaultConfig {
-        minSdkVersion VER_SDK_MIN.toInteger()
-        targetSdkVersion VER_SDK_TARGET.toInteger()
-        versionCode VER_CODE.toInteger()
-        versionName VER_NAME
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        minSdkVersion vers.androidMinSdk
+        targetSdkVersion vers.androidTargetSdk
+        versionCode vers.code
+        versionName vers.name
+        testInstrumentationRunner vers.androidTestRunnerClass
     }
     buildTypes {
         release {
@@ -64,28 +51,27 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':mycorelib')
     implementation project(':mytests')
-    implementation "com.android.support:support-annotations:$VER_ASUPPORT"
-    implementation "com.android.support:support-v4:$VER_ASUPPORT"
-    implementation "com.android.support:appcompat-v7:$VER_ASUPPORT"
-    implementation "com.android.support:support-v13:$VER_ASUPPORT"
-    implementation "com.android.support:preference-v14:$VER_ASUPPORT"
-    implementation "com.android.support:design:$VER_ASUPPORT"
-    implementation "com.android.support:customtabs:$VER_ASUPPORT"
-    implementation "com.android.support:percent:$VER_ASUPPORT"
-    implementation "com.squareup.retrofit2:retrofit:$VER_RETROFIT"
-    implementation "com.squareup.retrofit2:converter-moshi:$VER_RETROFIT"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:$VER_RETROFIT"
-    implementation "com.squareup.okhttp3:logging-interceptor:$VER_OKHTTP"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$VER_KOTLIN"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$VER_XCOROUTINES"
-    implementation "com.squareup.picasso:picasso:$VER_PICASSO"
+    implementation deps.kotlinStdlib
+    implementation deps.kotlinxCoroutinesCore
+    implementation deps.androidSupportAnnotations
+    implementation deps.androidSupportV4
+    implementation deps.androidSupportAppcompat
+    implementation deps.androidSupportV13
+    implementation deps.androidSupportPreference
+    implementation deps.androidSupportDesign
+    implementation deps.androidSupportCustomtabs
+    implementation deps.androidSupportPercent
+    implementation deps.retrofit
+    implementation deps.retrofitMoshi
+    implementation deps.retrofitRxjava
+    implementation deps.okhttpLogging
+    implementation deps.picasso
     testImplementation project(':mytests')
-    testImplementation "junit:junit:$VER_JUNIT"
-    testImplementation "com.google.truth:truth:$VER_GTRUTH"
-    androidTestImplementation "com.android.support.test:runner:$VER_ASUPPORT_TEST"
-    androidTestImplementation "com.android.support.test:rules:$VER_ASUPPORT_TEST"
+    testImplementation deps.junit
+    testImplementation deps.googleTruth
+    androidTestImplementation deps.androidTestRunner
+    androidTestImplementation deps.androidTestRules
 }
-
 
 // build a jar with source files
 task sourcesJar(type: Jar) {

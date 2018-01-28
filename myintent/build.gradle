@@ -3,20 +3,20 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion VER_SDK_COMPILE.toInteger()
-    buildToolsVersion VER_BUILD_TOOLS
+    compileSdkVersion vers.androidCompileSdk
+    buildToolsVersion vers.androidBuildTools
 
     lintOptions {
         abortOnError false
     }
 
     defaultConfig {
-        applicationId PKG
-        minSdkVersion VER_SDK_MIN.toInteger()
-        targetSdkVersion VER_SDK_TARGET.toInteger()
-        versionCode VER_CODE.toInteger()
-        versionName VER_NAME
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        applicationId vers.pkg
+        minSdkVersion vers.androidMinSdk
+        targetSdkVersion vers.androidTargetSdk
+        versionCode vers.code
+        versionName vers.name
+        testInstrumentationRunner vers.androidTestRunnerClass
         multiDexEnabled true
     }
 
@@ -42,7 +42,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             //noinspection GrUnresolvedAccess,GroovyAssignabilityCheck
             signingConfig signingConfigs.release
-            def auth = PKG + ".provider"
+            def auth = vers.pkg + ".provider"
             resValue "string", "mi_authority", auth
             buildConfigField "String", "AUTHORITY", "\"$auth\""
             buildConfigField "String", "NAME_PREFIX", '"MI "'
@@ -52,7 +52,7 @@ android {
         debug {
             def suff = ".debug"
             applicationIdSuffix suff
-            def auth = PKG + suff + ".provider"
+            def auth = vers.pkg + suff + ".provider"
             resValue "string", "mi_authority", auth
             buildConfigField "String", "AUTHORITY", "\"$auth\""
             buildConfigField "String", "NAME_PREFIX", '"MI D "'
@@ -63,7 +63,7 @@ android {
 //            initWith(buildTypes.debug)
 //            def suff = ".canary"
 //            applicationIdSuffix suff
-//            def auth = PKG + suff + ".provider"
+//            def auth = vers.pkg + suff + ".provider"
 //            resValue "string", "mi_authority", auth
 //            buildConfigField "String", "AUTHORITY", "\"$auth\""
 //            buildConfigField "String", "NAME_PREFIX", '"MI C "'
@@ -83,39 +83,35 @@ android {
     }
 }
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    testImplementation "junit:junit:$VER_JUNIT"
-    testImplementation "com.google.truth:truth:$VER_GTRUTH"
-    androidTestImplementation "junit:junit:$VER_JUNIT"
-    androidTestImplementation "com.google.truth:truth:$VER_GTRUTH"
-    androidTestImplementation "com.android.support:support-annotations:$VER_ASUPPORT"
-    androidTestImplementation "com.android.support.test:runner:$VER_ASUPPORT_TEST"
-    androidTestImplementation "com.android.support.test:rules:$VER_ASUPPORT_TEST"
-    implementation "com.android.support:appcompat-v7:$VER_ASUPPORT"
-    implementation "com.android.support:support-v13:$VER_ASUPPORT"
-    implementation "com.android.support:recyclerview-v7:$VER_ASUPPORT"
-    implementation "com.android.support:design:$VER_ASUPPORT"
-    implementation "com.android.support:support-annotations:$VER_ASUPPORT"
-    implementation "com.squareup.retrofit2:retrofit:$VER_RETROFIT"
-//    canaryImplementation "com.squareup.leakcanary:leakcanary-android:$VER_LCANARY"
-    debugImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$VER_LCANARY"
-    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$VER_LCANARY"
-    testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$VER_LCANARY"
+    implementation deps.androidSupportAppcompat
+    implementation deps.androidSupportV13
+    implementation deps.androidSupportRecyclerview
+    implementation deps.androidSupportDesign
+    implementation deps.androidSupportAnnotations
+    implementation deps.retrofit
 
-    implementation("com.afollestad.material-dialogs:core:$VER_MDIALOGS") {
+    testImplementation deps.junit
+    testImplementation deps.googleTruth
+    androidTestImplementation deps.junit
+    androidTestImplementation deps.googleTruth
+    androidTestImplementation deps.androidSupportAnnotations
+    androidTestImplementation deps.androidTestRunner
+    androidTestImplementation deps.androidTestRules
+
+//    canaryImplementation deps.leakcanary
+    debugImplementation deps.leakcanaryNoOp
+    releaseImplementation deps.leakcanaryNoOp
+    testImplementation deps.leakcanaryNoOp
+
+    implementation(deps.materialDialogsCore) {
         transitive = true
     }
-    implementation("com.afollestad.material-dialogs:commons:$VER_MDIALOGS") {
+    implementation(deps.materialDialogsCommons) {
         transitive = true
     }
 
-    implementation "com.google.android.gms:play-services-base:$VER_PSERVICES"
-    implementation "com.google.firebase:firebase-appindexing:$VER_PSERVICES"
     implementation project(':myactivities')
     implementation project(':myfragments')
     implementation project(':myloggers')
@@ -123,17 +119,17 @@ dependencies {
     implementation project(':myutils')
     implementation project(':myviews')
     implementation project(':mydrawables')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$VER_KOTLIN"
-    implementation "hu.supercluster:paperwork:$VER_PAPERWORK"
+    implementation deps.kotlinStdlib
+    implementation deps.playServicesBase
+    implementation deps.firebaseAppIndexing
+    implementation deps.paperwork
 }
 buildscript {
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$VER_KOTLIN"
-        classpath "org.jetbrains.kotlin:kotlin-android-extensions:$VER_KOTLIN"
-        classpath "hu.supercluster:paperwork-plugin:$VER_PAPERWORK"
+        classpath deps.paperworkPlugin
     }
 }
 

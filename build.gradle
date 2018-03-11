@@ -1,10 +1,8 @@
 buildscript {
 
-    apply from: 'deps.gradle'
-
-    vers.pkg = "pl.mareklangiewicz.myintent"
-    vers.name = "1.0.9-alpha"
-    vers.code = 9
+    ext.myintent_pkg = "pl.mareklangiewicz.myintent"
+    ext.myintent_name = "1.0.9-alpha"
+    ext.myintent_code = 9
 
     repositories {
         google()
@@ -13,9 +11,9 @@ buildscript {
     }
 
     dependencies {
-        classpath deps.kotlinGradlePlugin
-        classpath deps.androidGradlePlugin
-        classpath deps.androidMavenGradlePlugin
+        classpath Deps.kotlinGradlePlugin
+        classpath Deps.androidGradlePlugin
+        classpath Deps.androidMavenGradlePlugin
     }
 }
 

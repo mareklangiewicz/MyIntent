@@ -6,19 +6,19 @@ apply plugin: 'com.github.dcendents.android-maven'
 group='com.github.langara'
 
 android {
-    compileSdkVersion vers.androidCompileSdk
-    buildToolsVersion vers.androidBuildTools
+    compileSdkVersion Vers.androidCompileSdk
+    buildToolsVersion Vers.androidBuildTools
 
     lintOptions {
         abortOnError false
     }
 
     defaultConfig {
-        minSdkVersion vers.androidMinSdk
-        targetSdkVersion vers.androidTargetSdk
-        versionCode vers.code
-        versionName vers.name
-        testInstrumentationRunner vers.androidTestRunnerClass
+        minSdkVersion Vers.androidMinSdk
+        targetSdkVersion Vers.androidTargetSdk
+        versionCode myintent_code
+        versionName myintent_name
+        testInstrumentationRunner Vers.androidTestRunnerClass
     }
     buildTypes {
         release {
@@ -39,16 +39,16 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':myutils')
     testImplementation project(':myutils')
-    implementation deps.androidSupportDesign
-    implementation deps.androidSupportRecyclerview
-    implementation deps.androidSupportCardview
-    implementation deps.kotlinStdlib
-    testImplementation deps.junit
-    testImplementation deps.googleTruth
-    androidTestImplementation deps.androidSupportAnnotations
-    androidTestImplementation deps.androidTestRunner
-    androidTestImplementation deps.androidTestRules
-    androidTestImplementation deps.googleTruth
+    implementation Deps.androidSupportDesign
+    implementation Deps.androidSupportRecyclerview
+    implementation Deps.androidSupportCardview
+    implementation Deps.kotlinStdlib
+    testImplementation Deps.junit
+    testImplementation Deps.googleTruth
+    androidTestImplementation Deps.androidSupportAnnotations
+    androidTestImplementation Deps.androidTestRunner
+    androidTestImplementation Deps.androidTestRules
+    androidTestImplementation Deps.googleTruth
 }
 
 // build a jar with source files

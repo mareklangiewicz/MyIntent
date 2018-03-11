@@ -5,7 +5,7 @@ group='com.github.langara'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation deps.kotlinStdlib
+    implementation Deps.kotlinStdlib
 }
 
 // build a jar with source files

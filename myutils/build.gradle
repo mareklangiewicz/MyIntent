@@ -12,19 +12,19 @@ kotlin {
 }
 
 android {
-    compileSdkVersion vers.androidCompileSdk
-    buildToolsVersion vers.androidBuildTools
+    compileSdkVersion Vers.androidCompileSdk
+    buildToolsVersion Vers.androidBuildTools
 
     lintOptions {
         abortOnError false
     }
 
     defaultConfig {
-        minSdkVersion vers.androidMinSdk
-        targetSdkVersion vers.androidTargetSdk
-        versionCode vers.code
-        versionName vers.name
-        testInstrumentationRunner vers.androidTestRunnerClass
+        minSdkVersion Vers.androidMinSdk
+        targetSdkVersion Vers.androidTargetSdk
+        versionCode myintent_code
+        versionName myintent_name
+        testInstrumentationRunner Vers.androidTestRunnerClass
     }
     buildTypes {
         release {
@@ -51,26 +51,26 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':mycorelib')
     implementation project(':mytests')
-    implementation deps.kotlinStdlib
-    implementation deps.kotlinxCoroutinesCore
-    implementation deps.androidSupportAnnotations
-    implementation deps.androidSupportV4
-    implementation deps.androidSupportAppcompat
-    implementation deps.androidSupportV13
-    implementation deps.androidSupportPreference
-    implementation deps.androidSupportDesign
-    implementation deps.androidSupportCustomtabs
-    implementation deps.androidSupportPercent
-    implementation deps.retrofit
-    implementation deps.retrofitMoshi
-    implementation deps.retrofitRxjava
-    implementation deps.okhttpLogging
-    implementation deps.picasso
+    implementation Deps.kotlinStdlib
+    implementation Deps.kotlinxCoroutinesCore
+    implementation Deps.androidSupportAnnotations
+    implementation Deps.androidSupportV4
+    implementation Deps.androidSupportAppcompat
+    implementation Deps.androidSupportV13
+    implementation Deps.androidSupportPreference
+    implementation Deps.androidSupportDesign
+    implementation Deps.androidSupportCustomtabs
+    implementation Deps.androidSupportPercent
+    implementation Deps.retrofit
+    implementation Deps.retrofitMoshi
+    implementation Deps.retrofitRxjava
+    implementation Deps.okhttpLogging
+    implementation Deps.picasso
     testImplementation project(':mytests')
-    testImplementation deps.junit
-    testImplementation deps.googleTruth
-    androidTestImplementation deps.androidTestRunner
-    androidTestImplementation deps.androidTestRules
+    testImplementation Deps.junit
+    testImplementation Deps.googleTruth
+    androidTestImplementation Deps.androidTestRunner
+    androidTestImplementation Deps.androidTestRules
 }
 
 // build a jar with source files

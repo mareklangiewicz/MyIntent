@@ -6,18 +6,18 @@ apply plugin: 'com.github.dcendents.android-maven'
 group='com.github.langara'
 
 android {
-    compileSdkVersion vers.androidCompileSdk
-    buildToolsVersion vers.androidBuildTools
+    compileSdkVersion Vers.androidCompileSdk
+    buildToolsVersion Vers.androidBuildTools
 
     lintOptions {
         abortOnError false
     }
 
     defaultConfig {
-        minSdkVersion vers.androidMinSdk
-        targetSdkVersion vers.androidTargetSdk
-        versionCode vers.code
-        versionName vers.name
+        minSdkVersion Vers.androidMinSdk
+        targetSdkVersion Vers.androidTargetSdk
+        versionCode myintent_code
+        versionName myintent_name
     }
     buildTypes {
         release {
@@ -34,10 +34,10 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':myutils')
-    implementation deps.androidSupportAppcompat
-    implementation deps.androidSupportAnnotations
-    implementation deps.kotlinStdlib
-    testImplementation deps.junit
+    implementation Deps.androidSupportAppcompat
+    implementation Deps.androidSupportAnnotations
+    implementation Deps.kotlinStdlib
+    testImplementation Deps.junit
 }
 
 // build a jar with source files

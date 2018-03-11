@@ -3,20 +3,20 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion vers.androidCompileSdk
-    buildToolsVersion vers.androidBuildTools
+    compileSdkVersion Vers.androidCompileSdk
+    buildToolsVersion Vers.androidBuildTools
 
     lintOptions {
         abortOnError false
     }
 
     defaultConfig {
-        applicationId vers.pkg
-        minSdkVersion vers.androidMinSdk
-        targetSdkVersion vers.androidTargetSdk
-        versionCode vers.code
-        versionName vers.name
-        testInstrumentationRunner vers.androidTestRunnerClass
+        applicationId myintent_pkg
+        versionCode myintent_code
+        versionName myintent_name
+        minSdkVersion Vers.androidMinSdk
+        targetSdkVersion Vers.androidTargetSdk
+        testInstrumentationRunner Vers.androidTestRunnerClass
         multiDexEnabled true
     }
 
@@ -42,7 +42,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             //noinspection GrUnresolvedAccess,GroovyAssignabilityCheck
             signingConfig signingConfigs.release
-            def auth = vers.pkg + ".provider"
+            def auth = myintent_pkg + ".provider"
             resValue "string", "mi_authority", auth
             buildConfigField "String", "AUTHORITY", "\"$auth\""
             buildConfigField "String", "NAME_PREFIX", '"MI "'
@@ -52,7 +52,7 @@ android {
         debug {
             def suff = ".debug"
             applicationIdSuffix suff
-            def auth = vers.pkg + suff + ".provider"
+            def auth = myintent_pkg + suff + ".provider"
             resValue "string", "mi_authority", auth
             buildConfigField "String", "AUTHORITY", "\"$auth\""
             buildConfigField "String", "NAME_PREFIX", '"MI D "'
@@ -63,7 +63,7 @@ android {
 //            initWith(buildTypes.debug)
 //            def suff = ".canary"
 //            applicationIdSuffix suff
-//            def auth = vers.pkg + suff + ".provider"
+//            def auth = myintent_pkg + suff + ".provider"
 //            resValue "string", "mi_authority", auth
 //            buildConfigField "String", "AUTHORITY", "\"$auth\""
 //            buildConfigField "String", "NAME_PREFIX", '"MI C "'
@@ -85,30 +85,30 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation deps.androidSupportAppcompat
-    implementation deps.androidSupportV13
-    implementation deps.androidSupportRecyclerview
-    implementation deps.androidSupportDesign
-    implementation deps.androidSupportAnnotations
-    implementation deps.retrofit
+    implementation Deps.androidSupportAppcompat
+    implementation Deps.androidSupportV13
+    implementation Deps.androidSupportRecyclerview
+    implementation Deps.androidSupportDesign
+    implementation Deps.androidSupportAnnotations
+    implementation Deps.retrofit
 
-    testImplementation deps.junit
-    testImplementation deps.googleTruth
-    androidTestImplementation deps.junit
-    androidTestImplementation deps.googleTruth
-    androidTestImplementation deps.androidSupportAnnotations
-    androidTestImplementation deps.androidTestRunner
-    androidTestImplementation deps.androidTestRules
+    testImplementation Deps.junit
+    testImplementation Deps.googleTruth
+    androidTestImplementation Deps.junit
+    androidTestImplementation Deps.googleTruth
+    androidTestImplementation Deps.androidSupportAnnotations
+    androidTestImplementation Deps.androidTestRunner
+    androidTestImplementation Deps.androidTestRules
 
-//    canaryImplementation deps.leakcanary
-    debugImplementation deps.leakcanaryNoOp
-    releaseImplementation deps.leakcanaryNoOp
-    testImplementation deps.leakcanaryNoOp
+//    canaryImplementation Deps.leakcanary
+    debugImplementation Deps.leakcanaryNoOp
+    releaseImplementation Deps.leakcanaryNoOp
+    testImplementation Deps.leakcanaryNoOp
 
-    implementation(deps.materialDialogsCore) {
+    implementation(Deps.materialDialogsCore) {
         transitive = true
     }
-    implementation(deps.materialDialogsCommons) {
+    implementation(Deps.materialDialogsCommons) {
         transitive = true
     }
 
@@ -119,17 +119,17 @@ dependencies {
     implementation project(':myutils')
     implementation project(':myviews')
     implementation project(':mydrawables')
-    implementation deps.kotlinStdlib
-    implementation deps.playServicesBase
-    implementation deps.firebaseAppIndexing
-    implementation deps.paperwork
+    implementation Deps.kotlinStdlib
+    implementation Deps.playServicesBase
+    implementation Deps.firebaseAppIndexing
+    implementation Deps.paperwork
 }
 buildscript {
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath deps.paperworkPlugin
+        classpath Deps.paperworkPlugin
     }
 }
 

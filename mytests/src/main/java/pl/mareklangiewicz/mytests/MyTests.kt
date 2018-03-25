@@ -5,23 +5,23 @@ import com.google.common.truth.*
 import com.google.common.truth.Truth.assert_
 import java.math.BigDecimal
 
-val Assert: TestVerb by lazy { assert_() }
+val Assert: StandardSubjectBuilder by lazy { assert_() }
 
 // TODO NOW: investigate project Kluent (https://github.com/MarkusAmshove/Kluent)
 // (but be careful about polluting too broad namespaces..)
 
 // TODO LATER: not sure about all those generic types below - analyze/test it all later..
 
-infix fun <T> TestVerb.That(target: Comparable<T>?): ComparableSubject<*, Comparable<T>> = this.that(target)
-infix fun TestVerb.That(target: BigDecimal?): BigDecimalSubject = this.that(target)
-infix fun TestVerb.That(target: Any?): Subject<DefaultSubject, Any> = this.that(target)
-infix fun <T> TestVerb.That(target: Class<T>?): ClassSubject = this.that(target)
-infix fun TestVerb.That(target: Throwable?): ThrowableSubject = this.that(target)
-infix fun TestVerb.That(target: Long?): LongSubject = this.that(target)
-infix fun TestVerb.That(target: Double?): DoubleSubject = this.that(target)
-infix fun TestVerb.That(target: Float?): FloatSubject = this.that(target)
-infix fun TestVerb.That(target: Int?): IntegerSubject = this.that(target)
-infix fun TestVerb.That(target: Boolean?): BooleanSubject = this.that(target)
+infix fun <T> StandardSubjectBuilder.That(target: Comparable<T>?): ComparableSubject<*, Comparable<T>> = this.that(target)
+infix fun StandardSubjectBuilder.That(target: BigDecimal?): BigDecimalSubject = this.that(target)
+infix fun StandardSubjectBuilder.That(target: Any?): Subject<DefaultSubject, Any> = this.that(target)
+infix fun <T> StandardSubjectBuilder.That(target: Class<T>?): ClassSubject = this.that(target)
+infix fun StandardSubjectBuilder.That(target: Throwable?): ThrowableSubject = this.that(target)
+infix fun StandardSubjectBuilder.That(target: Long?): LongSubject = this.that(target)
+infix fun StandardSubjectBuilder.That(target: Double?): DoubleSubject = this.that(target)
+infix fun StandardSubjectBuilder.That(target: Float?): FloatSubject = this.that(target)
+infix fun StandardSubjectBuilder.That(target: Int?): IntegerSubject = this.that(target)
+infix fun StandardSubjectBuilder.That(target: Boolean?): BooleanSubject = this.that(target)
 // TODO SOMEDAY: rest
 
 interface ITestObject

@@ -1,7 +1,18 @@
 package pl.mareklangiewicz.mytests
 
 import com.google.common.collect.Range
-import com.google.common.truth.*
+import com.google.common.truth.BigDecimalSubject
+import com.google.common.truth.BooleanSubject
+import com.google.common.truth.ClassSubject
+import com.google.common.truth.ComparableSubject
+import com.google.common.truth.DefaultSubject
+import com.google.common.truth.DoubleSubject
+import com.google.common.truth.FloatSubject
+import com.google.common.truth.IntegerSubject
+import com.google.common.truth.LongSubject
+import com.google.common.truth.StandardSubjectBuilder
+import com.google.common.truth.Subject
+import com.google.common.truth.ThrowableSubject
 import com.google.common.truth.Truth.assert_
 import java.math.BigDecimal
 
@@ -59,5 +70,5 @@ infix fun <S: ComparableSubject<S, T>, T: Comparable<T>> ComparableSubject<S, T>
 infix fun <S: ComparableSubject<S, T>, T: Comparable<T>> ComparableSubject<S, T>.IsGreaterThan(other: T) = isGreaterThan(other)
 infix fun <S: ComparableSubject<S, T>, T: Comparable<T>> ComparableSubject<S, T>.IsLessThan(other: T) = isLessThan(other)
 infix fun <S: ComparableSubject<S, T>, T: Comparable<T>> ComparableSubject<S, T>.IsAtMost(other: T) = isAtMost(other)
-infix fun <S: ComparableSubject<S, T>, T: Comparable<T>> ComparableSubject<S, T>.IsAtLeast(other: T?) = isAtLeast(other)
+infix fun <S: ComparableSubject<S, T>, T: Comparable<T>> ComparableSubject<S, T>.IsAtLeast(other: T) = isAtLeast(other)
 // TODO SOMEDAY: rest from truth.ComparableSubject

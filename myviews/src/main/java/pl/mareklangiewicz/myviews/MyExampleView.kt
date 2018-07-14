@@ -6,10 +6,9 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.util.AttributeSet
-import android.widget.TextView
 
 class MyExampleView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
-    : TextView(context, attrs, defStyleAttr) {
+    : android.support.v7.widget.AppCompatTextView(context, attrs, defStyleAttr) {
 
     private val paint: Paint = Paint().apply {
         color = Color.BLACK

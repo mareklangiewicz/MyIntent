@@ -6,7 +6,7 @@ android {
     compileSdkVersion Vers.androidCompileSdk
 
     lintOptions {
-        abortOnError false
+        abortOnError true
     }
 
     defaultConfig {
@@ -89,6 +89,7 @@ dependencies {
     implementation Deps.androidSupportRecyclerview
     implementation Deps.androidSupportDesign
     implementation Deps.androidSupportAnnotations
+    implementation Deps.okhttp
     implementation Deps.retrofit
 
     testImplementation Deps.junit

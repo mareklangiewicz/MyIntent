@@ -15,7 +15,7 @@ android {
     compileSdkVersion Vers.androidCompileSdk
 
     lintOptions {
-        abortOnError false
+        abortOnError true
     }
 
     defaultConfig {

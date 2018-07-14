@@ -140,7 +140,7 @@ class MyPie @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
 
         companion object {
             //TODO SOMEDAY: we should save colors too
-            val CREATOR: Parcelable.Creator<SavedState> = object : Parcelable.Creator<SavedState> {
+            @JvmField val CREATOR: Parcelable.Creator<SavedState> = object : Parcelable.Creator<SavedState> {
                 override fun createFromParcel(inp: Parcel): SavedState { return SavedState(inp) }
                 override fun newArray(size: Int): Array<SavedState?> { return arrayOfNulls(size) }
             }

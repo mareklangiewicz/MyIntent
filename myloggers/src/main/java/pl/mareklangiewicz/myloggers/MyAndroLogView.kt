@@ -32,10 +32,10 @@ class MyAndroLogView : View {
         }
 
     var lines = 16
-        set(lines) {
-            if (lines < 0 || lines > 200)
+        set(value) {
+            if (value < 0 || value > 200)
                 throw IllegalArgumentException()
-            this.lines = lines
+            field = value
             invalidate()
         }
 
@@ -47,7 +47,7 @@ class MyAndroLogView : View {
 
 
     override fun onDraw(canvas: Canvas) {
-        arr?.run { draw(canvas, 4, canvas.height - 2, paint, lines) }
+        arr?.run { draw(canvas, 4, height - 2, paint, lines) }
         super.onDraw(canvas)
     }
 }

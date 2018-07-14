@@ -1,46 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
     <ProgressBar
+        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
         app:layout_behavior="pl.mareklangiewicz.myviews.MyScrollBehavior"
         app:mv_behavior_property="progress"
-        app:mv_behavior_scroll_min="0"
         app:mv_behavior_scroll_max="-100"
-        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
-        />
+        app:mv_behavior_scroll_min="0" />
 
     <ProgressBar
+        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         app:layout_behavior="pl.mareklangiewicz.myviews.MyScrollBehavior"
         app:mv_behavior_property="progress"
-        app:mv_behavior_scroll_min="0"
         app:mv_behavior_scroll_max="100"
-        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
-        />
+        app:mv_behavior_scroll_min="0" />
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/stupid_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="16dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        >
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <android.support.v7.widget.CardView
                 android:id="@+id/stupid_warning"
@@ -49,28 +43,24 @@
                 android:layout_margin="16dp"
                 app:cardElevation="4dp"
                 app:cardMaxElevation="16dp"
-                app:contentPadding="8dp"
-                >
+                app:contentPadding="8dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="STUPID EXPERIMENTS - THIS FRAGMENT IS ONLY FOR MYSELF - NOTHING INTERESTING HERE"
-                    />
+                    android:text="STUPID EXPERIMENTS - THIS FRAGMENT IS ONLY FOR MYSELF - NOTHING INTERESTING HERE" />
             </android.support.v7.widget.CardView>
 
             <android.support.design.widget.NavigationView
                 android:id="@+id/stupid_navigation_view"
                 android:layout_width="match_parent"
                 android:layout_height="500dp"
-                android:layout_margin="16dp"
-                />
+                android:layout_margin="16dp" />
 
             <pl.mareklangiewicz.myloggers.MyAndroLogView
                 android:id="@+id/my_stupid_log_simple_view"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                />
+                android:layout_height="200dp" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>

@@ -13,9 +13,18 @@ import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
 import android.widget.FrameLayout
 import android.widget.SeekBar
-import kotlinx.android.synthetic.main.mf_my_dawable_tests_fragment.*
-import pl.mareklangiewicz.mydrawables.*
-import pl.mareklangiewicz.myutils.*
+import kotlinx.android.synthetic.main.mf_my_dawable_tests_fragment.grid_view
+import kotlinx.android.synthetic.main.mf_my_dawable_tests_fragment.seek_bar_level
+import kotlinx.android.synthetic.main.mf_my_dawable_tests_fragment.seek_bar_stroke_width
+import pl.mareklangiewicz.mydrawables.MyArrowDrawable
+import pl.mareklangiewicz.mydrawables.MyCheckDrawable
+import pl.mareklangiewicz.mydrawables.MyLessDrawable
+import pl.mareklangiewicz.mydrawables.MyMagicLinesDrawable
+import pl.mareklangiewicz.mydrawables.MyPlayStopDrawable
+import pl.mareklangiewicz.mydrawables.MyPlusDrawable
+import pl.mareklangiewicz.myutils.e
+import pl.mareklangiewicz.myutils.i
+import pl.mareklangiewicz.myutils.w
 
 class MyDrawableTestsFragment : MyFragment(), View.OnClickListener, SeekBar.OnSeekBarChangeListener {
 
@@ -123,7 +132,7 @@ class MyDrawableTestsFragment : MyFragment(), View.OnClickListener, SeekBar.OnSe
             val contentparams = FrameLayout.LayoutParams(200, 200)
             contentparams.gravity = Gravity.CENTER
             content.layoutParams = contentparams
-            val card = CardView(activity)
+            val card = CardView(activity!!)
             val cardparams = ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             cardparams.setMargins(8, 8, 8, 8)
             card.layoutParams = cardparams

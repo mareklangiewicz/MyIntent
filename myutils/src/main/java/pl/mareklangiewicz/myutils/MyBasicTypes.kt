@@ -2,12 +2,14 @@ package pl.mareklangiewicz.myutils
 
 
 interface IEnabled {
+    @Suppress("UNUSED_PARAMETER")
     var enabled: Boolean
         get() = true
         set(value) = throw UnsupportedOperationException()
 }
 
 interface IVisible {
+    @Suppress("UNUSED_PARAMETER")
     var visible: Boolean
         get() = true
         set(value) = throw UnsupportedOperationException()
@@ -21,6 +23,7 @@ interface IVisible {
  * but the view don't want to remember the whole data structure, so it does not support reading back.
  */
 interface IData<T> {
+    @Suppress("UNUSED_PARAMETER")
     var data: T
         get() = throw UnsupportedOperationException()
         set(value) = throw UnsupportedOperationException()

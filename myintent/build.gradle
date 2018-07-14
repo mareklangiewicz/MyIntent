@@ -4,7 +4,6 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion Vers.androidCompileSdk
-    buildToolsVersion Vers.androidBuildTools
 
     lintOptions {
         abortOnError false

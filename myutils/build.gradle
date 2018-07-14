@@ -13,7 +13,6 @@ kotlin {
 
 android {
     compileSdkVersion Vers.androidCompileSdk
-    buildToolsVersion Vers.androidBuildTools
 
     lintOptions {
         abortOnError false

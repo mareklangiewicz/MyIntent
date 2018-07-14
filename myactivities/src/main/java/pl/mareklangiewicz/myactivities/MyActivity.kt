@@ -1,14 +1,13 @@
 package pl.mareklangiewicz.myactivities
 
-import android.app.Fragment
-import android.app.FragmentTransaction
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.support.annotation.CallSuper
 import android.support.design.widget.FloatingActionButton
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentTransaction
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v4.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
@@ -33,6 +32,7 @@ import pl.mareklangiewicz.myutils.*
 import pl.mareklangiewicz.myviews.IMyUIManager
 import pl.mareklangiewicz.myviews.IMyUINavigation
 import pl.mareklangiewicz.myviews.MyNavigationView
+import kotlin.collections.set
 
 open class MyActivity : AppCompatActivity(), IMyUIManager, DrawerLayout.DrawerListener {
 
@@ -117,7 +117,7 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, DrawerLayout.DrawerLi
         gdraw = ma_coordinator_layout.tag != "w1120dp"
         ldraw = ma_coordinator_layout.tag == ""
 
-        if(gdraw) ma_global_drawer_layout.addDrawerListener(this)
+        if(gdraw) ma_global_drawer_layout!!.addDrawerListener(this)
         if(ldraw) ma_local_drawer_layout.addDrawerListener(this)
 
 
@@ -125,7 +125,7 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, DrawerLayout.DrawerLi
         gnav!!.changes { // we ignore returned subscription - navigation will live as long as activity
             val empty = gnav!!.empty
             garrow.alpha = if (empty) 0 else 0xa0
-            if(gdraw) ma_global_drawer_layout.setDrawerLockMode(if (empty) LOCK_MODE_LOCKED_CLOSED else LOCK_MODE_UNLOCKED)
+            if(gdraw) ma_global_drawer_layout!!.setDrawerLockMode(if (empty) LOCK_MODE_LOCKED_CLOSED else LOCK_MODE_UNLOCKED)
             else setMNVAndArrow(!empty, ma_global_navigation_view, garrow)
         }
         lnav!!.changes { // we ignore returned subscription - navigation will live as long as activity
@@ -179,7 +179,7 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, DrawerLayout.DrawerLi
         ma_toolbar.addView(laview)
 
         if (savedInstanceState != null) {
-            val fm = fragmentManager
+            val fm = supportFragmentManager
             val f = fm.findFragmentByTag(TAG_LOCAL_FRAGMENT)
             updateLocalFragment(f) // can be null.
         }
@@ -205,7 +205,7 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, DrawerLayout.DrawerLi
 
     private fun toggleGlobalNavigation() {
         hideKeyboard()
-        if (gdraw) toggleDrawer(ma_global_drawer_layout, GravityCompat.START)
+        if (gdraw) toggleDrawer(ma_global_drawer_layout!!, GravityCompat.START)
         else toggleMNVAndArrow(ma_global_navigation_view, garrow)
     }
 
@@ -236,7 +236,7 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, DrawerLayout.DrawerLi
 
     @CallSuper override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        if(gdraw) onDrawerSlide(ma_global_navigation_view, if (ma_global_drawer_layout.isDrawerOpen(GravityCompat.START)) 1f else 0f)
+        if(gdraw) onDrawerSlide(ma_global_navigation_view, if (ma_global_drawer_layout!!.isDrawerOpen(GravityCompat.START)) 1f else 0f)
         if(ldraw) onDrawerSlide(ma_local_navigation_view, if (ma_local_drawer_layout.isDrawerOpen(GravityCompat.END)) 1f else 0f)
         // ensure that drawers and menu icons are updated:
         gnav!!.changes.push(Unit)
@@ -286,7 +286,7 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, DrawerLayout.DrawerLi
 
         if (log.view === ma_coordinator_layout) log.view = null
 
-        if(gdraw) ma_global_drawer_layout.removeDrawerListener(this)
+        if(gdraw) ma_global_drawer_layout!!.removeDrawerListener(this)
         if(ldraw) ma_local_drawer_layout.removeDrawerListener(this)
 
         updateLocalFragment(null)
@@ -304,12 +304,10 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, DrawerLayout.DrawerLi
         fgmt = fragment
 
         fragment?.apply {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                enterTransition = Fade()
-                exitTransition = Fade()
-                sharedElementEnterTransition = AutoTransition()
-                sharedElementReturnTransition = AutoTransition()
-            }
+            enterTransition = Fade()
+            exitTransition = Fade()
+            sharedElementEnterTransition = AutoTransition()
+            sharedElementReturnTransition = AutoTransition()
         }
     }
 
@@ -396,7 +394,7 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, DrawerLayout.DrawerLi
             val args = command.toExtrasBundle()
             if (args.size() > 0) f.arguments = args
             updateLocalFragment(f)
-            val ft = fragmentManager.beginTransaction().replace(R.id.ma_local_frame_layout, f, TAG_LOCAL_FRAGMENT)
+            val ft = supportFragmentManager.beginTransaction().replace(R.id.ma_local_frame_layout, f, TAG_LOCAL_FRAGMENT)
             addAllSharedElementsToFragmentTransaction(ma_local_frame_layout, ft)
             ft.commit()
         }
@@ -408,12 +406,12 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, DrawerLayout.DrawerLi
     protected open fun onCommandCustom(command: MyCommand) = log.e("Unsupported custom command: ${command.str}")
 
     fun closeDrawers() {
-        if(gdraw) ma_global_drawer_layout.closeDrawers()
+        if(gdraw) ma_global_drawer_layout!!.closeDrawers()
         if(ldraw) ma_local_drawer_layout.closeDrawers()
     }
 
     fun areDrawersVisible(): Boolean
-            = (gdraw && ma_global_drawer_layout.isDrawerVisible(GravityCompat.START))
+            = (gdraw && ma_global_drawer_layout!!.isDrawerVisible(GravityCompat.START))
             || (ldraw && ma_local_drawer_layout.isDrawerVisible(GravityCompat.END))
 
     inline protected fun closeDrawersAnd(crossinline task: () -> Unit) {
@@ -428,16 +426,12 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, DrawerLayout.DrawerLi
 
 
     private fun addAllSharedElementsToFragmentTransaction(root: View, ft: FragmentTransaction) {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            val name = root.transitionName
-            if (name != null)
-                ft.addSharedElement(root, name)
-            else if (root is ViewGroup) {
-                for (i in 0..root.childCount - 1)
-                    addAllSharedElementsToFragmentTransaction(root.getChildAt(i), ft)
-            }
-        } else {
-            log.d("Can not add shared elements to fragment transaction. API < 21")
+        val name = root.transitionName
+        if (name != null)
+            ft.addSharedElement(root, name)
+        else if (root is ViewGroup) {
+            for (i in 0..root.childCount - 1)
+                addAllSharedElementsToFragmentTransaction(root.getChildAt(i), ft)
         }
     }
 
@@ -463,7 +457,7 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, DrawerLayout.DrawerLi
 
     @CallSuper
     override fun onBackPressed() {
-        if(gdraw) if(ma_global_drawer_layout.isDrawerOpen(GravityCompat.START)) { ma_global_drawer_layout.closeDrawer(GravityCompat.START); return }
+        if(gdraw) if(ma_global_drawer_layout!!.isDrawerOpen(GravityCompat.START)) { ma_global_drawer_layout!!.closeDrawer(GravityCompat.START); return }
         if(ldraw) if(ma_local_drawer_layout.isDrawerOpen(GravityCompat.END)) { ma_local_drawer_layout.closeDrawer(GravityCompat.END); return }
         super.onBackPressed()
     }

@@ -7,7 +7,6 @@ group='com.github.langara'
 
 android {
     compileSdkVersion Vers.androidCompileSdk
-    buildToolsVersion Vers.androidBuildTools
 
     lintOptions {
         abortOnError false

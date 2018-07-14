@@ -6,12 +6,29 @@ import android.os.Bundle
 import android.support.v7.widget.SearchView
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.*
-import kotlinx.android.synthetic.main.mi_log_fragment.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import kotlinx.android.synthetic.main.mi_log_fragment.mi_lf_et_command
+import kotlinx.android.synthetic.main.mi_log_fragment.mi_lf_iv_play_stop
+import kotlinx.android.synthetic.main.mi_log_fragment.mi_lf_pb_countdown
+import kotlinx.android.synthetic.main.mi_log_fragment.mi_lf_rv_log
 import pl.mareklangiewicz.myactivities.MyActivity
 import pl.mareklangiewicz.myfragments.MyFragment
-import pl.mareklangiewicz.myintent.PlayStopButton.State.*
-import pl.mareklangiewicz.myutils.*
+import pl.mareklangiewicz.myintent.PlayStopButton.State.HIDDEN
+import pl.mareklangiewicz.myintent.PlayStopButton.State.PLAY
+import pl.mareklangiewicz.myintent.PlayStopButton.State.STOP
+import pl.mareklangiewicz.myutils.Cancel
+import pl.mareklangiewicz.myutils.Lst
+import pl.mareklangiewicz.myutils.MyLogLevel
+import pl.mareklangiewicz.myutils.d
+import pl.mareklangiewicz.myutils.e
+import pl.mareklangiewicz.myutils.hideKeyboard
+import pl.mareklangiewicz.myutils.v
+import pl.mareklangiewicz.myutils.w
 
 class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listener {
 
@@ -133,9 +150,9 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
         inflater.inflate(R.menu.mi_log_options, menu)
         mSearchItem = menu.findItem(R.id.action_search)
         val sview = mSearchItem?.actionView as SearchView
-        val manager = activity.getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val manager = activity!!.getSystemService(Context.SEARCH_SERVICE) as SearchManager
 
-        sview.setSearchableInfo(manager.getSearchableInfo(activity.componentName))
+        sview.setSearchableInfo(manager.getSearchableInfo(activity!!.componentName))
         sview.setIconifiedByDefault(true)
     }
 
@@ -249,7 +266,7 @@ class MIStartFragment : MyFragment(), PlayStopButton.Listener, Countdown.Listene
 
         try {
             (activity as MyActivity).execute(cmd)
-            MIContract.CmdRecent.insert(activity, cmd)
+            MIContract.CmdRecent.insert(activity!!, cmd)
             mi_lf_et_command.setText("")
         } catch (e: RuntimeException) {
             log.e(e.message, "ML", e)

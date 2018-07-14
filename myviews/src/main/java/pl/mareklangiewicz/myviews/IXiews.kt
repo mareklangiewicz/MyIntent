@@ -1,6 +1,12 @@
 package pl.mareklangiewicz.myviews
 
-import pl.mareklangiewicz.myutils.*
+import pl.mareklangiewicz.myutils.Cancel
+import pl.mareklangiewicz.myutils.IChanges
+import pl.mareklangiewicz.myutils.IData
+import pl.mareklangiewicz.myutils.IEnabled
+import pl.mareklangiewicz.myutils.ILst
+import pl.mareklangiewicz.myutils.IPusher
+import pl.mareklangiewicz.myutils.IVisible
 
 /**
  * Created by Marek Langiewicz on 27.05.16.
@@ -24,14 +30,17 @@ interface IClicks<out T> {
 /** Some "moving" data - like progress bar etc. */
 interface IMovData : IData<Int> {
 
+    @Suppress("UNUSED_PARAMETER")
     var min: Int
         get() = 0
         set(value) = throw UnsupportedOperationException()
 
+    @Suppress("UNUSED_PARAMETER")
     var max: Int
         get() = 10000
         set(value) = throw UnsupportedOperationException()
 
+    @Suppress("UNUSED_PARAMETER")
     var fuzzy: Boolean // true means it should display something indicating that it is working and we don't know how far are we
         get() = false
         set(value) = throw UnsupportedOperationException()

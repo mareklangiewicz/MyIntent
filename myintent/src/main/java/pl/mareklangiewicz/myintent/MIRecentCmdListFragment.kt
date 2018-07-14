@@ -18,7 +18,7 @@ class MIRecentCmdListFragment : MICmdListFragment() {
 
     fun refresh() {
         val cmds = ArrayList<String>()
-        MIContract.CmdRecent.load(activity, cmds, 128)
+        MIContract.CmdRecent.load(activity!!, cmds, 128)
         commands = cmds
     }
 }

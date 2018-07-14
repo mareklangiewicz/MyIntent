@@ -6,9 +6,6 @@ import android.animation.ObjectAnimator.ofArgb
 import android.animation.PropertyValuesHolder
 import android.graphics.Color
 import android.graphics.Color.*
-import android.os.Build
-import android.os.Build.VERSION.SDK_INT
-import android.os.Build.VERSION_CODES.LOLLIPOP
 import android.os.Bundle
 import android.support.annotation.ColorInt
 import android.view.LayoutInflater
@@ -84,11 +81,8 @@ open class MyPieTestsFragment : MyFragment(), View.OnClickListener {
 
         if (randomize == "pieColor" || randomize == "ovalColor") {
             @ColorInt val value = RANDOM.nextColor(Color.rgb(0, 0, 0), Color.rgb(255, 255, 255))
-            if (SDK_INT >= LOLLIPOP) {
-                ofArgb(v, randomize, value).start()
-                log.i(format("[SNACK]MyPie:%s: random color is ... %X %X %X", randomize, red(value), green(value), blue(value)))
-            } else
-                log.w("[SNACK]Color animation is not supported on platforms before Lollipop")
+            ofArgb(v, randomize, value).start()
+            log.i(format("[SNACK]MyPie:%s: random color is ... %X %X %X", randomize, red(value), green(value), blue(value)))
         } else {
             var min = 0f
             var max = 100f
@@ -114,7 +108,7 @@ open class MyPieTestsFragment : MyFragment(), View.OnClickListener {
 
     override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
         if (drawerView !== manager?.lnav) return
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) hanimator.setCurrentFraction(slideOffset)
+        hanimator.setCurrentFraction(slideOffset)
     }
     override fun onDrawerOpened(drawerView: View) { }
     override fun onDrawerClosed(drawerView: View) { }

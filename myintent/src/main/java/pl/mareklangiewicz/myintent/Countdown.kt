@@ -3,6 +3,7 @@ package pl.mareklangiewicz.myintent
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.view.animation.LinearInterpolator
 import android.widget.ProgressBar
 import pl.mareklangiewicz.myutils.scale0d
@@ -10,6 +11,7 @@ import pl.mareklangiewicz.myutils.scale0d
 /**
  * Created by Marek Langiewicz on 16.12.15.
  */
+@SuppressLint("ClickableViewAccessibility")
 class Countdown internal constructor(private val bar: ProgressBar) {
 
     private var boost = 0L

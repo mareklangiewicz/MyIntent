@@ -35,7 +35,7 @@
         android:textColor="@android:color/black"
         android:textSize="@dimen/mi_custom_entry"
         tools:text="some rule name"
-        />
+        tools:ignore="LabelFor" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -55,7 +55,7 @@
         android:textColor="@android:color/black"
         android:textSize="@dimen/mi_custom_entry"
         tools:text="some rule description"
-        />
+        tools:ignore="LabelFor" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -75,7 +75,7 @@
         android:textColor="@android:color/black"
         android:textSize="@dimen/mi_custom_entry"
         tools:text="^rule(match) blabla$"
-        />
+        tools:ignore="LabelFor" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -95,6 +95,6 @@
         android:textColor="@android:color/black"
         android:textSize="@dimen/mi_custom_entry"
         tools:text="$1 blabla $2 bleble $3"
-        />
+        tools:ignore="LabelFor" />
 
 </LinearLayout>

@@ -59,7 +59,8 @@
                 android:hint="@string/mf_enter_name"
                 android:imeOptions="actionSend"
                 android:inputType="textPersonName"
-                />
+                android:importantForAutofill="no"
+                tools:ignore="UnusedAttribute" />
         </android.support.design.widget.TextInputLayout>
 
         <TextView

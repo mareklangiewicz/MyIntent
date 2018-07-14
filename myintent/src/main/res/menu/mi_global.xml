@@ -1,107 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="HardcodedText">
 
     <group
         android:id="@+id/mi_grp_sections"
-        android:checkableBehavior="single"
-        >
+        android:checkableBehavior="single">
         <item
             android:id="@+id/mi_start"
             android:icon="@drawable/mr_ic_whatshot_black_24dp"
             android:title="@string/mi_start"
-            android:titleCondensed="cmd:fragment .MIStartFragment"
-            />
+            android:titleCondensed="cmd:fragment .MIStartFragment" />
         <item
             android:id="@+id/mi_rules"
             android:icon="@drawable/mr_ic_whatshot_black_24dp"
             android:title="@string/mi_rules"
-            android:titleCondensed="cmd:fragment .MIRulesFragment"
-            />
+            android:titleCondensed="cmd:fragment .MIRulesFragment" />
         <item
             android:id="@+id/mi_recent_commands"
             android:icon="@drawable/mi_ic_recent_command_black_24dp"
             android:title="@string/mi_recent_commands"
-            android:titleCondensed="cmd:fragment .MIRecentCmdListFragment"
-            />
+            android:titleCondensed="cmd:fragment .MIRecentCmdListFragment" />
         <item
             android:id="@+id/mi_example_commands"
             android:icon="@drawable/mi_ic_example_command_black_24dp"
             android:title="@string/mi_example_commands"
-            android:titleCondensed="cmd:fragment .MIExampleCmdListFragment"
-            />
+            android:titleCondensed="cmd:fragment .MIExampleCmdListFragment" />
         <item
             android:id="@+id/mi_help"
             android:icon="@drawable/mr_ic_whatshot_black_24dp"
             android:title="@string/mi_help"
-            android:titleCondensed="cmd:fragment .MIHelpFragment"
-            />
+            android:titleCondensed="cmd:fragment .MIHelpFragment" />
         <item
             android:id="@+id/mi_about"
             android:icon="@drawable/mr_ic_whatshot_black_24dp"
             android:title="@string/mi_about"
-            android:titleCondensed="cmd:fragment .MIAboutFragment"
-            />
+            android:titleCondensed="cmd:fragment .MIAboutFragment" />
     </group>
 
     <item
         android:id="@+id/mi_item_global_actions"
-        android:title="@string/mi_actions"
-        >
+        android:title="@string/mi_actions">
         <menu>
             <item
                 android:id="@+id/mi_clear_recent"
                 android:icon="@drawable/mi_ic_recent_command_black_24dp"
-                android:title='Clear recent commands'
-                />
+                android:title='Clear recent commands' />
             <item
                 android:id="@+id/mi_reset_all"
                 android:icon="@drawable/mr_ic_whatshot_black_24dp"
-                android:title="@string/mi_reset_all"
-                />
+                android:title="@string/mi_reset_all" />
         </menu>
     </item>
     <item
         android:id="@+id/mi_item_debug_stuff"
         android:title="@string/mi_debug_stuff"
-        android:visible="@bool/mi_debug_mode"
-        >
+        android:visible="@bool/mi_debug_mode">
         <menu>
             <item
                 android:id="@+id/mi_ds_start_my_test_activity"
                 android:icon="@drawable/mr_ic_whatshot_black_24dp"
                 android:title="@string/mi_start_my_test_activity"
-                android:titleCondensed="cmd:activity .MITestActivity"
-                />
+                android:titleCondensed="cmd:activity .MITestActivity" />
             <item
                 android:id="@+id/mi_ds_orientation_portrait"
                 android:icon="@drawable/mr_ic_whatshot_black_24dp"
                 android:title="@string/mi_orientation_portrait"
-                android:titleCondensed="cmd:start custom action orientation data portrait"
-                />
+                android:titleCondensed="cmd:start custom action orientation data portrait" />
             <item
                 android:id="@+id/mi_ds_orientation_landscape"
                 android:icon="@drawable/mr_ic_whatshot_black_24dp"
                 android:title="@string/mi_orientation_landscape"
-                android:titleCondensed="cmd:start custom action orientation data landscape"
-                />
+                android:titleCondensed="cmd:start custom action orientation data landscape" />
             <item
                 android:id="@+id/mi_ds_orientation_unspecified"
                 android:icon="@drawable/mr_ic_whatshot_black_24dp"
                 android:title="@string/mi_orientation_unspecified"
-                android:titleCondensed="cmd:start custom action orientation data unspecified"
-                />
+                android:titleCondensed="cmd:start custom action orientation data unspecified" />
             <item
                 android:id="@+id/mi_ds_set_timer_666"
                 android:icon="@drawable/mr_ic_whatshot_black_24dp"
                 android:title="set timer 666"
-                android:titleCondensed="cmd:set timer 666"
-                />
+                android:titleCondensed="cmd:set timer 666" />
             <item
                 android:id="@+id/mi_ds_set_alarm_10_45"
                 android:icon="@drawable/mr_ic_whatshot_black_24dp"
                 android:title="set alarm 10 45"
-                android:titleCondensed="cmd:set alarm 10 45"
-                />
+                android:titleCondensed="cmd:set alarm 10 45" />
         </menu>
     </item>
 </menu>

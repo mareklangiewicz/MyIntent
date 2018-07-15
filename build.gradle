@@ -30,3 +30,7 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+wrapper {
+    //noinspection UnnecessaryQualifiedReference
+    distributionType = Wrapper.DistributionType.ALL
+}

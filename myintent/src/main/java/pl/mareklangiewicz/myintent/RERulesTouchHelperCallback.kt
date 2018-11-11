@@ -1,7 +1,8 @@
 package pl.mareklangiewicz.myintent
 
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.helper.ItemTouchHelper
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
+
 
 /**
  * Created by Marek Langiewicz on 22.10.15.

@@ -2,7 +2,7 @@ package pl.mareklangiewicz.mydrawables
 
 import android.graphics.*
 import android.graphics.drawable.Drawable
-import android.support.annotation.IntRange
+import androidx.annotation.IntRange
 import pl.mareklangiewicz.myutils.scale0d
 import pl.mareklangiewicz.myutils.scale1d
 

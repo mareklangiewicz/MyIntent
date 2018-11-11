@@ -5,11 +5,6 @@ apply plugin: 'com.github.dcendents.android-maven'
 
 group = 'com.github.langara'
 
-kotlin {
-    experimental {
-        coroutines "enable"
-    }
-}
 
 android {
     compileSdkVersion Vers.androidCompileSdk
@@ -52,14 +47,12 @@ dependencies {
     implementation project(':mytests')
     implementation Deps.kotlinStdlib
     implementation Deps.kotlinxCoroutinesCore
-    implementation Deps.androidSupportAnnotations
-    implementation Deps.androidSupportV4
-    implementation Deps.androidSupportAppcompat
-    implementation Deps.androidSupportV13
-    implementation Deps.androidSupportPreference
-    implementation Deps.androidSupportDesign
-    implementation Deps.androidSupportCustomtabs
-    implementation Deps.androidSupportPercent
+    implementation Deps.androidMaterial
+    implementation Deps.androidxAnnotation
+    implementation Deps.androidxAppcompat
+    implementation Deps.androidxPreference
+    implementation Deps.androidxBrowser
+    implementation Deps.androidxPercent
     implementation Deps.retrofit
     implementation Deps.retrofitMoshi
     implementation Deps.retrofitRxjava

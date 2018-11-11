@@ -1,6 +1,6 @@
 package pl.mareklangiewicz.myviews
 
-import android.support.annotation.IdRes
+import androidx.annotation.IdRes
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View

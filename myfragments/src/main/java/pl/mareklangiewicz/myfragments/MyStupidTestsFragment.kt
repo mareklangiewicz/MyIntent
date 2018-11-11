@@ -3,11 +3,12 @@ package pl.mareklangiewicz.myfragments
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.os.Bundle
-import android.support.v4.widget.DrawerLayout
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
+import androidx.drawerlayout.widget.DrawerLayout
 import kotlinx.android.synthetic.main.mf_my_stupid_tests_fragment.*
 import pl.mareklangiewicz.myutils.*
 

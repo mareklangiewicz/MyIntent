@@ -91,7 +91,7 @@ class MyPie @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
 
     }
 
-    public override fun onSaveInstanceState(): Parcelable {
+    public override fun onSaveInstanceState(): Parcelable? {
         val superState = super.onSaveInstanceState()
         val ss = SavedState(superState)
         ss.mMinimum = _minimum
@@ -120,7 +120,7 @@ class MyPie @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
         var mFrom: Float = 0f
         var mTo: Float = 0f
 
-        constructor(superState: Parcelable) : super(superState) {
+        constructor(superState: Parcelable?) : super(superState) {
         }
 
         private constructor(inp: Parcel) : super(inp) {

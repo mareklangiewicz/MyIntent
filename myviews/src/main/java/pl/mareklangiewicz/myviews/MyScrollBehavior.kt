@@ -1,13 +1,12 @@
 package pl.mareklangiewicz.myviews
 
 import android.animation.ObjectAnimator
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
-import android.support.design.widget.CoordinatorLayout
-import android.support.v4.view.ViewCompat
 import android.util.AttributeSet
 import android.view.View
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.view.ViewCompat
 import pl.mareklangiewicz.myloggers.MY_DEFAULT_ANDRO_LOGGER
 import pl.mareklangiewicz.myutils.*
 

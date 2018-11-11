@@ -1,9 +1,12 @@
 package pl.mareklangiewicz.myintent
 
-import android.support.v7.widget.RecyclerView
+
 import android.view.View
+import android.view.View.inflate
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.customview.customView
 import kotlinx.android.synthetic.main.mi_re_rule_layout.view.*
 import kotlinx.android.synthetic.main.mi_re_rule_ro_details.view.*
 import kotlinx.android.synthetic.main.mi_re_rule_rw_details.view.*
@@ -109,51 +112,40 @@ class RERulesAdapter() : RecyclerView.Adapter<RERulesAdapter.ViewHolder>(), View
 
         if(rule.editable) {
 
-            val onApply = MaterialDialog.SingleButtonCallback { dialog, _ ->
-                val cv = dialog.customView!!
-                rule.name = cv.re_rule_rw_name.text.toString()
-                rule.description = cv.re_rule_rw_description.text.toString()
-                rule.match = cv.re_rule_rw_match.text.toString()
-                rule.replace = cv.re_rule_rw_replace.text.toString()
-                notifyItemChanged(pos)
+            val dialogContentView = inflate(view.context, R.layout.mi_re_rule_rw_details, null).apply {
+                re_rule_rw_name.setText(rule.name)
+                re_rule_rw_description.setText(rule.description)
+                re_rule_rw_match.setText(rule.match)
+                re_rule_rw_replace.setText(rule.replace)
             }
 
-            val dialog = MaterialDialog.Builder(view.context)
-                    .title("RE Rule ${(pos + 1).str}")
-                    .customView(R.layout.mi_re_rule_rw_details, true)
-                    .positiveText("Apply")
-                    .negativeText("Cancel")
-                    .iconRes(R.mipmap.mi_ic_launcher)
-                    .limitIconToDefaultSize() // limits the displayed icon size to 48dp
-                    .onPositive(onApply)
-                    .build()
-
-            val cv = dialog.customView!!
-
-            cv.re_rule_rw_name.setText(rule.name)
-            cv.re_rule_rw_description.setText(rule.description)
-            cv.re_rule_rw_match.setText(rule.match)
-            cv.re_rule_rw_replace.setText(rule.replace)
-
-            dialog.show()
+            MaterialDialog(view.context)
+                .title(text = "RE Rule ${(pos + 1).str}")
+                .customView(view = dialogContentView, scrollable = true)
+                .positiveButton(text = "Apply") {dialog ->
+                    rule.name = dialogContentView.re_rule_rw_name.text.toString()
+                    rule.description = dialogContentView.re_rule_rw_description.text.toString()
+                    rule.match = dialogContentView.re_rule_rw_match.text.toString()
+                    rule.replace = dialogContentView.re_rule_rw_replace.text.toString()
+                    notifyItemChanged(pos)
+                }
+                .negativeButton(text = "Cancel")
+                .icon(R.mipmap.mi_ic_launcher)
+                .show()
         }
         else {
+            val dialogContentView = inflate(view.context, R.layout.mi_re_rule_ro_details, null).apply {
+                re_rule_ro_name.text = rule.name
+                re_rule_ro_description.text = rule.description
+                re_rule_ro_match.text = rule.match
+                re_rule_ro_replace.text = rule.replace
+            }
 
-            val dialog = MaterialDialog.Builder(view.context)
-                    .title("RE Rule ${(pos + 1).str}")
-                    .customView(R.layout.mi_re_rule_ro_details, true)
-                    .iconRes(R.mipmap.mi_ic_launcher)
-                    .limitIconToDefaultSize() // limits the displayed icon size to 48dp
-                    .build()
-
-            val cv = dialog.customView!!
-
-            cv.re_rule_ro_name.text = rule.name
-            cv.re_rule_ro_description.text = rule.description
-            cv.re_rule_ro_match.text = rule.match
-            cv.re_rule_ro_replace.text = rule.replace
-
-            dialog.show()
+            MaterialDialog(view.context)
+                .title(text = "RE Rule ${(pos + 1).str}")
+                .customView(view = dialogContentView, scrollable = true)
+                .icon(R.mipmap.mi_ic_launcher)
+                .show()
         }
     }
 

@@ -2,9 +2,9 @@ package pl.mareklangiewicz.myloggers
 
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.support.design.widget.Snackbar
 import android.util.Log
 import android.view.View
+import com.google.android.material.snackbar.Snackbar
 import pl.mareklangiewicz.myutils.*
 
 /**

@@ -38,13 +38,13 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':myutils')
     testImplementation project(':myutils')
-    implementation Deps.androidSupportDesign
-    implementation Deps.androidSupportRecyclerview
-    implementation Deps.androidSupportCardview
+    implementation Deps.androidMaterial
+    implementation Deps.androidxRecyclerview
+    implementation Deps.androidxCardview
     implementation Deps.kotlinStdlib
     testImplementation Deps.junit
     testImplementation Deps.googleTruth
-    androidTestImplementation Deps.androidSupportAnnotations
+    androidTestImplementation Deps.androidxAnnotation
     androidTestImplementation Deps.androidTestRunner
     androidTestImplementation Deps.androidTestRules
     androidTestImplementation Deps.googleTruth

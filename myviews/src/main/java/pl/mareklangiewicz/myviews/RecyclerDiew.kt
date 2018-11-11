@@ -1,8 +1,8 @@
 package pl.mareklangiewicz.myviews
 
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import pl.mareklangiewicz.myutils.*
 
 /**
@@ -11,7 +11,7 @@ import pl.mareklangiewicz.myutils.*
  */
 
 // TODO NOW: test it!!
-abstract class RecyclerDiew<I, V: AXiew<*>>( rview: RecyclerView, data: ILst<I> ) : ADiew<RecyclerView, ILst<I>>(rview), ILstDiew<I>, IArr<V?> {
+abstract class RecyclerDiew<I, V: AXiew<*>>(rview: RecyclerView, data: ILst<I> ) : ADiew<RecyclerView, ILst<I>>(rview), ILstDiew<I>, IArr<V?> {
 
     constructor(rview: RecyclerView) : this(rview, LstWithChgPusher<I>()) {
         (data as LstWithChgPusher<I>).changes { notify(it) }

@@ -1,10 +1,11 @@
 package pl.mareklangiewicz.myfragments
 
 import android.os.Bundle
-import android.support.v7.widget.RecyclerView
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.mf_maf_detail.view.*
 import kotlinx.android.synthetic.main.mf_my_about_fragment.*
 import pl.mareklangiewicz.myutils.inflate

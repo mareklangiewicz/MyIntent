@@ -1,7 +1,9 @@
 package pl.mareklangiewicz.myintent
 
 import android.view.View
+import android.view.View.inflate
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.customview.customView
 import kotlinx.android.synthetic.main.mi_log_details.view.*
 import pl.mareklangiewicz.myloggers.LOG_ITEM_VIEW_TAG_HOLDER
 import pl.mareklangiewicz.myloggers.MyAndroLogAdapter
@@ -21,21 +23,17 @@ class MyMDAndroLogAdapter(arr: IArr<MyLogEntry>?) : MyAndroLogAdapter(arr) {
 
         arr?.run {
             val entry = get(pos)
-            val dialog = MaterialDialog.Builder(v.context)
-                    .title(entry.tag + " message " + entry.id)
-                    .customView(R.layout.mi_log_details, true)
-                    .iconRes(R.mipmap .mi_ic_launcher) //TODO SOMEDAY: change icon depending on level
-                    .limitIconToDefaultSize() // limits the displayed icon size to 48dp
-                    .build()
-
-            dialog.customView?.run {
+            val view = inflate(v.context, R.layout.mi_log_details, null).apply {
                 log_level.text = entry.level.toString()
                 log_level.setTextColor(entry.level.color)
                 log_time.text = String.format(Locale.US, "%tT", entry.time)
                 log_message.text = entry.message
             }
-
-            dialog.show()
+            MaterialDialog(v.context)
+                .title(text = entry.tag + " message " + entry.id)
+                .customView(view = view, scrollable = true)
+                .icon(R.mipmap .mi_ic_launcher) //TODO SOMEDAY: change icon depending on level
+                .show()
         }
     }
 }

@@ -405,18 +405,15 @@ class MIActivity : MyActivity() {
     }
 
     private fun resetAll() {
-        MaterialDialog.Builder(this)
+        MaterialDialog(this)
                 .title(R.string.mi_reset_all)
-                .content(R.string.mi_are_you_sure_reset)
-                .positiveText(R.string.mi_reset)
-                .negativeText(R.string.mi_cancel)
-                .onPositive(
-                        { _, _ ->
-                            deleteDatabase(MIDBHelper.DATABASE_NAME)
-                            dbsave = false
-                            resurrection()
-                        }
-                )
+                .message(R.string.mi_are_you_sure_reset)
+                .positiveButton(R.string.mi_reset) {
+                    deleteDatabase(MIDBHelper.DATABASE_NAME)
+                    dbsave = false
+                    resurrection()
+                }
+                .negativeButton(R.string.mi_cancel)
                 .show()
     }
 

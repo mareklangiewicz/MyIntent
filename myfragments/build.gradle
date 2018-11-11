@@ -38,11 +38,11 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation Deps.androidSupportAppcompat
-    implementation Deps.androidSupportDesign
-    implementation Deps.androidSupportRecyclerview
-    implementation Deps.androidSupportCardview
-    implementation Deps.androidSupportAnnotations
+    implementation Deps.androidMaterial
+    implementation Deps.androidxAppcompat
+    implementation Deps.androidxRecyclerview
+    implementation Deps.androidxCardview
+    implementation Deps.androidxAnnotation
     implementation Deps.kotlinStdlib
     implementation project(':myviews')
     implementation project(':mydrawables')

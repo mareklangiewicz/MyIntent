@@ -84,11 +84,10 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation Deps.androidSupportAppcompat
-    implementation Deps.androidSupportV13
-    implementation Deps.androidSupportRecyclerview
-    implementation Deps.androidSupportDesign
-    implementation Deps.androidSupportAnnotations
+    implementation Deps.androidMaterial
+    implementation Deps.androidxAppcompat
+    implementation Deps.androidxRecyclerview
+    implementation Deps.androidxAnnotation
     implementation Deps.okhttp
     implementation Deps.retrofit
 
@@ -96,7 +95,7 @@ dependencies {
     testImplementation Deps.googleTruth
     androidTestImplementation Deps.junit
     androidTestImplementation Deps.googleTruth
-    androidTestImplementation Deps.androidSupportAnnotations
+    androidTestImplementation Deps.androidxAnnotation
     androidTestImplementation Deps.androidTestRunner
     androidTestImplementation Deps.androidTestRules
 
@@ -105,12 +104,7 @@ dependencies {
     releaseImplementation Deps.leakcanaryNoOp
     testImplementation Deps.leakcanaryNoOp
 
-    implementation(Deps.materialDialogsCore) {
-        transitive = true
-    }
-    implementation(Deps.materialDialogsCommons) {
-        transitive = true
-    }
+    implementation(Deps.materialDialogs)
 
     implementation project(':myactivities')
     implementation project(':myfragments')

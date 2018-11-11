@@ -1,6 +1,6 @@
 package pl.mareklangiewicz.myviews
 
-import android.support.design.widget.FloatingActionButton
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 /**
  * Created by Marek Langiewicz on 03.09.15.

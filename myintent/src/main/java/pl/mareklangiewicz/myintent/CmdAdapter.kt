@@ -1,9 +1,10 @@
 package pl.mareklangiewicz.myintent
 
-import android.support.annotation.DrawableRes
-import android.support.v7.widget.RecyclerView
+import androidx.annotation.DrawableRes
+
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.mi_command.view.*
 import pl.mareklangiewicz.myloggers.MY_DEFAULT_ANDRO_LOGGER
 import pl.mareklangiewicz.myutils.inflate

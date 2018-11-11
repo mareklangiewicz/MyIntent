@@ -2,15 +2,16 @@ package pl.mareklangiewicz.myfragments
 
 
 import android.annotation.TargetApi
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.content.Context
 import android.os.Bundle
-import android.support.annotation.CallSuper
-import android.support.v4.widget.DrawerLayout
+import androidx.annotation.CallSuper
+
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.drawerlayout.widget.DrawerLayout
 import pl.mareklangiewicz.myloggers.MY_DEFAULT_ANDRO_LOGGER
 import pl.mareklangiewicz.myutils.*
 import pl.mareklangiewicz.myviews.IMyUIManager

@@ -4,22 +4,28 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.support.annotation.CallSuper
-import android.support.design.widget.FloatingActionButton
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentTransaction
-import android.support.v4.view.GravityCompat
-import android.support.v4.widget.DrawerLayout
-import android.support.v4.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
-import android.support.v4.widget.DrawerLayout.LOCK_MODE_UNLOCKED
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
+import androidx.annotation.CallSuper
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
+
+
+
+
+
+
 import android.transition.AutoTransition
 import android.transition.Fade
 import android.util.DisplayMetrics
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.ma_app_bar_layout.*
 import kotlinx.android.synthetic.main.ma_fab.*
 import kotlinx.android.synthetic.main.ma_local_drawer_layout.*

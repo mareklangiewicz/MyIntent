@@ -8,7 +8,7 @@ import android.graphics.Rect
 import android.util.AttributeSet
 
 class MyExampleView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
-    : android.support.v7.widget.AppCompatTextView(context, attrs, defStyleAttr) {
+    : androidx.appcompat.widget.AppCompatTextView(context, attrs, defStyleAttr) {
 
     private val paint: Paint = Paint().apply {
         color = Color.BLACK

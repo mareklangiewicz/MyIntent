@@ -1,8 +1,8 @@
 package pl.mareklangiewicz.myloggers
 
-import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.ml_log_item.view.*
 import pl.mareklangiewicz.myutils.IArr
 import pl.mareklangiewicz.myutils.MyLogEntry

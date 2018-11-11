@@ -3,9 +3,9 @@ package pl.mareklangiewicz.myfragments
 
 import android.animation.ObjectAnimator
 import android.os.Bundle
-import android.support.v7.widget.CardView
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
+
+
+
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +13,9 @@ import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
 import android.widget.FrameLayout
 import android.widget.SeekBar
+import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.mf_my_dawable_tests_fragment.grid_view
 import kotlinx.android.synthetic.main.mf_my_dawable_tests_fragment.seek_bar_level
 import kotlinx.android.synthetic.main.mf_my_dawable_tests_fragment.seek_bar_stroke_width

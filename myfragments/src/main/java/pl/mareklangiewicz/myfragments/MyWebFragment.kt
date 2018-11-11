@@ -26,7 +26,7 @@ open class MyWebFragment : MyFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let { url = it.getString(ARG_URL) }
+        arguments?.let { url = it.getString(ARG_URL).orEmpty() }
     }
 
 

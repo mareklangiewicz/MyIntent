@@ -100,11 +100,11 @@
             />
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mf_mmt_rv_log"
         android:layout_width="match_parent"
         android:scrollbars="vertical"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_height="match_parent"
         />
 

@@ -1,10 +1,14 @@
 package pl.mareklangiewicz.myintent
 
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.helper.ItemTouchHelper
+
+
 import android.view.View
+import android.view.View.inflate
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.customview.customView
 import kotlinx.android.synthetic.main.mi_re_group_details.view.*
 import kotlinx.android.synthetic.main.mi_re_group_layout.view.*
 import pl.mareklangiewicz.myloggers.MY_DEFAULT_ANDRO_LOGGER
@@ -74,19 +78,17 @@ class REGroupsAdapter() : RecyclerView.Adapter<REGroupsAdapter.ViewHolder>(), Vi
 
         val group = groups?.get(pos) ?: return
 
-        val dialog = MaterialDialog.Builder(v.context)
-                .title("RE Group " + (pos + 1).str)
-                .customView(R.layout.mi_re_group_details, true)
-                .iconRes(R.mipmap.mi_ic_launcher)
-                .limitIconToDefaultSize() // limits the displayed icon size to 48dp
-                .build()
+        val view = inflate(v.context, R.layout.mi_re_group_details, null).apply {
+            re_group_name.text = group.name
+            re_group_description.text = group.description
+            re_group_match.text = group.match
+        }
 
-        val cv = dialog.customView!!
-        cv.re_group_name.text = group.name
-        cv.re_group_description.text = group.description
-        cv.re_group_match.text = group.match
-
-        dialog.show()
+        MaterialDialog(v.context)
+            .title(text = "RE Group " + (pos + 1).str)
+            .customView(view = view, scrollable = true)
+            .icon(R.mipmap.mi_ic_launcher)
+            .show()
     }
 
     class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {

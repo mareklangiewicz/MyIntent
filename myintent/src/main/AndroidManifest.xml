@@ -23,7 +23,6 @@
         android:allowBackup="false"
         android:icon="@mipmap/mi_ic_launcher"
         android:label="@string/mi_app_name"
-        android:supportsRtl="false"
         android:theme="@style/mi_AppTheme"
         >
 

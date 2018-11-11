@@ -490,7 +490,7 @@ fun MyCommand.toIntent(): Intent {
                 else
                     intent.setDataAndType(Uri.parse(value), type)
             }
-            "flags" -> intent.addFlags(Integer.decode(value)!!) //TODO SOMEDAY: symbolic multiple flags implementation
+            "flags" -> intent.addFlags(Integer.decode(value)) //TODO SOMEDAY: symbolic multiple flags implementation
             "package" -> intent.`package` = value
             "component" -> intent.component = ComponentName.unflattenFromString(value) ?: throw IllegalArgumentException("Illegal component name: $value")
             "scheme" -> intent.data = Uri.parse(value + ":")

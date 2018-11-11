@@ -3,7 +3,7 @@ package pl.mareklangiewicz.mydrawables
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Rect
-import android.support.annotation.IntRange
+import androidx.annotation.IntRange
 
 
 /**

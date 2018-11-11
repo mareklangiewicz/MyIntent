@@ -7,14 +7,14 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Rect
 import android.net.Uri
-import android.support.annotation.LayoutRes
-import android.support.design.widget.Snackbar
-import android.support.v7.widget.RecyclerView
+import androidx.annotation.LayoutRes
 import android.view.LayoutInflater.from
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 
 /**
  * Created by Marek Langiewicz on 29.01.16.
@@ -96,7 +96,7 @@ fun Cursor.kgetIntOrNull(columnName: String): Int? {
 
 fun ContentResolver.kclear(uri: Uri): Int = delete(uri, null, null)
 
-inline fun ContentResolver.kinsert(uri: Uri, cvbuilder: ContentValues.() -> Unit): Uri = insert(uri, ContentValues().apply(cvbuilder))
+inline fun ContentResolver.kinsert(uri: Uri, cvbuilder: ContentValues.() -> Unit): Uri = insert(uri, ContentValues().apply(cvbuilder))!!
 
 inline fun ContentResolver.kquery(
         uri: Uri,

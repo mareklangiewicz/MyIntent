@@ -1,12 +1,12 @@
 package pl.mareklangiewicz.myviews
 
 import android.content.Context
-import android.support.annotation.IdRes
-import android.support.design.widget.NavigationView
+import androidx.annotation.IdRes
 import android.util.AttributeSet
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import com.google.android.material.navigation.NavigationView
 import pl.mareklangiewicz.myloggers.MY_DEFAULT_ANDRO_LOGGER
 import pl.mareklangiewicz.myutils.*
 

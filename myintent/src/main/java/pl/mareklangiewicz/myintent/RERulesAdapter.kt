@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
+import com.afollestad.materialdialogs.customview.getCustomView
 import kotlinx.android.synthetic.main.mi_re_rule_layout.view.*
 import kotlinx.android.synthetic.main.mi_re_rule_ro_details.view.*
 import kotlinx.android.synthetic.main.mi_re_rule_rw_details.view.*
@@ -112,40 +113,43 @@ class RERulesAdapter() : RecyclerView.Adapter<RERulesAdapter.ViewHolder>(), View
 
         if(rule.editable) {
 
-            val dialogContentView = inflate(view.context, R.layout.mi_re_rule_rw_details, null).apply {
-                re_rule_rw_name.setText(rule.name)
-                re_rule_rw_description.setText(rule.description)
-                re_rule_rw_match.setText(rule.match)
-                re_rule_rw_replace.setText(rule.replace)
-            }
-
             MaterialDialog(view.context)
                 .title(text = "RE Rule ${(pos + 1).str}")
-                .customView(view = dialogContentView, scrollable = true)
                 .positiveButton(text = "Apply") {dialog ->
-                    rule.name = dialogContentView.re_rule_rw_name.text.toString()
-                    rule.description = dialogContentView.re_rule_rw_description.text.toString()
-                    rule.match = dialogContentView.re_rule_rw_match.text.toString()
-                    rule.replace = dialogContentView.re_rule_rw_replace.text.toString()
-                    notifyItemChanged(pos)
+                    dialog.getCustomView()?.apply {
+                        rule.name = re_rule_rw_name.text.toString()
+                        rule.description = re_rule_rw_description.text.toString()
+                        rule.match = re_rule_rw_match.text.toString()
+                        rule.replace = re_rule_rw_replace.text.toString()
+                        notifyItemChanged(pos)
+                    }
                 }
                 .negativeButton(text = "Cancel")
                 .icon(R.mipmap.mi_ic_launcher)
-                .show()
+                .customView(R.layout.mi_re_rule_rw_details, scrollable = true)
+                .show {
+                    getCustomView()?.apply {
+                        re_rule_rw_name.setText(rule.name)
+                        re_rule_rw_description.setText(rule.description)
+                        re_rule_rw_match.setText(rule.match)
+                        re_rule_rw_replace.setText(rule.replace)
+                    }
+                }
         }
         else {
-            val dialogContentView = inflate(view.context, R.layout.mi_re_rule_ro_details, null).apply {
-                re_rule_ro_name.text = rule.name
-                re_rule_ro_description.text = rule.description
-                re_rule_ro_match.text = rule.match
-                re_rule_ro_replace.text = rule.replace
-            }
 
             MaterialDialog(view.context)
                 .title(text = "RE Rule ${(pos + 1).str}")
-                .customView(view = dialogContentView, scrollable = true)
                 .icon(R.mipmap.mi_ic_launcher)
-                .show()
+                .customView(R.layout.mi_re_rule_ro_details, scrollable = true)
+                .show {
+                    getCustomView()?.apply {
+                        re_rule_ro_name.text = rule.name
+                        re_rule_ro_description.text = rule.description
+                        re_rule_ro_match.text = rule.match
+                        re_rule_ro_replace.text = rule.replace
+                    }
+                }
         }
     }
 

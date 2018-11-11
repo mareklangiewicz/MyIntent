@@ -4,6 +4,7 @@ import android.view.View
 import android.view.View.inflate
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
+import com.afollestad.materialdialogs.customview.getCustomView
 import kotlinx.android.synthetic.main.mi_log_details.view.*
 import pl.mareklangiewicz.myloggers.LOG_ITEM_VIEW_TAG_HOLDER
 import pl.mareklangiewicz.myloggers.MyAndroLogAdapter
@@ -23,17 +24,18 @@ class MyMDAndroLogAdapter(arr: IArr<MyLogEntry>?) : MyAndroLogAdapter(arr) {
 
         arr?.run {
             val entry = get(pos)
-            val view = inflate(v.context, R.layout.mi_log_details, null).apply {
-                log_level.text = entry.level.toString()
-                log_level.setTextColor(entry.level.color)
-                log_time.text = String.format(Locale.US, "%tT", entry.time)
-                log_message.text = entry.message
-            }
             MaterialDialog(v.context)
                 .title(text = entry.tag + " message " + entry.id)
-                .customView(view = view, scrollable = true)
                 .icon(R.mipmap .mi_ic_launcher) //TODO SOMEDAY: change icon depending on level
-                .show()
+                .customView(R.layout.mi_log_details, scrollable = true)
+                .show {
+                    getCustomView()?.apply {
+                        log_level.text = entry.level.toString()
+                        log_level.setTextColor(entry.level.color)
+                        log_time.text = String.format(Locale.US, "%tT", entry.time)
+                        log_message.text = entry.message
+                    }
+                }
         }
     }
 }

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
+import com.afollestad.materialdialogs.customview.getCustomView
 import kotlinx.android.synthetic.main.mi_re_group_details.view.*
 import kotlinx.android.synthetic.main.mi_re_group_layout.view.*
 import pl.mareklangiewicz.myloggers.MY_DEFAULT_ANDRO_LOGGER
@@ -78,17 +79,17 @@ class REGroupsAdapter() : RecyclerView.Adapter<REGroupsAdapter.ViewHolder>(), Vi
 
         val group = groups?.get(pos) ?: return
 
-        val view = inflate(v.context, R.layout.mi_re_group_details, null).apply {
-            re_group_name.text = group.name
-            re_group_description.text = group.description
-            re_group_match.text = group.match
-        }
-
         MaterialDialog(v.context)
             .title(text = "RE Group " + (pos + 1).str)
-            .customView(view = view, scrollable = true)
+            .customView(R.layout.mi_re_group_details, scrollable = true)
             .icon(R.mipmap.mi_ic_launcher)
-            .show()
+            .show {
+                getCustomView()?.apply {
+                    re_group_name.text = group.name
+                    re_group_description.text = group.description
+                    re_group_match.text = group.match
+                }
+            }
     }
 
     class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {

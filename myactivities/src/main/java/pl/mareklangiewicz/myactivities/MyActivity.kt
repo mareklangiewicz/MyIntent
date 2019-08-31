@@ -396,7 +396,7 @@ open class MyActivity : AppCompatActivity(), IMyUIManager, DrawerLayout.DrawerLi
      */
     protected open fun onCommandStartFragment(command: MyCommand) {
         try {
-            val f = Fragment.instantiate(this@MyActivity, command["component"])
+            val f = Fragment.instantiate(this@MyActivity, command["component"]!!)
             val args = command.toExtrasBundle()
             if (args.size() > 0) f.arguments = args
             updateLocalFragment(f)

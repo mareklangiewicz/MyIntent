@@ -13,7 +13,7 @@ android {
         applicationId myintent_pkg
         versionCode myintent_code
         versionName myintent_name
-        minSdkVersion Vers.androidMinSdk
+        minSdkVersion 26
         targetSdkVersion Vers.androidTargetSdk
         testInstrumentationRunner Vers.androidTestRunnerClass
         multiDexEnabled true
@@ -100,9 +100,6 @@ dependencies {
     androidTestImplementation Deps.androidTestRules
 
 //    canaryImplementation Deps.leakcanary
-    debugImplementation Deps.leakcanaryNoOp
-    releaseImplementation Deps.leakcanaryNoOp
-    testImplementation Deps.leakcanaryNoOp
 
     implementation(Deps.materialDialogs)
 

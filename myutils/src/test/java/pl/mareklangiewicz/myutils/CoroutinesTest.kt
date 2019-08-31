@@ -1,10 +1,11 @@
 package pl.mareklangiewicz.myutils
 
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.junit.Test
-import kotlin.coroutines.experimental.suspendCoroutine
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 
 class CoroutinesTest {
@@ -16,7 +17,7 @@ class CoroutinesTest {
 
     @Test
     fun test1() {
-        launch(CommonPool) {
+        GlobalScope.launch {
             delay(1000L)
             println("World!")
         }
@@ -32,7 +33,7 @@ class CoroutinesTest {
 
     @Test
     fun testAwaitForOnePush() {
-        launch(CommonPool) {
+        GlobalScope.launch {
             println("inside: before await")
             val value = timer.awaitForOnePush()
             println("inside: after await: value = $value")

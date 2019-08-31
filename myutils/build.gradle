@@ -14,7 +14,7 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion Vers.androidMinSdk
+        minSdkVersion 26
         targetSdkVersion Vers.androidTargetSdk
         versionCode myintent_code
         versionName myintent_name
@@ -52,7 +52,6 @@ dependencies {
     implementation Deps.androidxAppcompat
     implementation Deps.androidxPreference
     implementation Deps.androidxBrowser
-    implementation Deps.androidxPercent
     implementation Deps.retrofit
     implementation Deps.retrofitMoshi
     implementation Deps.retrofitRxjava

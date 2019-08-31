@@ -29,13 +29,6 @@ class MITestActivity : MyTestActivity() {
         item3.titleCondensed = cmd3
     }
 
-    override fun onCommandStartFragment(command: MyCommand) {
-        val f = fgmt
-        if(f !== null)
-            (application as? MIApplication)?.REF_WATCHER?.watch(f)
-        super.onCommandStartFragment(command)
-    }
-
     override fun onCommandCustom(command: MyCommand) {
         when(command["action"]) {
             "leak" -> when(command["data"]) {

@@ -451,12 +451,5 @@ class MIActivity : MyActivity() {
                         ComponentName(this, RecentCommandsAWProvider::class.java)),
                 R.id.recent_commands_listview)
     }
-
-    override fun onCommandStartFragment(command: MyCommand) {
-        val f = fgmt
-        if(f !== null)
-            (application as? MIApplication)?.REF_WATCHER?.watch(f)
-        super.onCommandStartFragment(command)
-    }
 }
 

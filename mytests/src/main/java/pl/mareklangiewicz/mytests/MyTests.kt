@@ -5,7 +5,6 @@ import com.google.common.truth.BigDecimalSubject
 import com.google.common.truth.BooleanSubject
 import com.google.common.truth.ClassSubject
 import com.google.common.truth.ComparableSubject
-import com.google.common.truth.DefaultSubject
 import com.google.common.truth.DoubleSubject
 import com.google.common.truth.FloatSubject
 import com.google.common.truth.IntegerSubject
@@ -23,9 +22,9 @@ val Assert: StandardSubjectBuilder by lazy { assert_() }
 
 // TODO LATER: not sure about all those generic types below - analyze/test it all later..
 
-infix fun <T> StandardSubjectBuilder.That(target: Comparable<T>?): ComparableSubject<*, Comparable<T>> = this.that(target)
+infix fun <T> StandardSubjectBuilder.That(target: Comparable<T>?): ComparableSubject<Comparable<T>> = this.that(target)
 infix fun StandardSubjectBuilder.That(target: BigDecimal?): BigDecimalSubject = this.that(target)
-infix fun StandardSubjectBuilder.That(target: Any?): Subject<DefaultSubject, Any> = this.that(target)
+infix fun StandardSubjectBuilder.That(target: Any?): Subject = this.that(target)
 infix fun <T> StandardSubjectBuilder.That(target: Class<T>?): ClassSubject = this.that(target)
 infix fun StandardSubjectBuilder.That(target: Throwable?): ThrowableSubject = this.that(target)
 infix fun StandardSubjectBuilder.That(target: Long?): LongSubject = this.that(target)
@@ -43,7 +42,7 @@ object NotNull : ITestObject
 object True : IBooleanTestObject
 object False : IBooleanTestObject
 
-infix fun <S: Subject<S, T>, T> Subject<S, T>.Is(obj: ITestObject) = when(obj) {
+infix fun Subject.Is(obj: ITestObject) = when(obj) {
     Null -> isNull()
     NotNull -> isNotNull()
     else -> throw ClassCastException()
@@ -55,20 +54,18 @@ infix fun BooleanSubject.Is(obj: IBooleanTestObject) = when(obj) {
     else -> throw ClassCastException()
 }
 
-infix fun <S: Subject<out S, out T>, T> Subject<out S, out T>.IsEqualTo(other: Any?) = isEqualTo(other)
-infix fun <S: Subject<out S, out T>, T> Subject<out S, out T>.IsNotEqualTo(other: Any?) = isNotEqualTo(other)
-infix fun <S: Subject<out S, out T>, T> Subject<out S, out T>.IsSameAs(other: Any?) = isSameAs(other)
-infix fun <S: Subject<out S, out T>, T> Subject<out S, out T>.IsNotSameAs(other: Any?) = isNotSameAs(other)
-infix fun <S: Subject<out S, out T>, T> Subject<out S, out T>.IsInstanceOf(clazz: Class<*>) = isInstanceOf(clazz)
-infix fun <S: Subject<out S, out T>, T> Subject<out S, out T>.IsNotInstanceOf(clazz: Class<*>) = isNotInstanceOf(clazz)
-infix fun <S: Subject<out S, out T>, T> Subject<out S, out T>.IsIn(iterable: Iterable<*>) = isIn(iterable)
-infix fun <S: Subject<out S, out T>, T> Subject<out S, out T>.IsNotIn(iterable: Iterable<*>) = isNotIn(iterable)
+infix fun Subject.IsEqualTo(other: Any?) = isEqualTo(other)
+infix fun Subject.IsNotEqualTo(other: Any?) = isNotEqualTo(other)
+infix fun Subject.IsInstanceOf(clazz: Class<*>) = isInstanceOf(clazz)
+infix fun Subject.IsNotInstanceOf(clazz: Class<*>) = isNotInstanceOf(clazz)
+infix fun Subject.IsIn(iterable: Iterable<*>) = isIn(iterable)
+infix fun Subject.IsNotIn(iterable: Iterable<*>) = isNotIn(iterable)
 // TODO SOMEDAY: rest from truth.Subject
 
-infix fun <S: ComparableSubject<S, T>, T: Comparable<T>> ComparableSubject<S, T>.IsIn(range: ClosedRange<T>) = isIn(Range.closed(range.start, range.endInclusive))
-infix fun <S: ComparableSubject<S, T>, T: Comparable<T>> ComparableSubject<S, T>.IsNotIn(range: ClosedRange<T>) = isNotIn(Range.closed(range.start, range.endInclusive))
-infix fun <S: ComparableSubject<S, T>, T: Comparable<T>> ComparableSubject<S, T>.IsGreaterThan(other: T) = isGreaterThan(other)
-infix fun <S: ComparableSubject<S, T>, T: Comparable<T>> ComparableSubject<S, T>.IsLessThan(other: T) = isLessThan(other)
-infix fun <S: ComparableSubject<S, T>, T: Comparable<T>> ComparableSubject<S, T>.IsAtMost(other: T) = isAtMost(other)
-infix fun <S: ComparableSubject<S, T>, T: Comparable<T>> ComparableSubject<S, T>.IsAtLeast(other: T) = isAtLeast(other)
+infix fun <T: Comparable<T>> ComparableSubject<T>.IsIn(range: ClosedRange<T>) = isIn(Range.closed(range.start, range.endInclusive))
+infix fun <T: Comparable<T>> ComparableSubject<T>.IsNotIn(range: ClosedRange<T>) = isNotIn(Range.closed(range.start, range.endInclusive))
+infix fun <T: Comparable<T>> ComparableSubject<T>.IsGreaterThan(other: T) = isGreaterThan(other)
+infix fun <T: Comparable<T>> ComparableSubject<T>.IsLessThan(other: T) = isLessThan(other)
+infix fun <T: Comparable<T>> ComparableSubject<T>.IsAtMost(other: T) = isAtMost(other)
+infix fun <T: Comparable<T>> ComparableSubject<T>.IsAtLeast(other: T) = isAtLeast(other)
 // TODO SOMEDAY: rest from truth.ComparableSubject

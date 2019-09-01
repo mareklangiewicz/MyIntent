@@ -165,8 +165,16 @@ open class PueTestsFragment : MyFragment() {
 
         mf_mmt_b_test5.setOnClickListener {
             log.i("Test 5")
-            log.i("TODO")
+            log.i("merging clicks on pies")
 
+            val pie1ClickS = mf_mmt_mp1.relayClickS()
+            val pie2ClickS = mf_mmt_mp2.relayClickS()
+            val pie3ClickS = mf_mmt_mp3.relayClickS()
+
+            val allClickS = merge(pie1ClickS, pie2ClickS, pie3ClickS)
+
+            val ctl1 = allClickS { log.i("clicked ${it}") }
+            todo.add { ctl1(Cancel) }
         }
 
     }
@@ -185,3 +193,6 @@ open class PueTestsFragment : MyFragment() {
         super.onDestroyView()
     }
 }
+
+fun View.relayClickS() = Relay<View>().apply { setOnClickListener { push(it) } }
+

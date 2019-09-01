@@ -770,6 +770,18 @@ fun <A, C> IPusher<A, C>.ladropWhile(pred: Function1<A, Boolean>) = lift<A, Unit
 fun <V, C> IPuller<V, C>.lvdropWhile(pred: Function1<V, Boolean>) = lift<Unit, V, Unit, V, C> { it.vdropWhile(pred) }
 
 
+fun <T> pusheeOf(pushees: List<IPushee<T>>) = { t: T -> for (p in pushees) p(t) }
+fun <T> pusheeOf(vararg pushees: IPushee<T>) = pusheeOf(listOf(*pushees))
+
+fun <T, Cmd> merge(pushers: List<IPusher<T, Cmd>>) = object : IPusher<T, Cmd> {
+    override fun invoke(puee: IPuee<T, Unit>): IPushee<Cmd> {
+        val controllers = pushers.map { it(puee) }
+        return pusheeOf(controllers)
+    }
+}
+
+fun <T, Cmd> merge(vararg pushers: IPusher<T, Cmd>) = merge(listOf(*pushers))
+
 // TODO: tests, examples for all these take and drop versions..
 
 
@@ -785,7 +797,6 @@ interface IPeek<out T> {
     val peek: IPullee<T>
         get() = throw UnsupportedOperationException() // it usually is "an optional operation" so by default it throws.
 }
-
 
 class Remove<I>(private val i: I, private val items: MutableCollection<I>) : Function1<Cancel, Unit> {
     override fun invoke(c: Cancel) {
@@ -809,6 +820,8 @@ class Relay<A>(initcap: Int = 16) : IPusher<A, Cancel>, IPush<A> {
     override fun invoke(p: (A) -> Unit): (Cancel) -> Unit {
         pushees.add(p)
         return Remove(p, pushees)
+        // TODO: check why not just lambda instead of Remove class:
+        //  return { _: Cancel -> pushees.remove(p); Unit }
     }
 }
 
@@ -829,6 +842,7 @@ class Yaler<R>(initcap: Int = 16) : IPuller<R, Cancel>, IPull<Function1<Unit, R?
     override fun invoke(p: (Unit) -> R): (Cancel) -> Unit {
         pullees.add(p)
         return Remove(p, pullees)
+        // TODO: check why not just lambda instead of Remove class (as in Relay)
     }
 }
 

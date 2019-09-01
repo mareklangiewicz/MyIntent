@@ -54,6 +54,9 @@ class PueTest {
     @Test
     fun testCrazyBasics() {
 
+        33345 / { it * 10 } / Int::toString / ps
+        33345 / { it * 10 } / Int::toString / len / pi
+
         3 (xxx)
 
         2 (const(660) * pi)

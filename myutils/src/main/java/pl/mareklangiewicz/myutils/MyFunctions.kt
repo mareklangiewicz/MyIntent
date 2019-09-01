@@ -3,6 +3,9 @@ package pl.mareklangiewicz.myutils
 /**
  * Created by Marek Langiewicz on 21.02.16.
  *
+ * Warning: It's mostly an exercise and contains a lot of HACKY (unreadable) syntax.
+ * Do not use it (or even "conventions" like this) in production - unless you are evil ;)
+ *
  * TODO LATER: consider making some functions inline (see Pue.kt:44 for details)
  */
 
@@ -11,7 +14,6 @@ fun <T> ident(t: T): T = t
 fun <T> const(t: T) = { _: Unit -> t }
 
 /** function compositions: (f * g)(x) = g(f(x)) (works also for objects with 'invoke' method */
-
 operator infix fun <A, B> Function0<A>.times(f: Function1<A, B>): Function0<B> = { f(this()) }
 
 operator infix fun <A, B, C> Function1<A, B>.times(f: Function1<B, C>): Function1<A, C> = { f(this(it)) }
@@ -20,6 +22,8 @@ operator infix fun <A, B, C, D> Function2<A, B, C>.times(f: Function1<C, D>): Fu
 
 operator infix fun <A, B, C, D, E> Function3<A, B, C, D>.times(f: Function1<D, E>): Function3<A, B, C, E> = { a, b, c -> f(this(a, b, c)) }
 
+/** a "pipe" */
+operator infix fun <A, B> A.div(f: Function1<A, B>): B = f(this)
 
 /** It just perform additional given action on any function result. Here U is usually Unit. It is ignored anyway */
 operator infix fun <A, U> Function0<A>.rem(f: Function1<A, U>): Function0<A>

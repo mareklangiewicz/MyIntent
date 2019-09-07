@@ -784,7 +784,7 @@ fun <T, Cmd> merge(vararg pushers: IPusher<T, Cmd>) = merge(listOf(*pushers))
 
 // TODO: think it through again (this is just a fast experiment and I have no idea if it is correct at all)
 // TODO: Syntax can be shortened, but I postpone using clever kotlin syntax to keep it more explicit until I'm sure it's correct.
-// TODO: Can it be implemented with the "lift" operator?
+// TODO: Common implementation for all base types (pull based too, passive too); use "lift"
 fun <A, T, Cmd> IPusher<T, Cmd>.scan(seed: A, reduce: (Pair<A, T>) -> A): IPusher<A, Cmd> = object : IPusher<A, Cmd> {
     var acc = seed
     override fun invoke(apushee: IPushee<A>): IPushee<Cmd> {

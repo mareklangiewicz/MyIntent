@@ -243,7 +243,7 @@ class PueTest {
 
         val r = Relay<String>()
 
-        val scanS = r.scan("seed") { acc,t -> "$acc.$t" }
+        val scanS = r.scan("seed") { (acc,t) -> "$acc.$t" }
 
         val ctl = scanS(ps)
 
@@ -251,6 +251,70 @@ class PueTest {
         r.push("2")
         r.push("3")
         r.push("4")
+
+    }
+
+    @Test
+    fun testWithLast() {
+
+        val r = Relay<String>()
+
+        val withLastS = r.withLast("seed")
+
+        val ctl = withLastS(Pair<String, String>::toString * ps)
+
+        r.push("1")
+        r.push("2")
+        r.push("3")
+        r.push("4")
+
+    }
+
+    @Test
+    fun testDropRepeats() {
+
+        val r = Relay<String>()
+
+        val dropRepeatsS = r.dropRepeats("seed")
+
+        val ctl = dropRepeatsS(ps)
+
+        r.push("1")
+        r.push("2")
+        r.push("2")
+        r.push("2")
+        r.push("xxxxxxxx")
+        r.push("2")
+        r.push("2")
+        r.push("3")
+        r.push("3")
+        r.push("3")
+        r.push("4")
+        r.push("yyyyyy")
+
+    }
+
+    @Test
+    fun testDropRepeatsCustomEqual() {
+
+        val r = Relay<String>()
+
+        val dropRepeatsS = r.dropRepeats("seed") { it.first.length == it.second.length }
+
+        val ctl = dropRepeatsS(ps)
+
+        r.push("1")
+        r.push("2")
+        r.push("2")
+        r.push("2")
+        r.push("xxxxxxxx")
+        r.push("2")
+        r.push("2")
+        r.push("3")
+        r.push("3")
+        r.push("3")
+        r.push("4")
+        r.push("yyyyyy")
 
     }
 

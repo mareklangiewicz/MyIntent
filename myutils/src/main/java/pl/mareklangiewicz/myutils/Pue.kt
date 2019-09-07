@@ -785,19 +785,20 @@ fun <T, Cmd> merge(vararg pushers: IPusher<T, Cmd>) = merge(listOf(*pushers))
 // TODO: think it through again (this is just a fast experiment and I have no idea if it is correct at all)
 // TODO: Syntax can be shortened, but I postpone using clever kotlin syntax to keep it more explicit until I'm sure it's correct.
 // TODO: Can it be implemented with the "lift" operator?
-fun <A, T, Cmd> IPusher<T, Cmd>.scan(seed: A, reduce: (A, T) -> A): IPusher<A, Cmd> = object : IPusher<A, Cmd> {
+fun <A, T, Cmd> IPusher<T, Cmd>.scan(seed: A, reduce: (Pair<A, T>) -> A): IPusher<A, Cmd> = object : IPusher<A, Cmd> {
     var acc = seed
     override fun invoke(apushee: IPushee<A>): IPushee<Cmd> {
-        val tpushee = { t: T -> acc = reduce(acc, t); apushee(acc) }
+        val tpushee = { t: T -> acc = reduce(acc to t); apushee(acc) }
         return this@scan(tpushee)
     }
 }
 
-fun <T, Cmd> IPusher<T, Cmd>.dropIfLast(compare: (last: T, curr: T) -> Boolean): IPusher<T, Cmd> = TODO() // use scan
+fun <T, Cmd> IPusher<T, Cmd>.withLast(seed: T) = scan(seed to seed) { (last, curr) -> last.second to curr }
 
-fun <T, Cmd> IPusher<T, Cmd>.dropRepeats() = dropIfLast { last, curr -> last == curr }
-
-
+fun <T, Cmd> IPusher<T, Cmd>.dropRepeats(seed: T, equals: (Pair<T, T>) -> Boolean = { it.first == it.second })
+        = withLast(seed)
+        .lafilter { !equals(it) }
+        .lamap { it.second }
 
 
 // TODO: tests, examples for all these take and drop versions..

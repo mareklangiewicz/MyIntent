@@ -774,13 +774,31 @@ fun <T> pusheeOf(pushees: List<IPushee<T>>) = { t: T -> for (p in pushees) p(t) 
 fun <T> pusheeOf(vararg pushees: IPushee<T>) = pusheeOf(listOf(*pushees))
 
 fun <T, Cmd> merge(pushers: List<IPusher<T, Cmd>>) = object : IPusher<T, Cmd> {
-    override fun invoke(puee: IPuee<T, Unit>): IPushee<Cmd> {
-        val controllers = pushers.map { it(puee) }
+    override fun invoke(pushee: IPushee<T>): IPushee<Cmd> {
+        val controllers = pushers.map { it(pushee) }
         return pusheeOf(controllers)
     }
 }
 
 fun <T, Cmd> merge(vararg pushers: IPusher<T, Cmd>) = merge(listOf(*pushers))
+
+// TODO: think it through again (this is just a fast experiment and I have no idea if it is correct at all)
+// TODO: Syntax can be shortened, but I postpone using clever kotlin syntax to keep it more explicit until I'm sure it's correct.
+// TODO: Can it be implemented with the "lift" operator?
+fun <A, T, Cmd> IPusher<T, Cmd>.scan(seed: A, reduce: (A, T) -> A): IPusher<A, Cmd> = object : IPusher<A, Cmd> {
+    var acc = seed
+    override fun invoke(apushee: IPushee<A>): IPushee<Cmd> {
+        val tpushee = { t: T -> acc = reduce(acc, t); apushee(acc) }
+        return this@scan(tpushee)
+    }
+}
+
+fun <T, Cmd> IPusher<T, Cmd>.dropIfLast(compare: (last: T, curr: T) -> Boolean): IPusher<T, Cmd> = TODO() // use scan
+
+fun <T, Cmd> IPusher<T, Cmd>.dropRepeats() = dropIfLast { last, curr -> last == curr }
+
+
+
 
 // TODO: tests, examples for all these take and drop versions..
 

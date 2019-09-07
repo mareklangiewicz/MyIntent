@@ -214,6 +214,46 @@ class PueTest {
 
     }
 
+    @Test
+    fun testMerge() {
+
+        val r1 = Relay<String>()
+        val r2 = Relay<String>()
+
+        val mergedS = merge(r1, r2)
+
+        val ctl = mergedS(ps)
+
+        r1.push("1 1")
+        r1.push("2 1")
+        r1.push("3 1")
+        r2.push("4 2")
+        r2.push("5 2")
+        r1.push("6 11")
+        r1.push("7 11")
+        r2.push("8 222")
+        r1.push("9 111")
+        ctl(Cancel)
+        r1.push("10 11111111111111 - after Cancel")
+        r2.push("11 22222222222222 - after Cancel")
+    }
+
+    @Test
+    fun testScan() {
+
+        val r = Relay<String>()
+
+        val scanS = r.scan("seed") { acc,t -> "$acc.$t" }
+
+        val ctl = scanS(ps)
+
+        r.push("1")
+        r.push("2")
+        r.push("3")
+        r.push("4")
+
+    }
+
     // TODO SOMEDAY: more pue tests
 
 }

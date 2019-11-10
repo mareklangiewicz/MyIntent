@@ -20,7 +20,7 @@ class MyMDAndroLogAdapter(arr: IArr<MyLogEntry>?) : MyAndroLogAdapter(arr) {
 
     override fun onClick(v: View) {
         val tag = v.getTag(LOG_ITEM_VIEW_TAG_HOLDER) ?: return
-        val pos = (tag as MyAndroLogAdapter.ViewHolder).adapterPosition
+        val pos = (tag as ViewHolder).adapterPosition
 
         arr?.run {
             val entry = get(pos)
@@ -29,7 +29,7 @@ class MyMDAndroLogAdapter(arr: IArr<MyLogEntry>?) : MyAndroLogAdapter(arr) {
                 .icon(R.mipmap .mi_ic_launcher) //TODO SOMEDAY: change icon depending on level
                 .customView(R.layout.mi_log_details, scrollable = true)
                 .show {
-                    getCustomView()?.apply {
+                    getCustomView().apply {
                         log_level.text = entry.level.toString()
                         log_level.setTextColor(entry.level.color)
                         log_time.text = String.format(Locale.US, "%tT", entry.time)

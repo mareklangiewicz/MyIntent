@@ -2,6 +2,7 @@ package pl.mareklangiewicz.myintent
 
 
 
+import android.annotation.SuppressLint
 import android.view.View
 import android.view.View.inflate
 import android.view.ViewGroup
@@ -55,6 +56,7 @@ class REGroupsAdapter() : RecyclerView.Adapter<REGroupsAdapter.ViewHolder>(), Vi
         holder.resetRulesRecyclerView()
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         val group = groups?.get(position) ?: throw IllegalStateException()
@@ -84,7 +86,7 @@ class REGroupsAdapter() : RecyclerView.Adapter<REGroupsAdapter.ViewHolder>(), Vi
             .customView(R.layout.mi_re_group_details, scrollable = true)
             .icon(R.mipmap.mi_ic_launcher)
             .show {
-                getCustomView()?.apply {
+                getCustomView().apply {
                     re_group_name.text = group.name
                     re_group_description.text = group.description
                     re_group_match.text = group.match

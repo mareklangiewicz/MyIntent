@@ -1,6 +1,7 @@
 package pl.mareklangiewicz.myintent
 
 
+import android.annotation.SuppressLint
 import android.view.View
 import android.view.View.inflate
 import android.view.ViewGroup
@@ -50,6 +51,7 @@ class RERulesAdapter() : RecyclerView.Adapter<RERulesAdapter.ViewHolder>(), View
         return holder
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (rules === null) {
             log.e("Rules not set.")
@@ -116,7 +118,7 @@ class RERulesAdapter() : RecyclerView.Adapter<RERulesAdapter.ViewHolder>(), View
             MaterialDialog(view.context)
                 .title(text = "RE Rule ${(pos + 1).str}")
                 .positiveButton(text = "Apply") {dialog ->
-                    dialog.getCustomView()?.apply {
+                    dialog.getCustomView().apply {
                         rule.name = re_rule_rw_name.text.toString()
                         rule.description = re_rule_rw_description.text.toString()
                         rule.match = re_rule_rw_match.text.toString()
@@ -128,7 +130,7 @@ class RERulesAdapter() : RecyclerView.Adapter<RERulesAdapter.ViewHolder>(), View
                 .icon(R.mipmap.mi_ic_launcher)
                 .customView(R.layout.mi_re_rule_rw_details, scrollable = true)
                 .show {
-                    getCustomView()?.apply {
+                    getCustomView().apply {
                         re_rule_rw_name.setText(rule.name)
                         re_rule_rw_description.setText(rule.description)
                         re_rule_rw_match.setText(rule.match)
@@ -143,7 +145,7 @@ class RERulesAdapter() : RecyclerView.Adapter<RERulesAdapter.ViewHolder>(), View
                 .icon(R.mipmap.mi_ic_launcher)
                 .customView(R.layout.mi_re_rule_ro_details, scrollable = true)
                 .show {
-                    getCustomView()?.apply {
+                    getCustomView().apply {
                         re_rule_ro_name.text = rule.name
                         re_rule_ro_description.text = rule.description
                         re_rule_ro_match.text = rule.match

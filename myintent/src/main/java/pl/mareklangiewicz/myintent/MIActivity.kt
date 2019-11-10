@@ -1,5 +1,6 @@
 package pl.mareklangiewicz.myintent
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -253,6 +254,7 @@ class MIActivity : MyActivity() {
         result.setResultCallback { if (!it.isSuccess) log.d("App Indexing API problem: ${it.str}") }
     }
 
+    @SuppressLint("SourceLockedOrientationActivity")
     override fun onCommandCustom(command: MyCommand) {
         when(command["action"]) {
             "listen" -> startSpeechRecognizer()
@@ -396,7 +398,7 @@ class MIActivity : MyActivity() {
     }
 
     private fun resurrection() {
-        val i = baseContext.packageManager.getLaunchIntentForPackage(baseContext.packageName)
+        val i = baseContext.packageManager.getLaunchIntentForPackage(baseContext.packageName)!!
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         val pi = PendingIntent.getActivity(this@MIActivity, 0, i, 0)
         val manager = this@MIActivity.getSystemService(Context.ALARM_SERVICE) as AlarmManager

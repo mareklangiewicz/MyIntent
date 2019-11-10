@@ -41,7 +41,7 @@ class MIContentProvider : ContentProvider() {
     private lateinit var dbhelper: MIDBHelper
 
     override fun onCreate(): Boolean {
-        dbhelper = MIDBHelper(context)
+        dbhelper = MIDBHelper(context!!)
         return true
     }
 
@@ -133,7 +133,7 @@ class MIContentProvider : ContentProvider() {
         }
     }
 
-    @Synchronized override fun insert(uri: Uri, values: ContentValues): Uri? {
+    @Synchronized override fun insert(uri: Uri, values: ContentValues?): Uri? {
 
         val db = dbhelper.writableDatabase
         val table = when (matcher.match(uri)) {

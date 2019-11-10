@@ -29,7 +29,7 @@ object MIContract {
         val TYPE_DIR = "${ContentResolver.CURSOR_DIR_BASE_TYPE}/$AUTH/$PATH"
         val TYPE_ITEM = "${ContentResolver.CURSOR_ITEM_BASE_TYPE}/$AUTH/$PATH"
 
-        val TABLE_NAME = CmdRecent::class.java.simpleName!!
+        val TABLE_NAME = CmdRecent::class.java.simpleName
 
         val COL_COMMAND = "Command"
         val COL_TIME = "Time"
@@ -67,7 +67,7 @@ object MIContract {
         val TYPE_DIR = "${ContentResolver.CURSOR_DIR_BASE_TYPE}/$AUTH/$PATH"
         val TYPE_ITEM = "${ContentResolver.CURSOR_ITEM_BASE_TYPE}/$AUTH/$PATH"
 
-        val TABLE_NAME = CmdExample::class.java.simpleName!!
+        val TABLE_NAME = CmdExample::class.java.simpleName
 
         val COL_COMMAND = "Command"
         val COL_PRIORITY = "Priority"
@@ -98,7 +98,7 @@ object MIContract {
 
         val TYPE_DIR = "${ContentResolver.CURSOR_DIR_BASE_TYPE}/$AUTH/$PATH"
 
-        val TABLE_NAME = CmdSuggest::class.java.simpleName!!
+        val TABLE_NAME = CmdSuggest::class.java.simpleName
 
         val COL_QUERY = SearchManager.SUGGEST_COLUMN_QUERY
         val COL_TEXT = SearchManager.SUGGEST_COLUMN_TEXT_1
@@ -117,7 +117,7 @@ object MIContract {
         val TYPE_DIR = "${ContentResolver.CURSOR_DIR_BASE_TYPE}/$AUTH/$PATH"
         val TYPE_ITEM = "${ContentResolver.CURSOR_ITEM_BASE_TYPE}/$AUTH/$PATH"
 
-        val TABLE_NAME = RuleUser::class.java.simpleName!!
+        val TABLE_NAME = RuleUser::class.java.simpleName
 
         val COL_POSITION = "Position"
         val COL_EDITABLE = "Editable"

@@ -58,7 +58,7 @@ dependencies {
     implementation Deps.okhttpLogging
     implementation Deps.picasso
     testImplementation project(':mytests')
-    testImplementation Deps.junit
+    testImplementation Deps.junit4
     testImplementation Deps.googleTruth
     androidTestImplementation Deps.androidTestRunner
     androidTestImplementation Deps.androidTestRules

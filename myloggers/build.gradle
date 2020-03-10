@@ -42,7 +42,7 @@ dependencies {
     implementation Deps.androidxRecyclerview
     implementation Deps.androidxCardview
     implementation Deps.kotlinStdlib
-    testImplementation Deps.junit
+    testImplementation Deps.junit4
     testImplementation Deps.googleTruth
     androidTestImplementation Deps.androidxAnnotation
     androidTestImplementation Deps.androidTestRunner

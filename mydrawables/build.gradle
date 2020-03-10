@@ -36,7 +36,7 @@ dependencies {
     implementation Deps.androidxAppcompat
     implementation Deps.androidxAnnotation
     implementation Deps.kotlinStdlib
-    testImplementation Deps.junit
+    testImplementation Deps.junit4
 }
 
 // build a jar with source files

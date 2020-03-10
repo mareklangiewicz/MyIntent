@@ -33,7 +33,7 @@ dependencies {
     implementation Deps.androidMaterial
     implementation Deps.androidxRecyclerview
     implementation Deps.androidxAnnotation
-    testImplementation Deps.junit
+    testImplementation Deps.junit4
     testImplementation Deps.googleTruth
     implementation project(':mydrawables')
     implementation project(':myutils')

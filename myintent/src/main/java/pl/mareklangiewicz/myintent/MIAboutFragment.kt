@@ -24,7 +24,6 @@ class MIAboutFragment : MyAboutFragment() {
 
         details = listOf(
                 "build type" to BuildConfig.BUILD_TYPE,
-                "build flavor" to BuildConfig.FLAVOR,
                 "version code" to BuildConfig.VERSION_CODE.str,
                 "version name" to BuildConfig.VERSION_NAME,
                 "build time" to paperwork.get("buildTime"),

@@ -7,7 +7,7 @@ group='com.github.langara'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation Deps.kotlinStdlib
-    implementation Deps.junit
+    implementation Deps.junit4
     implementation Deps.googleTruth
 }
 

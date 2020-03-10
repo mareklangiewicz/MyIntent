@@ -91,9 +91,9 @@ dependencies {
     implementation Deps.okhttp
     implementation Deps.retrofit
 
-    testImplementation Deps.junit
+    testImplementation Deps.junit4
     testImplementation Deps.googleTruth
-    androidTestImplementation Deps.junit
+    androidTestImplementation Deps.junit4
     androidTestImplementation Deps.googleTruth
     androidTestImplementation Deps.androidxAnnotation
     androidTestImplementation Deps.androidTestRunner

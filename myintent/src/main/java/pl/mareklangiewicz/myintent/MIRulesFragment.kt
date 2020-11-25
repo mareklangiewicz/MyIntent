@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.mi_rules_fragment.*
 import pl.mareklangiewicz.myfragments.MyFragment
 import pl.mareklangiewicz.myutils.*
+import pl.mareklangiewicz.pue.Cancel
 
 /**
  * Created by Marek Langiewicz on 14.10.15.

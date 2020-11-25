@@ -7,6 +7,8 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Rect
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import androidx.annotation.LayoutRes
 import android.view.LayoutInflater.from
 import android.view.View
@@ -15,6 +17,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import pl.mareklangiewicz.pue.Cancel
+import pl.mareklangiewicz.pue.IScheduler
 
 /**
  * Created by Marek Langiewicz on 29.01.16.
@@ -139,3 +143,18 @@ fun <I> RecyclerView.notify(chg: LstChg<I>) = adapter?.run {
         else -> notifyDataSetChanged()
     }
 }
+
+class HandlerScheduler(private val handler: Handler = Handler(Looper.getMainLooper())) : IScheduler {
+
+    override fun schedule(delay: Long, action: (Unit) -> Unit): (Cancel) -> Unit {
+        val runnable = Runnable { action(Unit) }
+        if (delay > 0)
+            handler.postDelayed(runnable, delay)
+        else
+            handler.post(runnable)
+        return { handler.removeCallbacks(runnable) }
+    }
+
+    override val now = { _: Unit -> System.currentTimeMillis() }
+}
+

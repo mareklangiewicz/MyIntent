@@ -9,6 +9,7 @@ import android.view.View
 import com.google.android.material.navigation.NavigationView
 import pl.mareklangiewicz.myloggers.MY_DEFAULT_ANDRO_LOGGER
 import pl.mareklangiewicz.myutils.*
+import pl.mareklangiewicz.pue.Relay
 
 class MyNavigationView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
     : NavigationView(context, attrs, defStyle), IMyUINavigation, NavigationView.OnNavigationItemSelectedListener {

@@ -2,7 +2,7 @@ package pl.mareklangiewicz.myutils
 
 import org.junit.Test
 import java.util.*
-import pl.mareklangiewicz.mytests.*
+import pl.mareklangiewicz.pue.*
 
 /**
  * Created by Marek Langiewicz on 30.05.16.

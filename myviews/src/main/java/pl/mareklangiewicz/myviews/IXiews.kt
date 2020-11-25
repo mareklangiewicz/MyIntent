@@ -1,11 +1,11 @@
 package pl.mareklangiewicz.myviews
 
-import pl.mareklangiewicz.myutils.Cancel
+import pl.mareklangiewicz.pue.Cancel
 import pl.mareklangiewicz.myutils.IChanges
 import pl.mareklangiewicz.myutils.IData
 import pl.mareklangiewicz.myutils.IEnabled
 import pl.mareklangiewicz.myutils.ILst
-import pl.mareklangiewicz.myutils.IPusher
+import pl.mareklangiewicz.pue.IPusher
 import pl.mareklangiewicz.myutils.IVisible
 
 /**

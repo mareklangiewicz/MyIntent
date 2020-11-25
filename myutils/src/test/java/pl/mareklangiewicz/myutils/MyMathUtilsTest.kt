@@ -1,7 +1,10 @@
 package pl.mareklangiewicz.myutils
 
 import org.junit.Test
-import pl.mareklangiewicz.mytests.*
+import pl.mareklangiewicz.pue.Assert
+import pl.mareklangiewicz.pue.IsAtLeast
+import pl.mareklangiewicz.pue.IsLessThan
+import pl.mareklangiewicz.pue.That
 
 /**
  * Created by Marek Langiewicz on 04.11.15.

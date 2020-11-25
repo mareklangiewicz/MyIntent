@@ -4,6 +4,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.junit.Test
+import pl.mareklangiewicz.pue.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 

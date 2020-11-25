@@ -6,6 +6,7 @@ import android.graphics.PointF
 import android.graphics.Rect
 import android.graphics.RectF
 import androidx.annotation.ColorInt
+import pl.mareklangiewicz.pue.IPullee
 
 import java.util.Random
 

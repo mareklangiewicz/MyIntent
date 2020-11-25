@@ -1,5 +1,8 @@
 package pl.mareklangiewicz.myutils
 
+import pl.mareklangiewicz.pue.Cancel
+import pl.mareklangiewicz.pue.IPusher
+
 
 interface IEnabled {
     @Suppress("UNUSED_PARAMETER")

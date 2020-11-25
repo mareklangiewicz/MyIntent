@@ -1,8 +1,6 @@
-package pl.mareklangiewicz.myutils
+package pl.mareklangiewicz.pue
 
 import org.junit.Test
-import pl.mareklangiewicz.mytests.*
-
 
 class MyFunctionsTest {
 

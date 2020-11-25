@@ -1,4 +1,4 @@
-package pl.mareklangiewicz.myutils
+package pl.mareklangiewicz.pue
 
 import org.junit.After
 import org.junit.Before

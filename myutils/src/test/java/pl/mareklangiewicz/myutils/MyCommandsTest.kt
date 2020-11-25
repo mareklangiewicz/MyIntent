@@ -2,9 +2,9 @@ package pl.mareklangiewicz.myutils
 
 import org.junit.Ignore
 import org.junit.Test
-import pl.mareklangiewicz.mytests.Assert
-import pl.mareklangiewicz.mytests.IsEqualTo
-import pl.mareklangiewicz.mytests.That
+import pl.mareklangiewicz.pue.Assert
+import pl.mareklangiewicz.pue.IsEqualTo
+import pl.mareklangiewicz.pue.That
 import java.lang.String.format
 import java.lang.System.currentTimeMillis
 import java.util.*

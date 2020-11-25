@@ -11,6 +11,7 @@ import android.view.animation.LinearInterpolator
 import androidx.drawerlayout.widget.DrawerLayout
 import kotlinx.android.synthetic.main.mf_my_stupid_tests_fragment.*
 import pl.mareklangiewicz.myutils.*
+import pl.mareklangiewicz.pue.Cancel
 
 /**
  * Created by Marek Langiewicz on 10.09.15.

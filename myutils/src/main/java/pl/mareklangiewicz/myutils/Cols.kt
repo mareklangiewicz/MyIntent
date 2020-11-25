@@ -1,5 +1,9 @@
 package pl.mareklangiewicz.myutils
 
+import pl.mareklangiewicz.pue.IPeek
+import pl.mareklangiewicz.pue.IPull
+import pl.mareklangiewicz.pue.IPush
+
 /**
  * Mini collections library
  *

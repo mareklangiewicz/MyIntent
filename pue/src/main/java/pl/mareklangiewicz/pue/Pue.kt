@@ -1,7 +1,5 @@
-package pl.mareklangiewicz.myutils
+package pl.mareklangiewicz.pue
 
-import android.os.Handler
-import android.os.Looper
 import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
@@ -323,20 +321,6 @@ class ExecutorScheduler(private val ses: ScheduledExecutorService) : IScheduler 
 }
 
 
-class HandlerScheduler(private val handler: Handler = Handler(Looper.getMainLooper())) : IScheduler {
-
-    override fun schedule(delay: Long, action: (Unit) -> Unit): (Cancel) -> Unit {
-        val runnable = Runnable { action(Unit) }
-        if (delay > 0)
-            handler.postDelayed(runnable, delay)
-        else
-            handler.post(runnable)
-        return { handler.removeCallbacks(runnable) }
-    }
-
-    override val now = { _: Unit -> System.currentTimeMillis() }
-}
-
 /**
  * Wraps a scheduler adding additional delay to every schedule and current time.
  */
@@ -350,19 +334,6 @@ class FutureScheduler(val scheduler: IScheduler, val future: Millis) : ISchedule
 
 
 /**
- * Wraps a scheduler and adds catching exceptions and logging them using provided logger
- */
-fun IScheduler.logex(log: IPushee<MyLogEntry>): IScheduler = object : IScheduler by this@logex {
-    override fun schedule(delay: Long, action: (Unit) -> Unit) = this@logex.schedule(delay) {
-        try {
-            action(Unit)
-        } catch (e: Throwable) {
-            log.e(e, throwable = e)
-        }
-    }
-}
-
-/**
  * Pushes a Long number every time the Step command is invoked but only when pusher is started.
  * Steps are ignored when pusher is stopped. By default it pushes 0 value once for every step,
  * but you can provide explicit 'step' constructor parameter to change it to more.
@@ -373,10 +344,10 @@ fun IScheduler.logex(log: IPushee<MyLogEntry>): IScheduler = object : IScheduler
 open class StepPusher(val step: Long = 1, val tick: Long = 1, val tock: Long = 1) : IPusher<Long, ICommand> {
 
     protected class Pusher(
-        private var function: IPushee<Long>?,
-        val step: Long = 1,
-        val tick: Long = 1,
-        val tock: Long = 1
+            private var function: IPushee<Long>?,
+            val step: Long = 1,
+            val tick: Long = 1,
+            val tock: Long = 1
     ) : IPushee<ICommand> {
 
         var started = false

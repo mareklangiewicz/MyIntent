@@ -9,6 +9,7 @@ import kotlinx.android.synthetic.main.mf_pue_tests_fragment.*
 import pl.mareklangiewicz.myloggers.MyAndroLogAdapter
 import pl.mareklangiewicz.myloggers.MyAndroSystemLogger
 import pl.mareklangiewicz.myutils.*
+import pl.mareklangiewicz.pue.*
 
 /**
  * Created by Marek Langiewicz on 05.03.16.

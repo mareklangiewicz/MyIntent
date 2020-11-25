@@ -1,4 +1,4 @@
-package pl.mareklangiewicz.myutils
+package pl.mareklangiewicz.pue
 
 /**
  * Created by Marek Langiewicz on 21.02.16.

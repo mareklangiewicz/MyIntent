@@ -1,5 +1,7 @@
 package pl.mareklangiewicz.myutils
 
+import pl.mareklangiewicz.pue.Relay
+
 
 private val MIN_CAPACITY = 8 // Must be a power of 2
 

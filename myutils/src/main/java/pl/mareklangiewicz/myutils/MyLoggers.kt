@@ -1,5 +1,9 @@
 package pl.mareklangiewicz.myutils
 
+import pl.mareklangiewicz.pue.IPush
+import pl.mareklangiewicz.pue.IPushee
+import pl.mareklangiewicz.pue.IScheduler
+import pl.mareklangiewicz.pue.amap
 import java.util.concurrent.atomic.AtomicLong
 
 /**
@@ -122,5 +126,18 @@ class MyLogHistory : IArr<MyLogEntry>, IPush<MyLogEntry>, IChanges<LstChg<MyLogE
                 buff.filter = { it.level >= value }
             }
         }
+}
+
+/**
+ * Wraps a scheduler and adds catching exceptions and logging them using provided logger
+ */
+fun IScheduler.logex(log: IPushee<MyLogEntry>): IScheduler = object : IScheduler by this@logex {
+    override fun schedule(delay: Long, action: (Unit) -> Unit) = this@logex.schedule(delay) {
+        try {
+            action(Unit)
+        } catch (e: Throwable) {
+            log.e(e, throwable = e)
+        }
+    }
 }
 

@@ -1,5 +1,8 @@
 buildscript {
 
+    ext {
+        kotlin_version = '1.4.20'
+    }
     ext.myintent_pkg = "pl.mareklangiewicz.myintent"
     ext.myintent_name = "1.0.9-alpha"
     ext.myintent_code = 9
@@ -14,6 +17,7 @@ buildscript {
         classpath Deps.kotlinGradlePlugin
         classpath Deps.androidGradlePlugin
         classpath Deps.androidMavenGradlePlugin
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 

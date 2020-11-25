@@ -1,4 +1,4 @@
-package pl.mareklangiewicz.mytests
+package pl.mareklangiewicz.pue
 
 import com.google.common.collect.Range
 import com.google.common.truth.BigDecimalSubject

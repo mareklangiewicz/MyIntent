@@ -44,7 +44,7 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':mycorelib')
-    implementation project(':mytests')
+    api project(':pue')
     implementation Deps.kotlinStdlib
     implementation Deps.kotlinxCoroutinesCore
     implementation Deps.androidMaterial
@@ -57,7 +57,6 @@ dependencies {
     implementation Deps.retrofitRxjava
     implementation Deps.okhttpLogging
     implementation Deps.picasso
-    testImplementation project(':mytests')
     testImplementation Deps.junit4
     testImplementation Deps.googleTruth
     androidTestImplementation Deps.androidTestRunner

@@ -4,6 +4,7 @@ import io.reactivex.Observable
 import io.reactivex.Observable.merge
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import pl.mareklangiewicz.pue.IPushee
 
 /**
  * Created by Marek Langiewicz on 16.02.16.

@@ -211,7 +211,7 @@ class MIActivity : MyActivity() {
 
         when (resultCode) {
             Activity.RESULT_OK -> {
-                val results = data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                val results = data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)!!
                 //                float[] scores = data.getFloatArrayExtra(RecognizerIntent.EXTRA_CONFIDENCE_SCORES);
                 //                log.v("Voice recognition results:");
                 //                for(int i = 0; i < results.size(); ++i) {
@@ -219,7 +219,7 @@ class MIActivity : MyActivity() {
                 //                    float score = scores == null ? -1 : scores[i];
                 //                    log.v("   %f:%s", score, result);
                 //                }
-                val command = results[0].toLowerCase()
+                val command = results[0].toLowerCase(Locale.US)
 
                 play(command)
             }

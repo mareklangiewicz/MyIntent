@@ -111,7 +111,7 @@ dependencies {
     implementation project(':myviews')
     implementation project(':mydrawables')
     implementation Deps.kotlinStdlib
-    implementation Deps.playServicesBase
+    implementation Deps.googlePlayServicesBase
     implementation Deps.firebaseAppIndexing
     implementation Deps.paperwork
 }

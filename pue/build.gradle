@@ -1,7 +1,10 @@
 plugins {
     id 'java-library'
     id 'kotlin'
+    id 'maven'
 }
+
+group='com.github.langara'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_7
@@ -12,4 +15,14 @@ dependencies {
     implementation Deps.kotlinStdlib
     implementation Deps.junit4
     implementation Deps.googleTruth
+}
+
+// build a jar with source files
+task sourcesJar(type: Jar) {
+    from sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+artifacts {
+    archives sourcesJar
 }

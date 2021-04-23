@@ -7,4 +7,9 @@ plugins {
 }
 
 include ':myactivities', ':myutils', ':myviews', ':myfragments', ':myloggers', ':myres', ':mydrawables', ':myintent', ':mycorelib'
-includeBuild("../../kotlin/upue")
+includeBuild("../../kotlin/upue") {
+    dependencySubstitution {
+        substitute(module("com.github.langara.upue:upue"))
+            .with(project(":upue"))
+    }
+}

@@ -7,7 +7,8 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.mf_my_log_fragment.*
 import pl.mareklangiewicz.myloggers.MyAndroLogAdapter
 import pl.mareklangiewicz.myutils.*
-import pl.mareklangiewicz.pue.Cancel
+import pl.mareklangiewicz.upue.Cancel
+import pl.mareklangiewicz.upue.Pushee
 
 /**
  * MyFragment showing MyAndroidLogger messages.
@@ -17,7 +18,7 @@ open class MyLogFragment : MyFragment() {
 
     private val adapter = MyAndroLogAdapter(log.history)
 
-    private val tocancel = Lst<(Cancel) -> Unit>()
+    private val tocancel = Lst<Pushee<Cancel>>()
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

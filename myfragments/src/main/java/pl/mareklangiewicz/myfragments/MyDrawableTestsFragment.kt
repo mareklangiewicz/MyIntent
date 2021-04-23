@@ -26,7 +26,7 @@ import pl.mareklangiewicz.mydrawables.MyMagicLinesDrawable
 import pl.mareklangiewicz.mydrawables.MyPlayStopDrawable
 import pl.mareklangiewicz.mydrawables.MyPlusDrawable
 import pl.mareklangiewicz.myutils.e
-import pl.mareklangiewicz.pue.e
+import pl.mareklangiewicz.upue.e
 import pl.mareklangiewicz.myutils.i
 import pl.mareklangiewicz.myutils.w
 

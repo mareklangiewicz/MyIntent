@@ -4,7 +4,7 @@ import io.reactivex.Observable
 import io.reactivex.Observable.merge
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import pl.mareklangiewicz.pue.IPushee
+import pl.mareklangiewicz.upue.Pushee
 
 /**
  * Created by Marek Langiewicz on 16.02.16.
@@ -17,7 +17,7 @@ operator fun CompositeDisposable.plusAssign(disposable: Disposable) {
 fun Disposable.addTo(subscription: CompositeDisposable) = subscription.add(this)
 
 fun <T> Observable<T>.lsubscribe(
-        log: IPushee<MyLogEntry>,
+        log: Pushee<MyLogEntry>,
         logOnError: String? = "error %s",
         logOnCompleted: String? = "completed",
         onNext: (T) -> Unit
@@ -28,7 +28,7 @@ fun <T> Observable<T>.lsubscribe(
 )
 
 fun <T> Observable<T>.lsubscribe(
-        log: IPushee<MyLogEntry>,
+        log: Pushee<MyLogEntry>,
         logOnError: String? = "error %s",
         logOnCompleted: String? = "completed",
         logOnNext: String? = "next %s"

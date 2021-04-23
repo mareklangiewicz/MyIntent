@@ -1,11 +1,11 @@
 package pl.mareklangiewicz.myviews
 
-import pl.mareklangiewicz.pue.Cancel
+import pl.mareklangiewicz.upue.Cancel
 import pl.mareklangiewicz.myutils.IChanges
 import pl.mareklangiewicz.myutils.IData
 import pl.mareklangiewicz.myutils.IEnabled
 import pl.mareklangiewicz.myutils.ILst
-import pl.mareklangiewicz.pue.IPusher
+import pl.mareklangiewicz.upue.Pusher
 import pl.mareklangiewicz.myutils.IVisible
 
 /**
@@ -23,7 +23,7 @@ import pl.mareklangiewicz.myutils.IVisible
 
 
 interface IClicks<out T> {
-    val clicks: IPusher<T, Cancel>
+    val clicks: Pusher<T, Cancel>
         get() = throw UnsupportedOperationException()
 }
 

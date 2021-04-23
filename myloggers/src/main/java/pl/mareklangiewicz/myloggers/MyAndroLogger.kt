@@ -6,8 +6,8 @@ import android.util.Log
 import android.view.View
 import com.google.android.material.snackbar.Snackbar
 import pl.mareklangiewicz.myutils.*
-import pl.mareklangiewicz.pue.IPushee
-import pl.mareklangiewicz.pue.apeek
+import pl.mareklangiewicz.upue.Pushee
+import pl.mareklangiewicz.upue.apeek
 
 /**
  * Created by Marek Langiewicz on 19.02.16.
@@ -15,7 +15,7 @@ import pl.mareklangiewicz.pue.apeek
  * In release mode use: tosystem = false.
  */
 
-class MyAndroLogger(val tosystem: Boolean = true, val tomemory: Boolean = true) : IPushee<MyLogEntry> {
+class MyAndroLogger(val tosystem: Boolean = true, val tomemory: Boolean = true) : Pushee<MyLogEntry> {
 
 
     val history = MyLogHistory()
@@ -29,10 +29,10 @@ class MyAndroLogger(val tosystem: Boolean = true, val tomemory: Boolean = true) 
         }
 
 
-    private fun compose(view: View?): IPushee<MyLogEntry> {
+    private fun compose(view: View?): Pushee<MyLogEntry> {
 
         if(!tosystem && !tomemory)
-            return { }
+            return Pushee { }
 
         if(!tosystem)
             return history.push.snack(view)
@@ -53,7 +53,7 @@ class MyAndroLogger(val tosystem: Boolean = true, val tomemory: Boolean = true) 
  * Simple android logger that logs on console using android.util.Log class. It can be is a bit slow, so use it in debug only.
  * This logger can be used from any thread.
  */
-class MyAndroSystemLogger : IPushee<MyLogEntry> {
+class MyAndroSystemLogger : Pushee<MyLogEntry> {
     override fun invoke(entry: MyLogEntry) {
         val suffix = if(entry.throwable === null) "" else "\n${Log.getStackTraceString(entry.throwable)}"
         Log.println(entry.level.number, entry.tag, entry.message + suffix)
@@ -94,7 +94,7 @@ fun IArr<MyLogEntry>.draw(canvas: Canvas, x: Int, y: Int, paint: Paint, lines: I
 /**
  * Displays every given log message that matches given prefix on snackbar
  * You have to specify a View object used to find root view for Snackbar
- * This function should be last in loggers "IPushee chain", so it is invoked first for every log message.
+ * This function should be last in loggers "Pushee chain", so it is invoked first for every log message.
  * Important: this last step should be rebuild every time we have to reconnect to new View to avoid memleaks.
  */
 
@@ -102,7 +102,7 @@ const val SNACK_TAG = "[SNACK]"
 const val SHORT_TAG = "[SHORT]"
 const val INDEF_TAG = "[INDEF]"
 
-fun IPushee<MyLogEntry>.snack(view: View?): IPushee<MyLogEntry> = {
+fun Pushee<MyLogEntry>.snack(view: View?): Pushee<MyLogEntry> = Pushee {
     var msg = it.message.removePrefix(SNACK_TAG)
     if(msg !== it.message) {
         var length = Snackbar.LENGTH_LONG

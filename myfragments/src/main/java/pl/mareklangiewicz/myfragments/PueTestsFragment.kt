@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.mf_pue_tests_fragment.*
 import pl.mareklangiewicz.myloggers.MyAndroLogAdapter
 import pl.mareklangiewicz.myloggers.MyAndroSystemLogger
 import pl.mareklangiewicz.myutils.*
-import pl.mareklangiewicz.pue.*
+import pl.mareklangiewicz.upue.*
 
 /**
  * Created by Marek Langiewicz on 05.03.16.
@@ -91,7 +91,7 @@ open class PueTestsFragment : MyFragment() {
 
             val relay = Relay<Float>()
 
-            val subscriptions = arrayOf<(Cancel) -> Unit>( {}, {}, {} )
+            val subscriptions = arrayOf<Pushee<Cancel>>( Pushee {}, Pushee {}, Pushee {} )
 
             val intervals = (1..70).asNPullee().vnmap { 300L }
 
@@ -131,7 +131,7 @@ open class PueTestsFragment : MyFragment() {
 
             todo.add { mf_mmt_mp3.setOnClickListener(null) }
 
-            val intervals = { _: Unit -> mf_mmt_mp3.to.toLong() * 10 }
+            val intervals = Pullee { _: Unit -> mf_mmt_mp3.to.toLong() * 10 }
                     .vntake(64)
                     .vpeek { if(it === null) syslog.w("All intervals pulled.") }
 

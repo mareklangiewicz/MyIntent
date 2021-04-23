@@ -5,7 +5,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import pl.mareklangiewicz.myutils.IChanges
-import pl.mareklangiewicz.pue.Relay
+import pl.mareklangiewicz.upue.Relay
 
 /**
  * Created by Marek Langiewicz on 02.09.15.

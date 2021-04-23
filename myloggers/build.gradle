@@ -1,7 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'com.github.dcendents.android-maven'
 
 group='com.github.langara'
 
@@ -41,7 +40,7 @@ dependencies {
     implementation Deps.androidMaterial
     implementation Deps.androidxRecyclerview
     implementation Deps.androidxCardview
-    implementation Deps.kotlinStdlib
+    implementation Deps.kotlinStdlib8
     testImplementation Deps.junit4
     testImplementation Deps.googleTruth
     androidTestImplementation Deps.androidxAnnotation

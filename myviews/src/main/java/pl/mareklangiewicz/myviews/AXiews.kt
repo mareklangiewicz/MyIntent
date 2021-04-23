@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import pl.mareklangiewicz.myutils.*
-import pl.mareklangiewicz.pue.Relay
+import pl.mareklangiewicz.upue.Relay
 
 /**
  * Android implementation of basic IXiews

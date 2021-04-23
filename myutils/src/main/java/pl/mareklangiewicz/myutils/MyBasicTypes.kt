@@ -1,7 +1,7 @@
 package pl.mareklangiewicz.myutils
 
-import pl.mareklangiewicz.pue.Cancel
-import pl.mareklangiewicz.pue.IPusher
+import pl.mareklangiewicz.upue.Cancel
+import pl.mareklangiewicz.upue.Pusher
 
 
 interface IEnabled {
@@ -33,7 +33,7 @@ interface IData<T> {
 }
 
 interface IChanges<out T> {
-    val changes: IPusher<T, Cancel>
+    val changes: Pusher<T, Cancel>
         get() = throw UnsupportedOperationException()
 }
 

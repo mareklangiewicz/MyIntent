@@ -8,7 +8,7 @@ import android.os.Bundle
 import android.provider.AlarmClock
 import android.provider.ContactsContract
 import android.provider.MediaStore
-import pl.mareklangiewicz.pue.IPushee
+import pl.mareklangiewicz.upue.Pushee
 import java.util.*
 
 /**
@@ -53,7 +53,7 @@ data class RERule private constructor(
     /**
      * Applying a rule means matching and replacing ALL occurrences of re match with replace
      */
-    fun apply(cmd: String, log: IPushee<MyLogEntry>): String {
+    fun apply(cmd: String, log: Pushee<MyLogEntry>): String {
         var vcmd = cmd
         if(test(vcmd)) {
             vcmd = rmatch.replace(vcmd, replace)
@@ -76,7 +76,7 @@ data class RERule private constructor(
     }
 }
 
-fun Iterable<RERule>.applyAllRules(cmd: String, log: IPushee<MyLogEntry>) = this.fold(cmd) { c, rule -> rule.apply(c, log) }
+fun Iterable<RERule>.applyAllRules(cmd: String, log: Pushee<MyLogEntry>) = this.fold(cmd) { c, rule -> rule.apply(c, log) }
 
 
 data class REGroup private constructor(
@@ -108,7 +108,7 @@ data class REGroup private constructor(
      * It applies all rules in this group one by one in order to given command.
      * Otherwise it just returns given command.
      */
-    fun apply(cmd: String, log: IPushee<MyLogEntry>): String {
+    fun apply(cmd: String, log: Pushee<MyLogEntry>): String {
         if (!test(cmd)) {
             if (VV) {
                 log.v("group NOT matched:")
@@ -124,7 +124,7 @@ data class REGroup private constructor(
     }
 }
 
-fun Iterable<REGroup>.applyAllGroups(cmd: String, log: IPushee<MyLogEntry>): String {
+fun Iterable<REGroup>.applyAllGroups(cmd: String, log: Pushee<MyLogEntry>): String {
 
     if (V) {
         log.v("Applying all matching RE rules to:")
@@ -434,7 +434,7 @@ class MyCommand(cmd: String = "") : HashMap<String, String>(20) {
             parse(cmd)
     }
 
-    constructor(cmd: String, rules: Iterable<REGroup>, log: IPushee<MyLogEntry>) : this(rules.applyAllGroups(cmd, log))
+    constructor(cmd: String, rules: Iterable<REGroup>, log: Pushee<MyLogEntry>) : this(rules.applyAllGroups(cmd, log))
 
     fun parse(cmd: String) {
 

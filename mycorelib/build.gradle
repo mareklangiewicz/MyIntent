@@ -1,11 +1,11 @@
 apply plugin: 'kotlin'
-apply plugin: 'maven'
+//apply plugin: 'maven'
 
 group='com.github.langara'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation Deps.kotlinStdlib
+    implementation Deps.kotlinStdlib8
 }
 
 // build a jar with source files

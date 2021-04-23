@@ -11,7 +11,8 @@ import android.view.animation.LinearInterpolator
 import androidx.drawerlayout.widget.DrawerLayout
 import kotlinx.android.synthetic.main.mf_my_stupid_tests_fragment.*
 import pl.mareklangiewicz.myutils.*
-import pl.mareklangiewicz.pue.Cancel
+import pl.mareklangiewicz.upue.Cancel
+import pl.mareklangiewicz.upue.Pushee
 
 /**
  * Created by Marek Langiewicz on 10.09.15.
@@ -22,7 +23,7 @@ import pl.mareklangiewicz.pue.Cancel
 
 open class MyStupidTestsFragment : MyFragment(), DrawerLayout.DrawerListener {
 
-    private val tocancel = Lst<(Cancel) -> Unit>()
+    private val tocancel = Lst<Pushee<Cancel>>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState) //just for logging

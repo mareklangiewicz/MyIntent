@@ -1,2 +1,10 @@
+pluginManagement {
+    includeBuild("../../kotlin/deps.kt")
+}
+
+plugins {
+    id("pl.mareklangiewicz.deps.settings")
+}
+
 include ':myactivities', ':myutils', ':myviews', ':myfragments', ':myloggers', ':myres', ':mydrawables', ':myintent', ':mycorelib'
-include ':pue'
+includeBuild("../../kotlin/upue")

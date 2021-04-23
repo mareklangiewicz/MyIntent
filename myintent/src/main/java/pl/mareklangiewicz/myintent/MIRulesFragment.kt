@@ -7,14 +7,15 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.mi_rules_fragment.*
 import pl.mareklangiewicz.myfragments.MyFragment
 import pl.mareklangiewicz.myutils.*
-import pl.mareklangiewicz.pue.Cancel
+import pl.mareklangiewicz.upue.Cancel
+import pl.mareklangiewicz.upue.Pushee
 
 /**
  * Created by Marek Langiewicz on 14.10.15.
  */
 class MIRulesFragment : MyFragment() {
 
-    private val tocancel = Lst<(Cancel) -> Unit>()
+    private val tocancel = Lst<Pushee<Cancel>>()
 
     private val adapter = REGroupsAdapter(RE_RULES)
 

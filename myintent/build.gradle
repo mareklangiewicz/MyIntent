@@ -110,9 +110,10 @@ dependencies {
     implementation project(':myutils')
     implementation project(':myviews')
     implementation project(':mydrawables')
-    implementation Deps.kotlinStdlib
+    implementation Deps.kotlinStdlib8
     implementation Deps.googlePlayServicesBase
-    implementation Deps.firebaseAppIndexing
+    implementation platform(Deps.firebaseAndroidBoM)
+    implementation 'com.google.firebase:firebase-appindexing'
     implementation Deps.paperwork
 }
 buildscript {

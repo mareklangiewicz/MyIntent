@@ -1,7 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'com.github.dcendents.android-maven'
 
 group = 'com.github.langara'
 
@@ -44,8 +43,8 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':mycorelib')
-    api project(':pue')
-    implementation Deps.kotlinStdlib
+    api Deps.upue
+    implementation Deps.kotlinStdlib8
     implementation Deps.kotlinxCoroutinesCore
     implementation Deps.androidMaterial
     implementation Deps.androidxAnnotation

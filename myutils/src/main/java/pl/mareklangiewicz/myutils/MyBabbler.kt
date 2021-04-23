@@ -4,7 +4,7 @@ import android.annotation.TargetApi
 import android.content.Context
 import android.os.Build
 import android.speech.tts.TextToSpeech
-import pl.mareklangiewicz.pue.IPushee
+import pl.mareklangiewicz.upue.Pushee
 import java.util.*
 
 /**
@@ -12,7 +12,7 @@ import java.util.*
  */
 class MyBabbler(
         context: Context,
-        val log: IPushee<MyLogEntry>,
+        val log: Pushee<MyLogEntry>,
         val funnyQuotes: Array<String> = arrayOf("No."),
         val smartQuotes: Array<String> = arrayOf("No.")
 ) : TextToSpeech.OnInitListener {

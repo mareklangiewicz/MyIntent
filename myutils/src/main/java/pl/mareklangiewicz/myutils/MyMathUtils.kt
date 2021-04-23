@@ -6,7 +6,7 @@ import android.graphics.PointF
 import android.graphics.Rect
 import android.graphics.RectF
 import androidx.annotation.ColorInt
-import pl.mareklangiewicz.pue.IPullee
+import pl.mareklangiewicz.upue.Pullee
 
 import java.util.Random
 
@@ -84,10 +84,10 @@ fun Random.nextPointF(min: PointF, max: PointF) = PointF(nextFloat(min.x, max.x)
 
 
 // common random pullees:
-fun Random.asInts(min: Int, max: Int): IPullee<Int>  = { nextInt(min, max) }
-fun Random.asFloats(min: Float, max: Float): IPullee<Float> = { nextFloat(min, max) }
-fun Random.asDoubles(min: Double, max: Double): IPullee<Double> = { nextDouble(min, max) }
-fun Random.asPoints(min: Point, max: Point): IPullee<Point> = { nextPoint(min, max) }
-fun Random.asPointFs(min: PointF, max: PointF): IPullee<PointF> = { nextPointF(min, max) }
-fun Random.asColors(@ColorInt min: Int, @ColorInt max: Int): IPullee<Int> = { nextColor(min, max) }
+fun Random.asInts(min: Int, max: Int): Pullee<Int>  = Pullee { nextInt(min, max) }
+fun Random.asFloats(min: Float, max: Float): Pullee<Float> = Pullee { nextFloat(min, max) }
+fun Random.asDoubles(min: Double, max: Double): Pullee<Double> = Pullee { nextDouble(min, max) }
+fun Random.asPoints(min: Point, max: Point): Pullee<Point> = Pullee { nextPoint(min, max) }
+fun Random.asPointFs(min: PointF, max: PointF): Pullee<PointF> = Pullee { nextPointF(min, max) }
+fun Random.asColors(@ColorInt min: Int, @ColorInt max: Int): Pullee<Int> = Pullee { nextColor(min, max) }
 

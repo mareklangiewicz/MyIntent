@@ -1,6 +1,8 @@
 package pl.mareklangiewicz.myutils
 
-import pl.mareklangiewicz.pue.Relay
+import pl.mareklangiewicz.upue.Pullee
+import pl.mareklangiewicz.upue.Pushee
+import pl.mareklangiewicz.upue.Relay
 
 
 private val MIN_CAPACITY = 8 // Must be a power of 2
@@ -222,16 +224,16 @@ open class Lst<T>(initcap: Int = MIN_CAPACITY) : ILst<T> {
 
 // use it to easily implement the head property of your Lst implementation
 class LstHead<T>(val lst: ILst<T>) : ISak<T> {
-    override val push: (T) -> Unit = { lst.ins(0, it) }
-    override val pull: (Unit) -> T? = { if(lst.len <= 0) null else lst.del(0) }
-    override val peek: (Unit) -> T? = { if(lst.len <= 0) null else lst.get(0) }
+    override val push = Pushee<T> { lst.ins(0, it) }
+    override val pull = Pullee<T?> { if(lst.len <= 0) null else lst.del(0) }
+    override val peek = Pullee<T?> { if(lst.len <= 0) null else lst.get(0) }
 }
 
 // use it to easily implement the tail property of your Lst implementation
 class LstTail<T>(val lst: ILst<T>) : ISak<T> {
-    override val push: (T) -> Unit = { lst.ins(lst.len, it) }
-    override val pull: (Unit) -> T? = { if(lst.len <= 0) null else lst.del(lst.len-1) }
-    override val peek: (Unit) -> T? = { if(lst.len <= 0) null else lst.get(lst.len-1) }
+    override val push = Pushee<T> { lst.ins(lst.len, it) }
+    override val pull = Pullee<T?> { if(lst.len <= 0) null else lst.del(lst.len-1) }
+    override val peek = Pullee<T?> { if(lst.len <= 0) null else lst.get(lst.len-1) }
 }
 
 

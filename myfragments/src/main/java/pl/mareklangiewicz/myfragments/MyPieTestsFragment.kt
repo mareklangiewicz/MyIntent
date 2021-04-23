@@ -16,14 +16,15 @@ import kotlinx.android.synthetic.main.mf_my_pie_tests_fragment.*
 import kotlinx.android.synthetic.main.mf_my_pie_tests_header.view.*
 import pl.mareklangiewicz.myutils.*
 import pl.mareklangiewicz.myviews.MyPie
-import pl.mareklangiewicz.pue.Cancel
+import pl.mareklangiewicz.upue.Cancel
+import pl.mareklangiewicz.upue.Pushee
 import java.lang.String.format
 
 //TODO SOMEDAY: create UI to change animation speed (in local menu header)
 
 open class MyPieTestsFragment : MyFragment(), View.OnClickListener {
 
-    private val tocancel = Lst<(Cancel) -> Unit>()
+    private val tocancel = Lst<Pushee<Cancel>>()
 
     private var randomize = "to"
 

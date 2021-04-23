@@ -1,9 +1,9 @@
 package pl.mareklangiewicz.myutils
 
-import pl.mareklangiewicz.pue.IPush
-import pl.mareklangiewicz.pue.IPushee
-import pl.mareklangiewicz.pue.IScheduler
-import pl.mareklangiewicz.pue.amap
+import pl.mareklangiewicz.upue.IPush
+import pl.mareklangiewicz.upue.Pushee
+import pl.mareklangiewicz.upue.IScheduler
+import pl.mareklangiewicz.upue.amap
 import java.util.concurrent.atomic.AtomicLong
 
 /**
@@ -37,8 +37,8 @@ data class MyLogEntry(
 }
 
 
-// alias IMyLogger = IPushee<MyLogEntry> // SOMEDAY: do it when Kotlin have type aliases
-// for now our IMyLogger IS just: IPushee<MyLogEntry> without alias name...
+// alias IMyLogger = Pushee<MyLogEntry> // SOMEDAY: do it when Kotlin have type aliases
+// for now our IMyLogger IS just: Pushee<MyLogEntry> without alias name...
 
 // those functions below should be inlined for performance, but then I loose correct StackTraceElement.lineNumber,
 // and I need those line numbers be able to find where in source the logging message was invoked
@@ -46,22 +46,22 @@ data class MyLogEntry(
 // TODO SOMEDAY: use inline versions in release mode, and leave as it is in debug mode.
 // (unless they will fix the line numbers returned from StackTraceElement)
 
-fun IPushee<MyLogEntry>.log(
+fun Pushee<MyLogEntry>.log(
         message: Any?,
         level: MyLogLevel = MyLogLevel.INFO,
         tag: String = "",
         throwable: Throwable? = null
 ) = this(MyLogEntry(message.toString(), level, tag, throwable))
 
-fun IPushee<MyLogEntry>.v(message: Any?, tag: String = "ML", throwable: Throwable? = null) = log(message, MyLogLevel.VERBOSE, tag, throwable)
-fun IPushee<MyLogEntry>.d(message: Any?, tag: String = "ML", throwable: Throwable? = null) = log(message, MyLogLevel.DEBUG  , tag, throwable)
-fun IPushee<MyLogEntry>.i(message: Any?, tag: String = "ML", throwable: Throwable? = null) = log(message, MyLogLevel.INFO   , tag, throwable)
-fun IPushee<MyLogEntry>.w(message: Any?, tag: String = "ML", throwable: Throwable? = null) = log(message, MyLogLevel.WARN   , tag, throwable)
-fun IPushee<MyLogEntry>.e(message: Any?, tag: String = "ML", throwable: Throwable? = null) = log(message, MyLogLevel.ERROR  , tag, throwable)
-fun IPushee<MyLogEntry>.a(message: Any?, tag: String = "ML", throwable: Throwable? = null) = log(message, MyLogLevel.ASSERT , tag, throwable)
+fun Pushee<MyLogEntry>.v(message: Any?, tag: String = "ML", throwable: Throwable? = null) = log(message, MyLogLevel.VERBOSE, tag, throwable)
+fun Pushee<MyLogEntry>.d(message: Any?, tag: String = "ML", throwable: Throwable? = null) = log(message, MyLogLevel.DEBUG  , tag, throwable)
+fun Pushee<MyLogEntry>.i(message: Any?, tag: String = "ML", throwable: Throwable? = null) = log(message, MyLogLevel.INFO   , tag, throwable)
+fun Pushee<MyLogEntry>.w(message: Any?, tag: String = "ML", throwable: Throwable? = null) = log(message, MyLogLevel.WARN   , tag, throwable)
+fun Pushee<MyLogEntry>.e(message: Any?, tag: String = "ML", throwable: Throwable? = null) = log(message, MyLogLevel.ERROR  , tag, throwable)
+fun Pushee<MyLogEntry>.a(message: Any?, tag: String = "ML", throwable: Throwable? = null) = log(message, MyLogLevel.ASSERT , tag, throwable)
 
 @Suppress("UNUSED_PARAMETER", "unused")
-fun IPushee<MyLogEntry>.q(message: Any?, tag: String = "", throwable: Throwable? = null) { }
+fun Pushee<MyLogEntry>.q(message: Any?, tag: String = "", throwable: Throwable? = null) { }
 
 
 
@@ -81,7 +81,7 @@ fun findStackTraceElement(depth: Int): StackTraceElement? {
  * until it starts to log correctly.
  * Warning: this can be slow - use it only in debug mode
  */
-fun IPushee<MyLogEntry>.trace(depth: Int): IPushee<MyLogEntry> = amap {
+fun Pushee<MyLogEntry>.trace(depth: Int): Pushee<MyLogEntry> = amap {
     val st = findStackTraceElement(depth)
     if(st === null) it else it.copy(message = "(${st.fileName}:${st.lineNumber}) ${it.message}")
 }
@@ -94,7 +94,7 @@ fun IPushee<MyLogEntry>.trace(depth: Int): IPushee<MyLogEntry> = amap {
  * WARNING: system err can be flushed at strange moments,
  * so usually it is better to use only out stream to avoid message reordering.
  */
-class MySystemLogger(val outlvl: MyLogLevel = MyLogLevel.VERBOSE, val errlvl: MyLogLevel = MyLogLevel.ASSERT) : IPushee<MyLogEntry> {
+class MySystemLogger(val outlvl: MyLogLevel = MyLogLevel.VERBOSE, val errlvl: MyLogLevel = MyLogLevel.ASSERT) : Pushee<MyLogEntry> {
     override fun invoke(le: MyLogEntry) {
         if(le.level < outlvl)
             return
@@ -131,7 +131,7 @@ class MyLogHistory : IArr<MyLogEntry>, IPush<MyLogEntry>, IChanges<LstChg<MyLogE
 /**
  * Wraps a scheduler and adds catching exceptions and logging them using provided logger
  */
-fun IScheduler.logex(log: IPushee<MyLogEntry>): IScheduler = object : IScheduler by this@logex {
+fun IScheduler.logex(log: Pushee<MyLogEntry>): IScheduler = object : IScheduler by this@logex {
     override fun schedule(delay: Long, action: (Unit) -> Unit) = this@logex.schedule(delay) {
         try {
             action(Unit)

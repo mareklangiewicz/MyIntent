@@ -96,8 +96,8 @@ dependencies {
     androidTestImplementation Deps.junit4
     androidTestImplementation Deps.googleTruth
     androidTestImplementation Deps.androidxAnnotation
-    androidTestImplementation Deps.androidTestRunner
-    androidTestImplementation Deps.androidTestRules
+    androidTestImplementation Deps.androidxTestRunner
+    androidTestImplementation Deps.androidxTestRules
 
 //    canaryImplementation Deps.leakcanary
 

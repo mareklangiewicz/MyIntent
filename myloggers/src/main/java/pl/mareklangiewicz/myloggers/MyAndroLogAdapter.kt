@@ -4,7 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.ml_log_item.view.*
-import pl.mareklangiewicz.myutils.IArr
+import pl.mareklangiewicz.upue.*
 import pl.mareklangiewicz.myutils.MyLogEntry
 import pl.mareklangiewicz.myutils.MyLogLevel
 import pl.mareklangiewicz.myutils.inflate

@@ -21,6 +21,7 @@ import pl.mareklangiewicz.upue.Cancel
 import pl.mareklangiewicz.upue.IScheduler
 import pl.mareklangiewicz.upue.Pullee
 import pl.mareklangiewicz.upue.Pushee
+import pl.mareklangiewicz.upue.*
 
 /**
  * Created by Marek Langiewicz on 29.01.16.

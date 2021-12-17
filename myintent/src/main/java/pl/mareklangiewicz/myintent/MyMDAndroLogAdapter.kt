@@ -8,8 +8,8 @@ import com.afollestad.materialdialogs.customview.getCustomView
 import kotlinx.android.synthetic.main.mi_log_details.view.*
 import pl.mareklangiewicz.myloggers.LOG_ITEM_VIEW_TAG_HOLDER
 import pl.mareklangiewicz.myloggers.MyAndroLogAdapter
-import pl.mareklangiewicz.myutils.IArr
 import pl.mareklangiewicz.myutils.MyLogEntry
+import pl.mareklangiewicz.upue.*
 import java.util.*
 
 /**

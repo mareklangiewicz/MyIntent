@@ -16,8 +16,7 @@ import kotlinx.android.synthetic.main.mf_my_pie_tests_fragment.*
 import kotlinx.android.synthetic.main.mf_my_pie_tests_header.view.*
 import pl.mareklangiewicz.myutils.*
 import pl.mareklangiewicz.myviews.MyPie
-import pl.mareklangiewicz.upue.Cancel
-import pl.mareklangiewicz.upue.Pushee
+import pl.mareklangiewicz.upue.*
 import java.lang.String.format
 
 //TODO SOMEDAY: create UI to change animation speed (in local menu header)

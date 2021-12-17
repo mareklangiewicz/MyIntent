@@ -32,6 +32,7 @@
             />
 
         <activity
+            android:exported="true"
             android:name=".MIActivity"
             android:label="@string/mi_activity"
             android:launchMode="singleTask"
@@ -104,6 +105,7 @@
 
         <!--This activity is only for debugging -->
         <activity
+            android:exported="true"
             android:name=".MITestActivity"
             android:label="@string/mi_test_activity"
             android:enabled="@bool/mi_debug_mode"
@@ -133,7 +135,7 @@
                 android:readPermission="android.permission.GLOBAL_SEARCH"
                 />
         </provider>
-        <receiver android:name="RecentCommandsAWProvider">
+        <receiver android:exported="true" android:name="RecentCommandsAWProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>

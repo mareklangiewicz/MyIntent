@@ -44,8 +44,8 @@ dependencies {
     testImplementation Deps.junit4
     testImplementation Deps.googleTruth
     androidTestImplementation Deps.androidxAnnotation
-    androidTestImplementation Deps.androidTestRunner
-    androidTestImplementation Deps.androidTestRules
+    androidTestImplementation Deps.androidxTestRunner
+    androidTestImplementation Deps.androidxTestRules
     androidTestImplementation Deps.googleTruth
 }
 

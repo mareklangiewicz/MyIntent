@@ -6,8 +6,7 @@ import android.util.Log
 import android.view.View
 import com.google.android.material.snackbar.Snackbar
 import pl.mareklangiewicz.myutils.*
-import pl.mareklangiewicz.upue.Pushee
-import pl.mareklangiewicz.upue.apeek
+import pl.mareklangiewicz.upue.*
 
 /**
  * Created by Marek Langiewicz on 19.02.16.

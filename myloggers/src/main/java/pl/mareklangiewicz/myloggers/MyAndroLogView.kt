@@ -6,7 +6,7 @@ import android.graphics.Paint
 import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
-import pl.mareklangiewicz.myutils.IArr
+import pl.mareklangiewicz.upue.*
 import pl.mareklangiewicz.myutils.MyLogEntry
 
 /**

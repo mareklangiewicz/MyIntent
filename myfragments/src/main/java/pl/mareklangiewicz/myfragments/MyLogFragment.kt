@@ -7,8 +7,7 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.mf_my_log_fragment.*
 import pl.mareklangiewicz.myloggers.MyAndroLogAdapter
 import pl.mareklangiewicz.myutils.*
-import pl.mareklangiewicz.upue.Cancel
-import pl.mareklangiewicz.upue.Pushee
+import pl.mareklangiewicz.upue.*
 
 /**
  * MyFragment showing MyAndroidLogger messages.

@@ -4,6 +4,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import pl.mareklangiewicz.myutils.*
+import pl.mareklangiewicz.upue.*
 
 /**
  * Created by Marek Langiewicz on 04.06.16.

@@ -1,15 +1,14 @@
 buildscript {
 
     ext {
-        kotlin_version = '1.4.20'
+        kotlin_version = Vers.kotlin
     }
     ext.myintent_pkg = "pl.mareklangiewicz.myintent"
-    ext.myintent_name = "1.0.10-alpha"
-    ext.myintent_code = 10
+    ext.myintent_name = "1.0.11-alpha"
+    ext.myintent_code = 11
 
     repositories {
         google()
-        jcenter()
         mavenCentral()
     }
 
@@ -25,7 +24,6 @@ allprojects {
 
     repositories {
         google()
-        jcenter()
         maven { url "https://jitpack.io" }
         mavenCentral()
     }
